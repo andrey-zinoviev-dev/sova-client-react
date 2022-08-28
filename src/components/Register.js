@@ -2,8 +2,8 @@ import React from "react";
 
 export default function Register(props) {
 
-  const [emailInput, setEmailInput] = React.useState(null);
-  const [passwordInput, setPasswordInput] = React.useState(null);
+  // const [emailInput, setEmailInput] = React.useState(null);
+  // const [passwordInput, setPasswordInput] = React.useState(null);
   const objToPost = {};
 
   function showInput(evt) {
