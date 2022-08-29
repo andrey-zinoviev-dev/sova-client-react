@@ -37,9 +37,8 @@ function App() {
 
       Promise.all([fetchedUser, fetchedCourses]).then((values) => {
         const [userFetched, coursesFetched] = values;
-        //setuser
-        // const userToSet = {...user, userFetched};
-        // console.log(userToSet);
+
+        //set user
         const userToSet = Object.assign({}, userFetched);
         setuser(userToSet);
 
@@ -94,6 +93,11 @@ function App() {
 
   }
 
+  function submitChatForm(evt, formData) {
+    evt.preventDefault();
+    //send message to APi
+    return formData;
+  }
   // function selectModule(data) {
   //   const newModule = Object.assign({}, data);
   //   setCourseModule(newModule);
@@ -102,7 +106,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path='courses/:courseID/modules/:moduleID' element={<CourseModule></CourseModule>}></Route>
+        <Route path='courses/:courseID/modules/:moduleID' element={<CourseModule submitForm={submitChatForm}></CourseModule>}></Route>
         <Route path='courses' element={<Courses user={user} courses={courses}></Courses>}></Route>
         <Route path='/' element={<Main openLoginPopup={openLoginPopup} openRegisterPopup={openRegisterPopup}></Main>}></Route>
       </Routes>
