@@ -40,10 +40,39 @@ function apiGetCurrentUser(token) {
   .then((res) => {
     return res.json();
   })
+
+}
+
+function apiGetCourses(token) {
+  return fetch(`${apiAdress}/coursesList`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
+function apiGetCourse(courseID, token) {
+  return fetch(`${apiAdress}/courses/${courseID}`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+  })
+  .then((res) => {
+    return res.json();
+  })
 }
 
 export {
   apiLogin,
   apiRegister,
-  apiGetCurrentUser
+  apiGetCurrentUser,
+  apiGetCourses,
+  apiGetCourse
 }
