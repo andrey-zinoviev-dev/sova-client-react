@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { apiGetCourse } from "../api";
 
 export default function CourseModule(props) {
+  console.log(props.socketUsers);
+
   const {courseID, moduleID} = useParams();
   const [courseData, setCourseData] = React.useState({});
   const [module, setModule] = React.useState({});
