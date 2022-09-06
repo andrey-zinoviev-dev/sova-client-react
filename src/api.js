@@ -69,10 +69,24 @@ function apiGetCourse(courseID, token) {
   })
 }
 
+function apiGetCourseModule(moduleID, token) {
+  return fetch(`${apiAdress}/modules/${moduleID}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
 export {
   apiLogin,
   apiRegister,
   apiGetCurrentUser,
   apiGetCourses,
-  apiGetCourse
+  apiGetCourse,
+  apiGetCourseModule,
 }
