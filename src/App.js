@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Main from './components/Main';
 import Login from './components/Login';
@@ -12,6 +12,9 @@ import { apiLogin, apiRegister, apiGetCurrentUser, apiGetCourses } from './api';
 import { UserContext } from './context/userContext';
 
 function App() {
+  //variables
+  // const userRef = useRef({});
+
   //state variables
   const [loginPopupOpened, setloginPopupOpened] = useState(false);
   const [registerPopupOpened, setregisterPopupOpened] = useState(false);
@@ -51,6 +54,7 @@ function App() {
         //set user
         const userToSet = Object.assign({}, userFetched);
         setuser(userToSet);
+        // userRef.current = userToSet;
         //emit user socket io
         // newSocket.emit('userConnected', userToSet);
         //set courses

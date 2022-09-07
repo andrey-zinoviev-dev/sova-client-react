@@ -1,11 +1,12 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { apiGetCourse, apiGetCourseModule } from "../api";
-import { SocketContext } from "../socketio/socketIO";
+// import { SocketContext } from "../socketio/socketIO";
+import io from 'socket.io-client';
 export default function CourseModule(props) {
 
   
-  const socket = React.useContext(SocketContext);
+  // const socket = React.useContext(SocketContext);
   const userToken = localStorage.getItem('token');
   const sessionStorage = localStorage.getItem('sessionID');
 
@@ -19,6 +20,8 @@ export default function CourseModule(props) {
   const [messageData, setMessageData] = React.useState({content: '', from: null, to: null});
 
   // const objToSend = {};
+  //socket io ref
+  const socket = React.useRef(null);
   
   //functions
   function updateFormData(evt, userID) {
@@ -29,7 +32,7 @@ export default function CourseModule(props) {
 
   function sendMessage(evt) {
     props.submitForm(evt);
-    socket.emit('message', messageData)
+    socket.current.emit('message', messageData)
     // props.socket.emit('message', {
     //   to: userID, 
     //   content: objToSend,
@@ -87,41 +90,58 @@ export default function CourseModule(props) {
 
   //socket io use effect
   React.useEffect(() => {
-  
     if(props.user._id) {
-      if(sessionStorage) {
-        socket.auth = { localsessionID: sessionStorage };
-        socket.connect();
-      }
-      
-      socket.emit('userConnected', props.user);
+      socket.current = io('http://localhost:3000');
 
-      //socket on 
-      socket.on('session', ({sessionID, userID}) => {
+      if(sessionStorage) {
+        socket.current.auth = { localsessionID: sessionStorage };
+        socket.current.connect();
+      };
+
+      socket.current.emit('userConnected', props.user);
+
+      socket.current.on('session', ({ sessionID, userID }) => {
         localStorage.setItem('sessionID', sessionID);
-        socket.userID = userID;
-        socket.username = props.user.name;
+        socket.current.userID = userID;
+        socket.current.username = props.user.name;
       });
 
-      socket.on('private message', ({ content, from, to}) => {
-        setMessages((prevMessages) => {
-          return [...prevMessages, {content, from, to}];
-        });
-      })
-    };
-
-    return () => {
-      socket.off('userConnected');
-      socket.off('session');
-      // socket.off('users');
-      socket.close();
     }
+    //   if(sessionStorage) {
+    //     socket.current.auth = { localsessionID: sessionStorage };
+    //     socket.current.connect();
+    //   }
+      
+    //   //socket on
+    //   // socket.current.on('session', ({ sessionID, userID }) => {
+    //   //   console.log(sessionID, userID);
+    //   // })
+    // }
+    // socket.current.emit('userConnected', props.user);
+    //   socket.emit('userConnected', props.user);
+
+    //   //socket on 
+    //   socket.on('session', ({sessionID, userID}) => {
+    //     localStorage.setItem('sessionID', sessionID);
+    //     socket.userID = userID;
+    //     socket.username = props.user.name;
+    //   });
+
+    //   socket.on('private message', ({ content, from, to}) => {
+    //     setMessages((prevMessages) => {
+    //       return [...prevMessages, {content, from, to}];
+    //     });
+    //   })
+    // };
+
+    // return () => {
+    // //   socket.off('userConnected');
+    // //   socket.off('session');
+    // //   // socket.off('users');
+    //   socket.current.close();
+    // }
   }, [props.user._id])
   
-  //socket io on events
-  React.useEffect(() => {
-    
-  });
   //socket io on received message
   // React.useEffect(() => {
   //   console.log(props.socket);
@@ -135,9 +155,19 @@ export default function CourseModule(props) {
   //   } 
   // }, [props.socket, messages]);
 
-  // React.useEffect(() => {
-  //   console.log(messages);
-  // }, [messages]);
+  React.useEffect(() => {
+    
+    if(socket.current) {      
+      socket.current.on('users', (users) => {
+        // console.log(users);
+      });
+
+      socket.current.on('private message', ({ content, from, to }) => {
+        const newMessages = [...messages, {content, from, to}];
+        setMessages(newMessages);
+      })
+    }
+  }, [socket.current]);
 
   return (
     <section>
