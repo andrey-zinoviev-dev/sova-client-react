@@ -1,0 +1,24 @@
+.lesson__div-chat {
+  background-color: #2a2e37;
+}
+.lesson__div-chat-user {
+  background-color: transparent;
+
+}
+.lesson__div-chat-user-name {
+  min-width: 90px;
+  min-height: 45px;
+  color: white;
+}
+.lesson__div-chat-user-avatar {
+  max-width: 85px;
+  border-radius: 50px;
+}
+.lesson__div-chat-messages-message {
+  color: yellowgreen;
+}
+.lesson__div-chat-messages-message_recepient-message {
+  color: red;
+};
+
+

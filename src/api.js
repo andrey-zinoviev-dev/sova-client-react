@@ -82,6 +82,36 @@ function apiGetCourseModule(moduleID, token) {
   })
 }
 
+function apiGetUserMessages(moduleID, token) {
+  return fetch(`${apiAdress}/modules/${moduleID}/messages`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
+function apiSendMessage(moduleID, token, message) {
+  return fetch(`${apiAdress}/messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+    body: JSON.stringify({
+      moduleID,
+      message,
+    }),
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
 export {
   apiLogin,
   apiRegister,
@@ -89,4 +119,6 @@ export {
   apiGetCourses,
   apiGetCourse,
   apiGetCourseModule,
+  apiGetUserMessages,
+  apiSendMessage,
 }
