@@ -95,17 +95,14 @@ function apiGetUserMessages(moduleID, token) {
   })
 };
 
-function apiSendMessage(moduleID, token, message) {
+function apiSendMessage(token, message) {
   return fetch(`${apiAdress}/messages`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token,
     },
-    body: JSON.stringify({
-      moduleID,
-      message,
-    }),
+    body: JSON.stringify(message),
   })
   .then((res) => {
     return res.json();

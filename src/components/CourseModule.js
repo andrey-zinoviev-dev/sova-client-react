@@ -2,6 +2,7 @@ import './CourseModule.css';
 import React from "react";
 import { useParams } from "react-router-dom";
 import { apiGetCourse, apiGetCourseModule, apiGetUserMessages, apiSendMessage } from "../api";
+import Chat from './Chat';
 // import { SocketContext } from "../socketio/socketIO";
 import io, { Socket } from 'socket.io-client';
 
@@ -21,7 +22,7 @@ export default function CourseModule(props) {
   const [moduleImages, setModuleImages] = React.useState([]);
   const [messages, setMessages] = React.useState([]);
   const [students, setStudents] = React.useState([]);
-  const [messageData, setMessageData] = React.useState({text: '', module:moduleID,  from: null, to: null});
+  // const [messageData, setMessageData] = React.useState({text: '', module:moduleID,  from: null, to: null});
 
   //students ref
   // const studentsRef = React.useRef(students);
@@ -34,27 +35,27 @@ export default function CourseModule(props) {
   const socket = React.useRef(null);
   
   //functions
-  function updateFormData(evt, user) {
-    const { name, value } = evt.target;
+  // function updateFormData(evt, user) {
+  //   const { name, value } = evt.target;
     
-    setMessageData({...messageData, [name]: value, from: props.user._id, to: user});
-  }
+  //   setMessageData({...messageData, [name]: value, from: props.user._id, to: user});
+  // }
 
-  function sendMessage(evt) {
-    props.submitForm(evt);
-    socket.current.emit('message', messageData);
-    console.log(messageData);
-    // console.log(props.user._id);
-    const newMessages = [...messages, messageData];
+  // function sendMessage(evt) {
+  //   props.submitForm(evt);
+  //   socket.current.emit('message', messageData);
+  //   console.log(messageData);
+  //   // console.log(props.user._id);
+  //   const newMessages = [...messages, messageData];
     
-    //send messages to server
-    apiSendMessage(moduleID, userToken, messageData)
-    .then((data) => {
-      console.log(data);
-      setMessages(newMessages);
-      evt.target.reset();
-    });
-  }
+  //   //send messages to server
+  //   apiSendMessage(moduleID, userToken, messageData)
+  //   .then((data) => {
+  //     console.log(data);
+  //     setMessages(newMessages);
+  //     evt.target.reset();
+  //   });
+  // }
 
   //useEffect
   React.useEffect(() => {
@@ -142,7 +143,7 @@ export default function CourseModule(props) {
           setStudents(onlineStudents);
 
         } else {
-          console.log('show author which is online here');
+          // console.log('show author which is online here');
           setCourseAuthor({...courseAuthor, online: true});
         }
 
@@ -156,7 +157,7 @@ export default function CourseModule(props) {
         //   authorRef.current = {...authorRef.current, online: true};
         //   setCourseAuthor(authorRef.current);
         } else {
-          console.log(`${userID} ${username} is ${online}`);
+          // console.log(`${userID} ${username} is ${online}`);
           const studentToUpdate = students.findIndex((student) => {
             return student._id === userID;
           });
@@ -171,7 +172,7 @@ export default function CourseModule(props) {
       }));
 
       socket.current.on('user is offline', ({ userID, username }) => {
-        console.log(userID, username);
+        
         if(userID === courseAuthor._id) {
           setCourseAuthor((prevValue) => {
             return {...prevValue, online: false};
@@ -189,16 +190,17 @@ export default function CourseModule(props) {
 
       });
       
-      socket.current.on('private message', ({ text, module, from, to }) => {
-        setMessages((prevValue) => {
-          return [...prevValue, {text, module, from, to}];
-        })
-      })
+      // socket.current.on('private message', (data) => {
+      //   // console.log(data);
+      //   setMessages((prevValue) => {
+      //     return [...prevValue, data];
+      //   })
+      // })
 
       return () => {
         socket.current.off('session');
         socket.current.off('user is online');
-        socket.current.off('private message');
+        // socket.current.off('private message');
         socket.current.close();
       };
     }
@@ -220,43 +222,7 @@ export default function CourseModule(props) {
       </ul>
       
       <div className="lesson__div">
-        {/* {/* <p>Чат здесь</p> */}
-          <ul className="lesson__div_chat-messages">
-
-            {/* {messages && messages.map((message, index) => {
-              return <li key={index} className={props.user._id && props.user._id === message.to ? 'lesson__div-chat-messages-message lesson__div-chat-messages-message_recepient-message' : 'lesson__div-chat-messages-message'}>
-                {message.text}</li>
-            })} */}
-          </ul>
-          <div className='lesson__div-chat'>
-            {props.user._id && props.user.admin ?
-              <ul>
-                {students.length > 0 && students.map((student) => {
-                return <li key={student._id} className="lesson__div-chat-user">
-                  <img className='lesson__div-chat-user-avatar' src='https://toppng.com/uploads/preview/roger-berry-avatar-placeholder-11562991561rbrfzlng6h.png'></img>
-                  <span className='lesson__div-chat-user-name'>{student.name}</span>
-                  {messages.length > 0 && console.log(messages.filter((message) => {
-                    return message.to === student._id && message.user._id === courseAuthor._id || message.to === courseAuthor._id && message.user._id === student._id;
-                  }))}
-                  {/* <p>Чат с {student.name} <span>{student.online? "В сети" : "Не в сети"}</span></p>
-                  <form className="lesson__div-form" onSubmit={sendMessage}>
-                  <input className="lesson__div-form-input" type="text" name="text" onInput={(evt) => {updateFormData(evt, student._id)}} />
-                  <button type="submit" className="lesson__div-form-button">Отправить</button>
-                </form>  */}
-                </li>
-                })}
-              </ul>: 
-              <div>
-                <p>Чат с {courseAuthor._id && courseAuthor.name} <span>{courseAuthor._id && courseAuthor.online? "В сети" : "Не в сети"}</span></p>
-                <form className="lesson__div-form" onSubmit={sendMessage}>
-                  <input className="lesson__div-form-input" type="text" name="text" onInput={(evt) => {updateFormData(evt, courseAuthor._id)}} />
-                  <button type="submit" className="lesson__div-form-button">Отправить</button>
-                </form> 
-              </div>
-            }          
-          </div>
-          
-
+          <Chat students={students} courseAuthor={courseAuthor} user={props.user} messages={messages} socket={socket} moduleID={moduleID} token={userToken}></Chat>
         </div>
     </section>
   )

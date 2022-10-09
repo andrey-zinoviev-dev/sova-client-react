@@ -1,0 +1,171 @@
+.lesson__div-chat {
+  background-color: #2a2e37;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 2em 0;
+  
+}
+.lesson__div-chat-contacts {
+  min-width: 450px;
+  border-right: 1px solid white;
+}
+.lesson__div-chat-contacts-headline {
+  margin: 0 0 2em 0;
+  color: white;
+}
+.lesson__div-chat-contacts-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.lesson__div-chat-contacts-list-element {
+  padding: 0 2em;
+  position: relative;
+}
+.lesson__div-chat-contacts-list-element:not(:last-of-type) {
+  margin: 0 0 2em 0;
+}
+.lesson__div-chat-contacts-list-element-button {
+  padding: 0;
+  width: 100%;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border: none;
+  cursor: pointer;
+}
+.lesson__div-chat-user-avatar {
+  max-width: 55px;
+  border-radius: 50px;
+}
+.lesson__div-chat-user-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  padding: 0.5em 0;
+  width: calc(100% - 85px);
+  text-align: left;
+  /* position: relative; */
+}
+
+.lesson__div-chat-contacts-list-element-status {
+  content:"";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: var(--status);
+  box-shadow: 0 0 15px var(--status);
+  top: 0;
+  right: 15px;
+  border-radius: 50%;
+}
+.lesson__div-chat-user-text-name {
+  margin: 0 0 0.5em 0;
+  font-size: 16px;
+}
+.lesson__div-chat-textarea {
+  width: calc(100% - 450px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+  color: white;
+ 
+}
+.lesson__div-chat-textarea-messages {
+  list-style: none;
+  padding: 0 15px;
+  width: calc(100% - 200px);
+  height: 240px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.lesson__div-chat-textarea-messages-message {
+  max-width: 230px;
+  min-height: 40px;
+  
+  text-align: left;
+  padding: 7px;
+  
+  border-radius: 10px;
+  background-color: #1a1d24;
+  position: relative;
+}
+.lesson__div-chat-textarea-messages-message::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  top: 0;
+  left: -3%;
+  border-top: 10px solid #1a1d24;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  /* background-color: white; */
+}
+.lesson__div-chat-textarea-messages-message:not(:last-of-type) {
+  margin: 0 0 15px 0;
+}
+.lesson__div-chat-textarea-messages-message_self {
+  max-width: 230px;
+  min-height: 40px;
+  
+  text-align: left;
+  padding: 7px;
+  
+  border-radius: 10px;
+  
+  position: relative;
+  background-color: #f04c4d;
+  align-self: flex-end;
+}
+.lesson__div-chat-textarea-messages-message_self::after {
+  position: absolute;
+  content: "";
+  width: 0;
+  height: 0;
+  /* top: 0; */
+  bottom: 0;
+  right: -9px;
+  border-bottom: 10px solid #f04c4d;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+}
+.lesson__div-form {
+  width: calc(100% - 200px);
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.lesson__div-form-input {
+  min-height: 40px;
+  border-radius: 15px;
+  width: 100%;
+  padding: 5px 10px;
+  background-color: #1a1d24;
+  color: white;
+  /* box-shadow: inset 3px 5px 5px #101115, inset -3px -5px 5px #282b2e; */
+  box-shadow: inset 3px 5px 5px #101115, inset -5px -5px 5px #282b2e;
+  border: 1px solid #313234;
+  outline: none;
+}
+.lesson__div-form-input:focus {
+  border: 1px solid #f04c4d;
+}
+.lesson__div-form-button {
+  position: absolute;
+  right: 15px;
+  height: 100%;
+  display: inline-block;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  color: #f04c4d;
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+}
