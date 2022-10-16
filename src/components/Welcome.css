@@ -1,28 +1,115 @@
 .welcome {
   height: 100vh;
-  background-image: url(https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/4f90510d-3dcd-4a9c-a1ee-5dbf41625fa8/dez8j05-d1e9cf26-8550-49d3-beec-40a4235adedd.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzRmOTA1MTBkLTNkY2QtNGE5Yy1hMWVlLTVkYmY0MTYyNWZhOFwvZGV6OGowNS1kMWU5Y2YyNi04NTUwLTQ5ZDMtYmVlYy00MGE0MjM1YWRlZGQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.Sy9_XxpVLHYlHhqYgzoF8C0KbMkX60icBNtOSCvAXdE);
+  background-image: url(https://sun1-99.userapi.com/0XTa_dZrKLlSYyJ55tiU4MGpkPS2K6sjmjMxyA/VrplHgNDx3Y.jpg);
   background-size: cover;
   background-position: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   color: white;
+  position: relative;
 }
-
+.welcome__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 10%;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.welcome__header-logo {
+  max-width: 55px;
+}
+.welcome__header-nav-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  min-width: 420px;
+  justify-content: space-between;
+}
+.welcome__header-nav-list-element {
+  text-transform: uppercase;
+  color: #f7f50e;
+}
+.welcome__header-nav-list-element-link {
+  text-decoration: none;
+  color: white;
+  font-weight: 700;
+}
+.welcome__header-nav-list-element-link:hover {
+  /* color: rgb(203,81,39); */
+  color: #f5441e;
+}
+.welcome__links-list {
+  padding: 0;
+  list-style: none;
+  min-width: 210px;
+  max-width: 220px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.welcome__links-list-element {
+  height: 35px;
+  width: 35px;
+  /* border: 2px solid #f7f50e; */
+  /* border-radius: 9px;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center; */
+    /* color: #93e4ff; */
+    /* background-color: #93e4ff; */
+  /* color: white; */
+}
+.welcome__links-list-element-button {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background-color: transparent;
+  /* border: 3px solid #f7f50e; */
+  color: #f7f50e;
+  border-radius: 9px;
+  cursor: pointer;
+  border: none;
+}
+.welcome__links-list-element-icon {
+  font-size: 20px;
+}
+.welcome__content {
+  margin: auto 0;
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+}
+.welcome__content-buttons-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  /* width: 75%; */
+  min-height: 150px;
+  margin: 100px 0 0 0;
+}
 .welcome__button {
   min-width: 160px;
-  min-height: 75px;
+  min-height: 55px;
   clip-path: polygon(0% 0%, 100% 0%, 100% 80%, 80% 100%, 0% 100%);
-  border: 2px solid #f7f50e;
-  background-color: transparent;
+  border: 2px solid #63cbfd;
+  background-color: rgba(0, 0, 0, 0.35);
   /* text-shadow: 0 0 15px #f7f50e; */
-  color: #f7f50e;
+  color: #63cbfd;
   position: relative;
   cursor: pointer;
   /* border: none; */
 }
 .welcome__button:hover {
-  text-shadow: 0 0 10px #f7f50e, 0 0 15px #f7f50e;
+  text-shadow: 0 0 10px #63cbfd, 0 0 15px #63cbfd;
   /* box-shadow: 0 0 20px #f7f50e; */
 }
 .welcome__button::after {
@@ -30,10 +117,39 @@
   content: "";
   width: 100%;
   height: 100%;
-  top: 55%;
+  top: 50%;
   left: 80%;
-  background-color: #f7f50e;
-  rotate: -25deg;
+  background-color: rgba(99,203,253,255);
+  /* rotate: -25deg; */
+  transform: rotate(-20deg);
   /* background-color: transparent; */
   /* border: 2px solid #f7f50e; */
+}
+.welcome__span {
+  position: absolute;
+  top: 75px;
+  left: -85px;
+  min-height: 320px;
+    -webkit-writing-mode: vertical-lr;;
+    /* transform: rotateZ(-180deg); */
+        /* transform: rotateZ(-180deg); */
+    text-orientation: upright;
+}
+.welcome__footer {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  /* padding: 0 25px; */
+  padding: 0 12%;
+}
+.filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
 }

@@ -20,15 +20,15 @@ function App() {
   // const userRef = useRef({});
 
   //state variables
-  const [loginPopupOpened, setloginPopupOpened] = useState(false);
-  const [registerPopupOpened, setregisterPopupOpened] = useState(false);
+  
+  // const [registerPopupOpened, setregisterPopupOpened] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setuser] = useState({});
   const [courses, setCourses] = useState([]);
 
   //useNavigate
   // const navigate = useNavigate();
-
+  
   //useEffect
   useEffect(() => {
     //localstorage manipulations
@@ -67,18 +67,17 @@ function App() {
 
 
   //functions
-  function openLoginPopup() {
-    setloginPopupOpened(true);
-  };
+
 
   function openRegisterPopup() {
-    setregisterPopupOpened(true);
+    // console.log('register opened');
+    // setregisterPopupOpened(true);
   };
 
-  function closePopups() {
-    setloginPopupOpened(false);
-    setregisterPopupOpened(false);
-  };
+  // function closePopups() {
+  //   setWelcomePopupOpened(false);
+  //   // setregisterPopupOpened(false);
+  // };
 
   function navigationLoginFormSubmit(evt, formData) {
     evt.preventDefault();
@@ -128,7 +127,7 @@ function App() {
       </Routes> */}
       {/* <Login formSubmit={navigationLoginFormSubmit} isOpened={loginPopupOpened} closePopup={closePopups}></Login>
       <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register> */}
-      {loggedIn ? <Main></Main> : <Welcome loggedIn={loggedIn} switchToLoggedIn={switchToLoggedInComponent}></Welcome>}
+      {loggedIn ? <Main></Main> : <Welcome></Welcome>}
       </UserContext.Provider>
     </div>
   );

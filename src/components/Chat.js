@@ -1,6 +1,7 @@
 import React from "react";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+// import { faFacebook} from '@fortawesome/free-regular-svg-icons'
 import { apiSendMessage } from "../api";
 import './Chat.css';
 
