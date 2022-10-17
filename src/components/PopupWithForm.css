@@ -34,7 +34,10 @@
   }
   
   .popup__left-wrapper {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* position: relative; */
     z-index: 3;
     color: black;
     height: 100%;
@@ -46,10 +49,11 @@
     background-color: #dfd841;
     /* background-color: #63cbfd; */
     width: 50%;
+    /* transition: translate 0.75s cubic-bezier(.75,.1,.39,.91); */
   }
   
-  .popup__left-wrapper[initiateAnimation = '1'] {
-    animation: switchColor 5s ease-in-out 0s 1 forwards;
+  .popup__left-wrapper_registration {
+    translate: 100%;
   }
 
   .popup__left-logo {

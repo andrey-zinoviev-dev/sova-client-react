@@ -1,13 +1,21 @@
 import React from 'react';
-// import Main from './Main';
-import Login from './Login';
-import Register from './Register';
-import PopupWithForm from './PopupWithForm';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+// import Main from './Main';
+// import Login from './Login';
+// import Register from './Register';
+import PopupWithForm from './PopupWithForm';
+
 import SovaLogo from '../images/sova_logo_icon.png';
 import './Welcome.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faVk, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons';
+
+//framer-motion variants
+const animationVariants = {
+  registerForm: {translate: "0%"},
+  loginForm: {translate: "100%"},
+}
 
 export default function Welcome() {
   
@@ -16,12 +24,12 @@ export default function Welcome() {
 
   const [welcomePopupOpened, setWelcomePopupOpened] = React.useState(false);
   const [loginButtonPressed, setLoginButtonPressed] = React.useState(false);
-  const [initiateAnimation, setInitiateAnimation] = React.useState(0);
+  // const [initiateAnimation, setInitiateAnimation] = React.useState(0);
 
   function openWelcomePopupLogin() {
     // console.log('app is rendered');
     setWelcomePopupOpened(true);
-    setLoginButtonPressed(true);
+    // setLoginButtonPressed(true);
   };
 
   function openWelcomePopup() {
@@ -32,18 +40,22 @@ export default function Welcome() {
   function closePopups() {
     setWelcomePopupOpened(false);
     setLoginButtonPressed(false);
-    setInitiateAnimation(0);
+    // setInitiateAnimation(0);
   };
 
   function switchFormToRegsitration() {
     setLoginButtonPressed(false);
-    setInitiateAnimation(1);
+    // setInitiateAnimation(1);
   };
 
   function switchFormToLogin() {
     setLoginButtonPressed(true);
-    setInitiateAnimation(0);
+    // setInitiateAnimation(0);
   }
+
+  React.useEffect(() => {
+    console.log(loginButtonPressed);
+  }, [loginButtonPressed])
 
   return (
     <>
@@ -99,15 +111,15 @@ export default function Welcome() {
         <div className='filter'></div>
     </section>
     <PopupWithForm welcomePopupOpened={welcomePopupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
-      <div className="popup__left-wrapper" initiateAnimation={initiateAnimation}>
+      <motion.div className="popup__left-wrapper" animate={loginButtonPressed ? "loginForm" : "registerForm"} variants={animationVariants} transition={{type: "spring", duration: 1.5}}>
         <img className="popup__left-logo" src={SovaLogo}></img>
         <div>
           <span className="popup__left-span">SOVA STUDIO</span>
           <p className="popup__left-p">Заходи, присоединись к семье проессионалов, стань профессионалом</p>
-          <button onClick={loginButtonPressed ? switchFormToRegsitration : switchFormToLogin}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</button>
+          <button onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</button>
         </div>
-      </div>
-      <div className="popup__right-wrapper">
+      </motion.div>
+      {/* <div className="popup__right-wrapper">
         <div className="popup__form-wrapper">
           <button className="popup__close" onClick={closePopups}>Закрыть</button>
           <h3 className="popup__headline">{loginButtonPressed ? 'Вход' : 'Регистрация'}</h3>
@@ -117,7 +129,7 @@ export default function Welcome() {
             <button className="popup__form-button" type="submit" data-type="login">Войти</button>
           </form>
         </div>
-      </div>
+      </div> */}
       <div className="popup__overlay">
 
       </div>
