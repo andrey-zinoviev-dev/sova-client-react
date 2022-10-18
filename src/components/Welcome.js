@@ -18,7 +18,7 @@ const animationVariants = {
 }
 
 const textAnimationVariants = {
-  registerForm: {},
+  registerForm: {translate: ["-25%", "0%"], transition: {duration: 1.5, ease: "easeInOut"}},
   loginForm: {},
 }
 
@@ -118,7 +118,7 @@ export default function Welcome() {
     <PopupWithForm welcomePopupOpened={welcomePopupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
       <motion.div className="popup__left-wrapper" variants={animationVariants}>
         <img className="popup__left-logo" src={SovaLogo}></img>
-        <motion.div variants={textAnimationVariants}>
+        <motion.div animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={textAnimationVariants}>
           <span className="popup__left-span">SOVA STUDIO</span>
           <p className="popup__left-p">Заходи, присоединись к семье проессионалов, стань профессионалом</p>
           <button onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</button>
