@@ -1,16 +1,16 @@
 {
-  "main.css": "/sova-client-react/static/css/main.b1cdb9ed.chunk.css",
-  "main.js": "/sova-client-react/static/js/main.015f4fa6.chunk.js",
-  "main.js.map": "/sova-client-react/static/js/main.015f4fa6.chunk.js.map",
-  "static/js/1.f993ed0e.chunk.js": "/sova-client-react/static/js/1.f993ed0e.chunk.js",
-  "static/js/1.f993ed0e.chunk.js.map": "/sova-client-react/static/js/1.f993ed0e.chunk.js.map",
-  "static/js/2.118fdab5.chunk.js": "/sova-client-react/static/js/2.118fdab5.chunk.js",
-  "static/js/2.118fdab5.chunk.js.map": "/sova-client-react/static/js/2.118fdab5.chunk.js.map",
-  "runtime~main.js": "/sova-client-react/static/js/runtime~main.103df8b4.js",
-  "runtime~main.js.map": "/sova-client-react/static/js/runtime~main.103df8b4.js.map",
-  "static/media/sova_logo_icon.png": "/sova-client-react/static/media/sova_logo_icon.4c1b845b.png",
-  "static/css/main.b1cdb9ed.chunk.css.map": "/sova-client-react/static/css/main.b1cdb9ed.chunk.css.map",
-  "index.html": "/sova-client-react/index.html",
-  "precache-manifest.a05b2f94415229e1b94e02c9311cf8fa.js": "/sova-client-react/precache-manifest.a05b2f94415229e1b94e02c9311cf8fa.js",
-  "service-worker.js": "/sova-client-react/service-worker.js"
+  "files": {
+    "main.css": "/sova-client-react/static/css/main.390df04b.css",
+    "main.js": "/sova-client-react/static/js/main.4debc6ff.js",
+    "static/js/787.7ef5a8f3.chunk.js": "/sova-client-react/static/js/787.7ef5a8f3.chunk.js",
+    "static/media/sova_logo_icon.png": "/sova-client-react/static/media/sova_logo_icon.8014f281333cf0a3a0c1.png",
+    "index.html": "/sova-client-react/index.html",
+    "main.390df04b.css.map": "/sova-client-react/static/css/main.390df04b.css.map",
+    "main.4debc6ff.js.map": "/sova-client-react/static/js/main.4debc6ff.js.map",
+    "787.7ef5a8f3.chunk.js.map": "/sova-client-react/static/js/787.7ef5a8f3.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.390df04b.css",
+    "static/js/main.4debc6ff.js"
+  ]
 }
