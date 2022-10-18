@@ -34,11 +34,12 @@
   }
   
   .popup__left-wrapper {
-    position: absolute;
+    /* position: absolute;
     top: 0;
-    left: 0;
-    /* position: relative; */
-    z-index: 3;
+    left: 0; */
+    position: relative;
+    /* z-index: 3; */
+    z-index: 5;
     color: black;
     height: 100%;
     display: flex;

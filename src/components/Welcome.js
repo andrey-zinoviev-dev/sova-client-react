@@ -13,13 +13,18 @@ import { faFacebookF, faVk, faYoutube, faInstagram } from '@fortawesome/free-bra
 
 //framer-motion variants
 const animationVariants = {
-  registerForm: {translate: "0%",},
-  loginForm: {translate: "100%"},
+  registerForm: {translate: "0%", transition: {duration: 1, ease: [0.75,0.1,0.39,0.91]}},
+  loginForm: {translate: "100%", transition: {duration: 1, ease: [0.75,0.1,0.39,0.91]}},
+}
+
+const rightWrapperVariants = {
+  registerForm: {translate: "0%", transition: {delay: 0.15, duration: 0.75, ease: [0.75,0.1,0.39,0.91]}},
+  loginForm: {translate: "-100%", transition: { delay: 0.15, duration: 0.75, ease: [0.75,0.1,0.39,0.91]}},
 }
 
 const textAnimationVariants = {
-  registerForm: {translate: ["-25%", "0%"], transition: {duration: 1.5, ease: "easeInOut"}},
-  loginForm: {},
+  registerForm: {opacity: [0, 0, 1], transition: {duration: 0.75, ease: "easeInOut", opacity: {duration: 0.5, ease: "easeInOut"}}},
+  loginForm: {opacity:[0, 0, 1], transition: {duration: 0.75, ease: "easeInOut", opacity: {duration: 0.5, ease: "easeInOut"}}},
 }
 
 export default function Welcome() {
@@ -28,7 +33,7 @@ export default function Welcome() {
   const passwordRef = React.useRef();
 
   const [welcomePopupOpened, setWelcomePopupOpened] = React.useState(false);
-  const [loginButtonPressed, setLoginButtonPressed] = React.useState(false);
+  const [loginButtonPressed, setLoginButtonPressed] = React.useState(true);
   // const [initiateAnimation, setInitiateAnimation] = React.useState(0);
 
   function openWelcomePopupLogin() {
@@ -40,6 +45,7 @@ export default function Welcome() {
   function openWelcomePopup() {
     // console.log('app is rendered');
     setWelcomePopupOpened(true);
+    // setLoginButtonPressed(true);
   };
 
   function closePopups() {
@@ -82,7 +88,7 @@ export default function Welcome() {
           <h1>Здраааааааасте, тут можно стать вокальным экспертом</h1>
           <p>Проходи курсы по вокалу от Саши Совы здесь, становись экспертом здесь, у себя, везде. А потом тренируй остальных, ибо ты уже эксперт(ка)</p>
           <div className='welcome__content-buttons-wrapper'>
-            <button className="welcome__button header__button_login" onClick={openWelcomePopupLogin} >Войти</button>
+            <button className="welcome__button header__button_login" onClick={openWelcomePopup} >Войти</button>
             <button className="welcome__button header__button_register" onClick={openWelcomePopup} >Зарегистрироваться</button>
           </div>
           <span className='welcome__span'>SASHA SOVA INC. BE STELLAR, SING STELLAR</span>
@@ -116,15 +122,18 @@ export default function Welcome() {
         <div className='filter'></div>
     </section>
     <PopupWithForm welcomePopupOpened={welcomePopupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
-      <motion.div className="popup__left-wrapper" variants={animationVariants}>
+      <motion.div className="popup__left-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm" } variants={animationVariants}>
         <img className="popup__left-logo" src={SovaLogo}></img>
-        <motion.div animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={textAnimationVariants}>
-          <span className="popup__left-span">SOVA STUDIO</span>
-          <p className="popup__left-p">Заходи, присоединись к семье проессионалов, стань профессионалом</p>
+        <div style={{overflow: "hidden"}}>
+          <motion.div animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={textAnimationVariants}>
+            <span className="popup__left-span">SOVA STUDIO</span>
+            <h3>{loginButtonPressed ? "Добро пожаловать! Присоединяйся к семье, стань профессионалом, начни петь аки мастер" : "С возвращением! Входи, чтобы поскорее вернуться к занятиям"}</h3>
+            {/* <p className="popup__left-p">Заходи, присоединись к семье проессионалов, стань профессионалом</p> */}
+          </motion.div>
           <button onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</button>
-        </motion.div>
+        </div>
       </motion.div>
-      {/* <div className="popup__right-wrapper">
+      <motion.div className="popup__right-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={rightWrapperVariants}>
         <div className="popup__form-wrapper">
           <button className="popup__close" onClick={closePopups}>Закрыть</button>
           <h3 className="popup__headline">{loginButtonPressed ? 'Вход' : 'Регистрация'}</h3>
@@ -134,7 +143,7 @@ export default function Welcome() {
             <button className="popup__form-button" type="submit" data-type="login">Войти</button>
           </form>
         </div>
-      </div> */}
+      </motion.div>
       <div className="popup__overlay">
 
       </div>
