@@ -13,8 +13,13 @@ import { faFacebookF, faVk, faYoutube, faInstagram } from '@fortawesome/free-bra
 
 //framer-motion variants
 const animationVariants = {
-  registerForm: {translate: "0%"},
+  registerForm: {translate: "0%",},
   loginForm: {translate: "100%"},
+}
+
+const textAnimationVariants = {
+  registerForm: {},
+  loginForm: {},
 }
 
 export default function Welcome() {
@@ -111,13 +116,13 @@ export default function Welcome() {
         <div className='filter'></div>
     </section>
     <PopupWithForm welcomePopupOpened={welcomePopupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
-      <motion.div className="popup__left-wrapper" animate={loginButtonPressed ? "loginForm" : "registerForm"} variants={animationVariants} transition={{type: "spring", duration: 1.5}}>
+      <motion.div className="popup__left-wrapper" variants={animationVariants}>
         <img className="popup__left-logo" src={SovaLogo}></img>
-        <div>
+        <motion.div variants={textAnimationVariants}>
           <span className="popup__left-span">SOVA STUDIO</span>
           <p className="popup__left-p">Заходи, присоединись к семье проессионалов, стань профессионалом</p>
           <button onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</button>
-        </div>
+        </motion.div>
       </motion.div>
       {/* <div className="popup__right-wrapper">
         <div className="popup__form-wrapper">

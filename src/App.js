@@ -36,30 +36,30 @@ function App() {
     const localsessionID = localStorage.getItem('sessionID');
 
     if(userToken) {
-      const fetchedUser = apiGetCurrentUser(userToken)
-      .then((userFetched) => {
-        return userFetched;
-      });
+      // const fetchedUser = apiGetCurrentUser(userToken)
+      // .then((userFetched) => {
+      //   return userFetched;
+      // });
 
-      const fetchedCourses = apiGetCourses(userToken)
-      .then((coursesFetched) => {
-        return coursesFetched;
-      });
+      // const fetchedCourses = apiGetCourses(userToken)
+      // .then((coursesFetched) => {
+      //   return coursesFetched;
+      // });
 
-      Promise.all([fetchedUser, fetchedCourses]).then((values) => {
+      // Promise.all([fetchedUser, fetchedCourses]).then((values) => {
 
-        const [userFetched, coursesFetched] = values;
+      //   const [userFetched, coursesFetched] = values;
 
-        //set user
-        const userToSet = Object.assign({}, userFetched);
-        setuser(userToSet);
+      //   //set user
+      //   const userToSet = Object.assign({}, userFetched);
+      //   setuser(userToSet);
 
-        //set courses
-        const coursesToSet = [...coursesFetched];
+      //   //set courses
+      //   const coursesToSet = [...coursesFetched];
         
-        setCourses(coursesToSet);
+      //   setCourses(coursesToSet);
 
-      });
+      // });
       
     };
 
