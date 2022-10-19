@@ -39,30 +39,30 @@ export default function Welcome() {
   function openWelcomePopupLogin() {
     // console.log('app is rendered');
     setWelcomePopupOpened(true);
-    // setLoginButtonPressed(true);
+    setLoginButtonPressed(true);
   };
 
-  function openWelcomePopup() {
+  function openWelcomePopupRegister() {
     // console.log('app is rendered');
     setWelcomePopupOpened(true);
-    // setLoginButtonPressed(true);
+    setLoginButtonPressed(false);
   };
 
   function closePopups() {
     setWelcomePopupOpened(false);
-    setLoginButtonPressed(false);
+    // setLoginButtonPressed(false);
     // setInitiateAnimation(0);
   };
 
-  function switchFormToRegsitration() {
-    setLoginButtonPressed(false);
-    // setInitiateAnimation(1);
-  };
+  // function switchFormToRegsitration() {
+  //   setLoginButtonPressed(false);
+  //   // setInitiateAnimation(1);
+  // };
 
-  function switchFormToLogin() {
-    setLoginButtonPressed(true);
-    // setInitiateAnimation(0);
-  }
+  // function switchFormToLogin() {
+  //   setLoginButtonPressed(true);
+  //   // setInitiateAnimation(0);
+  // }
 
   React.useEffect(() => {
     console.log(loginButtonPressed);
@@ -88,8 +88,8 @@ export default function Welcome() {
           <h1>Здраааааааасте, тут можно стать вокальным экспертом</h1>
           <p>Проходи курсы по вокалу от Саши Совы здесь, становись экспертом здесь, у себя, везде. А потом тренируй остальных, ибо ты уже эксперт(ка)</p>
           <div className='welcome__content-buttons-wrapper'>
-            <button className="welcome__button header__button_login" onClick={openWelcomePopup} >Войти</button>
-            <button className="welcome__button header__button_register" onClick={openWelcomePopup} >Зарегистрироваться</button>
+            <button className="welcome__button header__button_login" onClick={openWelcomePopupLogin} >Войти</button>
+            <button className="welcome__button header__button_register" onClick={openWelcomePopupRegister} >Зарегистрироваться</button>
           </div>
           <span className='welcome__span'>SASHA SOVA INC. BE STELLAR, SING STELLAR</span>
         </div>
@@ -124,13 +124,13 @@ export default function Welcome() {
     <PopupWithForm welcomePopupOpened={welcomePopupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
       <motion.div className="popup__left-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm" } variants={animationVariants}>
         <img className="popup__left-logo" src={SovaLogo}></img>
-        <div style={{overflow: "hidden"}}>
+        <div style={{overflow: "hidden", padding: "5% 10%", boxSizing: "border-box"}}>
           <motion.div animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={textAnimationVariants}>
             <span className="popup__left-span">SOVA STUDIO</span>
             <h3>{loginButtonPressed ? "Добро пожаловать! Присоединяйся к семье, стань профессионалом, начни петь аки мастер" : "С возвращением! Входи, чтобы поскорее вернуться к занятиям"}</h3>
             {/* <p className="popup__left-p">Заходи, присоединись к семье проессионалов, стань профессионалом</p> */}
           </motion.div>
-          <button onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</button>
+          <motion.button whileHover={{scale: 1.1, backgroundColor:"black", color: "white"}} className='popup__left-button' onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</motion.button>
         </div>
       </motion.div>
       <motion.div className="popup__right-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={rightWrapperVariants}>
