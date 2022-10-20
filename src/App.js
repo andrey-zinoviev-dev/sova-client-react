@@ -36,11 +36,13 @@ function App() {
     const localsessionID = localStorage.getItem('sessionID');
 
     if(userToken) {
-      // const fetchedUser = apiGetCurrentUser(userToken)
-      // .then((userFetched) => {
-      //   return userFetched;
-      // });
+      
+      const fetchedUser = apiGetCurrentUser(userToken)
+      .then((userFetched) => {
+        return userFetched;
+      });
 
+      console.log(fetchedUser);
       // const fetchedCourses = apiGetCourses(userToken)
       // .then((coursesFetched) => {
       //   return coursesFetched;
@@ -79,10 +81,12 @@ function App() {
   //   // setregisterPopupOpened(false);
   // };
 
-  function navigationLoginFormSubmit(evt, formData) {
+  function loginFormSubmit(evt, formData) {
     evt.preventDefault();
+    // console.log(evt.target);
     apiLogin(formData)
     .then(({token}) => {
+      // console.log(token);
       if(!token) {
         return //process error
       }
@@ -91,6 +95,7 @@ function App() {
       return apiGetCurrentUser(token)
       .then((userDoc) => {
         setuser(userDoc);
+        setLoggedIn(true);
         // navigate('/courses')
       })
     })
@@ -110,10 +115,10 @@ function App() {
     // socket
   }
 
-  //test
-  function switchToLoggedInComponent() {
-    setLoggedIn(true);
-  };
+  // //test
+  // function switchToLoggedInComponent() {
+  //   // setLoggedIn(true);
+  // };
 
   return (
     <div className="App">
@@ -127,7 +132,7 @@ function App() {
       </Routes> */}
       {/* <Login formSubmit={navigationLoginFormSubmit} isOpened={loginPopupOpened} closePopup={closePopups}></Login>
       <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register> */}
-      {loggedIn ? <Main></Main> : <Welcome></Welcome>}
+      {loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit}></Welcome>}
       </UserContext.Provider>
     </div>
   );

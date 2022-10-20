@@ -27,7 +27,7 @@ const textAnimationVariants = {
   loginForm: {opacity:[0, 0, 1], transition: {duration: 0.75, ease: "easeInOut", opacity: {duration: 0.5, ease: "easeInOut"}}},
 }
 
-export default function Welcome() {
+export default function Welcome({ loginFormSubmit }) {
   
   const loginRef = React.useRef();
   const passwordRef = React.useRef();
@@ -54,15 +54,14 @@ export default function Welcome() {
     // setInitiateAnimation(0);
   };
 
-  // function switchFormToRegsitration() {
-  //   setLoginButtonPressed(false);
-  //   // setInitiateAnimation(1);
-  // };
+  function submitloginForm(evt) {
+    const objToPost = {email: loginRef.current.value, password: passwordRef.current.value};
+    loginFormSubmit(evt, objToPost)
+  }
 
-  // function switchFormToLogin() {
-  //   setLoginButtonPressed(true);
-  //   // setInitiateAnimation(0);
-  // }
+  function submitregisterForm(evt) {
+    console.log(evt);
+  };
 
   React.useEffect(() => {
     console.log(loginButtonPressed);
@@ -130,14 +129,14 @@ export default function Welcome() {
             <h3>{loginButtonPressed ? "Добро пожаловать! Присоединяйся к семье, стань профессионалом, начни петь аки мастер" : "С возвращением! Входи, чтобы поскорее вернуться к занятиям"}</h3>
             {/* <p className="popup__left-p">Заходи, присоединись к семье проессионалов, стань профессионалом</p> */}
           </motion.div>
-          <motion.button whileHover={{scale: 1.1, backgroundColor:"black", color: "white"}} className='popup__left-button' onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</motion.button>
+          <motion.button whileHover={{scale: 1.1, backgroundColor:"rgba(0, 0, 0)", color:"#f8f205", transition: {duration: 0.25}}} whileTap={{scale: 0.85, transition: {duration: 0.15}}} className='popup__left-button' onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</motion.button>
         </div>
       </motion.div>
       <motion.div className="popup__right-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={rightWrapperVariants}>
         <div className="popup__form-wrapper">
           <button className="popup__close" onClick={closePopups}>Закрыть</button>
           <h3 className="popup__headline">{loginButtonPressed ? 'Вход' : 'Регистрация'}</h3>
-          <form className="popup__form">
+          <form className="popup__form" onSubmit={loginButtonPressed ? submitloginForm : submitregisterForm}>
             <input ref={loginRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
             <input ref={passwordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
             <button className="popup__form-button" type="submit" data-type="login">Войти</button>
