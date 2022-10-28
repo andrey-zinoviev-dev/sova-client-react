@@ -70,7 +70,7 @@ export default function Welcome({ loginFormSubmit }) {
   return (
     <>
       <section className='welcome'>
-        <header className='welcome__header'>
+        {/* <header className='welcome__header'>
           <img className='welcome__header-logo' src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
           <nav className='welcome__header-nav'>
             <ul className='welcome__header-nav-list'>
@@ -81,7 +81,7 @@ export default function Welcome({ loginFormSubmit }) {
               <li className='welcome__header-nav-list-element'><Link className='welcome__header-nav-list-element-link' to='contacts'>Контакты</Link></li>
             </ul>
           </nav>
-        </header>
+        </header> */}
         {/* <div className='container'></div> */}
         <div className='welcome__content'>
           <h1>Здраааааааасте, тут можно стать вокальным экспертом</h1>
@@ -137,8 +137,8 @@ export default function Welcome({ loginFormSubmit }) {
           <button className="popup__close" onClick={closePopups}>Закрыть</button>
           <h3 className="popup__headline">{loginButtonPressed ? 'Вход' : 'Регистрация'}</h3>
           <form className="popup__form" onSubmit={loginButtonPressed ? submitloginForm : submitregisterForm}>
-            <input ref={loginRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-            <input ref={passwordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+            <motion.input whileTap={{scale: 0.95}} ref={loginRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
+            <motion.input whileTap={{scale: 0.95}} ref={passwordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
             <button className="popup__form-button" type="submit" data-type="login">Войти</button>
           </form>
         </div>

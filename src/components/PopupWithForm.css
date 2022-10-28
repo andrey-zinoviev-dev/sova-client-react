@@ -126,14 +126,20 @@
     padding: 10px;
     box-sizing: border-box;
     border-radius: 9px;
-    border: 2px solid #f8f205;
-    background-color: transparent;
-    color: #dfd841;
-    /* background-color: #e6e1299c; */
+    border: 2px solid transparent;
+    /* border: none; */
+    /* background-color: transparent; */
+    color: black;
+    background-color: #e6e1299c;
   }
   
+  .popup__form-input:focus {
+    outline: none;
+    border: 2px solid #f8f205;
+  }
+
   .popup__form-input::placeholder {
-    color: white;
+    color: black;
   }
   
   .popup__form-button {

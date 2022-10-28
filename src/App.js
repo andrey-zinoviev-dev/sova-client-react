@@ -8,7 +8,8 @@ import Register from './components/Register';
 import Courses from './components/Courses';
 import CourseModule from './components/CourseModule';
 import Chat from './components/Chat';
-
+import Course from './components/Course';
+import Dashboard from './components/Dashboard';
 import { apiLogin, apiRegister, apiGetCurrentUser, apiGetCourses } from './api';
 
 import { UserContext } from './context/userContext';
@@ -37,12 +38,16 @@ function App() {
 
     if(userToken) {
       
-      const fetchedUser = apiGetCurrentUser(userToken)
+      apiGetCurrentUser(userToken)
       .then((userFetched) => {
-        return userFetched;
+        if(!userFetched) {
+          return;
+        }
+        setuser(userFetched);
+        setLoggedIn(true);
       });
 
-      console.log(fetchedUser);
+      
       // const fetchedCourses = apiGetCourses(userToken)
       // .then((coursesFetched) => {
       //   return coursesFetched;
@@ -132,7 +137,11 @@ function App() {
       </Routes> */}
       {/* <Login formSubmit={navigationLoginFormSubmit} isOpened={loginPopupOpened} closePopup={closePopups}></Login>
       <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register> */}
-      {loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit}></Welcome>}
+        <Dashboard></Dashboard>
+        <Routes>
+          <Route path='courses/:courseID' element={<Course/>}></Route>
+          <Route path='/' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit}></Welcome>}></Route>
+        </Routes>
       </UserContext.Provider>
     </div>
   );
