@@ -137,7 +137,7 @@ function App() {
       </Routes> */}
       {/* <Login formSubmit={navigationLoginFormSubmit} isOpened={loginPopupOpened} closePopup={closePopups}></Login>
       <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register> */}
-        <Dashboard></Dashboard>
+        {/* <Dashboard></Dashboard> */}
         <Routes>
           <Route path='courses/:courseID' element={<Course/>}></Route>
           <Route path='/' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit}></Welcome>}></Route>

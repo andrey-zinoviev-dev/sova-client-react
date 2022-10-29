@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 // import Main from './Main';
 // import Login from './Login';
 // import Register from './Register';
+import Dashboard from './Dashboard';
 import PopupWithForm from './PopupWithForm';
 
 import SovaLogo from '../images/sova_logo_icon.png';
@@ -83,6 +84,7 @@ export default function Welcome({ loginFormSubmit }) {
           </nav>
         </header> */}
         {/* <div className='container'></div> */}
+        <Dashboard></Dashboard>
         <div className='welcome__content'>
           <h1>Здраааааааасте, тут можно стать вокальным экспертом</h1>
           <p>Проходи курсы по вокалу от Саши Совы здесь, становись экспертом здесь, у себя, везде. А потом тренируй остальных, ибо ты уже эксперт(ка)</p>

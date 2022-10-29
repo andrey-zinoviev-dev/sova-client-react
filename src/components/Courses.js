@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import Dashboard from "./Dashboard";
+import CourseModulesPopup from "./CourseModulesPopup";
 import './Courses.css';
 import {  
   apiGetCourses
@@ -23,6 +24,7 @@ export default function Courses(props) {
   //state variables
   const [courses, setCourses] = React.useState([]);
   const [courseIndex, setCourseIndex] = React.useState(0);
+  const [modulesPopupOpened, setModulesPopupOpened] = React.useState(false);
 
   //variables
   // let courseIndex = 0;
@@ -53,6 +55,12 @@ export default function Courses(props) {
     setCourseIndex((prevValue) => {
       return prevValue = prevValue + 1;
     })
+  };
+
+  function showCoursePopup(course) {
+    setModulesPopupOpened(true);
+  //  const courseModules = course.modules;
+  //  console.log(courseModules);
   }
 
   React.useEffect(() => {
@@ -71,14 +79,16 @@ export default function Courses(props) {
 
   return (
     <section style={{backgroundImage: `url(${courses.length > 0 && courses[courseIndex].cover}`}} className="main__courses">
+      <Dashboard></Dashboard>
       <motion.div className="main_courses-wrapper">
         <h3 className="main__courses-headline">{courses.length > 0 && courses[courseIndex].name}</h3>
         <p className="main__courses-para">{courses.length > 0 && courses[courseIndex].description}</p>
-        <Link to={`/courses/${courses.length > 0 && courses[courseIndex]._id}`}>
-          <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} className="main_courses-btn" onClick={() => {
-            console.log(courses[courseIndex]._id);
-          }}>Открыть</motion.button>
-        </Link>
+        {/* <Link to={`/courses/${courses.length > 0 && courses[courseIndex]._id}`}>
+          <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} className="main_courses-btn">Открыть</motion.button>
+        </Link> */}
+        <button onClick={() => {
+          showCoursePopup(courses[courseIndex]);
+        }} className="main_courses-btn">Открыть</button>
       </motion.div>
       <span className="main__courses-span">Sova inc</span>
       {/* <p>{courses[courseIndex].description}</p> */}
@@ -102,6 +112,17 @@ export default function Courses(props) {
 
 
       <div className="main__courses-overlay"></div>
+      <CourseModulesPopup modulesPopupOpened={modulesPopupOpened}>
+        <div>
+          <h3>{courses.length > 0 && courses[courseIndex].name}</h3>
+          <button>X</button>
+          <ul>
+            {courses.length > 0 ? courses[courseIndex].modules.map((module) => {
+              return <li key={module._id}>{module.name}</li>
+            }) : <li>У курса пока нет модулей, но это скоро изменится</li> }
+          </ul>
+        </div>
+      </CourseModulesPopup>
       {/* <h2>Эй, ты, <p className="headline">{props.user && props.user.name}</p>, это твоя панель... управления</h2>
       
       <p>Здесь можно открыть курс, пройти задания, не пройти задания (шучу), посмотреть свой профиль и так далее</p>
