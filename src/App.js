@@ -139,7 +139,7 @@ function App() {
       <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register> */}
         {/* <Dashboard></Dashboard> */}
         <Routes>
-          <Route path='courses/:courseID' element={<Course/>}></Route>
+          <Route path='courses/:courseID/modules/:moduleID' element={<Course/>}></Route>
           <Route path='/' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
