@@ -1,3 +1,52 @@
+.module {
+  background-color: #d37c52;
+  display: flex;
+  min-height: 100vh;
+  padding: 1% 1% 1% 0;
+  box-sizing: border-box;
+  
+}
+
+.module__menu {
+  width: 5%;
+  text-align: left;
+}
+
+.module__menu_opened {
+  width: 40%;
+}
+
+.module__content {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  border-radius: 9px;
+  background-color: white;
+  padding: 5% 15%;
+  text-align: left;
+  font-family: 'Monda', sans-serif;
+}
+
+.module__navigation-list {
+  /* min-width: 10%; */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  margin: 5% 0 0 0;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.module__navigation-list:hover {
+  cursor: pointer;
+}
+
+.module__navigation-list-li:not(.module__navigation-list-li:last-of-type) {
+  margin: 0 0 20px 0;
+}
+
+.module__content-img {
+  width: 100%;
+}
 
 .lesson__div-chat-user {
   background-color: transparent;

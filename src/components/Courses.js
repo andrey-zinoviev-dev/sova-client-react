@@ -84,6 +84,7 @@ export default function Courses(props) {
     if(userToken) {
       apiGetCourses(userToken)
       .then((data) => {
+        // console.log(data);
         if(!data) {
           return;
         }
@@ -157,11 +158,12 @@ export default function Courses(props) {
             <span className="popup__modules-course-span">0{courses.length > 0 && courseIndex + 1} Курс</span>
           </div>
           <h3 className="popup__modules-headline">{courses.length > 0 && courses[courseIndex].name}</h3>
+          <span className="popup__modules-topics">Темы курса</span>
           <button className="popup__close popup__close_modules" onClick={closeCoursePopup}>X</button>
           <ul className="popup__modules-list">
             {courses.length > 0 ? courses[courseIndex].modules.map((module, index) => {
               return <motion.li whileHover="hover" initial="rest" variants={liMotion} className="popup__modules-list-element" key={module._id}>
-                <Link className="popup__modules-list-element-link" to={`/courses/${courses[courseIndex]._id}/modules/${module._id}}`}>
+                <Link className="popup__modules-list-element-link" to={`courses/${courses[courseIndex]._id}/modules/${module._id}`}>
                   <div className="popup__modules-list-element-order">
                     <span>{`0${index + 1}`}</span><span>{module.name}</span>
                   </div>

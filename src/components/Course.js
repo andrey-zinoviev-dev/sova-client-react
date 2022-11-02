@@ -4,7 +4,7 @@ import { UserContext } from "../context/userContext";
 
 export default function Course() {
   const loggedInUser = React.useContext(UserContext);
-
+  
   return(
     <section>
       <div>
