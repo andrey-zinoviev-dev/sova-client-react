@@ -32,6 +32,27 @@ export default function CourseModule(props) {
   function showSideMenu() {
     setMenuOpened(!menuOpened);
   };
+
+  //variants
+  const menuVariants = {
+    closed: {width: "4%", transition: {duration: 0.5, ease: "easeInOut"}},
+    opened: {width: "25%", transition: {duration: 0.5, ease: "easeInOut"}},
+  };
+
+  const imgVariants = {
+    closed: {opacity: 0, transition: {duration: 0.25, ease: "linear"}, transitionEnd: { display: "none"}},
+    opened: {display: "flex", opacity: 1, transition: {duration: 0.25, ease: "linear"}}
+  };
+
+  const contentVariants = {
+    closed: {margin: "0 0 0 4%", transition: {duration: 0.5, ease: "easeInOut"}},
+    opened: {margin: "0 0 0 25%", transition: {duration: 0.5, ease: "easeInOut"}},
+  }
+
+  const linkVariants = {
+    closed: {},
+    opened: {},
+  };
   //variables
   // const [messageData, setMessageData] = React.useState({text: '', module:moduleID,  from: null, to: null});
 
@@ -226,39 +247,37 @@ export default function CourseModule(props) {
 
   }, [moduleID, userToken]);
 
-
-  React.useEffect(() => {
-    console.log(module);
-  }, [module]);
-
   return (
-    <section className='module'>
+    <motion.section className='module'>
       
-      <div className={menuOpened ? "module__menu module__menu_opened" : "module__menu"}>
-        <div style={{position: "relative", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: 'border-box', padding: '5%'}}>
-          <img style={{maxWidth: '30px', display: menuOpened ? 'block': "none"}} src={SovaLogo} alt="Логотип"></img>
-          <button onClick={showSideMenu}>
-            <FontAwesomeIcon icon={faSquareCaretDown} style={{fontSize: '20px'}}/>
-          </button>
+      <motion.div className='module__menu' initial="closed" animate={menuOpened ? "opened" : "closed"} variants={menuVariants}>
+        <div style={{position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 0 20px 0", minHeight: 59}}>
+          <motion.img initial="closed" animate={menuOpened ? "opened" : "closed"} variants={imgVariants} style={{maxWidth: '30px', margin: "0px 0px 0px 20px"}} src={SovaLogo} alt="Логотип"></motion.img>
+          <motion.button whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} onClick={showSideMenu} style={{backgroundColor: "rgba(255, 255, 255, 0)", border: "none"}}>
+            <FontAwesomeIcon icon={faSquareCaretDown} style={{fontSize: '30px'}}/>
+          </motion.button>
         </div>
-        <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", padding: '0 5%', boxSizing: "border-box"}}>
-          <span>Курс</span>
-          <h3 style={{margin: '5% 0', fontSize: '36px', letterSpacing: '2px', fontWeight: 700}}>{module._id && module.course.name}</h3>
-          <span>Модули</span>
+        <motion.div animate={{ opacity :  menuOpened ? 1 : 0, transition: {duration: 0.35}}} style={{display: "flex", visibility: menuOpened ? "visible" : "hidden", flexDirection: "column", alignItems: "flex-start", boxSizing: "border-box", fontWeight: 700}}>
+          <p style={{padding: '0 5%'}}>Курс</p>
+          <h3 style={{margin: '5% 0', padding: '0 5%', fontSize: '36px', letterSpacing: '2px', fontWeight: 700}}>{module._id && module.course.name}</h3>
+          <span style={{padding: '0 5%'}}>Модули</span>
           <ul className='module__navigation-list'>
             {module._id && module.course.modules.map((courseModule, index) => {
-              return <motion.li initial={{color: courseModule._id === module._id ? "rgb(0, 0, 0, 1)" : "rgb(0, 0, 0, 0.6)"}} whileHover={{color: "rgb(0, 0, 0, 1)"}} key={index} className="module__navigation-list-li">{courseModule.description}</motion.li>
+              return <motion.li key={index} className="module__navigation-list-li" style={{padding: '15px 20px', borderLeft: courseModule._id === module._id && "4px solid rgb(0, 0, 0)", fontSize: '18px'}}>{courseModule.description}</motion.li>
             })}
           </ul>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
       
-      <div className='module__content'>
-        <h3 className='module__content-headline'>Курс {module.name}</h3>
-        <p>{module.description}</p>
-        <p>Вот на этой картинке можно изучить строение гортани</p>
-        <img className='module__content-img' src={module._id && module.images[0]} alt="Гортань спереди"></img>
-      </div>
+      <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center'}} initial={"closed"} animate={menuOpened ? "opened" : "closed"} variants={contentVariants} className='module__content'>
+        <div style={{maxWidth: 768, width: '100%'}}>
+          <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>Курс {module._id && module.course.name}</h3>
+          <p>{module._id && module.name}</p>
+          <p>{module.description}</p>
+          <p>Вот на этой картинке можно изучить строение гортани</p>
+        </div>
+        <img style={{maxWidth: 768}} className='module__content-img' src={module._id && module.images[0]} alt="Гортань спереди"></img>
+      </motion.div>
       
       
       {/* <p>Модуль {module.name}</p>
@@ -274,6 +293,6 @@ export default function CourseModule(props) {
       <div className="lesson__div">
           <Chat students={students} courseAuthor={courseAuthor} user={props.user} messages={messages} socket={socket} moduleID={moduleID} token={userToken}></Chat>
         </div> */}
-    </section>
+    </motion.section>
   )
 }

@@ -2,14 +2,19 @@
   background-color: #d37c52;
   display: flex;
   min-height: 100vh;
-  padding: 1% 1% 1% 0;
+  /* padding: 1% 1% 1% 0; */
   box-sizing: border-box;
-  
+  position: relative;
 }
 
 .module__menu {
   width: 5%;
   text-align: left;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #d37c52;
 }
 
 .module__menu_opened {
@@ -20,7 +25,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 0;
-  border-radius: 9px;
+  border-radius: 9px 0 0 9px;
   background-color: white;
   padding: 5% 15%;
   text-align: left;
@@ -34,6 +39,7 @@
   list-style: none;
   margin: 5% 0 0 0;
   color: rgba(0, 0, 0, 0.6);
+  width: 100%;
 }
 
 .module__navigation-list:hover {
