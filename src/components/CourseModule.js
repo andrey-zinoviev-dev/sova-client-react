@@ -40,8 +40,18 @@ export default function CourseModule(props) {
   };
 
   const imgVariants = {
-    closed: {opacity: 0, transition: {duration: 0.25, ease: "linear"}, transitionEnd: { display: "none"}},
-    opened: {display: "flex", opacity: 1, transition: {duration: 0.25, ease: "linear"}}
+    closed: {opacity: 0, transition: {duration: 0.25, ease: "linear"}},
+    opened: {opacity: 1, transition: {duration: 0.25, ease: "linear"}}
+  };
+
+  const sideContentVariants = {
+    closed: {transition: {staggerChildren: 0.5, staggerDirection: -1}},
+    opened: {transition: {staggerChildren: 0.5, staggerDirection: 1}},
+  };
+
+  const linkVariants = {
+    closed: {opacity: 0, transition: {duration: 0.5}},
+    opened: {opacity: 1, transition: {duration: 0.5}},
   };
 
   const contentVariants = {
@@ -49,10 +59,7 @@ export default function CourseModule(props) {
     opened: {margin: "0 0 0 25%", transition: {duration: 0.5, ease: "easeInOut"}},
   }
 
-  const linkVariants = {
-    closed: {},
-    opened: {},
-  };
+
   //variables
   // const [messageData, setMessageData] = React.useState({text: '', module:moduleID,  from: null, to: null});
 
@@ -257,11 +264,12 @@ export default function CourseModule(props) {
             <FontAwesomeIcon icon={faSquareCaretDown} style={{fontSize: '30px'}}/>
           </motion.button>
         </div>
-        <motion.div animate={{ opacity :  menuOpened ? 1 : 0, transition: {duration: 0.35}}} style={{display: "flex", visibility: menuOpened ? "visible" : "hidden", flexDirection: "column", alignItems: "flex-start", boxSizing: "border-box", fontWeight: 700}}>
-          <p style={{padding: '0 5%'}}>Курс</p>
-          <h3 style={{margin: '5% 0', padding: '0 5%', fontSize: '36px', letterSpacing: '2px', fontWeight: 700}}>{module._id && module.course.name}</h3>
-          <span style={{padding: '0 5%'}}>Модули</span>
-          <ul className='module__navigation-list'>
+        {/* animate={{display: menuOpened && "flex", opacity :  menuOpened ? 1 : 0, transition: {staggerChildren: 0.5, staggerDirection: 1}, transitionEnd: !menuOpened && {display : "none"}}} */}
+        <motion.div  variants={sideContentVariants} style={{width: 360, display: "flex", opacity: menuOpened ? 1 : 0, flexDirection: "column", alignItems: "flex-start", boxSizing: "border-box", fontWeight: 700}}>
+          <motion.p variants={linkVariants} style={{padding: '0 5%'}}>Курс</motion.p>
+          <motion.h3 variants={linkVariants} style={{margin: '5% 0', padding: '0 5%', fontSize: '36px', letterSpacing: '2px', fontWeight: 700}}>{module._id && module.course.name}</motion.h3>
+          <motion.span variants={linkVariants} style={{padding: '0 5%'}}>Модули</motion.span>
+          <ul  className='module__navigation-list'>
             {module._id && module.course.modules.map((courseModule, index) => {
               return <motion.li key={index} className="module__navigation-list-li" style={{padding: '15px 20px', borderLeft: courseModule._id === module._id && "4px solid rgb(0, 0, 0)", fontSize: '18px'}}>{courseModule.description}</motion.li>
             })}
