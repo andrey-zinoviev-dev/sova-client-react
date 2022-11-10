@@ -1,9 +1,11 @@
 .lesson__div-chat {
-  background-color: #2a2e37;
+  border: 1px solid #2a2e37;
+  border-radius: 9px;
+  background-color: #f4f3f8;
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  padding: 2em 0;
+  /* padding: 2em 0; */
   
 }
 .lesson__div-chat-contacts {

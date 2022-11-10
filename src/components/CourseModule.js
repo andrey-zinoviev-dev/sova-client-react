@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { apiGetCourse, apiGetCourseModule, apiGetUserMessages, apiSendMessage } from "../api";
+import { UserContext } from '../context/userContext';
 import Chat from './Chat';
 // import { SocketContext } from "../socketio/socketIO";
 import './CourseModule.css';
@@ -22,15 +23,31 @@ export default function CourseModule(props) {
   
   const [courseData, setCourseData] = React.useState({});
   const [courseAuthor, setCourseAuthor] = React.useState({});
-  const [module, setModule] = React.useState({});
+  const [courseModule, setCourseModule] = React.useState({});
   const [moduleImages, setModuleImages] = React.useState([]);
   const [messages, setMessages] = React.useState([]);
   const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
+  const [chatIsOpened, setChatIsOpened] = React.useState(false);
+
+  //variables derived from courseModule state variable
+  // const admin = courseModule._id ? courseModule.course.author : {};
+  // let students = courseModule._id ? courseModule.students : [];
+
+  //Context
+  const loggedInUser = React.useContext(UserContext);
 
   //functions
   function showSideMenu() {
     setMenuOpened(!menuOpened);
+  };
+
+  function openChat() {
+    setChatIsOpened(true);
+  }
+
+  function closeChat() {
+    setChatIsOpened(false);
   };
 
   //variants
@@ -59,10 +76,11 @@ export default function CourseModule(props) {
     opened: {margin: "0 0 0 25%", transition: {duration: 0.5, ease: "easeInOut"}},
   }
 
-
-  //variables
   // const [messageData, setMessageData] = React.useState({text: '', module:moduleID,  from: null, to: null});
 
+  //refs
+  const adminStatusRef = React.useRef();
+  const studentStatusRef = React.useRef();
   //students ref
   // const studentsRef = React.useRef(students);
   // studentsRef.current = students;
@@ -100,7 +118,7 @@ export default function CourseModule(props) {
   // React.useEffect(() => {
     
   //   const userToken = localStorage.getItem('token');
-  //   if(userToken) {
+
   //     apiGetCourse(courseID, userToken)
   //     .then((course) => {
         
@@ -245,14 +263,86 @@ export default function CourseModule(props) {
   //   }
     
   // }, [props.user._id, courseAuthor._id]);
-  React.useEffect(() => {
-    // console.log(moduleID);
-    apiGetCourseModule(moduleID, userToken)
-    .then((moduleData) => {
-      setModule(moduleData);
-    });
 
-  }, [moduleID, userToken]);
+  React.useEffect(() => {
+ 
+    if(userToken && loggedInUser._id) {
+      apiGetCourseModule(moduleID, userToken)
+      .then((moduleData) => {
+        setCourseModule(moduleData);
+        setCourseAuthor(moduleData.course.author);
+        setStudents(moduleData.students);
+      });
+    }
+
+  }, [moduleID, userToken, loggedInUser._id]);
+
+  React.useEffect(() => {
+    socket.current = io('http://localhost:3000');
+    
+    if(loggedInUser._id && courseAuthor._id && students.length > 0) { 
+      // console.log(admin, students);
+
+      if(sessionStorage) {
+        socket.current.auth = { localsessionID: sessionStorage };
+        socket.current.connect();
+      };
+
+      socket.current.emit('userConnected', loggedInUser);
+  
+      socket.current.on('session', ({ sessionID, userID, users }) => {
+        localStorage.setItem('sessionID', sessionID);
+        socket.current.userID = userID;
+        socket.current.username = loggedInUser.name;
+      });
+  
+      socket.current.on('user is online', (({ userID, username, online, users }) => {
+        // console.log(userID, username);
+        if(loggedInUser.admin) {
+          // console.log(students);
+          // console.log(userID, username);
+          const onlineStudents = students.map((student) => {
+            return student._id === userID ? {...student, online: true} : student;
+          });
+          // students[onlineStudent].online = true;
+          // console.log(students);
+          setStudents(onlineStudents);
+          // console.log(students);
+        } else {
+          // console.log(courseAuthor);
+          setCourseAuthor((prevValue) => {
+            return {...prevValue, online: true}
+          })
+          // admin.online = true;
+          // console.log(userID, username);
+        }
+        
+        // if(loggedInUser.admin && students.length > 0) {
+        //   const onlineUser = students.find((student) => {
+        //     return student._id === userID;
+        //   });
+        //   onlineUser.online = true;
+        //   console.log(students);
+        // } else {
+        //   console.log(admin);
+        // }
+        // console.log(admin);
+          // if(userID === admin._id) {
+          //   console.log('admin is online');
+          // } 
+          // else {
+          //   console.log('students are online');
+          // }
+      }));
+  
+      //remove socket connection on component not rendered
+      return () => {
+        socket.current.off('session');
+        socket.current.close();
+      }
+    }
+
+  }, [sessionStorage, loggedInUser._id, students.length, courseAuthor._id]);
 
   return (
     <motion.section className='module'>
@@ -278,13 +368,40 @@ export default function CourseModule(props) {
       </motion.div>
       
       <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center'}} initial={"closed"} animate={menuOpened ? "opened" : "closed"} variants={contentVariants} className='module__content'>
-        <div style={{maxWidth: 768, width: '100%'}}>
-          <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>Курс {module._id && module.course.name}</h3>
-          <p>{module._id && module.name}</p>
-          <p>{module.description}</p>
-          <p>Вот на этой картинке можно изучить строение гортани</p>
+        <div>
+          <ul>
+            <li><button onClick={closeChat}>Урок</button></li>
+            <li><button onClick={openChat}>Чат</button></li>
+          </ul>
         </div>
-        <img style={{maxWidth: 768}} className='module__content-img' src={module._id && module.images[0]} alt="Гортань спереди"></img>
+        {!chatIsOpened ?
+          <div style={{maxWidth: 768, width: '100%'}}>
+            <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>Курс {courseModule._id && courseModule.course.name}</h3>
+            <p>{courseModule._id && courseModule.name}</p>
+            <p>{courseModule.description}</p>
+            <p>Вот на этой картинке можно изучить строение гортани</p>
+            <img style={{maxWidth: 768}} className='module__content-img' src={courseModule._id && courseModule.images[0]} alt="Гортань спереди"></img>
+          </div>
+          :
+          <div style={{maxWidth: 768, width: '100%'}}>
+            <h3>Чат здесь</h3>
+            <Chat>
+              <ul style={{minHeight: 210, margin: 0, minWidth: 180, borderRight: '1px solid rgba(193,200,205, 0.7)', padding: 0}}>
+                {loggedInUser.admin? 
+                  students.length > 0 && students.map((student) => {
+                    return <li key={student._id} style={{display: "flex", alignItems: "center", boxSizing: "border-box", padding: "0 10px"}}><span style={{minWidth: 15, minHeight: 15, margin: '0 10px 0 0', borderRadius: 9, backgroundColor: student.online ? "yellowgreen": '#fe4a29'}}></span><p>{student.name}</p></li>
+                  })
+                  :
+                  <li style={{display: "flex", alignItems: "center", boxSizing: "border-box", padding: "0 10px"}}><span style={{minWidth: 15, minHeight: 15, margin: '0 10px 0 0', borderRadius: 9, backgroundColor: courseAuthor.online ? "green" : '#fe4a29'}}></span><p>{courseAuthor.name}</p></li>
+                }
+              </ul>
+              <div>
+                <p>Выберите чат, чтобы написать</p>
+              </div>
+            </Chat>
+          </div>
+        }
+
       </motion.div>
       
       
