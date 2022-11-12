@@ -22,17 +22,19 @@ export default function CourseModule(props) {
   const {courseID, moduleID} = useParams();
   
   const [courseData, setCourseData] = React.useState({});
-  const [courseAuthor, setCourseAuthor] = React.useState({});
+  // const [courseAuthor, setCourseAuthor] = React.useState({});
   const [courseModule, setCourseModule] = React.useState({});
   const [moduleImages, setModuleImages] = React.useState([]);
   const [messages, setMessages] = React.useState([]);
-  const [students, setStudents] = React.useState([]);
+  // const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
+  const [adminIsOnline, setAdminIsOnline] = React.useState(false);
+  const [studentId, setStudentId] = React.useState("");
 
   //variables derived from courseModule state variable
-  // const admin = courseModule._id ? courseModule.course.author : {};
-  // let students = courseModule._id ? courseModule.students : [];
+  const admin = courseModule._id ? {...courseModule.course.author, online: adminIsOnline} : {};
+  const students = courseModule._id ? courseModule.students : [];
 
   //Context
   const loggedInUser = React.useContext(UserContext);
@@ -270,8 +272,8 @@ export default function CourseModule(props) {
       apiGetCourseModule(moduleID, userToken)
       .then((moduleData) => {
         setCourseModule(moduleData);
-        setCourseAuthor(moduleData.course.author);
-        setStudents(moduleData.students);
+        // setCourseAuthor(moduleData.course.author);
+        // setStudents(moduleData.students);
       });
     }
 
@@ -280,7 +282,7 @@ export default function CourseModule(props) {
   React.useEffect(() => {
     socket.current = io('http://localhost:3000');
     
-    if(loggedInUser._id && courseAuthor._id && students.length > 0) { 
+    if(loggedInUser._id && admin._id && students.length > 0) { 
       // console.log(admin, students);
 
       if(sessionStorage) {
@@ -294,6 +296,39 @@ export default function CourseModule(props) {
         localStorage.setItem('sessionID', sessionID);
         socket.current.userID = userID;
         socket.current.username = loggedInUser.name;
+        if(loggedInUser.admin) {
+          // console.log('admin check, admin check');
+          console.log(users);
+          console.log(students);
+          
+          // const onlineUsers = users.filter((user) => {
+          //   return user.userID !== loggedInUser._id;
+          // });
+          // setStudents(onlineUsers);
+          // console.log(students);
+          // console.log(userID, username);
+          // const onlineStudents = students.map((student) => {
+          //   return student._id === userID ? {...student, online: true} : student;
+          // });
+          // students[onlineStudent].online = true;
+          // console.log(students);
+          // setStudents(onlineStudents);
+          // console.log(students);
+        } else {
+          // console.log(admin._id);
+          const adminOnline = users.find((user) => {
+            return user.userID === admin._id && user.online;
+          });
+          
+          adminOnline && setAdminIsOnline(true);
+          // adminOnline && setAdminIsOnline(true);
+          // console.log(courseAuthor);
+          // setCourseAuthor((prevValue) => {
+          //   return {...prevValue, online: true}
+          // })
+          // admin.online = true;
+          // console.log(userID, username);
+        }
       });
   
       socket.current.on('user is online', (({ userID, username, online, users }) => {
@@ -301,18 +336,18 @@ export default function CourseModule(props) {
         if(loggedInUser.admin) {
           // console.log(students);
           // console.log(userID, username);
-          const onlineStudents = students.map((student) => {
-            return student._id === userID ? {...student, online: true} : student;
-          });
+          // const onlineStudents = students.map((student) => {
+          //   return student._id === userID ? {...student, online: true} : student;
+          // });
           // students[onlineStudent].online = true;
           // console.log(students);
-          setStudents(onlineStudents);
+          // setStudents(onlineStudents);
           // console.log(students);
         } else {
           // console.log(courseAuthor);
-          setCourseAuthor((prevValue) => {
-            return {...prevValue, online: true}
-          })
+          // setCourseAuthor((prevValue) => {
+          //   return {...prevValue, online: true}
+          // })
           // admin.online = true;
           // console.log(userID, username);
         }
@@ -342,7 +377,11 @@ export default function CourseModule(props) {
       }
     }
 
-  }, [sessionStorage, loggedInUser._id, students.length, courseAuthor._id]);
+  }, [sessionStorage, loggedInUser._id, students.length, admin._id]);
+
+  // React.useEffect(() => {
+  //   console.log(admin);
+  // }, [adminIsOnline]);
 
   return (
     <motion.section className='module'>
@@ -392,7 +431,7 @@ export default function CourseModule(props) {
                     return <li key={student._id} style={{display: "flex", alignItems: "center", boxSizing: "border-box", padding: "0 10px"}}><span style={{minWidth: 15, minHeight: 15, margin: '0 10px 0 0', borderRadius: 9, backgroundColor: student.online ? "yellowgreen": '#fe4a29'}}></span><p>{student.name}</p></li>
                   })
                   :
-                  <li style={{display: "flex", alignItems: "center", boxSizing: "border-box", padding: "0 10px"}}><span style={{minWidth: 15, minHeight: 15, margin: '0 10px 0 0', borderRadius: 9, backgroundColor: courseAuthor.online ? "green" : '#fe4a29'}}></span><p>{courseAuthor.name}</p></li>
+                  <li style={{display: "flex", alignItems: "center", boxSizing: "border-box", padding: "0 10px"}}><span style={{minWidth: 15, minHeight: 15, margin: '0 10px 0 0', borderRadius: 9, backgroundColor: admin.online ? "green" : '#fe4a29'}}></span><p>{admin.name}</p></li>
                 }
               </ul>
               <div>
