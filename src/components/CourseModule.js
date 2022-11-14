@@ -26,7 +26,7 @@ export default function CourseModule(props) {
   const [courseModule, setCourseModule] = React.useState({});
   const [moduleImages, setModuleImages] = React.useState([]);
   const [messages, setMessages] = React.useState([]);
-  // const [students, setStudents] = React.useState([]);
+  const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
   const [adminIsOnline, setAdminIsOnline] = React.useState(false);
@@ -34,8 +34,12 @@ export default function CourseModule(props) {
 
   //variables derived from courseModule state variable
   const admin = courseModule._id ? {...courseModule.course.author, online: adminIsOnline} : {};
-  const students = courseModule._id ? courseModule.students : [];
+  const filteredMessages = messages.filter((message) => {
+    return message.user._id === studentId;
+  });
 
+  // const students = courseModule._id ? courseModule.students : [];
+  // let messages;
   //Context
   const loggedInUser = React.useContext(UserContext);
 
@@ -52,6 +56,11 @@ export default function CourseModule(props) {
     setChatIsOpened(false);
   };
 
+  function filterChatToUser(userId) {
+    // console.log(userId);
+    setStudentId(userId);
+    // console.log(filteredMessages);
+  }
   //variants
   const menuVariants = {
     closed: {width: "4%", transition: {duration: 0.5, ease: "easeInOut"}},
@@ -273,11 +282,21 @@ export default function CourseModule(props) {
       .then((moduleData) => {
         setCourseModule(moduleData);
         // setCourseAuthor(moduleData.course.author);
-        // setStudents(moduleData.students);
+        setStudents(moduleData.students);
       });
+
+      apiGetUserMessages(moduleID, userToken)
+      .then((messagesData) => {
+        setMessages(messagesData);
+      })
     }
 
   }, [moduleID, userToken, loggedInUser._id]);
+
+  React.useEffect(() => {
+    console.log(messages);
+    console.log(studentId)
+  }, [messages, studentId]);
 
   React.useEffect(() => {
     socket.current = io('http://localhost:3000');
@@ -298,9 +317,18 @@ export default function CourseModule(props) {
         socket.current.username = loggedInUser.name;
         if(loggedInUser.admin) {
           // console.log('admin check, admin check');
-          console.log(users);
-          console.log(students);
-          
+          const onlineUsers = users.filter((user) => {
+            return user.online && user.userID !== loggedInUser._id;
+          });
+
+          const onlineStudents = students.map((student) => {
+            const onlineStudent = onlineUsers.find((onlineUser) => {
+              return onlineUser.userID === student._id;
+            });
+            // console.log(onlineStudent);
+            return onlineStudent && onlineStudent.userID === student._id ? {...student, online: true} : student; 
+          });
+          setStudents(onlineStudents);
           // const onlineUsers = users.filter((user) => {
           //   return user.userID !== loggedInUser._id;
           // });
@@ -373,15 +401,12 @@ export default function CourseModule(props) {
       //remove socket connection on component not rendered
       return () => {
         socket.current.off('session');
+        socket.current.off('user is online');
         socket.current.close();
       }
     }
 
   }, [sessionStorage, loggedInUser._id, students.length, admin._id]);
-
-  // React.useEffect(() => {
-  //   console.log(admin);
-  // }, [adminIsOnline]);
 
   return (
     <motion.section className='module'>
@@ -425,17 +450,37 @@ export default function CourseModule(props) {
           <div style={{maxWidth: 768, width: '100%'}}>
             <h3>Чат здесь</h3>
             <Chat>
-              <ul style={{minHeight: 210, margin: 0, minWidth: 180, borderRight: '1px solid rgba(193,200,205, 0.7)', padding: 0}}>
+              <ul style={{minHeight: 210, margin: 0, minWidth: 210, borderRight: '1px solid rgba(193,200,205, 0.7)', padding: 0}}>
                 {loggedInUser.admin? 
                   students.length > 0 && students.map((student) => {
-                    return <li key={student._id} style={{display: "flex", alignItems: "center", boxSizing: "border-box", padding: "0 10px"}}><span style={{minWidth: 15, minHeight: 15, margin: '0 10px 0 0', borderRadius: 9, backgroundColor: student.online ? "yellowgreen": '#fe4a29'}}></span><p>{student.name}</p></li>
+                    return <li key={student._id} style={{display: "flex", alignItems: "center", boxSizing: "border-box"}}>
+                      <button onClick={() => {
+                        filterChatToUser(student._id)
+                      }} style={{cursor:"pointer", width: "100%", padding: "5px 15px", backgroundColor: "transparent", border: "none", borderBottom: "1px solid lightgrey", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box"}}>
+                        <div style={{position: "relative"}}>
+                          <img style={{maxWidth: 50, borderRadius: "51%"}} src='https://images.assetsdelivery.com/compings_v2/thesomeday123/thesomeday1231709/thesomeday123170900021.jpg'></img>
+                          <span style={{position: "absolute", bottom: 5, right: 5, minWidth: 10, minHeight: 10, borderRadius: 9, backgroundColor: student.online ? "yellowgreen": '#fe4a29'}}></span>
+                        </div>
+                        <p>{student.name}</p>
+                      </button>
+                    </li>
                   })
                   :
-                  <li style={{display: "flex", alignItems: "center", boxSizing: "border-box", padding: "0 10px"}}><span style={{minWidth: 15, minHeight: 15, margin: '0 10px 0 0', borderRadius: 9, backgroundColor: admin.online ? "green" : '#fe4a29'}}></span><p>{admin.name}</p></li>
+                  <li style={{display: "flex", alignItems: "center", boxSizing: "border-box"}}>
+                    <button onClick={() => {
+                      filterChatToUser(admin._id)
+                    }} style={{cursor:"pointer", width: "100%", padding: "5px 15px", backgroundColor: "transparent", border: "none", borderBottom: "1px solid lightgrey", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box"}}>
+                      <div style={{position: "relative"}}>
+                        <img style={{maxWidth: 50, borderRadius: "51%"}} src='https://images.assetsdelivery.com/compings_v2/thesomeday123/thesomeday1231709/thesomeday123170900021.jpg'></img>
+                        <span style={{position: "absolute", bottom: 5, right: 5, minWidth: 10, minHeight: 10, borderRadius: 9, backgroundColor: admin.online ? "green" : '#fe4a29'}}></span>
+                      </div>
+                      <p>{admin.name}</p>
+                    </button>
+                  </li>
                 }
               </ul>
               <div>
-                <p>Выберите чат, чтобы написать</p>
+                {studentId.length > 0 ? <form><button>Отправить</button></form> : <p>Выберите чат, чтобы написать</p>}
               </div>
             </Chat>
           </div>
