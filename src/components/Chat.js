@@ -152,7 +152,7 @@ export default function Chat({ children, students, courseAuthor, user, messages,
                {/* sendMessage(chosenStudent); */}
             {/* }}><FontAwesomeIcon icon={faPaperPlane} /></button> */}
             {/* </form> */}
-            :
+            {/* : */}
             {/* <form className="lesson__div-form">
               <input ref={inputRef} className="lesson__div-form-input" type="text" name="text" />
               <button type="submit" className="lesson__div-form-button" onClick={(evt) => {
