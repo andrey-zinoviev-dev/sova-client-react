@@ -10,18 +10,18 @@ export default function Contacts ({contacts, admin, filterChatToUser}) {
   };
   
   return (
-    <div>
-      <ul>
+    <div style={{minWidth: 200, borderRight: "1px solid #d37c52"}}>
+      <ul style={{listStyle: "none", margin: 0, padding: "0 20px", boxSizing: "border-box"}}>
         {loggedInUser.admin ?
           contacts.map((contact) => {
             return <li key={contact._id} onClick={() => {
               showContactId(contact._id);
-            }}>{contact.name}</li>
+            }} style={{borderBottom: "1px solid rgb(211, 124, 82)", padding: "15px 0", boxSizing: "border-box"}}>{contact.name}</li>
           })
           : 
           <li key={admin._id} onClick={() => {
             showContactId(admin._id);
-          }}>{admin.name}</li>
+          }} style={{borderBottom: "1px solid rgb(211, 124, 82)", padding: "15px 0", boxSizing: "border-box"}}>{admin.name}</li>
         }
       </ul>
     </div>

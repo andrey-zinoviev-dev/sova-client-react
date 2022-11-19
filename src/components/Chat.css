@@ -5,6 +5,7 @@
   display: flex;
   justify-content: space-between;
   align-items: stretch;
+  box-sizing: border-box;
   /* padding: 2em 0; */
   
 }

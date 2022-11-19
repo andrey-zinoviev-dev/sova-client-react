@@ -455,7 +455,7 @@ export default function CourseModule(props) {
             <h3>Чат здесь</h3>
             <Chat>
               <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
-              <MessageForm moduleID={moduleID} selectedContact={studentId}></MessageForm>
+              <MessageForm user={loggedInUser} moduleID={moduleID} selectedContact={studentId}></MessageForm>
               {/* <ul style={{minHeight: 210, margin: 0, minWidth: 210, borderRight: '1px solid rgba(193,200,205, 0.7)', padding: 0}}>
                 {loggedInUser.admin? 
                   students.length > 0 && students.map((student) => {
