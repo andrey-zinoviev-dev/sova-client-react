@@ -13,6 +13,7 @@ import io, { Socket } from 'socket.io-client';
 import SovaLogo from '../images/sova_logo_icon.png';
 import Contacts from './Contacts';
 import MessageForm from './MessageForm';
+import Messages from './Messages';
 // import Messages from './Messages';
 
 export default function CourseModule(props) {
@@ -24,23 +25,24 @@ export default function CourseModule(props) {
 
   const {courseID, moduleID} = useParams();
   
-  const [courseData, setCourseData] = React.useState({});
   // const [courseAuthor, setCourseAuthor] = React.useState({});
   const [courseModule, setCourseModule] = React.useState({});
-  const [moduleImages, setModuleImages] = React.useState([]);
+
   // const [messages, setMessages] = React.useState([]);
   const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
   const [adminIsOnline, setAdminIsOnline] = React.useState(false);
-  const [studentId, setStudentId] = React.useState("");
+  const [userId, setUserId] = React.useState("");
 
   //variables derived from courseModule state variable
   const admin = courseModule._id ? {...courseModule.course.author, online: adminIsOnline} : {};
   // const filteredMessages = messages.filter((message) => {
   //   return message.user._id === studentId;
   // });
-
+  const selectedStudent = students.find((student) => {
+    return student._id === userId;
+  })
   // const students = courseModule._id ? courseModule.students : [];
   // let messages;
   //Context
@@ -62,7 +64,7 @@ export default function CourseModule(props) {
   function filterChatToUser(userId) {
     // console.log(userId);
     // console.log(userId);
-    setStudentId(userId);
+    setUserId(userId);
     // console.log(filteredMessages);
   }
   //variants
@@ -297,11 +299,6 @@ export default function CourseModule(props) {
 
   }, [moduleID, userToken, loggedInUser._id]);
 
-  // React.useEffect(() => {
-  //   console.log(messages);
-  //   console.log(studentId)
-  // }, [messages, studentId]);
-
   React.useEffect(() => {
     socket.current = io('http://localhost:3000');
     
@@ -455,7 +452,11 @@ export default function CourseModule(props) {
             <h3>Чат здесь</h3>
             <Chat>
               <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
-              <MessageForm user={loggedInUser} moduleID={moduleID} selectedContact={studentId}></MessageForm>
+              <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300}}>
+                <Messages selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
+                <MessageForm user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
+              </div>
+              
               {/* <ul style={{minHeight: 210, margin: 0, minWidth: 210, borderRight: '1px solid rgba(193,200,205, 0.7)', padding: 0}}>
                 {loggedInUser.admin? 
                   students.length > 0 && students.map((student) => {
