@@ -313,6 +313,7 @@ export default function CourseModule(props) {
       socket.current.emit('userConnected', loggedInUser);
   
       socket.current.on('session', ({ sessionID, userID, users }) => {
+        
         localStorage.setItem('sessionID', sessionID);
         socket.current.userID = userID;
         socket.current.username = loggedInUser.name;
@@ -348,7 +349,6 @@ export default function CourseModule(props) {
           const adminOnline = users.find((user) => {
             return user.userID === admin._id && user.online;
           });
-          
           adminOnline && setAdminIsOnline(true);
           // adminOnline && setAdminIsOnline(true);
           // console.log(courseAuthor);
@@ -454,7 +454,7 @@ export default function CourseModule(props) {
               <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
               <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300}}>
                 <Messages selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
-                <MessageForm user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
+                <MessageForm socket={socket} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               
               {/* <ul style={{minHeight: 210, margin: 0, minWidth: 210, borderRight: '1px solid rgba(193,200,205, 0.7)', padding: 0}}>

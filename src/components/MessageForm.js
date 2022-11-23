@@ -1,10 +1,9 @@
 import React from "react";
-import Messages from "./Messages";
+// import Messages from "./Messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { apiSendMessage } from "../api";
-export default function MessageForm({ userId, userToken, moduleID, user }) {
-
+export default function MessageForm({ socket, userId, userToken, moduleID, user }) {
   //refs
   const inputRef = React.useRef();
 

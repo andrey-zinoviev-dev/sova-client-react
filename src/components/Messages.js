@@ -28,7 +28,7 @@ export default function Messages ({selectedStudent, admin, moduleID, userId, use
   return (
     <>
       {userId.length > 0 && 
-        <div style={{width: "100%", boxSizing: "border-box", padding: "10px 20px", borderBottom: "1px solid lightgrey"}}>
+        <div style={{width: "100%", boxSizing: "border-box", padding: "15px 20px", borderBottom: "1px solid lightgrey"}}>
           <h3 style={{margin: 0}}>{user.admin ? selectedStudent && selectedStudent.name : admin && admin.name}</h3>
         </div>
       }
