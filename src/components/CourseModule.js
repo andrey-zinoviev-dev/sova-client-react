@@ -28,7 +28,7 @@ export default function CourseModule(props) {
   // const [courseAuthor, setCourseAuthor] = React.useState({});
   const [courseModule, setCourseModule] = React.useState({});
 
-  // const [messages, setMessages] = React.useState([]);
+  const [messages, setMessages] = React.useState([]);
   const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
@@ -298,10 +298,10 @@ export default function CourseModule(props) {
         setStudents(moduleData.students);
       });
 
-      // apiGetUserMessages(moduleID, userToken)
-      // .then((messagesData) => {
-      //   setMessages(messagesData);
-      // })
+      apiGetUserMessages(moduleID, userToken)
+      .then((messagesData) => {
+        setMessages(messagesData);
+      })
     }
 
   }, [moduleID, userToken, loggedInUser._id]);
@@ -407,9 +407,13 @@ export default function CourseModule(props) {
       }));
 
       socket.current.on('private message', (data) => {
+        // console.log(data);
         apiSendMessage(userToken, data)
         .then((data) => {
-          
+          console.log(data);
+          // setMessages((prevValue) => {
+          //   return [...prevValue, data];
+          // })
         });
       })
   
@@ -468,7 +472,7 @@ export default function CourseModule(props) {
             <Chat>
               <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
               <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300}}>
-                <Messages selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
+                <Messages messages={messages} selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
                 <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               

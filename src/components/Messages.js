@@ -10,12 +10,12 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
 
   //variables
   const members = [user._id, userId];
-  // const contactMessages = messages.filter((message) => {
-  //   return message.conversation.members.every((member) => {
-  //     return members.includes(member);
-  //   })
-  //   // return message.user._id === selectedContact;
-  // });
+  const contactMessages = messages.filter((message) => {
+    return message.conversation.members.every((member) => {
+      return members.includes(member);
+    })
+    // return message.user._id === selectedContact;
+  });
 
   // React.useEffect(() => {
   //   apiGetUserMessages(moduleID, userToken)
@@ -25,6 +25,7 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
   //   })
   // }, [moduleID, userToken]);
 
+
   return (
     <>
       {userId.length > 0 && 
@@ -32,7 +33,7 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
           <h3 style={{margin: 0}}>{user.admin ? selectedStudent && selectedStudent.name : admin && admin.name}</h3>
         </div>
       }
-      {/* {userId.length > 0 ?
+      {userId.length > 0 ?
           <ul style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", minHeight: 180, maxHeight: "calc(100% - 40px)", gap: 20, overflowY: "auto"}}>
             {contactMessages.length > 0 ? contactMessages.map((message) => {
               return <li key={message._id} style={{backgroundColor: message.user._id === user._id ? "#d37c52" : "white", alignSelf: message.user._id === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 35, borderRadius: "9px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 20px", boxSizing: "border-box"}}>{message.text}</li>
@@ -40,7 +41,7 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
           </ul>  
         :
         <p>Выберите чат</p>
-      } */}
+      }
 
     </>
   )
