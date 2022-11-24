@@ -67,6 +67,13 @@ export default function CourseModule(props) {
     setUserId(userId);
     // console.log(filteredMessages);
   }
+
+  function sendMessage(evt, obj) {
+    evt.preventDefault();
+    socket.current.emit('message', obj);
+    // console.log(obj);
+  };
+
   //variants
   const menuVariants = {
     closed: {width: "4%", transition: {duration: 0.5, ease: "easeInOut"}},
@@ -398,11 +405,19 @@ export default function CourseModule(props) {
           //   console.log('students are online');
           // }
       }));
+
+      socket.current.on('private message', (data) => {
+        apiSendMessage(userToken, data)
+        .then((data) => {
+          
+        });
+      })
   
       //remove socket connection on component not rendered
       return () => {
         socket.current.off('session');
         socket.current.off('user is online');
+        socket.current.off('private message');
         socket.current.close();
       }
     }
@@ -454,7 +469,7 @@ export default function CourseModule(props) {
               <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
               <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300}}>
                 <Messages selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
-                <MessageForm socket={socket} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
+                <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               
               {/* <ul style={{minHeight: 210, margin: 0, minWidth: 210, borderRight: '1px solid rgba(193,200,205, 0.7)', padding: 0}}>
