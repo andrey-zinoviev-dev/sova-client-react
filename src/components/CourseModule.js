@@ -68,10 +68,16 @@ export default function CourseModule(props) {
     // console.log(filteredMessages);
   }
 
-  function sendMessage(evt, obj) {
+  function sendMessage(evt, obj, formRef) {
     evt.preventDefault();
-    socket.current.emit('message', obj);
-    // console.log(obj);
+    apiSendMessage(userToken, obj)
+    .then((message) => {
+      setMessages((prevValue) => {
+        return [...prevValue, message];
+      });
+      socket.current.emit('message', message);
+      formRef.reset();
+    });
   };
 
   //variants
@@ -100,18 +106,6 @@ export default function CourseModule(props) {
     opened: {margin: "0 0 0 25%", transition: {duration: 0.5, ease: "easeInOut"}},
   }
 
-  // const [messageData, setMessageData] = React.useState({text: '', module:moduleID,  from: null, to: null});
-
-  //refs
-  const adminStatusRef = React.useRef();
-  const studentStatusRef = React.useRef();
-  //students ref
-  // const studentsRef = React.useRef(students);
-  // studentsRef.current = students;
-
-  //course author ref
-  // const authorRef = React.useRef(courseAuthor);
-  // authorRef.current = courseAuthor;
   //socket io ref
   const socket = React.useRef(null);
   
@@ -407,15 +401,10 @@ export default function CourseModule(props) {
       }));
 
       socket.current.on('private message', (data) => {
-        // console.log(data);
-        apiSendMessage(userToken, data)
-        .then((data) => {
-          console.log(data);
-          // setMessages((prevValue) => {
-          //   return [...prevValue, data];
-          // })
+        setMessages((prevValue) => {
+          return [...prevValue, data];
         });
-      })
+      });
   
       //remove socket connection on component not rendered
       return () => {
