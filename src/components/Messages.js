@@ -4,7 +4,8 @@ import { apiSendMessage } from "../api";
 export default function Messages ({ messages, selectedStudent, admin, moduleID, userId, user }) {
   const userToken = localStorage.getItem('token');
 
-  
+  //refs
+  const ulRef = React.useRef();
   //states
   // const [messages, setMessages] = React.useState([]);
 
@@ -17,13 +18,11 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
     // return message.user._id === selectedContact;
   });
 
-  // React.useEffect(() => {
-  //   apiGetUserMessages(moduleID, userToken)
-  //   .then((data) => {
-  //     // console.log(data);
-  //     setMessages(data);
-  //   })
-  // }, [moduleID, userToken]);
+  React.useEffect(() => {
+    if(userId.length > 0){
+      ulRef.current.scrollTo({top: ulRef.current.clientHeight, left:0, behavior: "smooth"});
+    }
+  }, [userId]);
 
   return (
     <>
@@ -33,7 +32,7 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
         </div>
       }
       {userId.length > 0 ?
-          <ul style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", height: 380, gap: 20, overflowY: "auto"}}>
+          <ul ref={ulRef} style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", height: 410, gap: 20, overflowY: "auto"}}>
             {contactMessages.length > 0 ? contactMessages.map((message) => {
               return <li key={message._id} style={{backgroundColor: message.user === user._id ? "#d37c52" : "white", alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 35, borderRadius: "9px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 20px", boxSizing: "border-box"}}>{message.text}</li>
             }) : <li key={0} style={{textAlign: "center"}}>Пока сообщений нет</li>}
