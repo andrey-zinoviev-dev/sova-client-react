@@ -28,7 +28,7 @@ export default function CourseModule(props) {
   // const [courseAuthor, setCourseAuthor] = React.useState({});
   const [courseModule, setCourseModule] = React.useState({});
 
-  // const [messages, setMessages] = React.useState([]);
+  const [messages, setMessages] = React.useState([]);
   const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
@@ -70,7 +70,14 @@ export default function CourseModule(props) {
 
   function sendMessage(evt, obj) {
     evt.preventDefault();
-    socket.current.emit('message', obj);
+    apiSendMessage(userToken, obj)
+    .then((message) => {
+      setMessages((prevValue) => {
+        return [...prevValue, message];
+      });
+      socket.current.emit('message', message)
+    })
+    // socket.current.emit('message', obj);
     // console.log(obj);
   };
 
@@ -298,10 +305,10 @@ export default function CourseModule(props) {
         setStudents(moduleData.students);
       });
 
-      // apiGetUserMessages(moduleID, userToken)
-      // .then((messagesData) => {
-      //   setMessages(messagesData);
-      // })
+      apiGetUserMessages(moduleID, userToken)
+      .then((messagesData) => {
+        setMessages(messagesData);
+      })
     }
 
   }, [moduleID, userToken, loggedInUser._id]);
@@ -367,19 +374,20 @@ export default function CourseModule(props) {
         }
       });
   
-      socket.current.on('user is online', (({ userID, username, online, users }) => {
-        // console.log(userID, username);
+      socket.current.on('user is online', (({ userID, username, online}) => {
         if(loggedInUser.admin) {
+
           // console.log(students);
           // console.log(userID, username);
-          // const onlineStudents = students.map((student) => {
-          //   return student._id === userID ? {...student, online: true} : student;
-          // });
+          const onlineStudents = students.map((student) => {
+            return student._id === userID ? {...student, online: true} : student;
+          });
           // students[onlineStudent].online = true;
           // console.log(students);
-          // setStudents(onlineStudents);
+          setStudents(onlineStudents);
           // console.log(students);
         } else {
+          setAdminIsOnline(true);
           // console.log(courseAuthor);
           // setCourseAuthor((prevValue) => {
           //   return {...prevValue, online: true}
@@ -407,10 +415,13 @@ export default function CourseModule(props) {
       }));
 
       socket.current.on('private message', (data) => {
-        apiSendMessage(userToken, data)
-        .then((data) => {
-          
-        });
+        setMessages((prevValue) => {
+          return [...prevValue, data];
+        })
+        // apiSendMessage(userToken, data)
+        // .then((data) => {
+        //   console.log(data);
+        // });
       })
   
       //remove socket connection on component not rendered
@@ -449,9 +460,9 @@ export default function CourseModule(props) {
       
       <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center'}} initial={"closed"} animate={menuOpened ? "opened" : "closed"} variants={contentVariants} className='module__content'>
         <div>
-          <ul>
-            <li><button onClick={closeChat}>Урок</button></li>
-            <li><button onClick={openChat}>Чат</button></li>
+          <ul style={{display: "flex", justifyContent: "space-between", alignCenter: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
+            <li><motion.button whileHover={{color: "rgba(0, 0, 0, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 1)", border: "2px solid transparent", borderBottom: chatIsOpened ? "none" : "2px solid black" }} onClick={closeChat}>Урок</motion.button></li>
+            <li><motion.button whileHover={{color: "rgba(0, 0, 0, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.5)", border: "2px solid transparent", borderBottom: chatIsOpened ? "2px solid black" : "none" }} onClick={openChat}>Чат</motion.button></li>
           </ul>
         </div>
         {!chatIsOpened ?
@@ -468,7 +479,7 @@ export default function CourseModule(props) {
             <Chat>
               <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
               <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300}}>
-                <Messages selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
+                <Messages messages={messages} selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
                 <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               
