@@ -14,6 +14,7 @@ import SovaLogo from '../images/sova_logo_icon.png';
 import Contacts from './Contacts';
 import MessageForm from './MessageForm';
 import Messages from './Messages';
+import FileUploadPopup from './FileUploadPopup';
 // import Messages from './Messages';
 
 export default function CourseModule(props) {
@@ -68,10 +69,11 @@ export default function CourseModule(props) {
     // console.log(filteredMessages);
   }
 
-  function sendMessage(evt, obj, formRef) {
-    evt.preventDefault();
+  function sendMessage(obj, formRef) {
+    
     apiSendMessage(userToken, obj)
     .then((message) => {
+      // console.log(message);
       setMessages((prevValue) => {
         return [...prevValue, message];
       });
@@ -461,7 +463,7 @@ export default function CourseModule(props) {
             <h3>Чат здесь</h3>
             <Chat>
               <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
-              <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300}}>
+              <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, maxWidth: "calc(100% - 201px)"}}>
                 <Messages messages={messages} selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
                 <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
@@ -501,7 +503,6 @@ export default function CourseModule(props) {
             </Chat>
           </div>
         }
-
       </motion.div>
       
       

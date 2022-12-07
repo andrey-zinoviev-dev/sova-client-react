@@ -20,7 +20,7 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
 
   React.useEffect(() => {
     if(userId.length > 0){
-      ulRef.current.scrollTo({top: ulRef.current.clientHeight, left:0, behavior: "smooth"});
+      ulRef.current.scrollTo({top: 900, left:0, behavior: "smooth"});
     }
   }, [userId]);
 

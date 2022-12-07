@@ -99,10 +99,10 @@ function apiSendMessage(token, message) {
   return fetch(`${apiAdress}/messages`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      
       'Authorization': token,
     },
-    body: JSON.stringify(message),
+    body: message,
   })
   .then((res) => {
     return res.json();
