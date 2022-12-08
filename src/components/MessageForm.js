@@ -38,11 +38,11 @@ export default function MessageForm({ sendMessage, userId, userToken, moduleID, 
       formData.append("files", file);
     });
 
-    console.log('message shall be sent here');
+    // console.log('message shall be sent here');
     // const obj = {text: inputRef.current.value, user: user._id, to: userId, moduleID: moduleID, file: selectedFile};
     
     //uncomment futher!!!
-    // sendMessage(formData, formRef.current);
+    sendMessage(formData, formRef.current);
 
   }
 

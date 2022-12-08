@@ -73,11 +73,14 @@ export default function CourseModule(props) {
     
     apiSendMessage(userToken, obj)
     .then((message) => {
-      // console.log(message);
+      console.log(message);
       setMessages((prevValue) => {
         return [...prevValue, message];
       });
-      socket.current.emit('message', message);
+
+      //uncomment futher!!!
+      // socket.current.emit('message', message);
+      
       formRef.reset();
     });
   };

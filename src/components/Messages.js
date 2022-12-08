@@ -34,7 +34,16 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
       {userId.length > 0 ?
           <ul ref={ulRef} style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", height: 410, gap: 20, overflowY: "auto"}}>
             {contactMessages.length > 0 ? contactMessages.map((message) => {
-              return <li key={message._id} style={{backgroundColor: message.user === user._id ? "#d37c52" : "white", alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 35, borderRadius: "9px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 20px", boxSizing: "border-box"}}>{message.text}</li>
+              return <li key={message._id} style={{backgroundColor: message.user === user._id ? "#d37c52" : "white", alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 35, borderRadius: "9px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 20px", boxSizing: "border-box"}}>{message.files.length > 0 ? 
+                <ul>
+                  {message.files.map((file, index) => {
+                    return <li key={index}>
+                      {file.mimetype.includes('image') ? <img src={`http://localhost:3000/${file.destination.replace('public/', '')}${file.filename}`}></img> : <p>грузить другой файл</p>}
+                    </li>
+                  })}
+                </ul>
+                : 
+                message.text}</li>
             }) : <li key={0} style={{textAlign: "center"}}>Пока сообщений нет</li>}
           </ul>  
         :
