@@ -14,7 +14,8 @@ import SovaLogo from '../images/sova_logo_icon.png';
 import Contacts from './Contacts';
 import MessageForm from './MessageForm';
 import Messages from './Messages';
-import FileUploadPopup from './FileUploadPopup';
+import ModuleSide from './ModuleSide';
+import { NavLink, useLocation } from "react-router-dom";
 // import Messages from './Messages';
 
 export default function CourseModule(props) {
@@ -44,8 +45,9 @@ export default function CourseModule(props) {
   const selectedStudent = students.find((student) => {
     return student._id === userId;
   })
-  // const students = courseModule._id ? courseModule.students : [];
-  // let messages;
+
+  //history
+  const location = useLocation();
   //Context
   const loggedInUser = React.useContext(UserContext);
 
@@ -87,8 +89,13 @@ export default function CourseModule(props) {
 
   //variants
   const menuVariants = {
-    closed: {width: "4%", transition: {duration: 0.5, ease: "easeInOut"}},
-    opened: {width: "25%", transition: {duration: 0.5, ease: "easeInOut"}},
+    closed: {width: 60, transition: {duration: 0.65, ease: "easeInOut"}},
+    opened: {width: 310, transition: {duration: 0.65, ease: "easeInOut"}},
+  };
+
+  const textVariants = {
+    closed: { opacity: 0, transition: {duration: 0.45, ease: "easeInOut"}},
+    opened: { opacity: 1, transition: {duration: 0.45, ease: "easeInOut"}}
   };
 
   const imgVariants = {
@@ -107,8 +114,8 @@ export default function CourseModule(props) {
   };
 
   const contentVariants = {
-    closed: {margin: "0 0 0 4%", transition: {duration: 0.5, ease: "easeInOut"}},
-    opened: {margin: "0 0 0 25%", transition: {duration: 0.5, ease: "easeInOut"}},
+    closed: {transition: {duration: 0.5, ease: "easeInOut"}},
+    opened: {transition: {duration: 0.5, ease: "easeInOut"}},
   }
 
   //socket io ref
@@ -423,17 +430,21 @@ export default function CourseModule(props) {
 
   }, [sessionStorage, loggedInUser._id, students.length, admin._id]);
 
+  // React.useEffect(() => {
+  //   console.log(courseModule);
+  // }, [courseModule]);
+
   return (
     <motion.section className='module'>
       
-      <motion.div className='module__menu' initial="closed" animate={menuOpened ? "opened" : "closed"} variants={menuVariants}>
+      {/* <motion.div className='module__menu' initial="closed" animate={menuOpened ? "opened" : "closed"} variants={menuVariants}>
         <div style={{position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 0 20px 0", minHeight: 59}}>
           <motion.img initial="closed" animate={menuOpened ? "opened" : "closed"} variants={imgVariants} style={{maxWidth: '30px', margin: "0px 0px 0px 20px"}} src={SovaLogo} alt="Логотип"></motion.img>
           <motion.button whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} onClick={showSideMenu} style={{backgroundColor: "rgba(255, 255, 255, 0)", border: "none"}}>
             <FontAwesomeIcon icon={faSquareCaretDown} style={{fontSize: '30px'}}/>
           </motion.button>
         </div>
-        {/* animate={{display: menuOpened && "flex", opacity :  menuOpened ? 1 : 0, transition: {staggerChildren: 0.5, staggerDirection: 1}, transitionEnd: !menuOpened && {display : "none"}}} */}
+        
         <motion.div  variants={sideContentVariants} style={{width: 360, display: "flex", opacity: menuOpened ? 1 : 0, flexDirection: "column", alignItems: "flex-start", boxSizing: "border-box", fontWeight: 700}}>
           <motion.p variants={linkVariants} style={{padding: '0 5%'}}>Курс</motion.p>
           <motion.h3 variants={linkVariants} style={{margin: '5% 0', padding: '0 5%', fontSize: '36px', letterSpacing: '2px', fontWeight: 700}}>{module._id && module.course.name}</motion.h3>
@@ -444,8 +455,35 @@ export default function CourseModule(props) {
             })}
           </ul>
         </motion.div>
-      </motion.div>
-      
+      </motion.div> */}
+      <ModuleSide>
+        <motion.div initial="closed" style={{position: "relative", padding: "15px 0 0 0", textAlign: "left", boxSizing: "border-box"}} animate={menuOpened ? "opened" : "closed"} variants={menuVariants}>
+          <motion.button whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} onClick={showSideMenu} style={{width: 60, height: 60, border: "none", backgroundColor: "rgba(255, 255, 255, 0)", position: "absolute", top: 0, right: 0, zIndex: 15}}>
+            <FontAwesomeIcon icon={faSquareCaretDown} style={{fontSize: '30px'}}/>
+          </motion.button>
+          <div style={{padding: "0 0 0 15px"}}>
+            <motion.img initial="closed" animate={menuOpened ? "opened" : "closed"} variants={imgVariants} style={{maxWidth: '25px'}} src={SovaLogo} alt="Логотип"></motion.img>
+          </div>
+          <motion.div variants={textVariants}>
+            <div style={{padding: "0 0 0 15px"}}>
+              <p>Курс</p>
+              <h3>{courseModule._id && courseModule.course.name}</h3>
+              <p>Модули</p>
+            </div>
+
+            <ul style={{padding: 0, listStyle: "none", lineHeight: 2}}>
+              {courseModule._id && courseModule.course.modules.map((module) => {
+                return <motion.li whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} key={module._id} className="side__links-link" style={{fontWeight: 700, borderLeft: module._id === courseModule._id && "3px solid black"}}>
+                  <NavLink to={`../courses/${courseID}/modules/${module._id}`} style={{textDecoration: "none", color: "black"}} >
+                    {module.name}
+
+                  </NavLink>
+                </motion.li>
+              })}
+            </ul>
+          </motion.div>
+        </motion.div>
+      </ModuleSide>
       <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center'}} initial={"closed"} animate={menuOpened ? "opened" : "closed"} variants={contentVariants} className='module__content'>
         <div>
           <ul style={{display: "flex", justifyContent: "space-between", alignCenter: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>

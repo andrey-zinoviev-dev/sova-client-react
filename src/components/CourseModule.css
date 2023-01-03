@@ -72,6 +72,10 @@
 }
 .lesson__div-chat-messages-message_recepient-message {
   color: red;
-};
+}
 
+.side__links-link{
+  padding: 0 0 0 15px;
+  border-radius: 0 9px 9px 0;
+}
 

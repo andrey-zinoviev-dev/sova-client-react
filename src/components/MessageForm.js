@@ -60,10 +60,6 @@ export default function MessageForm({ sendMessage, userId, userToken, moduleID, 
     console.log('file shall be deleted');
   }
 
-  React.useEffect(() => {
-    console.log(selectedFiles);
-  }, [selectedFiles]);
-
   return (
     <>
       <motion.div style={{width: "100%", borderTop: "1px solid lightgrey"}}>

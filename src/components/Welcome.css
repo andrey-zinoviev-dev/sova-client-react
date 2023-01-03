@@ -95,6 +95,7 @@
   /* width: 75%; */
   min-height: 150px;
   margin: 100px 0 0 0;
+  position: relative;
 }
 .welcome__button {
   min-width: 160px;
@@ -127,8 +128,8 @@
 }
 .welcome__span {
   position: absolute;
-  top: 75px;
-  left: -85px;
+  top: -75px;
+  left: -140px;
   min-height: 320px;
     -webkit-writing-mode: vertical-lr;;
     /* transform: rotateZ(-180deg); */
@@ -152,4 +153,16 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.35);
+}
+
+@media screen and (max-width: 1279px) {
+  .welcome__span {
+    left: -40px;
+  }
+}
+
+@media screen and (max-width: 1279px) {
+  .welcome__span {
+    left: 60px;
+  }
 }
