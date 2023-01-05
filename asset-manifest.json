@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/sova-client-react/static/css/main.da706c07.css",
-    "main.js": "/sova-client-react/static/js/main.e2180dd3.js",
+    "main.js": "/sova-client-react/static/js/main.11730837.js",
     "static/js/787.7ef5a8f3.chunk.js": "/sova-client-react/static/js/787.7ef5a8f3.chunk.js",
     "static/media/sova_logo_icon.png": "/sova-client-react/static/media/sova_logo_icon.8014f281333cf0a3a0c1.png",
     "index.html": "/sova-client-react/index.html",
     "main.da706c07.css.map": "/sova-client-react/static/css/main.da706c07.css.map",
-    "main.e2180dd3.js.map": "/sova-client-react/static/js/main.e2180dd3.js.map",
+    "main.11730837.js.map": "/sova-client-react/static/js/main.11730837.js.map",
     "787.7ef5a8f3.chunk.js.map": "/sova-client-react/static/js/787.7ef5a8f3.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.da706c07.css",
-    "static/js/main.e2180dd3.js"
+    "static/js/main.11730837.js"
   ]
 }
