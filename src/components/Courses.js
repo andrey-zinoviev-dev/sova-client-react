@@ -96,7 +96,7 @@ export default function Courses(props) {
   return (
     <>
       <section style={{backgroundImage: `url(${courses.length > 0 && courses[courseIndex].cover}`}} className="main__courses">
-        <Dashboard></Dashboard>
+        {/* <Dashboard></Dashboard> */}
         <motion.div className="main_courses-wrapper">
           <h3 className="main__courses-headline">{courses.length > 0 && courses[courseIndex].name}</h3>
           <p className="main__courses-para">{courses.length > 0 && courses[courseIndex].description}</p>

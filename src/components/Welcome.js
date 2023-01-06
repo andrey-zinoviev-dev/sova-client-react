@@ -30,8 +30,10 @@ const textAnimationVariants = {
 
 export default function Welcome({ loginFormSubmit }) {
   
-  const loginRef = React.useRef();
-  const passwordRef = React.useRef();
+  const loginEmailRef = React.useRef();
+  const loginPasswordRef = React.useRef();
+  const registerEmailRef = React.useRef();
+  const registerPasswordRef = React.useRef();
 
   const [welcomePopupOpened, setWelcomePopupOpened] = React.useState(false);
   const [loginButtonPressed, setLoginButtonPressed] = React.useState(true);
@@ -56,7 +58,8 @@ export default function Welcome({ loginFormSubmit }) {
   };
 
   function submitloginForm(evt) {
-    const objToPost = {email: loginRef.current.value, password: passwordRef.current.value};
+    // console.log(loginEmailRef.current, loginPasswordRef.current);
+    const objToPost = {email: loginEmailRef.current.value, password: loginPasswordRef.current.value};
     loginFormSubmit(evt, objToPost)
   }
 
@@ -64,13 +67,14 @@ export default function Welcome({ loginFormSubmit }) {
     console.log(evt);
   };
 
-  React.useEffect(() => {
-    console.log(loginButtonPressed);
-  }, [loginButtonPressed])
+  // React.useEffect(() => {
+  //   console.log(loginButtonPressed);
+  // }, [loginButtonPressed])
 
-  React.useEffect(() => {
-    console.log(window.innerWidth);
-  }, [])
+  // React.useEffect(() => {
+  //   console.log(window.innerWidth);
+  // }, [])
+  
   return (
     <>
       <section className='welcome'>
@@ -151,10 +155,10 @@ export default function Welcome({ loginFormSubmit }) {
       </motion.div> */}
       <div className="popup__left-wrapper">
         <img className="popup__left-logo" src={SovaLogo}></img>
-        <div style={{overflow: "hidden", padding: "5% 10%", boxSizing: "border-box"}}>
+        <div style={{overflow: "hidden", padding: "5% 10%", boxSizing: "border-box", minHeight: 207}}>
           <motion.div animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={textAnimationVariants}>
             <span className="popup__left-span">SOVA STUDIO</span>
-            <h3>{loginButtonPressed ? "Добро пожаловать! Присоединяйся к семье, стань профессионалом, начни петь аки мастер" : "С возвращением! Входи, чтобы поскорее вернуться к занятиям"}</h3>
+            <h3 className="popup__left-headline">{loginButtonPressed ? "Добро пожаловать! Присоединяйся к семье, стань профессионалом" : "С возвращением! Входи, чтобы поскорее вернуться к занятиям"}</h3>
 
           </motion.div>
           <motion.button whileHover={{scale: 1.1, backgroundColor:"rgba(0, 0, 0)", color:"#f8f205", transition: {duration: 0.25}}} whileTap={{scale: 0.85, transition: {duration: 0.15}}} className='popup__left-button' onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</motion.button>
@@ -167,8 +171,8 @@ export default function Welcome({ loginFormSubmit }) {
               <button className="popup__close" onClick={closePopups}>Закрыть</button>
               <h3 className="popup__headline">Вход</h3>
               <form className="popup__form" onSubmit={ submitloginForm }>
-                <motion.input whileTap={{scale: 0.95}} ref={loginRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-                <motion.input whileTap={{scale: 0.95}} ref={passwordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+                <motion.input whileTap={{scale: 0.95}} ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
+                <motion.input whileTap={{scale: 0.95}} ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
                 <button className="popup__form-button" type="submit" data-type="login">Войти</button>
               </form>
             </div>
@@ -178,8 +182,8 @@ export default function Welcome({ loginFormSubmit }) {
               <button className="popup__close" onClick={closePopups}>Закрыть</button>
               <h3 className="popup__headline">Регистрация</h3>
               <form className="popup__form" onSubmit={submitregisterForm}>
-                <motion.input whileTap={{scale: 0.95}} ref={loginRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-                <motion.input whileTap={{scale: 0.95}} ref={passwordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+                <motion.input whileTap={{scale: 0.95}} ref={registerEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
+                <motion.input whileTap={{scale: 0.95}} ref={registerPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
                 <button className="popup__form-button" type="submit" data-type="login">Зарегистрироваться</button>
               </form>
             </div>

@@ -39,7 +39,7 @@ export default function Dashboard() {
         </button>
         
         <nav className='header__nav' style={{display: !menuOpened && window.innerWidth < 768 ? "none" : "flex", height: window.innerWidth < 768 && "100vh", position: window.innerWidth < 768 && "absolute", top: window.innerWidth < 768 && 0, right: window.innerWidth < 768 && 0, borderLeft: window.innerWidth < 768 && "2px solid yellow", backdropFilter: "blur(5px)", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
-          <button onClick={closeMenu} style={{margin: "0 0 15px 0", backgroundColor: "transparent", border: "2px solid white", color: "white"}}>
+          <button onClick={closeMenu} style={{display: window.innerWidth < 768 ? "inline-block" : "none", margin: "0 0 15px 0", backgroundColor: "transparent", border: "2px solid white", color: "white"}}>
             <FontAwesomeIcon icon={faClose} />
           </button>
           <ul className='header__nav-list' style={{flexDirection: window.innerWidth < 768 && "column", minWidth: window.innerWidth < 768 && 270, }}>

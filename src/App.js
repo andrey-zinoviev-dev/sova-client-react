@@ -88,13 +88,14 @@ function App() {
 
   function loginFormSubmit(evt, formData) {
     evt.preventDefault();
-    // console.log(evt.target);
+    console.log(formData);
     apiLogin(formData)
     .then(({token}) => {
       // console.log(token);
       if(!token) {
         return //process error
       }
+      console.log(token);
       localStorage.setItem('token', token);
       //get current user
       return apiGetCurrentUser(token)
@@ -140,7 +141,7 @@ function App() {
         {/* <Dashboard></Dashboard> */}
         <Routes>
           <Route path='courses/:courseID/modules/:moduleID' element={<CourseModule/>}></Route>
-          <Route path='/' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit}></Welcome>}></Route>
+          <Route path='/sova-client-react' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
     </div>

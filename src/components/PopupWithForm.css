@@ -62,7 +62,7 @@
     max-width: 65px;
     /* margin: 0 0 10% 0; */
   }
-  
+
   .popup__left-span, .popup__left-p {
     /* font-size: 18px; */
     font-weight: 700;
@@ -185,6 +185,16 @@
   @media screen and (max-width: 767px) {
     .popup {
       flex-direction: column;
+    }
+    .popup__left-logo {
+      max-width: 50px;
+    }
+    .popup__left-headline {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 75px;
+      max-height: 75px;
     }
     .popup__form {
       min-width: 270px;
