@@ -75,12 +75,6 @@ function App() {
 
   //functions
 
-
-  function openRegisterPopup() {
-    // console.log('register opened');
-    // setregisterPopupOpened(true);
-  };
-
   // function closePopups() {
   //   setWelcomePopupOpened(false);
   //   // setregisterPopupOpened(false);
@@ -108,8 +102,23 @@ function App() {
    
   };
 
-  function navigationRegisterFormSubmit(evt, formData) {
-    evt.preventDefault();
+  function registerFormSubmit(formData) {
+    apiRegister(formData)
+    .then(({ token }) => {
+      if(!token) {
+        return;
+      }
+      
+      return apiGetCurrentUser(token)
+      .then((userDoc) => {
+        localStorage.setItem('token', token);
+        // console.log(userDoc);
+        setuser(userDoc);
+        setLoggedIn(true);
+        // navigate('/courses')
+      })
+
+    })
 
   }
 
@@ -141,7 +150,7 @@ function App() {
         {/* <Dashboard></Dashboard> */}
         <Routes>
           <Route path='courses/:courseID/modules/:moduleID' element={<CourseModule/>}></Route>
-          <Route path='/sova-client-react' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit}></Welcome>}></Route>
+          <Route path='/' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
     </div>

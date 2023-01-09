@@ -1,5 +1,5 @@
 //api variable
-const apiAdress = 'http://localhost:3000';
+const apiAdress = 'http://api.sova-courses.site';
 
 //api calls
 function apiLogin(formData) {

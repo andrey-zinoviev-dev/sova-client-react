@@ -28,7 +28,7 @@ const textAnimationVariants = {
   loginForm: {opacity:[0, 0, 1], transition: {duration: 0.75, ease: "easeInOut", opacity: {duration: 0.5, ease: "easeInOut"}}},
 }
 
-export default function Welcome({ loginFormSubmit }) {
+export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
   
   const loginEmailRef = React.useRef();
   const loginPasswordRef = React.useRef();
@@ -64,7 +64,9 @@ export default function Welcome({ loginFormSubmit }) {
   }
 
   function submitregisterForm(evt) {
-    console.log(evt);
+    evt.preventDefault();
+    const objToPost = {email: registerEmailRef.current.value, password: registerPasswordRef.current.value};
+    registerFormSubmit(objToPost);
   };
 
   // React.useEffect(() => {
@@ -181,7 +183,7 @@ export default function Welcome({ loginFormSubmit }) {
             <div className="popup__form-wrapper">
               <button className="popup__close" onClick={closePopups}>Закрыть</button>
               <h3 className="popup__headline">Регистрация</h3>
-              <form className="popup__form" onSubmit={submitregisterForm}>
+              <form className="popup__form" onSubmit={(evt) => {submitregisterForm(evt)}}>
                 <motion.input whileTap={{scale: 0.95}} ref={registerEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
                 <motion.input whileTap={{scale: 0.95}} ref={registerPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
                 <button className="popup__form-button" type="submit" data-type="login">Зарегистрироваться</button>

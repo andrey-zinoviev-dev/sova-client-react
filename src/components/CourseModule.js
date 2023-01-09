@@ -313,7 +313,7 @@ export default function CourseModule(props) {
   }, [moduleID, userToken, loggedInUser._id]);
 
   React.useEffect(() => {
-    socket.current = io('http://localhost:3000');
+    socket.current = io('http://api.sova-courses.site:3000');
     
     if(loggedInUser._id && admin._id && students.length > 0) { 
       // console.log(admin, students);
