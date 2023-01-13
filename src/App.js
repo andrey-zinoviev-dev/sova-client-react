@@ -35,7 +35,7 @@ function App() {
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
     const localsessionID = localStorage.getItem('sessionID');
-
+    // console.log(userToken);
     if(userToken) {
       
       apiGetCurrentUser(userToken)
@@ -43,6 +43,7 @@ function App() {
         if(!userFetched) {
           return;
         }
+        // console.log(userFetched);
         setuser(userFetched);
         setLoggedIn(true);
       });

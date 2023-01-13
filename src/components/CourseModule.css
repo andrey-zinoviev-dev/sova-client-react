@@ -1,5 +1,5 @@
 .module {
-  background-color: #d37c52;
+  /* background-color: #d37c52; */
   display: flex;
   min-height: 100vh;
   /* padding: 1% 1% 1% 0; */
@@ -79,3 +79,9 @@
   border-radius: 0 9px 9px 0;
 }
 
+@media screen and (max-width: 767px) {
+  .module__content {
+    border-radius: 0;
+    padding: 5% 10%;
+  }
+}

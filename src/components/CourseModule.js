@@ -3,7 +3,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSquareCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faSquareCaretDown, faBars } from '@fortawesome/free-solid-svg-icons';
 import { apiGetCourse, apiGetCourseModule, apiGetUserMessages, apiSendMessage } from "../api";
 import { UserContext } from '../context/userContext';
 import Chat from './Chat';
@@ -81,17 +81,18 @@ export default function CourseModule(props) {
       });
 
       //uncomment futher!!!
-      // socket.current.emit('message', message);
+      socket.current.emit('message', message);
       
       formRef.reset();
     });
   };
 
   //variants
-  const menuVariants = {
-    closed: {width: 60, transition: {duration: 0.65, ease: "easeInOut"}},
-    opened: {width: 310, transition: {duration: 0.65, ease: "easeInOut"}},
-  };
+
+
+  const menuVariantsMobile = {
+
+  }
 
   const textVariants = {
     closed: { opacity: 0, transition: {duration: 0.45, ease: "easeInOut"}},
@@ -299,6 +300,7 @@ export default function CourseModule(props) {
     if(userToken && loggedInUser._id) {
       apiGetCourseModule(moduleID, userToken)
       .then((moduleData) => {
+        console.log(moduleData);
         setCourseModule(moduleData);
         // setCourseAuthor(moduleData.course.author);
         setStudents(moduleData.students);
@@ -313,11 +315,11 @@ export default function CourseModule(props) {
   }, [moduleID, userToken, loggedInUser._id]);
 
   React.useEffect(() => {
-    socket.current = io('http://api.sova-courses.site:3000');
+    socket.current = io('http://api.sova-courses.site');
     
     if(loggedInUser._id && admin._id && students.length > 0) { 
-      // console.log(admin, students);
-
+      // console.log('yes');
+   
       if(sessionStorage) {
         socket.current.auth = { localsessionID: sessionStorage };
         socket.current.connect();
@@ -326,12 +328,12 @@ export default function CourseModule(props) {
       socket.current.emit('userConnected', loggedInUser);
   
       socket.current.on('session', ({ sessionID, userID, users }) => {
-        
+        // console.log(sessionID);
         localStorage.setItem('sessionID', sessionID);
         socket.current.userID = userID;
         socket.current.username = loggedInUser.name;
         if(loggedInUser.admin) {
-          // console.log('admin check, admin check');
+          
           const onlineUsers = users.filter((user) => {
             return user.online && user.userID !== loggedInUser._id;
           });
@@ -340,77 +342,37 @@ export default function CourseModule(props) {
             const onlineStudent = onlineUsers.find((onlineUser) => {
               return onlineUser.userID === student._id;
             });
-            // console.log(onlineStudent);
+            
             return onlineStudent && onlineStudent.userID === student._id ? {...student, online: true} : student; 
           });
           setStudents(onlineStudents);
-          // const onlineUsers = users.filter((user) => {
-          //   return user.userID !== loggedInUser._id;
-          // });
-          // setStudents(onlineUsers);
-          // console.log(students);
-          // console.log(userID, username);
-          // const onlineStudents = students.map((student) => {
-          //   return student._id === userID ? {...student, online: true} : student;
-          // });
-          // students[onlineStudent].online = true;
-          // console.log(students);
-          // setStudents(onlineStudents);
-          // console.log(students);
+
         } else {
-          // console.log(admin._id);
+         
           const adminOnline = users.find((user) => {
             return user.userID === admin._id && user.online;
           });
           adminOnline && setAdminIsOnline(true);
-          // adminOnline && setAdminIsOnline(true);
-          // console.log(courseAuthor);
-          // setCourseAuthor((prevValue) => {
-          //   return {...prevValue, online: true}
-          // })
-          // admin.online = true;
-          // console.log(userID, username);
+
         }
       });
   
       socket.current.on('user is online', (({ userID, username, online}) => {
         if(loggedInUser.admin) {
 
-          // console.log(students);
-          // console.log(userID, username);
+
           const onlineStudents = students.map((student) => {
             return student._id === userID ? {...student, online: true} : student;
           });
-          // students[onlineStudent].online = true;
-          // console.log(students);
+
           setStudents(onlineStudents);
-          // console.log(students);
+      
         } else {
           setAdminIsOnline(true);
-          // console.log(courseAuthor);
-          // setCourseAuthor((prevValue) => {
-          //   return {...prevValue, online: true}
-          // })
-          // admin.online = true;
-          // console.log(userID, username);
+
         }
         
-        // if(loggedInUser.admin && students.length > 0) {
-        //   const onlineUser = students.find((student) => {
-        //     return student._id === userID;
-        //   });
-        //   onlineUser.online = true;
-        //   console.log(students);
-        // } else {
-        //   console.log(admin);
-        // }
-        // console.log(admin);
-          // if(userID === admin._id) {
-          //   console.log('admin is online');
-          // } 
-          // else {
-          //   console.log('students are online');
-          // }
+
       }));
 
       socket.current.on('private message', (data) => {
@@ -430,9 +392,7 @@ export default function CourseModule(props) {
 
   }, [sessionStorage, loggedInUser._id, students.length, admin._id]);
 
-  // React.useEffect(() => {
-  //   console.log(courseModule);
-  // }, [courseModule]);
+
 
   return (
     <motion.section className='module'>
@@ -456,9 +416,9 @@ export default function CourseModule(props) {
           </ul>
         </motion.div>
       </motion.div> */}
-      <ModuleSide>
-        <motion.div initial="closed" style={{position: "relative", padding: "15px 0 0 0", textAlign: "left", boxSizing: "border-box"}} animate={menuOpened ? "opened" : "closed"} variants={menuVariants}>
-          <motion.button whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} onClick={showSideMenu} style={{width: 60, height: 60, border: "none", backgroundColor: "rgba(255, 255, 255, 0)", position: "absolute", top: 0, right: 0, zIndex: 15}}>
+      <ModuleSide menuOpened={menuOpened}>
+        <motion.div  style={{position: "relative", padding: "15px 0 0 0", textAlign: "left", boxSizing: "border-box"}}>
+          <motion.button whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} onClick={showSideMenu} style={{ width: 60, height: 60, border: "none", backgroundColor: "rgba(255, 255, 255, 0)", position: "absolute", top: 0, right: 0, zIndex: 15}}>
             <FontAwesomeIcon icon={faSquareCaretDown} style={{fontSize: '30px'}}/>
           </motion.button>
           <div style={{padding: "0 0 0 15px"}}>
@@ -484,9 +444,14 @@ export default function CourseModule(props) {
           </motion.div>
         </motion.div>
       </ModuleSide>
-      <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center'}} initial={"closed"} animate={menuOpened ? "opened" : "closed"} variants={contentVariants} className='module__content'>
+      <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center'}} initial={"closed"} className='module__content'>
         <div>
-          <ul style={{display: "flex", justifyContent: "space-between", alignCenter: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
+          <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
+            {window.innerWidth < 768 && <li>
+              <button onClick={showSideMenu} style={{backgroundColor: "rgba(0, 0, 0, 0)", border: "none", minWidth: 24, minHeight: 24, color: "#d37c52"}}>
+                <FontAwesomeIcon icon={faBars} />
+              </button>  
+            </li>}
             <li><motion.button whileHover={{color: "rgba(0, 0, 0, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 1)", border: "2px solid transparent", borderBottom: chatIsOpened ? "none" : "2px solid black" }} onClick={closeChat}>Урок</motion.button></li>
             <li><motion.button whileHover={{color: "rgba(0, 0, 0, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(0, 0, 0, 1)" : "rgba(0, 0, 0, 0.5)", border: "2px solid transparent", borderBottom: chatIsOpened ? "2px solid black" : "none" }} onClick={openChat}>Чат</motion.button></li>
           </ul>

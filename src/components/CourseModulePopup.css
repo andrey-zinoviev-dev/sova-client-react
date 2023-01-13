@@ -94,3 +94,15 @@
   display: flex;
   justify-content: space-between;
 }
+
+@media screen and (max-width: 767px) {
+  .popup__modules {
+    width: 100%;
+    max-width: 280px;
+    padding: 5%;
+  }
+  .popup__close_modules {
+    right: 0;
+    top: -45px;
+  }
+}

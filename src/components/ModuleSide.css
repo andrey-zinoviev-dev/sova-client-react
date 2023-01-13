@@ -1,0 +1,13 @@
+.module__side {
+  background-color: #d37c52;
+  position: fixed;
+  height: 100%;
+  width: 310px;
+}
+
+@media screen and (max-width: 767px) {
+  .module__side {
+    min-width: 270px;
+    left: -100%;
+  }
+}
