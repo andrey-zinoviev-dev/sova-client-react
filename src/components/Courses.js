@@ -42,6 +42,7 @@ export default function Courses(props) {
 
   //refs
   const buttonsRef = React.useRef();
+  const ulRef = React.useRef();
 
   //functions
   function showCourse(index) {
@@ -53,16 +54,25 @@ export default function Courses(props) {
   };
 
   function previousCourse() {
+    console.log('prev course');
+    ulRef.current.scrollLeft += -ulRef.current.clientWidth;
+    //uncomment if necessary
     setCourseIndex((prevValue) => {
       return prevValue = prevValue - 1;
     })
+
+
     // courseIndex = courseIndex - 1;
     // console.log(courseIndex);
   }
 
   function nextCourse() {
+    console.log('next course');
+    ulRef.current.scrollLeft += ulRef.current.clientWidth;
     // courseIndex = courseIndex + 1;
     // console.log(courseIndex);
+
+    //uncomment if necessary
     setCourseIndex((prevValue) => {
       return prevValue = prevValue + 1;
     })
@@ -93,22 +103,24 @@ export default function Courses(props) {
     }
   }, []);
 
+  React.useEffect(() => {
+    console.log(courseIndex);
+  }, [courseIndex])
+
   return (
     <>
-      <section style={{backgroundImage: `url(${courses.length > 0 && courses[courseIndex].cover}`}} className="main__courses">
-        {/* <Dashboard></Dashboard> */}
+      {/* <section style={{backgroundImage: `url(${courses.length > 0 && courses[courseIndex].cover}`}} className="main__courses">
+        
         <motion.div className="main_courses-wrapper">
           <h3 className="main__courses-headline">{courses.length > 0 && courses[courseIndex].name}</h3>
           <p className="main__courses-para">{courses.length > 0 && courses[courseIndex].description}</p>
-          {/* <Link to={`/courses/${courses.length > 0 && courses[courseIndex]._id}`}>
-            <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} className="main_courses-btn">Открыть</motion.button>
-          </Link> */}
+
           <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
             showCoursePopup(courses[courseIndex]);
           }} className="main_courses-btn">Открыть</motion.button>
         </motion.div>
         <span className="main__courses-span">Sova inc</span>
-        {/* <p>{courses[courseIndex].description}</p> */}
+      
         <div className="main__courses-navigation-wrapper">
           <div className="main__courses-navigation-text">
             <span>Курс</span>
@@ -126,32 +138,51 @@ export default function Courses(props) {
             <button disabled={courses.length > 0 && courseIndex === courses.length - 1 ? true : false} className="main__courses-navigation-button" onClick={nextCourse}><FontAwesomeIcon icon={faChevronRight} /></button>
           </div>
         </div>
-
-
         <div className="main__courses-overlay"></div>
+      </section> */}
 
-        {/* <h2>Эй, ты, <p className="headline">{props.user && props.user.name}</p>, это твоя панель... управления</h2>
+      <section className="main__courses">
+        <ul ref={ulRef} className="main__courses-list" style={{margin: 0, padding: 0, listStyle: "none", position: "relative", zIndex: 5, display: "flex", alignItems:"center", justifyContent: "flex-start", overflow: "scroll hidden"}}>
+          {courses.map((course) => {
+            return <li className="main__courses-list-element" key={course._id} style={{flex: "1 0 100%", width: "100%", height: "100vh"}}>
+              <img style={{width: "100%", height: "100%", objectFit: "cover"}} src={course.cover}></img>
+            </li>
+          })}
+        </ul>
+        <div className="main__courses-content">
+          <div className="main_courses-wrapper">
+            <h3 className="main__courses-headline">{courses.length > 0 && courses[courseIndex].name}</h3>
+            <p className="main__courses-para">{courses.length > 0 && courses[courseIndex].description}</p>
+
+            <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
+              showCoursePopup(courses[courseIndex]);
+            }} className="main_courses-btn">Открыть</motion.button>
+          </div>
+          <span className="main__courses-span">Sova inc</span>
         
-        <p>Здесь можно открыть курс, пройти задания, не пройти задания (шучу), посмотреть свой профиль и так далее</p>
-        <ul>
-          {props.courses.length > 0 && props.courses.map((course) => {
-            return <li key={course._id}>
-              <h3>{course.name}</h3>
-              <p>`Курс из {course.length} этапов`</p>
-              <p>Модули:</p>
-              <ul>
-                {course.modules.map((courseModule) => {
-                  return <li key={courseModule._id}>
-                    <Link onClick={() => {
-                      // showSelectedModule(courseModule);
-                    }} to={`/courses/${course._id}/modules/${courseModule._id}`}>{courseModule.name}</Link>
+          <div className="main__courses-navigation-wrapper">
+            <div className="main__courses-navigation-text">
+              <span>Курс</span>
+              <span>{courseIndex + 1}</span>/<span>{courses.length > 0 && courses.length}</span>
+            </div>
+            <div className="main__courses-navigation-arrows">
+              <button disabled={courseIndex === 0 ? true : false } style={{color: courseIndex === 0 ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 1)"}} className="main__courses-navigation-button" onClick={previousCourse}><FontAwesomeIcon icon={faChevronLeft} /></button>
+              <ul ref={buttonsRef} className="main__courses-list main__courses-list_buttons">
+                {courses.length > 0 && courses.map((course, index) => {
+                  return <li key={index} className="main__courses-list-li" onClick={() => {showCourse(index)}}>
+                    <button style={{backgroundColor: `${index === courseIndex ? "#d37c52" : "rgb(255, 255, 255, 0.5)"}`}} className="main__courses-list-li-button" ></button>
                   </li>
                 })}
               </ul>
-            </li>
-          })}
-        </ul> */}
+              <button disabled={courses.length > 0 && courseIndex === courses.length - 1 ? true : false} style={{color: courseIndex === courses.length - 1 ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 1)"}} className="main__courses-navigation-button" onClick={nextCourse}><FontAwesomeIcon icon={faChevronRight} /></button>
+            </div>
+          </div>
+          <div className="main__courses-overlay"></div>
+        </div>
+
+        {/* <div className="main__courses-overlay"></div> */}
       </section>
+
       <CourseModulesPopup modulesPopupOpened={modulesPopupOpened}>
         <div className="popup__modules">
           <div className="popup__modules-course-div">
