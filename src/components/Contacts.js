@@ -14,7 +14,7 @@ export default function Contacts ({contacts, admin, filterChatToUser}) {
   }, [contacts]);
   
   return (
-    <div style={{minWidth: 200, borderRight: "1px solid lightgrey"}}>
+    <div style={{minWidth: 200, borderRight: "1px solid lightgrey", width: window.innerWidth < 768 && "100%"}}>
       <ul style={{listStyle: "none", margin: 0, padding: 0, boxSizing: "border-box"}}>
         {loggedInUser.admin ?
           contacts.length > 0 ? contacts.map((contact) => {

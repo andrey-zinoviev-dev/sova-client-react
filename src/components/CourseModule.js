@@ -469,7 +469,7 @@ export default function CourseModule(props) {
             <h3>Чат здесь</h3>
             <Chat>
               <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
-              <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, maxWidth: "calc(100% - 201px)"}}>
+              <div style={{width: window.innerWidth < 768 ? "0%" : "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, maxWidth: "calc(100% - 201px)", overflow: "hidden"}}>
                 <Messages messages={messages} selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
                 <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
