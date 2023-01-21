@@ -1,7 +1,9 @@
 import React from "react";
 import { apiGetUserMessages } from "../api";
 import { apiSendMessage } from "../api";
-export default function Messages ({ messages, selectedStudent, admin, moduleID, userId, user }) {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+export default function Messages ({ messages, selectedStudent, admin, moduleID, userId, user, resetContact }) {
   const userToken = localStorage.getItem('token');
 
   //refs
@@ -18,19 +20,27 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
     // return message.user._id === selectedContact;
   });
 
+  //functions
+  // function backToContacts() {
+  //   console.log("back to contacts");
+  // }
+
   React.useEffect(() => {
     if(userId.length > 0){
       ulRef.current.scrollTo({top: 900, left:0, behavior: "smooth"});
     }
   }, [userId]);
 
-  React.useEffect(() => {
-    console.log(messages);
-  }, [messages])
+  // React.useEffect(() => {
+  //   console.log(messages);
+  // }, [messages])
   return (
     <>
       {userId.length > 0 && 
         <div style={{width: "100%", boxSizing: "border-box", padding: "15px 20px", borderBottom: "1px solid lightgrey"}}>
+          <button style={{backgroundColor: "transparent", border: "none", color: "rgb(211, 124, 82)", fontSize: 15}} onClick={resetContact}>
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </button>
           <h3 style={{margin: 0}}>{user.admin ? selectedStudent && selectedStudent.name : admin && admin.name}</h3>
         </div>
       }

@@ -163,7 +163,7 @@ export default function Courses(props) {
                   <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
                     showCoursePopup(course);
                   }} className="main_courses-btn">Открыть</motion.button>
-                  <span>{`Курс 0${index + 1}`}</span>
+                  <span>{`00${index + 1}`}</span>
                 </div>
               </div>
               <div className="main__courses-overlay"></div>

@@ -7,7 +7,8 @@ import { motion } from "framer-motion";
 export default function MessageForm({ sendMessage, userId, userToken, moduleID, user }) {
   //states
   const [selectedFiles, setSelectedFiles] = React.useState([]);
-  
+  const [emptyMessageInput, setEmptyMessageInput] = React.useState("");
+
   //refs
   const formRef = React.useRef();
   const inputRef = React.useRef();
@@ -60,6 +61,16 @@ export default function MessageForm({ sendMessage, userId, userToken, moduleID, 
     console.log('file shall be deleted');
   }
 
+  function showAttachButton() {
+    setEmptyMessageInput((...prevValue) => {
+      return prevValue + inputRef.current.value;
+    })
+  }
+  
+
+  React.useEffect(() => {
+    console.log(emptyMessageInput);
+  }, [emptyMessageInput])
   return (
     <>
       <motion.div style={{width: "100%", borderTop: "1px solid lightgrey"}}>
@@ -80,8 +91,8 @@ export default function MessageForm({ sendMessage, userId, userToken, moduleID, 
       {userId.length > 0 && <form encType="multipart/form-data" ref={formRef} style={{position: "relative", width: "100%", border: "1px solid lightgrey", boxSizing: "border-box"}} onSubmit={submitMessage}>
         <div style={{position: "relative"}}>
           <input style={{display: "none"}} onChange={handleFileChange} type="file" name="file" ref={inputFileRef} multiple="multiple"></input>
-          <input ref={inputRef} style={{outline:"none", width: "100%", minHeight: 40, padding: "0 0 0 55px", border:"none", boxSizing: "border-box"}} placeholder="Напишите что-нибудь хорошее..." name="text"></input>
-          <button type="submit" style={{position: "absolute", minWidth: 30, minHeight: 30, backgroundColor: "#d37c52", borderRadius: 5, padding: 0, border: "none", top: 5, right: 10}}>
+          <input ref={inputRef} style={{outline:"none", width: "100%", minHeight: 40, padding: "0 0 0 55px", border:"none", boxSizing: "border-box"}} placeholder="Напишите что-нибудь хорошее..." name="text" onInput={showAttachButton}></input>
+          <button type="submit" style={{display: emptyMessageInput === '' && "none", position: "absolute", minWidth: 30, minHeight: 30, backgroundColor: "#d37c52", borderRadius: 5, padding: 0, border: "none", top: 5, right: 10}}>
             <FontAwesomeIcon style={{fontSize: 17, color: "white"}} icon={faPaperPlane} />
           </button>
           <button onClick={openFileUpload} type="button" style={{position: "absolute", top: 5, left: 10, minWidth: 30, minHeight: 30, border: "none", backgroundColor: "rgba(234, 162, 127, 0.3)", padding: 0, boxSizing: "border-box", borderRadius: 5, display: "flex", justifyContent: "center", alignItems: "center"}}>

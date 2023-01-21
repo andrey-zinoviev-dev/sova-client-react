@@ -1,7 +1,7 @@
 import React from "react";
 import { UserContext } from "../context/userContext";
 import { motion } from "framer-motion";
-export default function Contacts ({contacts, admin, filterChatToUser}) {
+export default function Contacts ({contacts, admin, userId, filterChatToUser}) {
   const loggedInUser = React.useContext(UserContext);
   // const [contactId, setContactId] = React.useState("");
 
@@ -9,12 +9,12 @@ export default function Contacts ({contacts, admin, filterChatToUser}) {
   function showContactId(id) {
     filterChatToUser(id);
   };
-  React.useEffect(() => {
-    console.log(contacts);
-  }, [contacts]);
+  // React.useEffect(() => {
+  //   console.log(userId);
+  // }, [userId]);
   
   return (
-    <div style={{minWidth: 200, borderRight: "1px solid lightgrey", width: window.innerWidth < 768 && "100%"}}>
+    <div style={{minWidth: window.innerWidth > 767 && 200, borderRight: "1px solid lightgrey", width: window.innerWidth < 768 && userId.length > 0 ? "0%" : "100%", overflow: "hidden"}}>
       <ul style={{listStyle: "none", margin: 0, padding: 0, boxSizing: "border-box"}}>
         {loggedInUser.admin ?
           contacts.length > 0 ? contacts.map((contact) => {

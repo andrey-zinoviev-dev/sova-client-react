@@ -69,6 +69,10 @@ export default function CourseModule(props) {
     // console.log(userId);
     setUserId(userId);
     // console.log(filteredMessages);
+  };
+
+  function resetContact() {
+    setUserId("");
   }
 
   function sendMessage(obj, formRef) {
@@ -468,9 +472,9 @@ export default function CourseModule(props) {
           <div style={{maxWidth: 768, width: '100%'}}>
             <h3>Чат здесь</h3>
             <Chat>
-              <Contacts contacts={students} admin={admin} filterChatToUser={filterChatToUser}></Contacts>
-              <div style={{width: window.innerWidth < 768 ? "0%" : "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, maxWidth: "calc(100% - 201px)", overflow: "hidden"}}>
-                <Messages messages={messages} selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID}></Messages>
+              <Contacts contacts={students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
+              <div style={{width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden"}}>
+                <Messages messages={messages} selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               
