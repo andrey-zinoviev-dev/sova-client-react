@@ -1,10 +1,10 @@
 import React from "react";
-import { apiGetUserMessages } from "../api";
-import { apiSendMessage } from "../api";
+// import { apiGetUserMessages } from "../api";
+// import { apiSendMessage } from "../api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 export default function Messages ({ messages, selectedStudent, admin, moduleID, userId, user, resetContact }) {
-  const userToken = localStorage.getItem('token');
+  // const userToken = localStorage.getItem('token');
 
   //refs
   const ulRef = React.useRef();
@@ -31,9 +31,6 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
     }
   }, [userId]);
 
-  // React.useEffect(() => {
-  //   console.log(messages);
-  // }, [messages])
   return (
     <>
       {userId.length > 0 && 
@@ -61,10 +58,10 @@ export default function Messages ({ messages, selectedStudent, admin, moduleID, 
                 {message.text}
               </li>
               :
-              <li key={0} style={{alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 300, maxHeight:300, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", overflow: "hidden"}}>
+              <li key={message._id} style={{alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 300, maxHeight:300, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", overflow: "hidden"}}>
                  <ul style={{width: "100%", height: "100%", padding: 0}}>
                   {message.files.map((file, index) => {
-                    return <li key={index} style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
+                    return <li key={Date.parse(new Date())} style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
                       {file.mimetype.includes('image') ? <img style={{width: "100%", height: "100%", objectFit: "cover"}} src={`http://api.sova-courses.site/${file.destination.replace('public/', '')}${file.filename}`}></img> : <p>грузить другой файл</p>}
                     </li>
                   })}

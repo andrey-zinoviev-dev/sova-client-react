@@ -57,20 +57,22 @@ export default function MessageForm({ sendMessage, userId, userToken, moduleID, 
     });
   }
 
-  function deleteAttachedFile() {
-    console.log('file shall be deleted');
+  function deleteAttachedFile(file) {
+    const filesArrayUpdated = selectedFiles.filter((selectedFile) => {
+      return selectedFile.name !== file.name;
+    });
+    setSelectedFiles(filesArrayUpdated);
   }
 
   function showAttachButton() {
-    setEmptyMessageInput((...prevValue) => {
-      return prevValue + inputRef.current.value;
-    })
+    setEmptyMessageInput(inputRef.current.value);
   }
   
 
-  React.useEffect(() => {
-    console.log(emptyMessageInput);
-  }, [emptyMessageInput])
+  // React.useEffect(() => {
+  //   console.log(selectedFiles);
+  // }, [selectedFiles]);
+
   return (
     <>
       <motion.div style={{width: "100%", borderTop: "1px solid lightgrey"}}>
@@ -81,7 +83,9 @@ export default function MessageForm({ sendMessage, userId, userToken, moduleID, 
               <span style={{textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap"}}>
                 {file.name}  
               </span>
-              <button onClick={deleteAttachedFile} style={{position: "absolute", top: 0, right: 0, padding: 0, width: 18, height: 18, border: '1px solid black', borderRadius: "51%"}}>
+              <button onClick={() => {
+                deleteAttachedFile(file)
+              }} style={{position: "absolute", top: 0, right: 0, padding: 0, width: 18, height: 18, border: '1px solid black', borderRadius: "51%"}}>
                 <FontAwesomeIcon icon={faXmark} />
               </button>
             </li>
