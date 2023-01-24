@@ -3,16 +3,18 @@ import React, {useState, useEffect, useRef } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Welcome from './components/Welcome';
 import Main from './components/Main';
-import Login from './components/Login';
-import Register from './components/Register';
-import Courses from './components/Courses';
+// import Login from './components/Login';
+// import Register from './components/Register';
+// import Courses from './components/Courses';
 import CourseModule from './components/CourseModule';
-import Chat from './components/Chat';
-import Course from './components/Course';
-import Dashboard from './components/Dashboard';
+import AddCourse from './components/AddCourse';
+// import Chat from './components/Chat';
+// import Course from './components/Course';
+// import Dashboard from './components/Dashboard';
 import { apiLogin, apiRegister, apiGetCurrentUser, apiGetCourses } from './api';
 
 import { UserContext } from './context/userContext';
+
 
 
 
@@ -150,6 +152,7 @@ function App() {
       <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register> */}
         {/* <Dashboard></Dashboard> */}
         <Routes>
+          <Route path='addCourse' element={<AddCourse />}></Route>
           <Route path='courses/:courseID/modules/:moduleID' element={<CourseModule/>}></Route>
           <Route path='/' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>

@@ -49,6 +49,24 @@
   z-index: 5;
 }
 
+.main__courses-list-element-content-add {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 210px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  border-radius: 15px 0 0 15px;
+  /* transition: all 0.25s ease-in-out; */
+}
+
+/* .main__courses-list-element-content-add:hover {
+  background-color: rgba(0, 0, 0, 0.35);
+} */
+
 .main__courses-content {
   position: absolute;
   top: 0;

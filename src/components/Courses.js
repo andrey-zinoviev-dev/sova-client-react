@@ -3,23 +3,18 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { UserContext } from "../context/userContext";
 import Dashboard from "./Dashboard";
 import CourseModulesPopup from "./CourseModulesPopup";
+import AddCourse from "./AddCourse";
 import './Courses.css';
 import {  
   apiGetCourses
 } from '../api';
 
 export default function Courses(props) {
-  // //variables
-  // const naviagte = useNavigate();
-  // //functions
-  // // function openCourse(id) {
-  // //   naviagte(`/courses/${id}`);
-  // // }
-  // function showSelectedModule(module) {
-  //   props.selectModule(module);
-  // }
+  //contexts
+  const loggedInUser = React.useContext(UserContext);
 
   //state variables
   const [courses, setCourses] = React.useState([]);
@@ -38,6 +33,34 @@ export default function Courses(props) {
     hover: {border: '2px solid rgba(211, 124, 82, 1)', transition: { ease: "easeInOut", duration: 0.25 }},
   }
 
+  const addCourseVariants = {
+    hidden: {
+      backgroundColor: "rgba(0, 0, 0, 0)",
+    },
+    shown: {
+      backgroundColor: "rgba(0, 0, 0, 0.35)",
+    },
+  }
+
+  const addCourseButton = {
+    hidden: {
+      opacity: 0,
+      transition: {
+        duration: 0.5,
+      },
+      transitionEnd: {
+        display: "none",
+      }
+    },
+    shown: {
+      opacity: 1,
+      scale: 1.1,
+      display: "inline-block",
+      transition: {
+        duration: 0.5,
+      },
+    },
+  }
   //variables
   // let courseIndex = 0;
 
@@ -48,10 +71,6 @@ export default function Courses(props) {
   //functions
   function showCourse(index) {
     console.log(index);
-    // setCourseIndex(index);
-    // courseIndex = courseIndex + 1;
-    // courseIndex = index;
-    // courseSectionRef.current.style.backgroundImage=`url(${courses[courseIndex].cover})`;
   };
 
   function previousCourse() {
@@ -108,13 +127,13 @@ export default function Courses(props) {
 
 
 
-  // React.useEffect(() => {
-  //   const courseIndex = courses.findIndex((course) => {
-  //     return course._id === selectedCourse._id;
-  //   });
-  //   console.log(courseIndex);
+  React.useEffect(() => {
+    // const courseIndex = courses.findIndex((course) => {
+    //   return course._id === selectedCourse._id;
+    // });
+    console.log(loggedInUser);
 
-  // }, [courses, selectedCourse]);
+  }, [loggedInUser]);
 
   return (
     <>
@@ -159,12 +178,24 @@ export default function Courses(props) {
                 <div className="main_courses-wrapper">
                   <h3 className="main__courses-headline">{course.name}</h3>
                   <p className="main__courses-para">{course.description}</p>
-
+                  <span>{index === courses.length - 1 && "последний курс"}</span>
                   <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
                     showCoursePopup(course);
                   }} className="main_courses-btn">Открыть</motion.button>
                   <span>{`00${index + 1}`}</span>
                 </div>
+                {index === courses.length - 1 && 
+                  <motion.div whileHover="shown" initial="hidden" animate="hidden" variants={addCourseVariants} className="main__courses-list-element-content-add" style={{position: "absolute", top: 0, right: 0, width: 210, height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
+                    <Link to={`../addCourse`}>
+                      <motion.button variants={addCourseButton} onClick={() => {
+                        console.log('add course button pressed');
+                        }} style={{padding: 0, minWidth: 45, minHeight: 45, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid white", color: "white"}}>
+                        +
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+                  
+                }
               </div>
               <div className="main__courses-overlay"></div>
             </li>
