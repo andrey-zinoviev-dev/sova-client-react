@@ -173,8 +173,8 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
               <button className="popup__close" onClick={closePopups}>Закрыть</button>
               <h3 className="popup__headline">Вход</h3>
               <form className="popup__form" onSubmit={ submitloginForm }>
-                <motion.input whileTap={{scale: 0.95}} ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-                <motion.input whileTap={{scale: 0.95}} ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+                <motion.input ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
+                <motion.input ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
                 <button className="popup__form-button" type="submit" data-type="login">Войти</button>
               </form>
             </div>
@@ -184,8 +184,8 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
               <button className="popup__close" onClick={closePopups}>Закрыть</button>
               <h3 className="popup__headline">Регистрация</h3>
               <form className="popup__form" onSubmit={(evt) => {submitregisterForm(evt)}}>
-                <motion.input whileTap={{scale: 0.95}} ref={registerEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-                <motion.input whileTap={{scale: 0.95}} ref={registerPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+                <motion.input ref={registerEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
+                <motion.input ref={registerPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
                 <button className="popup__form-button" type="submit" data-type="login">Зарегистрироваться</button>
               </form>
             </div>

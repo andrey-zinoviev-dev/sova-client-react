@@ -1,0 +1,29 @@
+.addCourse {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: rgb(0, 0, 0);
+    color: white;
+}
+
+.addCourse__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.addCourse__form-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 240px;
+}
+
+.addCourse__form_input {
+    width: 100%;
+    box-sizing: border-box;
+}
