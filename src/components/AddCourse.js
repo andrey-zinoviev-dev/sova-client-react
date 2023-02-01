@@ -1,5 +1,6 @@
 import React from "react";
 import "./AddCourse.css";
+// import { Stepper, Step, Box, StepLabel } from "@mui/material";
 import AddStep1 from "./AddStep1";
 import AddStep2 from "./AddStep2";
 import AddStep3 from "./AddStep3";
@@ -8,6 +9,7 @@ import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-sv
 
 export default function AddCourse() {
   const [formStep, setFormStep] = React.useState(0);
+  const [formData, setFormData] = React.useState({});
 
   //functions
   function renderStep() {
@@ -25,23 +27,48 @@ export default function AddCourse() {
 
   //refs
   const stepsRef = React.useRef();
-  const prevStepRef = React.useRef(0);
+  const prevStepRef = React.useRef();
+  const buttonStepRef = React.useRef();
+
+  //variables
+  const stepsArray = [
+    {
+      description: "Название и описание курса",
+      icon: faSignature,
+    }, 
+    {
+      description: "Содержание курса",
+      icon: faKeyboard
+    }, 
+    {
+      description: "Проверка курса",
+      icon: faListCheck,
+    }
+  ];
 
   React.useEffect(() => {
-    stepsRef.current.children[prevStepRef.current].querySelector("div").style.color = "rgba(255, 255, 255, 0.5)";
-    prevStepRef.current = formStep;
-    stepsRef.current.children[formStep].querySelector("div").style.color = "rgba(255, 255, 255, 1)";
-    //  console.log(prevStepRef.current);
-    // if(prevStepRef.current >= 0) {
-    //   Array.from(stepsRef.current.children)[prevStepRef.current].sstyle.color = "rgba(255, 255, 255, 0.5)";
-    // }
-    // prevStepRef.current = formStep;
-    // Array.from(stepsRef.current.children)[formStep].style.color = "rgba(255, 255, 255, 1)";
-    // prevStepRef.current = formStep;
-    // console.log(prevStepRef.current);
-    
-    // Array.from(stepsRef.current.children)[formStep].style.backgroundColor = "red";
+    const step = Array.from(stepsRef.current.children)[formStep];
+    const prevStep = Array.from(stepsRef.current.children)[prevStepRef.current];
 
+    step.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgb(226, 100, 59)';
+    step.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'transparent';
+    step.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+    step.querySelector('.addCourse__navigation-list-element-logo').style.color = "rgba(255, 255, 255, 1)";
+
+    if(formStep > prevStepRef.current) {
+      console.log('next step');
+      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'rgb(226, 100, 59)';
+      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgb(226, 100, 59)';
+      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.color = "rgba(255, 255, 255, 1)";
+      prevStep.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgb(226, 100, 59)';
+    } else if(formStep < prevStepRef.current) {
+      console.log('prev step');
+      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgba(255, 255, 255, 0.5)';
+      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'transparent';
+      prevStep.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+
+    }
+    prevStepRef.current = formStep;
   }, [formStep]);
 
   return (
@@ -56,8 +83,21 @@ export default function AddCourse() {
             <h3 style={{margin: "0 0 10px 0"}}>Добавить новый курс</h3>
             <p style={{margin: 0}}>Через эту форму можно добавить новый курс</p>
           </div>
-          <ul ref={stepsRef} style={{padding: 0, listStyle: "none", minWidth: 260, minHeight: 360, display: "flex", flexDirection: "column", justifyContent: "space-between", margin: 0, width: "100%"}}>
-              <li style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+           
+          <ul className="addCourse__navigation-list" ref={stepsRef} style={{padding: 0, listStyle: "none", minWidth: 260, minHeight: 360, display: "flex", flexDirection: "column", justifyContent: "space-between", margin: 0, width: "100%"}}>
+            {stepsArray.map((step, index) => {
+              return <li className="addCourse__navigation-list-element" style={{display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative"}} key={index}>
+                <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", maxWidth: 200, minHeight: 65, boxSizing: "border-box", padding: "5px 0", color:"rgba(255, 255, 255, 0.5)"}}>
+                  <span>Этап {index + 1}</span>
+                  <p style={{margin: 0, textAlign: "left"}}>{step.description}</p>
+                </div>
+                <div className="addCourse__navigation-list-element-logo" style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)", position: "relative"}}>
+                  <FontAwesomeIcon icon={step.icon} />
+                </div>
+                <div className="addCourse__navigation-list-element-step-connection" style={{display: index === stepsArray.length -1 && "none", position: "absolute", top: "93%", right: "7%", width: 4, height: "135%", backgroundColor: "rgba(255, 255, 255, 0.5)"}}></div>
+              </li>
+            })}
+              {/* <li style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
                 <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", maxWidth: 200, minHeight: 65, boxSizing: "border-box", padding: "5px 0", color:"rgba(255, 255, 255, 0.5)"}}>
                   <span>Этап 1</span>
                   <p style={{margin: 0, textAlign: "left"}}>Название и описание курса</p>
@@ -86,7 +126,7 @@ export default function AddCourse() {
                 <div style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)"}}>
                   <FontAwesomeIcon icon={faListCheck} />
                 </div>
-              </li>
+              </li> */}
           </ul>
         </div>
         
@@ -119,7 +159,7 @@ export default function AddCourse() {
           <form className="addCourse__form" onSubmit={(evt) => {
             evt.preventDefault();
             console.log('submit form');
-          }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", padding: "0 0 0 180px"}}>
+          }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", padding: "45px 75px"}}>
             {renderStep()}
             <div>
               <button type="button" style={{display: formStep < 1 ? "none": "inline-block",fontWeight: 700, minWidth: 120, minHeight: 50, backgroundColor: "rgb(226, 100, 59)", borderRadius: 15,}} onClick={() =>{
@@ -137,7 +177,7 @@ export default function AddCourse() {
             </div>
             
           </form>
-      <div></div>
+      {/* <div></div> */}
     </section>
   )
 }
