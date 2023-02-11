@@ -6,20 +6,31 @@ import AddStep2 from "./AddStep2";
 import AddStep3 from "./AddStep3";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
 export default function AddCourse() {
+  //states
   const [formStep, setFormStep] = React.useState(0);
-  const [formData, setFormData] = React.useState({});
+  const [formData, setFormData] = React.useState({
+    author: {},
+    course: {
+      name: "",
+      description: "",
+    },
+    module: {
+      text: "",
+    }
+  });
 
   //functions
   function renderStep() {
     switch (formStep) {
       case 0:
-        return <AddStep1 formStep={formStep} setFormStep={setFormStep}/>
+        return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       case 1:
-        return <AddStep2 formStep={formStep} setFormStep={setFormStep}/>
+        return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       case 2:
-        return <AddStep3 />
+        return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} />
       default:
         break;
     }
@@ -28,7 +39,7 @@ export default function AddCourse() {
   //refs
   const stepsRef = React.useRef();
   const prevStepRef = React.useRef();
-  const buttonStepRef = React.useRef();
+  // const buttonStepRef = React.useRef();
 
   //variables
   const stepsArray = [
@@ -47,6 +58,7 @@ export default function AddCourse() {
   ];
 
   React.useEffect(() => {
+    // console.log(formStep);
     const step = Array.from(stepsRef.current.children)[formStep];
     const prevStep = Array.from(stepsRef.current.children)[prevStepRef.current];
 
@@ -94,86 +106,32 @@ export default function AddCourse() {
                 <div className="addCourse__navigation-list-element-logo" style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)", position: "relative"}}>
                   <FontAwesomeIcon icon={step.icon} />
                 </div>
-                <div className="addCourse__navigation-list-element-step-connection" style={{display: index === stepsArray.length -1 && "none", position: "absolute", top: "93%", right: "7%", width: 4, height: "135%", backgroundColor: "rgba(255, 255, 255, 0.5)"}}></div>
+                <div className="addCourse__navigation-list-element-step-connection" style={{display: index === stepsArray.length -1 && "none", position: "absolute", top: window.innerWidth < 1439 ? "96%" : "93%", right: window.innerWidth < 1439 ? "9.5%" : "7%", width: 4, height: "135%", backgroundColor: "rgba(255, 255, 255, 0.5)"}}></div>
               </li>
             })}
-              {/* <li style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", maxWidth: 200, minHeight: 65, boxSizing: "border-box", padding: "5px 0", color:"rgba(255, 255, 255, 0.5)"}}>
-                  <span>Этап 1</span>
-                  <p style={{margin: 0, textAlign: "left"}}>Название и описание курса</p>
-                </div>
-                <div style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)", position: "relative"}}>
-                  <FontAwesomeIcon icon={faSignature} />
-                  <div></div>
-                </div>
-              </li>
-              <li style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", maxWidth: 200, minHeight: 65, boxSizing: "border-box", padding: "5px 0", color:"rgba(255, 255, 255, 0.5)"}}>
-                  <span>Этап 2</span>
-                  <p style={{margin: 0, textAlign: "left"}}>Содержание курса</p>
-                </div>
-                
-                <div style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)"}}>
-                  <FontAwesomeIcon icon={faKeyboard} />
-                </div>
-              </li>
-              <li style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", maxWidth: 200, minHeight: 65, boxSizing: "border-box", padding: "5px 0", color:"rgba(255, 255, 255, 0.5)"}}>
-                  <span>Этап 3</span>
-                  <p style={{margin: 0, textAlign: "left"}}>Проверка курса</p>
-                </div>
-                
-                <div style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)"}}>
-                  <FontAwesomeIcon icon={faListCheck} />
-                </div>
-              </li> */}
+
           </ul>
         </div>
-        
-
-          {/* <div style={{display: "flex", width: "100%", justifyContent: "space-between", alignItems: "flex-start", boxSizing: "border-box", padding: "35px 0", borderTop: "2px solid white"}}> */}
-          {/* <img src="" alt="обложка курса"></img> */}
-
-
-          {/* <form onSubmit={(evt) => {
-            evt.preventDefault();
-            setFormStep((prevValue) => {
-              return prevValue + 1;
-            })
-          }} className="addCourse__form">
-
-            <div className="addCourse__form-div">
-              <label  htmlFor="course-name">Название курса</label>
-              <input className="addCourse__form_input" id="course-name"></input>
-            </div>
-
-            <div className="addCourse__form-div">
-              <label id="course-description">Описание курса</label>
-              <input className="addCourse__form_input" id="course-description"></input>
-            </div>
-              
-            <button>Добавить</button>
-          </form> */}
-        {/* </div> */}
 
           <form className="addCourse__form" onSubmit={(evt) => {
             evt.preventDefault();
             console.log('submit form');
           }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", padding: "45px 75px"}}>
             {renderStep()}
-            <div>
-              <button type="button" style={{display: formStep < 1 ? "none": "inline-block",fontWeight: 700, minWidth: 120, minHeight: 50, backgroundColor: "rgb(226, 100, 59)", borderRadius: 15,}} onClick={() =>{
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box"}}>
+              <motion.button whileHover={{backgroundColor: "rgba(226, 100, 59, 1)", color: "rgb(255, 255, 255)"}} type="button" style={{display: formStep < 1 ? "none": "inline-block", fontWeight: 700, minWidth: 120, minHeight: 50, backgroundColor: "rgba(226, 100, 59, 0)", borderRadius: 15, border: "2px solid rgba(226, 100, 59, 1)", color: "rgba(226, 100, 59, 1)"}} onClick={() =>{
                 formStep > 0 &&
                 setFormStep((prevStep) => {
                   return prevStep - 1;
                 });
-              }}>Назад</button>
-              <button type="button" onClick={() =>{
-                formStep < 1 && 
+              }}>Назад</motion.button>
+              <motion.button whileHover={{backgroundColor: "rgba(226, 100, 59, 1)", color: "rgb(255, 255, 255)"}} type="button" onClick={() =>{
+                // console.log(formData);
+                formStep < 2 && 
                 setFormStep((prevStep) => {
                   return prevStep + 1;
                 });
-              }} style={{fontWeight: 700, minWidth: 120, minHeight: 50, backgroundColor: "rgb(226, 100, 59)", borderRadius: 15, }}>Вперед</button>
+              }}  style={{fontWeight: 700, minWidth: 120, minHeight: 50, backgroundColor: "rgba(226, 100, 59, 0)", borderRadius: 15, border: "2px solid rgb(226, 100, 59)", color: "rgb(226, 100, 59)"}}>Вперед</motion.button>
             </div>
             
           </form>

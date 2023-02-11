@@ -69,30 +69,12 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
     registerFormSubmit(objToPost);
   };
 
-  // React.useEffect(() => {
-  //   console.log(loginButtonPressed);
-  // }, [loginButtonPressed])
 
-  // React.useEffect(() => {
-  //   console.log(window.innerWidth);
-  // }, [])
   
   return (
     <>
       <section className='welcome'>
-        {/* <header className='welcome__header'>
-          <img className='welcome__header-logo' src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
-          <nav className='welcome__header-nav'>
-            <ul className='welcome__header-nav-list'>
-              <li className='welcome__header-nav-list-element'><Link className='welcome__header-nav-list-element-link' to='/music'>Музыка</Link></li>
-              <li className='welcome__header-nav-list-element'><Link className='welcome__header-nav-list-element-link' to='/education'>Обучение</Link></li>
-              <li className='welcome__header-nav-list-element'><Link className='welcome__header-nav-list-element-link' to='courseplatform'>Платформа</Link></li>
-              <li className='welcome__header-nav-list-element'><Link className='welcome__header-nav-list-element-link' to='about'>Об Авторе</Link></li>
-              <li className='welcome__header-nav-list-element'><Link className='welcome__header-nav-list-element-link' to='contacts'>Контакты</Link></li>
-            </ul>
-          </nav>
-        </header> */}
-        {/* <div className='container'></div> */}
+
         <Dashboard></Dashboard>
         <div className='welcome__content'>
           <h1>Здраааааааасте, тут можно стать вокальным экспертом</h1>

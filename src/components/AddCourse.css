@@ -43,6 +43,10 @@
     justify-content: space-between;
 }
 
+/* .addCourse__form button {
+    box-shadow: -5px -5px 5px #696f71, 5px 5px 5px rgb(15 13 13 / 53%);
+} */
+
 .addCourse__form-div {
     display: flex;
     flex-direction: column;
@@ -51,6 +55,15 @@
     min-width: 240px;
 }
 
+.addCourse__form-stepwrapper::-webkit-scrollbar {
+    width: 0;
+}
+.addCourse__form-stepwrapper-menu-list-element-button {
+    border-radius: 7px; 
+    border: 2px solid white;
+    background-color: transparent;
+    color: white;
+}
 .addCourse__form-input {
     width: 100%;
     box-sizing: border-box;
@@ -71,17 +84,57 @@
     color: rgba(255, 255, 255, 0.5)
 }
 
+/* .addCourse__form-stepwrapper-editor-div {
+   
+} */
+
+.addCourse__form-stepwrapper-editor-div::-webkit-scrollbar {
+    width: 7px;
+    
+}
+
+.addCourse__form-stepwrapper-editor-div::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 10px 0;
+}
+
+.addCourse__form-stepwrapper-editor-div::-webkit-scrollbar-thumb {
+    border-radius: 9px;
+    background-color: rgb(226, 100, 59);
+}
+
+/* .addCourse__form-stepwrapper-editor-div::-webkit-scrollbar-track-piece:start {
+    background-color: transparent;
+    margin-top: 15px;
+}
+
+.addCourse__form-stepwrapper-editor-div::-webkit-scrollbar-track-piece:end {
+    background-color: transparent;
+    margin-bottom: 15px;
+} */
+
 .ProseMirror {
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
     text-align: left;
     overflow-y: auto;
     box-sizing: border-box;
     outline: none;
-    border: 2px solid rgba(255, 255, 255, 0.5);
+    /* border: 2px solid rgba(255, 255, 255, 0.5); */
     border-radius: 9px;
-    max-height: 780px;
+    /* max-height: 780px; */
     padding: 15px 30px;
+}
+
+/* .ProseMirror::-webkit-scrollbar-track {
+    width: 3px;
+    background-color: red;
+} */
+
+.ProseMirror img {
+    /* max-width: 420px; */
+    width: 100%;
 }
 
 .ProseMirror p.is-editor-empty::before {
@@ -91,10 +144,23 @@
     height: 0;
     pointer-events: none;
   }
-.ProseMirror:focus {
+/* .ProseMirror:focus {
     border: 2px solid rgba(255, 255, 255, 1);
-}
+} */
 
 .is-active {
     border: 2px solid rgb(226, 100, 59);
+    border-radius: 7px;
+    background: transparent;
+    color: rgb(226, 100, 59);
+}
+
+@media screen and (max-width: 1439px) {
+    /* .ProseMirror {
+        max-height: 475px;
+    } */
+    .addCourse__navigation {
+        min-width: 370px;
+        padding: 45px;
+    }
 }

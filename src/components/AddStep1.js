@@ -1,6 +1,8 @@
 import React from "react";
 import "./AddCourse.css";
-export default function AddStep1({formStep}) {
+export default function AddStep1({formData, setFormData, formStep}) {
+    const { course } = formData;
+    // console.log(course);
     // React.useEffect(() => {
     //     console.log(formStep);
     // }, [formStep]);
@@ -14,11 +16,19 @@ export default function AddStep1({formStep}) {
 
             <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 80}}>
                 <label>Название курса</label>
-                <input className="addCourse__form-input" placeholder="Введите название курса"></input>
+                <input className="addCourse__form-input" placeholder="Введите название курса" value={course.name} onChange={(evt) => {
+                    setFormData({...formData, course: {
+                        ...formData.course, name: evt.target.value,
+                    }})
+                }}></input>
             </div>
             <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 80}}>
                 <label>Описание курса</label>
-                <input className="addCourse__form-input" placeholder="Введите описание курса"></input>
+                <input className="addCourse__form-input" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
+                    setFormData({...formData, course: {
+                        ...formData.course, description: evt.target.value,
+                    }})
+                }}></input>
             </div>
         </div>
     )
