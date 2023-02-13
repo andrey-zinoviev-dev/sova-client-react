@@ -16,10 +16,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
+    justify-content: flex-start;
     background-color: #242827;
     box-sizing: border-box;
-    padding: 45px 60px;
+    /* padding: 45px 60px; */
+    padding: 75px;
     min-width: 500px;
     /* max-width: 450px; */
     color: white;
@@ -34,6 +36,7 @@
     margin: 0 0 35px 0;
     text-align: left;
     width: 100%;
+    min-height: 100px;
 }
 
 .addCourse__form {
@@ -84,9 +87,24 @@
     color: rgba(255, 255, 255, 0.5)
 }
 
-/* .addCourse__form-stepwrapper-editor-div {
-   
-} */
+.addCourse__form-stepwrapper-editor-div {
+    width: 100%;
+    height: 100%;
+    /* max-height: 475px; */
+    max-height: calc(100% - 150px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: hidden auto;
+    box-sizing:border-box;
+    /* box-shadow:-2px -2px 15px rgb(255 255 255 / 20%), 5px 10px 15px rgb(0 0 0 /50%); */
+    box-shadow: 0px 0px 30px rgb(0 0 0 / 75%), 0px 0px 30px rgb(0 0 0 / 35%);
+    border-radius: 15px;
+}
+
+.addCourse__form-stepwrapper-editor-div .ProseMirror:focus {
+    border:2px solid rgb(226, 100, 59);
+}
 
 .addCourse__form-stepwrapper-editor-div::-webkit-scrollbar {
     width: 7px;
@@ -115,14 +133,14 @@
 } */
 
 .ProseMirror {
-    /* height: 100%; */
+    height: 100%;
     width: 100%;
     text-align: left;
     overflow-y: auto;
     box-sizing: border-box;
     outline: none;
-    /* border: 2px solid rgba(255, 255, 255, 0.5); */
-    border-radius: 9px;
+    border: 2px solid transparent;
+    border-radius: 15px;
     /* max-height: 780px; */
     padding: 15px 30px;
 }

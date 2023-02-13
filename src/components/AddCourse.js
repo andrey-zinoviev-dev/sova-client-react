@@ -92,11 +92,11 @@ export default function AddCourse() {
       <div className="addCourse__navigation">
       {/* <img src="https://d10j3mvrs1suex.cloudfront.net/u/516665/ebc1a0a065ca47fcaf444f6c2e229a0d39335176/original/flea-47-simon-campbell-supertone-studio.jpg/!!/b%3AW1sicmVzaXplIiwxMDAwXSxbIm1heCJdLFsid2UiXV0%3D/meta%3AeyJzcmNCdWNrZXQiOiJiemdsZmlsZXMifQ%3D%3D.jpg"></img> */}
           <div className="addCourse__headline-wrapper">
-            <h3 style={{margin: "0 0 10px 0"}}>Добавить новый курс</h3>
+            <h2 style={{margin: "0 0 10px 0"}}>Добавить новый курс</h2>
             <p style={{margin: 0}}>Через эту форму можно добавить новый курс</p>
           </div>
            
-          <ul className="addCourse__navigation-list" ref={stepsRef} style={{padding: 0, listStyle: "none", minWidth: 260, minHeight: 360, display: "flex", flexDirection: "column", justifyContent: "space-between", margin: 0, width: "100%"}}>
+          <ul className="addCourse__navigation-list" ref={stepsRef} style={{padding: 0, listStyle: "none", minWidth: 260, minHeight: 420, display: "flex", flexDirection: "column", justifyContent: "space-between", margin: 0, width: "100%"}}>
             {stepsArray.map((step, index) => {
               return <li className="addCourse__navigation-list-element" style={{display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative"}} key={index}>
                 <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", maxWidth: 200, minHeight: 65, boxSizing: "border-box", padding: "5px 0", color:"rgba(255, 255, 255, 0.5)"}}>
@@ -106,7 +106,7 @@ export default function AddCourse() {
                 <div className="addCourse__navigation-list-element-logo" style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)", position: "relative"}}>
                   <FontAwesomeIcon icon={step.icon} />
                 </div>
-                <div className="addCourse__navigation-list-element-step-connection" style={{display: index === stepsArray.length -1 && "none", position: "absolute", top: window.innerWidth < 1439 ? "96%" : "93%", right: window.innerWidth < 1439 ? "9.5%" : "7%", width: 4, height: "135%", backgroundColor: "rgba(255, 255, 255, 0.5)"}}></div>
+                <div className="addCourse__navigation-list-element-step-connection" style={{display: index === stepsArray.length -1 && "none", position: "absolute", top: window.innerWidth < 1439 ? "96%" : "93%", right: window.innerWidth < 1439 ? "9.5%" : "7.5%", width: 4, height: /*"135%"*/ "180%", backgroundColor: "rgba(255, 255, 255, 0.5)"}}></div>
               </li>
             })}
 
@@ -116,9 +116,9 @@ export default function AddCourse() {
           <form className="addCourse__form" onSubmit={(evt) => {
             evt.preventDefault();
             console.log('submit form');
-          }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", padding: "45px 75px"}}>
+          }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", padding: "75px 0" /*padding: "45px 75px"*/}}>
             {renderStep()}
-            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box"}}>
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box", padding:  "0 75px"}}>
               <motion.button whileHover={{backgroundColor: "rgba(226, 100, 59, 1)", color: "rgb(255, 255, 255)"}} type="button" style={{display: formStep < 1 ? "none": "inline-block", fontWeight: 700, minWidth: 120, minHeight: 50, backgroundColor: "rgba(226, 100, 59, 0)", borderRadius: 15, border: "2px solid rgba(226, 100, 59, 1)", color: "rgba(226, 100, 59, 1)"}} onClick={() =>{
                 formStep > 0 &&
                 setFormStep((prevStep) => {

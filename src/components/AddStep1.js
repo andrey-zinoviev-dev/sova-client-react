@@ -8,10 +8,11 @@ export default function AddStep1({formData, setFormData, formStep}) {
     // }, [formStep]);
 
     return (
-        <div style={{width: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", minHeight: 320, maxWidth: 540, margin: "0px 0px 70px 0"}}>
-            <div>
+        <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", padding: "0 0 0 75px", /*minHeight: 400,*/ maxHeight: 550, maxWidth: 540, /*margin: "0px 0px 70px 0"*/ }}>
+            <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 160, borderBottom: "2px solid rgb(226, 100, 59)", boxSizing: "border-box", padding: "0 0 30px 0"}}>
                 <span>Шаг {formStep + 1}/3</span>
-                <h3 style={{margin: "10px 0 0 0"}}>Добавим название и описание нового курса</h3>
+                <h2 style={{margin: 0}}>Добавим название и описание нового курса</h2>
+                <p style={{margin: 0}}>Введите данные нового курса, чтобы добавить новый курс.</p>
             </div>
 
             <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 80}}>

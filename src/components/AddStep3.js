@@ -1,7 +1,7 @@
 import React from "react";
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-
+import Image from '@tiptap/extension-image';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleRight, faCircleLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -17,7 +17,7 @@ export default function AddStep3({ formData, setFormData, formStep }) {
     const editor = useEditor({
       editable,
       content: module.text,
-      extensions: [StarterKit],
+      extensions: [StarterKit, Image],
     });
 
     //refs
@@ -38,9 +38,9 @@ export default function AddStep3({ formData, setFormData, formStep }) {
 
 
     return (
-        <div className="addCourse__form-stepwrapper" ref={sliderRef} style={{width: "100%", height: "100%", display: "flex", alignItems: "center", overflow: "scroll hidden",boxSizing: "border-box"}}>
+        <div className="addCourse__form-stepwrapper" ref={sliderRef} style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-start", overflow: "scroll hidden",boxSizing: "border-box"}}>
             {/* <h3 style={{margin: 0}}>Проверим, что бодует добавлено</h3> */}
-            <div style={{flex: "1 0 100%"}}>
+            <div style={{flex: "1 0 100%", boxSizing: "border-box", padding: "0 75px", height: "100%"}}>
                 <div style={{margin: "0 0 20px 0", textAlign: "left"}}>
                     <span>Шаг {formStep + 1}/3</span>
                     <h3 style={{margin: "10px 0 0 0"}}>Проверим, что бодует добавлено в новый курс</h3>
@@ -63,20 +63,20 @@ export default function AddStep3({ formData, setFormData, formStep }) {
                         }}></input>
                     </div>
                     
-                    <button style={{padding: 0, minWidth: 180, minHeight: 30, border: "none", backgroundColor: "transparent", color: "rgb(226, 100, 59)", display: "inline-flex", justifyContent: "space-between", alignItems: "center", fontSize: 16}} type="button" onClick={scrollTocontent}>
-                        <span>К контенту модуля</span>
+                    <button style={{padding: "0 10px", minWidth: 175, minHeight: 50, border: "2px solid rgb(226, 100, 59)", backgroundColor: "transparent", color: "rgb(226, 100, 59)", display: "inline-flex", justifyContent: "space-between", alignItems: "center", fontSize: 16, borderRadius: 7}} type="button" onClick={scrollTocontent}>
+                        <span>К контенту</span>
                         <FontAwesomeIcon style={{fontSize: 18}} icon={faCircleRight} />
                     </button>
                 </div>
             </div>
                     
-            <div style={{flex: "1 0 100%"}}>
-                <span>Что будет в модуле</span>
-                <EditorContent className="addCourse__form-stepwrapper-editor-div" style={{width: "100%", height: "100%", maxHeight: 475, display: "flex", alignItems: "flex-start", justifyContent: "center",  overflow: "auto", boxSizing:"border-box", border: "2px solid white", borderRadius: 15}} editor={editor}/>
-                <button style={{padding: 0, minWidth: 180, minHeight: 30, border: "none", backgroundColor: "transparent", color: "rgb(226, 100, 59)", display: "inline-flex", justifyContent: "space-between", alignItems: "center", fontSize: 16}} type="button" onClick={scrollToCourseDetails}>
-                        <span>К деталям курса</span>
-                        <FontAwesomeIcon style={{fontSize: 18}} icon={faCircleLeft} />
+            <div style={{flex: "1 0 100%", boxSizing: "border-box", padding: "0 75px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
+                <h2 style={{margin: 0}}>Что будет в модуле</h2>
+                <button style={{padding: "0 10px", minWidth: 175, minHeight: 50, border: "2px solid rgb(226, 100, 59)", backgroundColor: "transparent", color: "rgb(226, 100, 59)", display: "inline-flex", justifyContent: "space-between", alignItems: "center", fontSize: 16, margin: "auto 0", borderRadius: 7}} type="button" onClick={scrollToCourseDetails}>
+                    <FontAwesomeIcon style={{fontSize: 18}} icon={faCircleLeft} />
+                    <span>К деталям курса</span>    
                 </button>
+                <EditorContent className="addCourse__form-stepwrapper-editor-div" style={{width: "100%", height: "100%", /*maxHeight: 475,*/ display: "flex", alignItems: "flex-start", justifyContent: "center",  overflow: "auto", boxSizing:"border-box", borderRadius: 15, margin: "auto 0"}} editor={editor}/>
             </div>      
             {/* <div style={{minHeight: 120, width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", margin: "30px 0"}}>
                 <div style={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box", padding: "10px 20px"}}>
