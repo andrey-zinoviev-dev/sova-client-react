@@ -7,12 +7,18 @@ import AddStep3 from "./AddStep3";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
+import { UserContext } from '../context/userContext';
+import { apiCreateCourse } from '../api';
 
 export default function AddCourse() {
+  //token
+  const userToken = localStorage.getItem('token');
+  //user context
+  const loggedInUser = React.useContext(UserContext);
   //states
   const [formStep, setFormStep] = React.useState(0);
   const [formData, setFormData] = React.useState({
-    author: {},
+    author: loggedInUser,
     course: {
       name: "",
       description: "",
@@ -30,7 +36,7 @@ export default function AddCourse() {
       case 1:
         return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       case 2:
-        return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} />
+        return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       default:
         break;
     }
@@ -39,6 +45,7 @@ export default function AddCourse() {
   //refs
   const stepsRef = React.useRef();
   const prevStepRef = React.useRef();
+  const nextButtonRef = React.useRef();
   // const buttonStepRef = React.useRef();
 
   //variables
@@ -83,6 +90,8 @@ export default function AddCourse() {
     prevStepRef.current = formStep;
   }, [formStep]);
 
+
+
   return (
     <section className="addCourse">
       {/* <div style={{width: "100%", display: "flex", flexDirection: "column", maxWidth: 1280, margin: "0 auto"}}>
@@ -115,24 +124,24 @@ export default function AddCourse() {
 
           <form className="addCourse__form" onSubmit={(evt) => {
             evt.preventDefault();
-            console.log('submit form');
+            apiCreateCourse(userToken, formData)
           }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", padding: "75px 0" /*padding: "45px 75px"*/}}>
             {renderStep()}
-            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box", padding:  "0 75px"}}>
-              <motion.button whileHover={{backgroundColor: "rgba(226, 100, 59, 1)", color: "rgb(255, 255, 255)"}} type="button" style={{display: formStep < 1 ? "none": "inline-block", fontWeight: 700, minWidth: 120, minHeight: 50, backgroundColor: "rgba(226, 100, 59, 0)", borderRadius: 15, border: "2px solid rgba(226, 100, 59, 1)", color: "rgba(226, 100, 59, 1)"}} onClick={() =>{
+            {/* <div className="addCourse__form-buttons-wrapper" style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box", padding:  "0 75px"}}>
+              <motion.button className="addCourse__form-buttons-wrapper-button" type="button" style={{display: formStep < 1 ? "none": "inline-block", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15}} onClick={() =>{
                 formStep > 0 &&
                 setFormStep((prevStep) => {
                   return prevStep - 1;
                 });
               }}>Назад</motion.button>
-              <motion.button whileHover={{backgroundColor: "rgba(226, 100, 59, 1)", color: "rgb(255, 255, 255)"}} type="button" onClick={() =>{
+              <motion.button className="addCourse__form-buttons-wrapper-button" ref={nextButtonRef} disabled={(formData.course.name.length === 0 || formData.course.description.length === 0) && true} type="button" onClick={() =>{
                 // console.log(formData);
                 formStep < 2 && 
                 setFormStep((prevStep) => {
                   return prevStep + 1;
                 });
-              }}  style={{fontWeight: 700, minWidth: 120, minHeight: 50, backgroundColor: "rgba(226, 100, 59, 0)", borderRadius: 15, border: "2px solid rgb(226, 100, 59)", color: "rgb(226, 100, 59)"}}>Вперед</motion.button>
-            </div>
+              }}  style={{pointerEvents: (formData.course.name.length === 0 || formData.course.description.length === 0) && "none", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, border: formData.course.name.length === 0 || formData.course.description.length === 0 ? "2px solid rgb(255 255 255 / 30%)" : "2px solid rgb(226, 100, 59)", color: formData.course.name.length === 0 || formData.course.description.length === 0 ? "rgb(255 255 255 / 30%)" : "rgb(255 255 255 / 100%)"}}>Вперед</motion.button>
+            </div> */}
             
           </form>
       {/* <div></div> */}

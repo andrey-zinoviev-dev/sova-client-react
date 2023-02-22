@@ -86,7 +86,14 @@
 .addCourse__form-input::placeholder {
     color: rgba(255, 255, 255, 0.5)
 }
-
+.addCourse__form-buttons-wrapper-button {
+    background-color: rgba(226, 100, 59, 0);
+    transition: all 0.35s ease-in-out;
+}
+.addCourse__form-buttons-wrapper-button:hover {
+    background-color: rgba(226, 100, 59, 1);
+    color: rgb(255, 255, 255);
+}
 .addCourse__form-stepwrapper-editor-div {
     width: 100%;
     height: 100%;

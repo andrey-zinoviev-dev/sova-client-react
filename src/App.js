@@ -85,14 +85,14 @@ function App() {
 
   function loginFormSubmit(evt, formData) {
     evt.preventDefault();
-    console.log(formData);
+    // console.log(formData);
     apiLogin(formData)
     .then(({token}) => {
       // console.log(token);
       if(!token) {
         return //process error
       }
-      console.log(token);
+      // console.log(token);
       localStorage.setItem('token', token);
       //get current user
       return apiGetCurrentUser(token)

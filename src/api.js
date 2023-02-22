@@ -1,5 +1,6 @@
 //api variable
-const apiAdress = 'http://api.sova-courses.site';
+// const apiAdress = 'http://api.sova-courses.site';
+const apiAdress = 'http://localhost:3000';
 
 //api calls
 function apiLogin(formData) {
@@ -41,6 +42,9 @@ function apiGetCurrentUser(token) {
     // console.log(res);
     return res.json();
   })
+  // .catch((err) => {
+  //   console.log(err);
+  // })
 
 }
 
@@ -83,6 +87,20 @@ function apiGetCourseModule(moduleID, token) {
   })
 }
 
+function apiCreateCourse(token, content) {
+  return fetch(`${apiAdress}/courses/add`, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+    body: JSON.stringify(content)
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
 function apiGetUserMessages(moduleID, token) {
   return fetch(`${apiAdress}/modules/${moduleID}/messages`, {
     method: 'GET',
@@ -116,6 +134,7 @@ export {
   apiGetCurrentUser,
   apiGetCourses,
   apiGetCourse,
+  apiCreateCourse,
   apiGetCourseModule,
   apiGetUserMessages,
   apiSendMessage,
