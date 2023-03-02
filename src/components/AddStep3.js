@@ -4,6 +4,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleRight, faCircleLeft, faPen } from "@fortawesome/free-solid-svg-icons";
+import { Node, mergeAttributes } from "@tiptap/react";
 import { motion } from "framer-motion";
 
 export default function AddStep3({ formData, setFormData, formStep, setFormStep }) {
@@ -15,10 +16,45 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
 
     // console.log(module.text);
 
+      //crete Video extension
+  const Video = Node.create({
+    name: "video",
+    group: "block",
+    selectable: "true",
+    atom: "true",
+    parseHTML() {
+      return [
+        {
+          tag: "video",
+        },
+      ]
+    },
+    addAttributes() {
+      return {
+        "src": {
+          default: null,
+        },
+        "controls" : {
+          default: true,
+        },
+        "controlsList": {
+          default: "nodownload",
+        },
+        "oncontextmenu": {
+          default: "return false"
+        },
+      }
+    },
+    renderHTML({HTMLAttributes}) {
+      return ['video', mergeAttributes(HTMLAttributes)];
+    },
+  });
+
+
     const editor = useEditor({
       editable,
       content: module.text,
-      extensions: [StarterKit, Image],
+      extensions: [StarterKit, Image, Video,],
     });
 
     //refs

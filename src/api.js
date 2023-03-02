@@ -91,15 +91,28 @@ function apiCreateCourse(token, content) {
   return fetch(`${apiAdress}/courses/add`, {
     method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       'Authorization': token,
     },
-    body: JSON.stringify(content)
+    body: content,
   })
   .then((res) => {
     return res.json();
   })
 };
+
+function apiUploadFilesToCourse(token, files) {
+  return fetch(`${apiAdress}/courses/add/files`, {
+    method: "POST",
+    headers: {
+      'Authorization': token,
+    },
+    body: files
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
 
 function apiGetUserMessages(moduleID, token) {
   return fetch(`${apiAdress}/modules/${moduleID}/messages`, {
@@ -135,6 +148,7 @@ export {
   apiGetCourses,
   apiGetCourse,
   apiCreateCourse,
+  apiUploadFilesToCourse,
   apiGetCourseModule,
   apiGetUserMessages,
   apiSendMessage,

@@ -1,11 +1,63 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
-export default function TipTapButtons ({ editor }) {
+import { faImage, faFilm } from "@fortawesome/free-solid-svg-icons";
+export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
   //states
   const [imageSrc, setImageSrc] = React.useState("");
+  const [videoSrc, setVideoSrc] = React.useState("");
 
-  React.useEffect(() => {}, [imageSrc]);
+  //refs
+  const imageInputRef = React.useRef();
+  const videoInputRef = React.useRef();
+
+  //functions
+  function handleFileChange(evt) {
+    const image = evt.target.files[0];
+    console.log(image);
+    const relPath = window.URL.createObjectURL(image)
+    setImageSrc(relPath);
+    image.clientPath = relPath;
+    setSelectedFiles((prevValue) => {
+      return [...prevValue, image]
+    });
+    // console.log(evt.target.files[0]);
+    // const fileReader = new FileReader();
+
+    // fileReader.readAsDataURL(evt.target.files[0]);
+
+    // fileReader.onload = (evt) => {
+    //   setImageSrc(evt.target.result);
+    // }
+  }
+
+  function handleVideoUpload(evt) {
+    const video = evt.target.files[0];
+    const relPath = window.URL.createObjectURL(video);
+    video.clientPath = relPath;
+    setSelectedFiles((prevValue) => {
+      return [...prevValue, video]
+    });
+    setVideoSrc(relPath);
+  }
+
+  React.useEffect(() => {
+    if(imageSrc.length > 0) {
+      editor.chain().focus().setImage({ src: imageSrc }).run();
+    }
+    
+    // window.URL.revokeObjectURL(imageSrc);
+  }, [imageSrc]);
+
+  React.useEffect(() => {
+    if(videoSrc.length > 0) {
+      editor.chain().focus().insertContent(`<video src="${videoSrc}"></video>`).run();
+    }
+    
+  }, [videoSrc]);
+
+  // React.useEffect(() => {
+  //   console.log(formData);
+  // }, [formData])
 
   return (
     <ul className="addCourse__form-stepwrapper-menu-list" style={{padding: 0, margin: "0 0 20px 0", listStyle: "none", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 9}}>
@@ -55,11 +107,19 @@ export default function TipTapButtons ({ editor }) {
         }}>H6</button>
       </li>
       <li>
-        <button onClick={() => {
-          console.log('image button test');
+        <button type="button" className={editor.isActive('image') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'} onClick={() => {
+          imageInputRef.current.click();
         }}>
           <FontAwesomeIcon icon={faImage} />
-          <input type="file" />
+          <input ref={imageInputRef} onChange={handleFileChange} type="file" name="image" style={{display: "none"}}/>
+        </button>
+      </li>
+      <li>
+        <button type="button" onClick={() => {
+          videoInputRef.current.click();
+        }}>
+          <FontAwesomeIcon icon={faFilm} />
+          <input ref={videoInputRef} onChange={handleVideoUpload} type="file" name="video" style={{display: "none"}}/>
         </button>
       </li>
     </ul>

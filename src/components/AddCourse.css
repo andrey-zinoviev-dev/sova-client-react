@@ -115,7 +115,6 @@
 
 .addCourse__form-stepwrapper-editor-div::-webkit-scrollbar {
     width: 7px;
-    
 }
 
 .addCourse__form-stepwrapper-editor-div::-webkit-scrollbar-track {
@@ -152,12 +151,23 @@
     padding: 15px 30px;
 }
 
-/* .ProseMirror::-webkit-scrollbar-track {
-    width: 3px;
-    background-color: red;
-} */
+.ProseMirror::-webkit-scrollbar {
+    width: 7px;
+    /* background-color: red; */
+}
 
-.ProseMirror img {
+.ProseMirror::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 10px 0;
+}
+
+.ProseMirror::-webkit-scrollbar-thumb {
+    border-radius: 9px;
+    background-color: rgb(226, 100, 59);
+}
+
+.ProseMirror img, .ProseMirror video {
     /* max-width: 420px; */
     width: 100%;
 }
@@ -184,8 +194,16 @@
     /* .ProseMirror {
         max-height: 475px;
     } */
+    /* .addCourse__form {
+        padding: 45px;
+    } */
+
     .addCourse__navigation {
         min-width: 370px;
         padding: 45px;
+    }
+
+    .addCourse__form-stepwrapper-editor-div {
+        max-height: 450px;
     }
 }

@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { UserContext } from '../context/userContext';
-import { apiCreateCourse } from '../api';
+import { apiCreateCourse, apiUploadFilesToCourse } from '../api';
 
 export default function AddCourse() {
   //token
@@ -18,15 +18,16 @@ export default function AddCourse() {
   //states
   const [formStep, setFormStep] = React.useState(0);
   const [formData, setFormData] = React.useState({
-    author: loggedInUser,
+    // author: loggedInUser,
     course: {
       name: "",
       description: "",
     },
     module: {
       text: "",
-    }
+    },
   });
+  const [selectedFiles, setSelectedFiles] = React.useState([]);
 
   //functions
   function renderStep() {
@@ -34,13 +35,17 @@ export default function AddCourse() {
       case 0:
         return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       case 1:
-        return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
+        return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 2:
         return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       default:
         break;
     }
-  }
+  };
+
+  // function submitForm() {
+  //   console.log(formData);
+  // }
 
   //refs
   const stepsRef = React.useRef();
@@ -90,7 +95,9 @@ export default function AddCourse() {
     prevStepRef.current = formStep;
   }, [formStep]);
 
-
+  // React.useEffect(() => {
+  //   console.log(selectedFiles);
+  // }, [selectedFiles]);
 
   return (
     <section className="addCourse">
@@ -124,8 +131,31 @@ export default function AddCourse() {
 
           <form className="addCourse__form" onSubmit={(evt) => {
             evt.preventDefault();
-            apiCreateCourse(userToken, formData)
-          }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", padding: "75px 0" /*padding: "45px 75px"*/}}>
+            console.log(loggedInUser)
+            const form = new FormData();
+            form.append("author", JSON.stringify(loggedInUser));
+            form.append("course", JSON.stringify(formData.course));
+            form.append("module", JSON.stringify(formData.module));
+            form.append("files", selectedFiles)
+            
+            
+            
+            // selectedFiles.forEach((file) => {
+            //   console.log(file);
+            //   form.append("files", file);
+            // });
+
+            console.log(form);
+            apiCreateCourse(userToken, form)
+            .then((data) => {
+              console.log(data);
+            });
+            // apiUploadFilesToCourse(userToken, form)
+            // .then(() => {
+
+            // });
+
+          }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", padding: window.innerWidth < 1439 ? "45px 0": "75px 0" /*padding: "45px 75px"*/}}>
             {renderStep()}
             {/* <div className="addCourse__form-buttons-wrapper" style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box", padding:  "0 75px"}}>
               <motion.button className="addCourse__form-buttons-wrapper-button" type="button" style={{display: formStep < 1 ? "none": "inline-block", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15}} onClick={() =>{
