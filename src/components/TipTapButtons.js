@@ -3,8 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faFilm } from "@fortawesome/free-solid-svg-icons";
 export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
   //states
-  const [imageSrc, setImageSrc] = React.useState("");
-  const [videoSrc, setVideoSrc] = React.useState("");
+  const [image, setImage] = React.useState({});
+  const [video, setVideo] = React.useState({});
 
   //refs
   const imageInputRef = React.useRef();
@@ -15,8 +15,12 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     const image = evt.target.files[0];
     console.log(image);
     const relPath = window.URL.createObjectURL(image)
-    setImageSrc(relPath);
     image.clientPath = relPath;
+
+    setImage((prevValue) => {
+      return {...prevValue, image}
+    });
+
     setSelectedFiles((prevValue) => {
       return [...prevValue, image]
     });
@@ -34,26 +38,36 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     const video = evt.target.files[0];
     const relPath = window.URL.createObjectURL(video);
     video.clientPath = relPath;
+    setVideo((prevValue) => {
+      return {...prevValue, video};
+    });
     setSelectedFiles((prevValue) => {
       return [...prevValue, video]
     });
-    setVideoSrc(relPath);
+    
   }
 
   React.useEffect(() => {
-    if(imageSrc.length > 0) {
-      editor.chain().focus().setImage({ src: imageSrc }).run();
-    }
+    if(image.image) {
+      editor.chain().focus().setImage({ src: image.image.clientPath, title: image.image.name}).run();
+    };
+    // console.log(Object.keys(image));
+    // if(imageSrc.length > 0) {
+    //   editor.chain().focus().setImage({ src: image.src, title: image.relPath}).run();
+    // }
     
     // window.URL.revokeObjectURL(imageSrc);
-  }, [imageSrc]);
+  }, [image]);
 
   React.useEffect(() => {
-    if(videoSrc.length > 0) {
-      editor.chain().focus().insertContent(`<video src="${videoSrc}"></video>`).run();
-    }
+    if(video.video) {
+      console.log(Object.keys(video.video));
+    };
+    // if(videoSrc.length > 0) {
+    //   editor.chain().focus().insertContent(`<video src="${videoSrc}"></video>`).run();
+    // }
     
-  }, [videoSrc]);
+  }, [video]);
 
   // React.useEffect(() => {
   //   console.log(formData);

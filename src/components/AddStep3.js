@@ -14,8 +14,6 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
 
     const { course, module } = formData;
 
-    // console.log(module.text);
-
       //crete Video extension
   const Video = Node.create({
     name: "video",
@@ -54,7 +52,7 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
     const editor = useEditor({
       editable,
       content: module.text,
-      extensions: [StarterKit, Image, Video,],
+      extensions: [StarterKit, Image.configure(), Video,],
     });
 
     //refs
@@ -84,6 +82,10 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
     function focusCourseDescInput() {
         courseDescRef.current.focus();
     };
+
+    React.useEffect(() => {
+        console.log(module);
+    }, [module])
 
     return (
         <>

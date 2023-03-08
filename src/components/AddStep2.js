@@ -1,7 +1,7 @@
 import React from "react";
 import './AddCourse.css';
 import TipTapButtons from "./TipTapButtons";
-import { EditorContent, useEditor } from '@tiptap/react'
+import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -54,6 +54,9 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
         "oncontextmenu": {
           default: "return false"
         },
+        "data-url": {
+          default: null,
+        }
       }
     },
     renderHTML({HTMLAttributes}) {
@@ -62,26 +65,21 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
   });
 
   const editor = useEditor({
-        extensions: [
-          StarterKit,
-          Image,
-          Video,
-          Placeholder.configure({
-            placeholder: "Здесь можно написать контент для курса",
-          })
-        ],
-        content: module.text,
-        onUpdate: ({ editor }) => {
-          setFormData({...formData, module: {
-            ...formData.module,  text: editor.getJSON()
-          }});
-          // if(editor.getHTML() === '<p></p>') {
-          //   setDisableButton(true);
-          // } else {
-          //   setDisableButton(false);
-          // }
-          
-        }
+    extensions: [
+      StarterKit,
+      Image,
+      Video,
+      Placeholder.configure({
+        placeholder: "Здесь можно написать контент для курса",
+      })
+    ],
+    content: module.text,
+    onUpdate: ({ editor }) => {
+      // console.log(editor.getJSON());
+      setFormData({...formData, module: {
+        ...formData.module,  text: editor.getJSON()
+      }});
+    }
   });
 
   React.useEffect(() => {
@@ -114,7 +112,8 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
       </div>
       <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", minHeight: 40}}>
         <motion.button onClick={handleBackClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Назад</motion.button>
-        <motion.button onClick={handleNextClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ pointerEvents: disableButton && "none", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: disableButton ? "rgb(255 255 255 / 30%)" : "rgb(255 255 255 / 100%)", border: disableButton ? "2px solid rgb(255 255 255 /30%)" : "2px solid rgb(226, 100, 59)"}}>Далее</motion.button>
+        {/* <motion.button onClick={handleNextClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ pointerEvents: disableButton && "none", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: disableButton ? "rgb(255 255 255 / 30%)" : "rgb(255 255 255 / 100%)", border: disableButton ? "2px solid rgb(255 255 255 /30%)" : "2px solid rgb(226, 100, 59)"}}>Далее</motion.button> */}
+        <motion.button onClick={handleNextClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</motion.button>
       </div>
     </div>
   )

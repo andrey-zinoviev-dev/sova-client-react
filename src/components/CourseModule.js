@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareCaretDown, faBars } from '@fortawesome/free-solid-svg-icons';
-import { apiGetCourse, apiGetCourseModule, apiGetUserMessages, apiSendMessage } from "../api";
+import { apiGetCourseModule, apiGetUserMessages, apiSendMessage } from "../api";
 import { UserContext } from '../context/userContext';
 import Chat from './Chat';
 // import { SocketContext } from "../socketio/socketIO";
@@ -16,11 +16,14 @@ import MessageForm from './MessageForm';
 import Messages from './Messages';
 import ModuleSide from './ModuleSide';
 import { NavLink, useLocation } from "react-router-dom";
+import { EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
+import Placeholder from '@tiptap/extension-placeholder';
+import { generateHTML } from '@tiptap/react';
 // import Messages from './Messages';
 
 export default function CourseModule(props) {
-
-  
   // const socket = React.useContext(SocketContext);
   const userToken = localStorage.getItem('token');
   const sessionStorage = localStorage.getItem('sessionID');
@@ -37,11 +40,35 @@ export default function CourseModule(props) {
   const [adminIsOnline, setAdminIsOnline] = React.useState(false);
   const [userId, setUserId] = React.useState("");
 
+  const [editable, setEditable] = React.useState(false);
+
   //variables derived from courseModule state variable
   const admin = courseModule._id ? {...courseModule.course.author, online: adminIsOnline} : {};
   // const filteredMessages = messages.filter((message) => {
   //   return message.user._id === studentId;
   // });
+
+  //memo
+
+  //editor
+  const editor = useEditor({
+    editable,
+    extensions: [
+      StarterKit,
+      Image,
+      // Video,
+      // Placeholder.configure({
+      //   placeholder: "Здесь можно написать контент для курса",
+      // })
+    ],
+    content: '',
+    // onUpdate: ({ editor }) => {
+    //   setFormData({...formData, module: {
+    //     ...formData.module,  text: editor.getJSON()
+    //   }});
+    // }
+  });
+
   const selectedStudent = students.find((student) => {
     return student._id === userId;
   })
@@ -304,8 +331,10 @@ export default function CourseModule(props) {
     if(userToken && loggedInUser._id) {
       apiGetCourseModule(moduleID, userToken)
       .then((moduleData) => {
-        console.log(moduleData);
+        // console.log(moduleData);
         setCourseModule(moduleData);
+        editor.commands.setContent(moduleData.layout);
+        // localStorage.setItem('')
         // setCourseAuthor(moduleData.course.author);
         setStudents(moduleData.students);
       });
@@ -316,7 +345,7 @@ export default function CourseModule(props) {
       })
     }
 
-  }, [moduleID, userToken, loggedInUser._id]);
+  }, [moduleID, userToken, loggedInUser._id, editor]);
 
   React.useEffect(() => {
     // socket.current = io('http://api.sova-courses.site');
@@ -397,7 +426,13 @@ export default function CourseModule(props) {
 
   }, [sessionStorage, loggedInUser._id, students.length, admin._id]);
 
-
+  // React.useEffect(() => {
+  //   console.log(editor, courseModule.layout);
+  //   if(editor) {
+  //     editor.commands.setContent(courseModule.layout);
+  //   }
+    
+  // }, [editor, courseModule.layout])
 
   return (
     <motion.section className='module'>
@@ -464,10 +499,11 @@ export default function CourseModule(props) {
         {!chatIsOpened ?
           <div style={{maxWidth: 768, width: '100%'}}>
             <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>Курс {courseModule._id && courseModule.course.name}</h3>
-            <p>{courseModule._id && courseModule.name}</p>
+            <EditorContent editor={editor} />
+            {/* <p>{courseModule._id && courseModule.name}</p>
             <p>{courseModule.description}</p>
             <p>Вот на этой картинке можно изучить строение гортани</p>
-            <img style={{maxWidth: 768}} className='module__content-img' src={courseModule._id && courseModule.images[0]} alt="Гортань спереди"></img>
+            <img style={{maxWidth: 768}} className='module__content-img' src={courseModule._id && courseModule.images[0]} alt="Гортань спереди"></img> */}
           </div>
           :
           <div style={{maxWidth: 768, width: '100%'}}>

@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { UserContext } from '../context/userContext';
-import { apiCreateCourse, apiUploadFilesToCourse } from '../api';
+import { apiCreateCourse } from '../api';
 
 export default function AddCourse() {
   //token
@@ -131,21 +131,21 @@ export default function AddCourse() {
 
           <form className="addCourse__form" onSubmit={(evt) => {
             evt.preventDefault();
-            console.log(loggedInUser)
+            // console.log(selectedFiles)
             const form = new FormData();
             form.append("author", JSON.stringify(loggedInUser));
             form.append("course", JSON.stringify(formData.course));
             form.append("module", JSON.stringify(formData.module));
-            form.append("files", selectedFiles)
+            // form.append("files", JSON.stringify(selectedFiles));
             
             
             
-            // selectedFiles.forEach((file) => {
-            //   console.log(file);
-            //   form.append("files", file);
-            // });
+            selectedFiles.forEach((file) => {
+              // console.log(file);
+              form.append("files", file);
+            });
 
-            console.log(form);
+            // console.log(form);
             apiCreateCourse(userToken, form)
             .then((data) => {
               console.log(data);
