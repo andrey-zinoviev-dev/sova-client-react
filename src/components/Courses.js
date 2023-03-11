@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPen } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Dashboard from "./Dashboard";
 import CourseModulesPopup from "./CourseModulesPopup";
@@ -176,6 +176,11 @@ export default function Courses(props) {
               {/* <img style={{width: "100%", height: "100%", objectFit: "cover"}} src={course.cover}></img> */}
               <div className="main__courses-list-element-content">
                 <div className="main_courses-wrapper">
+                  <motion.button onClick={() => {
+                    console.log('yes');
+                  }} whileHover={{color: "#d37c52", border: "2px solid #d37c52"}} style={{position: "absolute", top: "5%", right: "45%", justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12}}>
+                    <FontAwesomeIcon icon={faPen}/>
+                  </motion.button>
                   <h3 className="main__courses-headline">{course.name}</h3>
                   <p className="main__courses-para">{course.description}</p>
                   <span>{index === courses.length - 1 && "последний курс"}</span>
