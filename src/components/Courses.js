@@ -6,13 +6,14 @@ import { faChevronLeft, faChevronRight, faPen } from "@fortawesome/free-solid-sv
 import { UserContext } from "../context/userContext";
 import Dashboard from "./Dashboard";
 import CourseModulesPopup from "./CourseModulesPopup";
-import AddCourse from "./AddCourse";
+// import AddCourse from "./AddCourse";
 import './Courses.css';
 import {  
   apiGetCourses
 } from '../api';
+import EditCourse from "./EditCourse";
 
-export default function Courses(props) {
+export default function Courses({ setCourseInEdit }) {
   //contexts
   const loggedInUser = React.useContext(UserContext);
 
@@ -20,7 +21,7 @@ export default function Courses(props) {
   const [courses, setCourses] = React.useState([]);
   const [selectedCourse, setSelectedCourse] = React.useState({});
   const [modulesPopupOpened, setModulesPopupOpened] = React.useState(false);
-
+  const [isEditCourse, setIsEditCourse] = React.useState(false);
 
   //variants
   const spanMotion = {
@@ -177,8 +178,9 @@ export default function Courses(props) {
               <div className="main__courses-list-element-content">
                 <div className="main_courses-wrapper">
                   <motion.button onClick={() => {
-                    console.log('yes');
-                  }} whileHover={{color: "#d37c52", border: "2px solid #d37c52"}} style={{position: "absolute", top: "5%", right: "45%", justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12}}>
+                    setSelectedCourse(course);
+                    setIsEditCourse(true);
+                  }} whileHover={{color: "#d37c52", border: "2px solid #d37c52"}} style={{position: "absolute", top: "5%", right: 0, justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12, zIndex: 6}}>
                     <FontAwesomeIcon icon={faPen}/>
                   </motion.button>
                   <h3 className="main__courses-headline">{course.name}</h3>
@@ -187,7 +189,7 @@ export default function Courses(props) {
                   <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
                     showCoursePopup(course);
                   }} className="main_courses-btn">Открыть</motion.button>
-                  <span>{`00${index + 1}`}</span>
+                  <span style={{color: "rgb(255 255 255/ 45%)", fontSize: 60}}>{`00${index + 1}`}</span>
                 </div>
                 {index === courses.length - 1 && 
                   <motion.div whileHover="shown" initial="hidden" animate="hidden" variants={addCourseVariants} className="main__courses-list-element-content-add" style={{position: "absolute", top: 0, right: 0, width: 210, height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
@@ -299,6 +301,7 @@ export default function Courses(props) {
         </div>
         <div className="popup__overlay"></div>
       </CourseModulesPopup>
+      {isEditCourse && <EditCourse selectedCourse={selectedCourse}/>}
     </>
 
   )

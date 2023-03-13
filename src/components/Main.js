@@ -5,7 +5,8 @@ import './Main.css';
 // import Navigation from './Navigation';
 import Dashboard from "./Dashboard";
 import Courses from "./Courses";
-import Course from "./Course";
+import EditCourse from "./EditCourse";
+// import Course from "./Course";
 import { UserContext } from '../context/userContext';
 
 export default function Main(props) {
