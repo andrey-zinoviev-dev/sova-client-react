@@ -13,7 +13,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
   //functions
   function handleFileChange(evt) {
     const image = evt.target.files[0];
-    console.log(image);
+    // console.log(image);
     const relPath = window.URL.createObjectURL(image)
     image.clientPath = relPath;
 
@@ -57,17 +57,20 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     // }
     
     // window.URL.revokeObjectURL(imageSrc);
-  }, [image]);
+  }, [image.image]);
 
   React.useEffect(() => {
+    // console.log(video);
     if(video.video) {
-      console.log(Object.keys(video.video));
+      // console.log(video);
+      editor.chain().focus().insertContent(`<video src="${video.video.clientPath}" title=${video.video.name}></video>`).run();
+      // console.log(Object.keys(video.video));
     };
     // if(videoSrc.length > 0) {
     //   editor.chain().focus().insertContent(`<video src="${videoSrc}"></video>`).run();
     // }
     
-  }, [video]);
+  }, [video.video]);
 
   // React.useEffect(() => {
   //   console.log(formData);

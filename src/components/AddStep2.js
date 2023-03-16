@@ -11,8 +11,12 @@ import { motion } from "framer-motion";
 export default function AddStep2({ formData, setFormData, formStep, setFormStep, setSelectedFiles }) {
   const { module } = formData;
 
+  //refs
+
+
   //states
   const [disableButton, setDisableButton] = React.useState(false);
+  const [filesToUpload, setFilesToUpload] = React.useState([]);
 
   //functions
   function handleNextClick() {
@@ -26,6 +30,10 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
       return prevValue - 1;
     })
   };
+
+  // function handleFileUpload(evt) {
+  //   console.log(evt.target.files[0]);
+  // }
 
   //crete Video extension
   const Video = Node.create({
@@ -54,7 +62,7 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
         "oncontextmenu": {
           default: "return false"
         },
-        "data-url": {
+        "title": {
           default: null,
         }
       }

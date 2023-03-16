@@ -20,7 +20,8 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
-import { generateHTML } from '@tiptap/react';
+// import { generateHTML } from '@tiptap/react';
+import { Node, mergeAttributes } from "@tiptap/react";
 // import Messages from './Messages';
 
 export default function CourseModule(props) {
@@ -48,7 +49,42 @@ export default function CourseModule(props) {
   //   return message.user._id === studentId;
   // });
 
-  //memo
+  //crete Video extension
+  const Video = Node.create({
+    name: "video",
+    group: "block",
+    selectable: "true",
+    atom: "true",
+    parseHTML() {
+      return [
+        {
+          tag: "video",
+        },
+      ]
+    },
+    addAttributes() {
+      return {
+        "src": {
+          default: null,
+        },
+        "controls" : {
+          default: true,
+        },
+        "controlsList": {
+          default: "nodownload",
+        },
+        "oncontextmenu": {
+          default: "return false"
+        },
+        "title": {
+          default: null,
+        }
+      }
+    },
+    renderHTML({HTMLAttributes}) {
+      return ['video', mergeAttributes(HTMLAttributes)];
+    },
+  });
 
   //editor
   const editor = useEditor({
@@ -56,7 +92,7 @@ export default function CourseModule(props) {
     extensions: [
       StarterKit,
       Image,
-      // Video,
+      Video,
       // Placeholder.configure({
       //   placeholder: "Здесь можно написать контент для курса",
       // })

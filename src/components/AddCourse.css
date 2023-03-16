@@ -170,6 +170,7 @@
 .ProseMirror img, .ProseMirror video {
     /* max-width: 420px; */
     width: 100%;
+    border-radius: 9px;
 }
 
 .ProseMirror p.is-editor-empty::before {

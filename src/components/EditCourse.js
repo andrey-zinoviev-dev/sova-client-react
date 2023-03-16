@@ -1,35 +1,38 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-export default function EditCourse({ selectedCourse }) {
+export default function EditCourse({ children }) {
   // React.useEffect(() => {
   //   console.log(selectedCourse);
   // }, [selectedCourse]);
 
   //states
-  const [courseCover, setCourseCover] = React.useState("");
+  // const [courseCover, setCourseCover] = React.useState("");
 
-  //refs
-  const courseNameRef = React.useRef();
-  const courseDescRef = React.useRef();
-  const courseCoverRef = React.useRef();
+  // //refs
+  // const courseNameRef = React.useRef();
+  // const courseDescRef = React.useRef();
+  // const courseCoverRef = React.useRef();
 
-  //functions
-  function handleCoverEdit() {
-    const relativePath = window.URL.createObjectURL(courseCoverRef.current.files[0]);
-    setCourseCover(relativePath);
-    // setCourseCover(courseCoverRef.current.files[0]);
-  };
+  // //functions
+  // function handleCoverEdit() {
+  //   const relativePath = window.URL.createObjectURL(courseCoverRef.current.files[0]);
+  //   setCourseCover(relativePath);
+  //   // setCourseCover(courseCoverRef.current.files[0]);
+  // };
+
+  // // React.useEffect(() => {
+
+  // // }, [courseCover])
 
   // React.useEffect(() => {
-
-  // }, [courseCover])
-
+  //   console.log(children);
+  // }, [])
   return (
-    <section style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/ 70%)", color: "white", zIndex: 10, display: "flex", justifyContent: "center", alignItems: "flex-start", boxSizing: "border-box", padding: "2% 0", fontSize: 20}}>
-      <div style={{textAlign: "left", position: "relative"}}>
-        <button style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
+    <section style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/ 70%)", color: "white", zIndex: 10, display: "flex", justifyContent: "center", alignItems: "flex-start", boxSizing: "border-box", padding: "2% 0", fontSize: 20, overflow: "auto"}}>
+      {/* <div style={{textAlign: "left", position: "relative"}}>
+        <button onClick={setIsEditCourse(false)} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
           <FontAwesomeIcon icon={faXmark} />
         </button>
         <h2 style={{fontSize: 36}}>Редактировать курс</h2>
@@ -40,7 +43,7 @@ export default function EditCourse({ selectedCourse }) {
           </div>
           <div>
             <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-desc">Описание</label>
-            {/* <input style={{width: "100%", boxSizing: "border-box", borderRadius: 12, padding: "10px 20px", border: "none"}} id="course-desc" value={selectedCourse.description} onChange={() => {}}></input> */}
+            
             <textarea ref={courseDescRef} style={{width: "100%", height: 350, boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
               console.log(evt.target.value);
             }}></textarea>
@@ -54,7 +57,8 @@ export default function EditCourse({ selectedCourse }) {
             <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
           </div>
         </form>
-      </div>
+      </div> */}
+      {children}
     </section>
   )
 };

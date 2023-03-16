@@ -131,6 +131,13 @@ function App() {
     // console.log(name, value);
     //send message to APi
     // socket
+  };
+
+  function handlePrntScrnButton(evt) {
+    // console.log(evt.code);
+    if(evt.code === 'PrintScreen') {
+      window.print();
+    };
   }
 
   // //test
@@ -139,7 +146,7 @@ function App() {
   // };
 
   return (
-    <div className="App">
+    <div className="App" onKeyUp={handlePrntScrnButton} tabIndex={0}>
       <UserContext.Provider value={user}>
       {/* <Routes>
         <Route path='courses/:courseID/modules/:moduleID' element={<CourseModule user={user} submitForm={submitChatForm}>

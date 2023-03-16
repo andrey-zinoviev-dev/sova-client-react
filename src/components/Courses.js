@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight, faPen } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Dashboard from "./Dashboard";
 import CourseModulesPopup from "./CourseModulesPopup";
@@ -22,6 +22,7 @@ export default function Courses({ setCourseInEdit }) {
   const [selectedCourse, setSelectedCourse] = React.useState({});
   const [modulesPopupOpened, setModulesPopupOpened] = React.useState(false);
   const [isEditCourse, setIsEditCourse] = React.useState(false);
+  const [courseCover, setCourseCover] = React.useState("");
 
   //variants
   const spanMotion = {
@@ -68,6 +69,9 @@ export default function Courses({ setCourseInEdit }) {
   //refs
   const buttonsRef = React.useRef();
   const ulRef = React.useRef();
+  const courseNameRef = React.useRef();
+  const courseDescRef = React.useRef();
+  const courseCoverRef = React.useRef();
 
   //functions
   function showCourse(index) {
@@ -111,6 +115,12 @@ export default function Courses({ setCourseInEdit }) {
     setModulesPopupOpened(false);
   };
 
+  function handleCoverEdit() {
+    const relativePath = window.URL.createObjectURL(courseCoverRef.current.files[0]);
+    setCourseCover(relativePath);
+    // setCourseCover(courseCoverRef.current.files[0]);
+  };
+
   React.useEffect(() => {
     const userToken = localStorage.getItem('token');
 
@@ -126,15 +136,17 @@ export default function Courses({ setCourseInEdit }) {
     }
   }, []);
 
-
-
   React.useEffect(() => {
-    // const courseIndex = courses.findIndex((course) => {
-    //   return course._id === selectedCourse._id;
-    // });
-    console.log(loggedInUser);
+    console.log(isEditCourse);
+  }, [isEditCourse])
 
-  }, [loggedInUser]);
+  // React.useEffect(() => {
+  //   // const courseIndex = courses.findIndex((course) => {
+  //   //   return course._id === selectedCourse._id;
+  //   // });
+  //   console.log(loggedInUser);
+
+  // }, [loggedInUser]);
 
   return (
     <>
@@ -301,7 +313,37 @@ export default function Courses({ setCourseInEdit }) {
         </div>
         <div className="popup__overlay"></div>
       </CourseModulesPopup>
-      {isEditCourse && <EditCourse selectedCourse={selectedCourse}/>}
+      {isEditCourse && <EditCourse>
+        <div style={{textAlign: "left", position: "relative"}}>
+          <button onClick={() => {
+            setIsEditCourse(false)
+            }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+          <h2 style={{fontSize: 36}}>Редактировать курс</h2>
+          <form style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", textAlign: "left", minHeight: 500}}>
+            <div style={{margin: '0 0 30px 0'}}>
+              <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-name">Название</label>
+              <input ref={courseNameRef} style={{width: "100%", boxSizing: "border-box", borderRadius: 12, padding: "10px 20px", border: "none", fontSize: 16}} id="course-name" value={selectedCourse.name} onChange={() => {}}></input>
+            </div>
+            <div>
+              <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-desc">Описание</label>
+              
+              <textarea ref={courseDescRef} style={{width: "100%", height: 350, boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
+                console.log(evt.target.value);
+              }}></textarea>
+            </div>
+            <div style={{textAlign: "left", margin: "30px 0 0 0"}}>
+              <span style={{display: "block"}}>Текущая обложка курса</span>
+              <img style={{height: 250, objectFit: "cover", width: 500, boxSizing: "border-box", borderRadius: 9, border: "2px solid white", margin: "30px 0"}} src={courseCover.length > 0 ? courseCover : selectedCourse.cover} alt="Обложка курса"></img>
+              <button type="button" style={{display: "block", boxSizing: "border-box", padding: "10px 20px", border: "2px solid white", color: "white", borderRadius: 12, backgroundColor: "transparent", fontSize: 18}}>
+                <label style={{cursor: "pointer"}} htmlFor="course-cover">Изменить обложку</label>
+              </button>
+              <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
+            </div>
+          </form>
+        </div>
+      </EditCourse>}
     </>
 
   )

@@ -39,8 +39,11 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
           default: "nodownload",
         },
         "oncontextmenu": {
-          default: "return false"
+            default: "return false"
         },
+        "title": {
+            default: null,
+        }
       }
     },
     renderHTML({HTMLAttributes}) {
