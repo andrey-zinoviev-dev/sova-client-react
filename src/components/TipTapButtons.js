@@ -1,10 +1,16 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImage, faFilm } from "@fortawesome/free-solid-svg-icons";
+import CyrillicToTranslit from "cyrillic-to-translit-js";
+
+
 export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
   //states
   const [image, setImage] = React.useState({});
   const [video, setVideo] = React.useState({});
+
+  //variables
+  const cyrillicToTranslit = new CyrillicToTranslit();
 
   //refs
   const imageInputRef = React.useRef();
@@ -14,7 +20,8 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
   function handleFileChange(evt) {
     const image = evt.target.files[0];
     // console.log(image);
-    const relPath = window.URL.createObjectURL(image)
+    const relPath = window.URL.createObjectURL(image);
+    console.log(/[А-Я]/.test(image.name));
     image.clientPath = relPath;
 
     setImage((prevValue) => {
@@ -36,6 +43,15 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
 
   function handleVideoUpload(evt) {
     const video = evt.target.files[0];
+    
+    // if(/[А-Я]/.test(video.name)) {
+    //   let videoLatinName = cyrillicToTranslit.transform(video.name, "_");
+    //   // Object.defineProperties(video, 'name', {
+    //   //   writable: true,
+    //   //   value: videoLatinName
+    //   // })
+    //   // video.name = videoLatinName;
+    // } 
     const relPath = window.URL.createObjectURL(video);
     video.clientPath = relPath;
     setVideo((prevValue) => {
@@ -46,6 +62,8 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     });
     
   }
+
+
 
   React.useEffect(() => {
     if(image.image) {
@@ -63,7 +81,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     // console.log(video);
     if(video.video) {
       // console.log(video);
-      editor.chain().focus().insertContent(`<video src="${video.video.clientPath}" title=${video.video.name}></video>`).run();
+      editor.chain().focus().insertContent(`<video src="${video.video.clientPath}" title=${cyrillicToTranslit.transform(video.video.name, "_")}></video>`).run();
       // console.log(Object.keys(video.video));
     };
     // if(videoSrc.length > 0) {

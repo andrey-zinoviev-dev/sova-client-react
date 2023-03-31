@@ -9,6 +9,7 @@ import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-sv
 import { motion } from "framer-motion";
 import { UserContext } from '../context/userContext';
 import { apiCreateCourse } from '../api';
+import CyrillicToTranslit from 'cyrillic-to-translit-js';
 
 export default function AddCourse() {
   //token
@@ -69,6 +70,9 @@ export default function AddCourse() {
     }
   ];
 
+  
+  const cyrillicToTranslit = new CyrillicToTranslit();
+
   React.useEffect(() => {
     // console.log(formStep);
     const step = Array.from(stepsRef.current.children)[formStep];
@@ -95,9 +99,62 @@ export default function AddCourse() {
     prevStepRef.current = formStep;
   }, [formStep]);
 
-  // React.useEffect(() => {
-  //   console.log(selectedFiles);
-  // }, [selectedFiles]);
+  React.useEffect(() => {
+    // console.log(selectedFiles);
+    // console.log(formData.module.text.content);
+    if(formData.module.text.content) {
+      setSelectedFiles((prevValue) => {
+        // console.log(prevValue);
+        const contentFilteredArray = formData.module.text.content.filter((contentFile) => {
+          return contentFile.type === 'image' || contentFile.type === 'video'
+        });
+        // console.log(contentFilteredArray);
+        const newFilesArray = prevValue.map((newFile, array) => {
+          if(/[А-Я]/.test(newFile.name)) {
+            const renamedFile = new File([newFile], cyrillicToTranslit.transform(newFile.name, "_"), {
+              type: newFile.type,
+              lastModified: newFile.lastModified,
+            });
+            renamedFile.clientPath = newFile.clientPath;
+            renamedFile.match = contentFilteredArray.some((layoutFile) => {
+              return layoutFile.attrs.src === renamedFile.clientPath;
+            });
+            return renamedFile;
+          }
+          newFile.match = contentFilteredArray.some((layoutFile) => {
+            return layoutFile.attrs.src === newFile.clientPath;
+          });
+          console.log(newFile);
+          return newFile;
+        });
+        // console.log(newFilesArray);
+        return newFilesArray.filter((file) => {
+          return file.match !== false;
+        });
+        // return [{}, {}, {}];
+          // const newFilesArray = [...prevValue].map((newFile, array) => {
+          //   console.log(newFile);
+          //   return {
+          //     newFile,
+          //     match: formData.module.text.content.filter((contentFile) => {
+          //       return contentFile.type === 'image' || contentFile.type === 'video'
+          //     }).some((layoutFile) => {
+          //       return layoutFile.attrs.src === newFile.clientPath;
+          //     })
+          //   };
+          // });
+          // console.log(newFilesArray);
+          // return newFilesArray.filter((newFile) => {
+          //   return newFile.match === true;
+          // });
+
+      })
+      // const filesLocal = [...selectedFiles];
+      // console.log(filesLocal);
+
+      // setSelectedFiles([]);
+    }
+  }, [formData.module.text.content]);
 
   return (
     <section className="addCourse">

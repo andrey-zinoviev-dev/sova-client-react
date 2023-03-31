@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Dashboard from "./Dashboard";
+import Menu from "./Menu";
 import CourseModulesPopup from "./CourseModulesPopup";
 // import AddCourse from "./AddCourse";
 import './Courses.css';
@@ -136,53 +137,15 @@ export default function Courses({ setCourseInEdit }) {
     }
   }, []);
 
-  React.useEffect(() => {
-    console.log(isEditCourse);
-  }, [isEditCourse])
-
   // React.useEffect(() => {
-  //   // const courseIndex = courses.findIndex((course) => {
-  //   //   return course._id === selectedCourse._id;
-  //   // });
-  //   console.log(loggedInUser);
-
-  // }, [loggedInUser]);
+  //   console.log(isEditCourse);
+  // }, [isEditCourse]);
 
   return (
     <>
-      {/* <section style={{backgroundImage: `url(${courses.length > 0 && courses[courseIndex].cover}`}} className="main__courses">
-        
-        <motion.div className="main_courses-wrapper">
-          <h3 className="main__courses-headline">{courses.length > 0 && courses[courseIndex].name}</h3>
-          <p className="main__courses-para">{courses.length > 0 && courses[courseIndex].description}</p>
-
-          <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
-            showCoursePopup(courses[courseIndex]);
-          }} className="main_courses-btn">Открыть</motion.button>
-        </motion.div>
-        <span className="main__courses-span">Sova inc</span>
-      
-        <div className="main__courses-navigation-wrapper">
-          <div className="main__courses-navigation-text">
-            <span>Курс</span>
-            <span>{courseIndex + 1}</span>/<span>{courses.length > 0 && courses.length}</span>
-          </div>
-          <div className="main__courses-navigation-arrows">
-            <button disabled={courseIndex === 0 ? true : false } className="main__courses-navigation-button" onClick={previousCourse}><FontAwesomeIcon icon={faChevronLeft}/></button>
-            <ul ref={buttonsRef} className="main__courses-list main__courses-list_buttons">
-              {courses.length > 0 && courses.map((course, index) => {
-                return <li key={index} className="main__courses-list-li" onClick={() => {showCourse(index)}}>
-                  <button style={{backgroundColor: `${index === courseIndex ? "rgb(255, 255, 255, 1)" : "rgb(255, 255, 255, 0.5)"}`}} className="main__courses-list-li-button" ></button>
-                </li>
-              })}
-            </ul>
-            <button disabled={courses.length > 0 && courseIndex === courses.length - 1 ? true : false} className="main__courses-navigation-button" onClick={nextCourse}><FontAwesomeIcon icon={faChevronRight} /></button>
-          </div>
-        </div>
-        <div className="main__courses-overlay"></div>
-      </section> */}
-
+      {/* <Dashboard /> */}
       <section className="main__courses">
+        <Menu />
         <ul ref={ulRef} className="main__courses-list">
           {courses.map((course, index) => {
             return <li className="main__courses-list-element" key={course._id} style={{flex: "1 0 100%", width: "100%", height: "100vh", backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative"}}>
@@ -192,7 +155,7 @@ export default function Courses({ setCourseInEdit }) {
                   <motion.button onClick={() => {
                     setSelectedCourse(course);
                     setIsEditCourse(true);
-                  }} whileHover={{color: "#d37c52", border: "2px solid #d37c52"}} style={{position: "absolute", top: "5%", right: 0, justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12, zIndex: 6}}>
+                  }} whileHover={{color: "#d37c52", border: "2px solid #d37c52"}} style={{position: "absolute", top: "5%", right: "-10%", justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12, zIndex: 6}}>
                     <FontAwesomeIcon icon={faPen}/>
                   </motion.button>
                   <h3 className="main__courses-headline">{course.name}</h3>
@@ -221,13 +184,13 @@ export default function Courses({ setCourseInEdit }) {
           })}
         </ul>
         <span className="main__courses-span">Sova inc</span>
-        <div className="main__courses-navigation-wrapper">
+        {/* <div className="main__courses-navigation-wrapper">
             <div className="main__courses-navigation-text">
               <span>Курс</span>
-              {/* <span>{courseIndex + 1}</span>/<span>{courses.length > 0 && courses.length}</span> */}
+              
             </div>
             <div className="main__courses-navigation-arrows">
-              <button /*disabled={courseIndex === 0 ? true : false }*/ style={{color:  "rgba(255, 255, 255, 1)"}} className="main__courses-navigation-button" onClick={previousCourse}><FontAwesomeIcon icon={faChevronLeft} /></button>
+              <button style={{color:  "rgba(255, 255, 255, 1)"}} className="main__courses-navigation-button" onClick={previousCourse}><FontAwesomeIcon icon={faChevronLeft} /></button>
               <ul className="main__courses-list main__courses-list_buttons">
                 {courses.map((course, index) => {
                   return <li key={index} className="main__courses-list-li">
@@ -235,16 +198,9 @@ export default function Courses({ setCourseInEdit }) {
                   </li>
                 })}
               </ul>
-              {/* <ul ref={buttonsRef} className="main__courses-list main__courses-list_buttons">
-                {courses.length > 0 && courses.map((course, index) => {
-                  return <li key={index} className="main__courses-list-li" onClick={() => {showCourse(index)}}>
-                    <button style={{backgroundColor: `${index === courseIndex ? "#d37c52" : "rgb(255, 255, 255, 0.5)"}`}} className="main__courses-list-li-button" ></button>
-                  </li>
-                })}
-              </ul>*/
-              <button /*disabled={courses.length > 0 && courseIndex === courses.length - 1 ? true : false}*/ style={{color: "rgba(255, 255, 255, 1)"}} className="main__courses-navigation-button" onClick={nextCourse}><FontAwesomeIcon icon={faChevronRight} /></button>}
+              <button style={{color: "rgba(255, 255, 255, 1)"}} className="main__courses-navigation-button" onClick={nextCourse}><FontAwesomeIcon icon={faChevronRight} /></button>}
             </div>
-          </div>
+          </div> */}
         {/* <div className="main__courses-content">
           <div className="main_courses-wrapper">
             <h3 className="main__courses-headline">{courses.length > 0 && courses[courseIndex].name}</h3>

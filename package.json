@@ -22,6 +22,7 @@
     "@tiptap/react": "^2.0.0-beta.209",
     "@tiptap/starter-kit": "^2.0.0-beta.209",
     "babel-plugin-macros": "^3.1.0",
+    "cyrillic-to-translit-js": "^3.2.1",
     "draft-js": "^0.11.7",
     "framer-motion": "^7.5.4",
     "gh-pages": "^4.0.0",

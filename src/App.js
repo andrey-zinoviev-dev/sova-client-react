@@ -10,7 +10,7 @@ import CourseModule from './components/CourseModule';
 import AddCourse from './components/AddCourse';
 // import Chat from './components/Chat';
 // import Course from './components/Course';
-// import Dashboard from './components/Dashboard';
+import Dashboard from './components/Dashboard';
 import { apiLogin, apiRegister, apiGetCurrentUser, apiGetCourses } from './api';
 
 import { UserContext } from './context/userContext';
