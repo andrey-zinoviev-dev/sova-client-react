@@ -111,6 +111,7 @@ export default function AddCourse() {
         // console.log(contentFilteredArray);
         const newFilesArray = prevValue.map((newFile, array) => {
           if(/[А-Я]/.test(newFile.name)) {
+            // console.log('test ciryllic');
             const renamedFile = new File([newFile], cyrillicToTranslit.transform(newFile.name, "_"), {
               type: newFile.type,
               lastModified: newFile.lastModified,
@@ -121,11 +122,18 @@ export default function AddCourse() {
             });
             return renamedFile;
           }
-          newFile.match = contentFilteredArray.some((layoutFile) => {
+          const newFilename = newFile.name.replace(" ", "");
+          console.log(newFilename);
+          const renamedFile = new File([newFile], newFilename, {
+            type: newFile.type,
+            lastModified: newFile.lastModified,
+          });
+          renamedFile.clientPath = newFile.clientPath;
+          renamedFile.match = contentFilteredArray.some((layoutFile) => {
             return layoutFile.attrs.src === newFile.clientPath;
           });
           console.log(newFile);
-          return newFile;
+          return renamedFile;
         });
         // console.log(newFilesArray);
         return newFilesArray.filter((file) => {

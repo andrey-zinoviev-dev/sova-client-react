@@ -32,6 +32,7 @@
     "react-froala-wysiwyg": "^4.0.17",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
+    "react-touch-drag-slider": "^2.2.5",
     "slate": "^0.88.1",
     "slate-react": "^0.88.2",
     "socket.io-client": "^4.5.1",

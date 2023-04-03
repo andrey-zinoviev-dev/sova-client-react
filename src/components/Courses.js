@@ -1,4 +1,5 @@
 import React from "react";
+import Slider from 'react-touch-drag-slider'
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -146,10 +147,11 @@ export default function Courses({ setCourseInEdit }) {
       {/* <Dashboard /> */}
       <section className="main__courses">
         <Menu user={loggedInUser} />
+        {/* <Slider activeIndex={0} threshHold={100}>
         <ul ref={ulRef} className="main__courses-list">
           {courses.map((course, index) => {
             return <li className="main__courses-list-element" key={course._id} style={{flex: "1 0 100%", width: "100%", height: "100vh", backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative"}}>
-              {/* <img style={{width: "100%", height: "100%", objectFit: "cover"}} src={course.cover}></img> */}
+        
               <div className="main__courses-list-element-content">
                 <div className="main_courses-wrapper">
                   <motion.button onClick={() => {
@@ -179,11 +181,50 @@ export default function Courses({ setCourseInEdit }) {
                   
                 }
               </div>
-              <div className="main__courses-overlay"></div>
+            
+            </li>
+          })}
+        </ul>
+        </Slider> */}
+        <ul ref={ulRef} className="main__courses-list">
+          {courses.map((course, index) => {
+            return <li className="main__courses-list-element" key={course._id} style={{flex: "1 0 100%", width: "100%", height: "100vh", backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative"}}>
+        
+              <div className="main__courses-list-element-content">
+                <div className="main_courses-wrapper">
+                  <motion.button onClick={() => {
+                    setSelectedCourse(course);
+                    setIsEditCourse(true);
+                  }} whileHover={{color: "#d37c52", border: "2px solid #d37c52"}} style={{position: "absolute", top: "5%", right: "-10%", justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12, zIndex: 6}}>
+                    <FontAwesomeIcon icon={faPen}/>
+                  </motion.button>
+                  <h3 className="main__courses-headline">{course.name}</h3>
+                  <p className="main__courses-para">{course.description}</p>
+                  <span>{index === courses.length - 1 && "последний курс"}</span>
+                  <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
+                    showCoursePopup(course);
+                  }} className="main_courses-btn">Открыть</motion.button>
+                  <span style={{color: "rgb(255 255 255/ 45%)", fontSize: 60}}>{`00${index + 1}`}</span>
+                </div>
+                {index === courses.length - 1 && 
+                  <motion.div whileHover="shown" initial="hidden" animate="hidden" variants={addCourseVariants} className="main__courses-list-element-content-add" style={{position: "absolute", top: 0, right: 0, width: 210, height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
+                    <Link to={`../addCourse`}>
+                      <motion.button variants={addCourseButton} onClick={() => {
+                        console.log('add course button pressed');
+                        }} style={{padding: 0, minWidth: 45, minHeight: 45, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid white", color: "white"}}>
+                        +
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+                  
+                }
+              </div>
+            
             </li>
           })}
         </ul>
         <span className="main__courses-span">Sova inc</span>
+
         {/* <div className="main__courses-navigation-wrapper">
             <div className="main__courses-navigation-text">
               <span>Курс</span>
@@ -198,9 +239,9 @@ export default function Courses({ setCourseInEdit }) {
                   </li>
                 })}
               </ul>
-              <button style={{color: "rgba(255, 255, 255, 1)"}} className="main__courses-navigation-button" onClick={nextCourse}><FontAwesomeIcon icon={faChevronRight} /></button>}
-            </div>
+              <button style={{color: "rgba(255, 255, 255, 1)"}} className="main__courses-navigation-button" onClick={nextCourse}><FontAwesomeIcon icon={faChevronRight} /></button>            </div>
           </div> */}
+
         {/* <div className="main__courses-content">
           <div className="main_courses-wrapper">
             <h3 className="main__courses-headline">{courses.length > 0 && courses[courseIndex].name}</h3>

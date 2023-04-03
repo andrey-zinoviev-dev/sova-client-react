@@ -22,9 +22,9 @@ function MenuSide({ openedMenu, setOpenedMenu }) {
         <motion.section animate={openedMenu ? "opened" : "closed"} variants={sideMenuVariants} style={{position: "absolute", top: 0, right: 0, display: "flex", flexDirection:"column", justifyContent:"space-between", alignItems: "center", color: "white", borderLeft: "2px solid white", width: 300, height: "100vh", boxSizing: "border-box", padding: "20px 10px", backgroundColor: "rgba(0, 0, 0, 0.75)", translate: openedMenu ? "0%" : "100%"}}>
             <button onClick={() => {
                 setOpenedMenu(false);
-            }} style={{display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%", gap: 10, backgroundColor: "transparent", color: "white"}}>
-                <span style={{lineHeight: "14px", fontSize: 14}}>закрыть</span>
-                <FontAwesomeIcon icon={faXmark} />
+            }} style={{display: "flex", justifyContent: "flex-end", alignItems: "center", width: "100%", gap: 10, backgroundColor: "transparent", color: "white", border: "none"}}>
+                <span style={{lineHeight: "20px", fontSize: 18}}>закрыть</span>
+                <FontAwesomeIcon style={{fontSize: 20}} icon={faXmark} />
             </button>
             
             <ul style={{display: "flex", width: "100%", minHeight: 180, margin: "auto 0", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: 0, listStyle: "none"}}>

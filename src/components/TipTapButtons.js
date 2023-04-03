@@ -81,7 +81,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     // console.log(video);
     if(video.video) {
       // console.log(video);
-      editor.chain().focus().insertContent(`<video src="${video.video.clientPath}" title=${cyrillicToTranslit.transform(video.video.name, "_")}></video>`).run();
+      editor.chain().focus().insertContent(`<video src="${video.video.clientPath}" title=${/[А-Я]/.test(video.video.name) ? cyrillicToTranslit.transform(video.video.name, "_") : video.video.name.replace(" ", "")}></video>`).run();
       // console.log(Object.keys(video.video));
     };
     // if(videoSrc.length > 0) {
