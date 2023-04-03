@@ -3,7 +3,7 @@ import Slider from 'react-touch-drag-slider'
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faArrowLeft, faArrowRight, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Dashboard from "./Dashboard";
 import Menu from "./Menu";
@@ -25,6 +25,7 @@ export default function Courses({ setCourseInEdit }) {
   const [modulesPopupOpened, setModulesPopupOpened] = React.useState(false);
   const [isEditCourse, setIsEditCourse] = React.useState(false);
   const [courseCover, setCourseCover] = React.useState("");
+  const [courseIndex, setCourseIndex] = React.useState(0);
 
   //variants
   const spanMotion = {
@@ -76,12 +77,12 @@ export default function Courses({ setCourseInEdit }) {
   const courseCoverRef = React.useRef();
 
   //functions
-  function showCourse(index) {
-    console.log(index);
-  };
-
   function previousCourse() {
-    console.log('prev course');
+    // console.log('prev course');
+    setCourseIndex((prevValue) => {
+      return prevValue -= 1;
+    })
+    // console.log(ulRef.current.clientWidth);
     ulRef.current.scrollLeft += -ulRef.current.clientWidth;
     //uncomment if necessary
     // setCourseIndex((prevValue) => {
@@ -94,7 +95,11 @@ export default function Courses({ setCourseInEdit }) {
   }
 
   function nextCourse() {
-    console.log('next course');
+    // console.log('next course');
+    setCourseIndex((prevValue) => {
+      return prevValue += 1;
+    })
+    // console.log(ulRef.current.clientWidth);
     ulRef.current.scrollLeft += ulRef.current.clientWidth;
     // courseIndex = courseIndex + 1;
     // console.log(courseIndex);
@@ -104,6 +109,24 @@ export default function Courses({ setCourseInEdit }) {
     //   return prevValue = prevValue + 1;
     // })
   };
+
+  function scrollToCourse(evt) {
+    const buttonValue = parseInt(evt.target.textContent) - 1;
+    setCourseIndex((prevValue) => {
+      if(prevValue > buttonValue) {
+        console.log('scroll courses left');
+        console.log(ulRef.current.children[buttonValue]);
+        ulRef.current.scrollTo({top: 0, left: ulRef.current.children[buttonValue].offsetLeft, behavior: "smooth"});
+        // ulRef.current.scrollLeft -= ulRef.current.clientWidth * parseInt(evt.target.textContent);
+      } else {
+        console.log('scroll courses right');
+        console.log(ulRef.current.children[buttonValue]);
+        ulRef.current.scrollTo({top: 0, left: ulRef.current.children[buttonValue].offsetLeft, behavior: "smooth"});
+      }
+      return buttonValue;
+    });
+    // ulRef.current.scrollLeft += ulRef.current.clientWidth * parseInt(evt.target.textContent);
+  }
 
   function showCoursePopup(course) {
     // console.log(course);
@@ -138,9 +161,9 @@ export default function Courses({ setCourseInEdit }) {
     }
   }, []);
 
-  // React.useEffect(() => {
-  //   console.log(isEditCourse);
-  // }, [isEditCourse]);
+  React.useEffect(() => {
+    console.log(courseIndex);
+  }, [courseIndex]);
 
   return (
     <>
@@ -224,7 +247,21 @@ export default function Courses({ setCourseInEdit }) {
           })}
         </ul>
         <span className="main__courses-span">Sova inc</span>
-
+        <div style={{position: "absolute", top: "50%", left: 0, padding: "0 5%", boxSizing: "border-box", width: "100%", zIndex: 7, display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+          <button onClick={previousCourse} style={{visibility: courseIndex <= 0 ? "hidden" : "visible", padding: 0, width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", color: "white", border: "2px solid white"}}>
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </button>
+          <button onClick={nextCourse} style={{visibility: courseIndex >= courses.length - 1 ? "hidden" : "visible", padding: 0, width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", color: "white", border: "2px solid white"}}>
+            <FontAwesomeIcon icon={faArrowRight} />
+          </button>
+        </div>
+        <ul style={{position: "absolute", bottom: "15%", right: 0, borderTop: "2px solid white", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 20, zIndex: 7, listStyle: "none", padding: "10px 0", margin: 0}}>
+          {courses.map((course, index) => {
+            return <li key={index} style={{transform: `scale(${index === courseIndex ? 2 : 1})`}}>
+              <button onClick={scrollToCourse} style={{backgroundColor: "transparent", border: "none", color: "white"}}>{index + 1}</button>
+            </li>
+          })}
+        </ul>
         {/* <div className="main__courses-navigation-wrapper">
             <div className="main__courses-navigation-text">
               <span>Курс</span>
