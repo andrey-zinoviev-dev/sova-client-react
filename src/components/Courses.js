@@ -145,7 +145,7 @@ export default function Courses({ setCourseInEdit }) {
     <>
       {/* <Dashboard /> */}
       <section className="main__courses">
-        <Menu />
+        <Menu user={loggedInUser} />
         <ul ref={ulRef} className="main__courses-list">
           {courses.map((course, index) => {
             return <li className="main__courses-list-element" key={course._id} style={{flex: "1 0 100%", width: "100%", height: "100vh", backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative"}}>
