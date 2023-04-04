@@ -66,8 +66,12 @@ export default function Courses({ setCourseInEdit }) {
       },
     },
   }
-  //variables
-  // let courseIndex = 0;
+
+  //animations
+  const pulseButton = {
+    boxShadow: ["0 0 0px rgb(255 255 255 / 70%)", "0 0 7.5px rgb(255 255 255 / 35%)", "0 0 0px rgb(255 255 255 / 0%)"],
+    // scale: [0.95, 1.2, 0.95],
+  }
 
   //refs
   const buttonsRef = React.useRef();
@@ -248,12 +252,12 @@ export default function Courses({ setCourseInEdit }) {
         </ul>
         <span className="main__courses-span">Sova inc</span>
         <div style={{position: "absolute", top: "50%", left: 0, padding: "0 5%", boxSizing: "border-box", width: "100%", zIndex: 7, display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-          <button onClick={previousCourse} style={{visibility: courseIndex <= 0 ? "hidden" : "visible", padding: 0, width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", color: "white", border: "2px solid white"}}>
+          <motion.button onClick={previousCourse} style={{visibility: courseIndex <= 0 ? "hidden" : "visible", padding: 0, width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", color: "white", border: "2px solid white"}}>
             <FontAwesomeIcon icon={faArrowLeft} />
-          </button>
-          <button onClick={nextCourse} style={{visibility: courseIndex >= courses.length - 1 ? "hidden" : "visible", padding: 0, width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", color: "white", border: "2px solid white"}}>
+          </motion.button>
+          <motion.button animate={pulseButton} transition={{duration: 2, repeat: "Infinity", type:"keyframes"}} onClick={nextCourse} style={{visibility: courseIndex >= courses.length - 1 ? "hidden" : "visible", padding: 0, width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", color: "white", border: "2px solid white"}}>
             <FontAwesomeIcon icon={faArrowRight} />
-          </button>
+          </motion.button>
         </div>
         <ul style={{position: "absolute", bottom: "15%", right: 0, borderTop: "2px solid white", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 20, zIndex: 7, listStyle: "none", padding: "10px 0", margin: 0}}>
           {courses.map((course, index) => {
