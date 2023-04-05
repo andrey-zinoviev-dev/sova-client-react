@@ -65,11 +65,39 @@ export default function Courses({ setCourseInEdit }) {
         duration: 0.5,
       },
     },
+  };
+
+  const liVariant = {
+    rest: {
+      width: 25,
+      transition: {
+        duration: 0.55,
+        ease: "easeOut",
+        type: "tween",
+      }
+    },
+    hover: {
+      width: "100%",
+      transition: {
+        duration: 0.55,
+        ease: "easeIn",
+        type: "tween",
+      }
+    }
+  };
+
+  const liChildrenVariant = {
+    rest: {
+
+    },
+    hover: {
+      
+    }
   }
 
   //animations
   const pulseButton = {
-    boxShadow: ["0 0 0px rgb(255 255 255 / 70%)", "0 0 7.5px rgb(255 255 255 / 35%)", "0 0 0px rgb(255 255 255 / 0%)"],
+    // boxShadow: ["0 0 0px rgb(255 255 255 / 70%)", "0 0 7.5px rgb(255 255 255 / 35%)", "0 0 0px rgb(255 255 255 / 0%)"],
     // scale: [0.95, 1.2, 0.95],
   }
 
@@ -213,7 +241,8 @@ export default function Courses({ setCourseInEdit }) {
           })}
         </ul>
         </Slider> */}
-        <ul ref={ulRef} className="main__courses-list">
+
+        {/* <ul ref={ulRef} className="main__courses-list">
           {courses.map((course, index) => {
             return <li className="main__courses-list-element" key={course._id} style={{flex: "1 0 100%", width: "100%", height: "100vh", backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative"}}>
         
@@ -249,8 +278,52 @@ export default function Courses({ setCourseInEdit }) {
             
             </li>
           })}
+        </ul> */}
+
+        <ul ref={ulRef} className="main__courses-list">
+          {courses.map((course, index) => {
+            return <motion.li initial="rest" whileHover="hover" animate="rest" className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/ width: 320, height: 380, backgroundColor:"rgb(255 255 255 /50%)",  backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative"}}>
+        
+              <div style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", boxSizing: "border-box", padding: "20px 35px", backgroundColor: "rgb(0 0 0 / 50%)"}}>
+                <motion.div variants={liVariant} style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                  <div style={{width: 15, height: 2, backgroundColor: "white"}}></div>
+                  <p style={{margin: 0}}>{index + 1}</p>
+                </motion.div>
+                <div>
+                  {/*<motion.button onClick={() => {
+                    setSelectedCourse(course);
+                    setIsEditCourse(true);
+                  }} whileHover={{color: "#d37c52", border: "2px solid #d37c52"}} style={{position: "absolute", top: "5%", right: "-10%", justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12, zIndex: 6}}>
+                    <FontAwesomeIcon icon={faPen}/>
+                  </motion.button>
+                  }*/}
+                  <h3 style={{margin: 0}}>{course.name}</h3>
+                  {/*<p className="main__courses-para">{course.description}</p>
+                  <span>{index === courses.length - 1 && "последний курс"}</span>
+                  <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
+                    showCoursePopup(course);
+                  }} className="main_courses-btn">Открыть</motion.button>
+                <span style={{color: "rgb(255 255 255/ 45%)", fontSize: 60}}>{`00${index + 1}`}</span>*/}
+                </div>
+                {/*index === courses.length - 1 && 
+                  <motion.div whileHover="shown" initial="hidden" animate="hidden" variants={addCourseVariants} className="main__courses-list-element-content-add" style={{position: "absolute", top: 0, right: 0, width: 210, height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
+                    <Link to={`../addCourse`}>
+                      <motion.button variants={addCourseButton} onClick={() => {
+                        console.log('add course button pressed');
+                        }} style={{padding: 0, minWidth: 45, minHeight: 45, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid white", color: "white"}}>
+                        +
+                      </motion.button>
+                    </Link>
+                  </motion.div>
+                  
+                } */}
+              </div>
+            
+            </motion.li>
+          })}
         </ul>
-        <span className="main__courses-span">Sova inc</span>
+
+        {/* <span className="main__courses-span">Sova inc</span>
         <div style={{position: "absolute", top: "50%", left: 0, padding: "0 5%", boxSizing: "border-box", width: "100%", zIndex: 7, display: "flex", alignItems: "center", justifyContent: "space-between"}}>
           <motion.button onClick={previousCourse} style={{visibility: courseIndex <= 0 ? "hidden" : "visible", padding: 0, width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", color: "white", border: "2px solid white"}}>
             <FontAwesomeIcon icon={faArrowLeft} />
@@ -258,14 +331,16 @@ export default function Courses({ setCourseInEdit }) {
           <motion.button animate={pulseButton} transition={{duration: 2, repeat: "Infinity", type:"keyframes"}} onClick={nextCourse} style={{visibility: courseIndex >= courses.length - 1 ? "hidden" : "visible", padding: 0, width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", color: "white", border: "2px solid white"}}>
             <FontAwesomeIcon icon={faArrowRight} />
           </motion.button>
-        </div>
-        <ul style={{position: "absolute", bottom: "15%", right: 0, borderTop: "2px solid white", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 20, zIndex: 7, listStyle: "none", padding: "10px 0", margin: 0}}>
+        </div> */}
+
+        {/* <ul style={{position: "absolute", bottom: "15%", right: 0, borderTop: "2px solid white", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 20, zIndex: 7, listStyle: "none", padding: "10px 0", margin: 0}}>
           {courses.map((course, index) => {
             return <li key={index} style={{transform: `scale(${index === courseIndex ? 2 : 1})`}}>
               <button onClick={scrollToCourse} style={{backgroundColor: "transparent", border: "none", color: "white"}}>{index + 1}</button>
             </li>
           })}
-        </ul>
+        </ul> */}
+
         {/* <div className="main__courses-navigation-wrapper">
             <div className="main__courses-navigation-text">
               <span>Курс</span>

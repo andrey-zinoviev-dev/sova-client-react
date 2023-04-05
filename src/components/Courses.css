@@ -1,7 +1,8 @@
 .main__courses {
   display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: flex-start;
     align-items: center;
     /* padding: 45px 90px; */
     box-sizing: border-box;
@@ -17,20 +18,29 @@
   list-style: none;
   position: relative;
   z-index: 5;
-  display: flex;
+  /* display: flex;
   align-items:center; 
   justify-content: flex-start;
   overflow: scroll hidden;
   scrollbar-width: none;
   scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x mandatory; */
   position: relative;
-  width: 100%;
+  border-radius: 9px;
+  /* width: 100%; */
+  display: grid;
+  grid-template-columns: repeat(4, 320px);
+  row-gap: 15px;
 }
 
 .main__courses-list-element {
   scroll-snap-align: center;
 }
+
+/* .main__courses-list-element:first-child {
+  border-radius: 9px 0 0 0;
+}; */
+
 
 .main__courses-list::-webkit-scrollbar {
   width: 0;

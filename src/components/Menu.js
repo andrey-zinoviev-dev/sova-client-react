@@ -18,7 +18,7 @@ export default function Menu({ user }) {
         navigateTo("/addCourse");
     }
     return(
-        <div style={{position: "absolute", top: 0, left: 0, width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box", padding: "2% 20%", zIndex: 10, backdropFilter: "blur(3px)"}}>
+        <div style={{/*position: "absolute", top: 0, left: 0,*/ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box", padding: "2% 20%", zIndex: 10, backdropFilter: "blur(3px)"}}>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 55}}>
                 <img style={{maxWidth: 50}} src="https://cdn.icon-icons.com/icons2/3053/PNG/512/steam_alt_macos_bigsur_icon_189698.png"/>
                 <p style={{margin: 0, fontSize: 18, color: "white"}}>С Возвращением, {user.name}</p>
