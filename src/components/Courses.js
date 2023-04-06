@@ -67,6 +67,24 @@ export default function Courses({ setCourseInEdit }) {
     },
   };
 
+  const liBackground = {
+    rest: {
+      backgroundColor: "rgb(54, 58, 59)"
+    },
+    hover: {
+      backgroundColor: "rgba(222,228,67,255)"
+    }
+  };
+
+  const liContent = {
+    rest: {
+      color: "rgba(255, 255, 255, 1)"
+    },
+    hover: {
+      color: "rgba(0, 0, 0, 1)"
+    }
+  }
+
   const liVariant = {
     rest: {
       width: 25,
@@ -88,10 +106,20 @@ export default function Courses({ setCourseInEdit }) {
 
   const liChildrenVariant = {
     rest: {
-
+      translate: "0 75%",
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+        type: "tween"
+      }
     },
     hover: {
-      
+      translate: "0 0%",
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+        type: "tween"
+      }
     }
   }
 
@@ -202,6 +230,11 @@ export default function Courses({ setCourseInEdit }) {
       {/* <Dashboard /> */}
       <section className="main__courses">
         <Menu user={loggedInUser} />
+        <div style={{color: "white"}}>
+          <h2>Чем можно позаниматься</h2>
+          <p>Например, стать профессионалом в одном из следующих направлений или во всех сразу. Да- все, везде и сразу</p>
+        </div>
+
         {/* <Slider activeIndex={0} threshHold={100}>
         <ul ref={ulRef} className="main__courses-list">
           {courses.map((course, index) => {
@@ -282,14 +315,14 @@ export default function Courses({ setCourseInEdit }) {
 
         <ul ref={ulRef} className="main__courses-list">
           {courses.map((course, index) => {
-            return <motion.li initial="rest" whileHover="hover" animate="rest" className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/ width: 320, height: 380, backgroundColor:"rgb(255 255 255 /50%)",  backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative"}}>
+            return <motion.li initial="rest" whileHover="hover" animate="rest" variants={liBackground} className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: 280, height: 380, /*backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center",*/ position: "relative", borderRadius: 12}}>
         
-              <div style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", boxSizing: "border-box", padding: "20px 35px", backgroundColor: "rgb(0 0 0 / 50%)"}}>
-                <motion.div variants={liVariant} style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-                  <div style={{width: 15, height: 2, backgroundColor: "white"}}></div>
-                  <p style={{margin: 0}}>{index + 1}</p>
+              <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", boxSizing: "border-box", padding: "20px 35px"}}>
+                <motion.div variants={liVariant} style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 30}}>
+                  <div style={{width: 15, height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
+                  <p style={{margin: 0, fontSize: 18}}>{index + 1}</p>
                 </motion.div>
-                <div>
+                <motion.div variants={liChildrenVariant}>
                   {/*<motion.button onClick={() => {
                     setSelectedCourse(course);
                     setIsEditCourse(true);
@@ -298,13 +331,14 @@ export default function Courses({ setCourseInEdit }) {
                   </motion.button>
                   }*/}
                   <h3 style={{margin: 0}}>{course.name}</h3>
+                  <p style={{margin: "50px 0 0 0"}}>{course.description}</p>
                   {/*<p className="main__courses-para">{course.description}</p>
                   <span>{index === courses.length - 1 && "последний курс"}</span>
                   <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
                     showCoursePopup(course);
                   }} className="main_courses-btn">Открыть</motion.button>
                 <span style={{color: "rgb(255 255 255/ 45%)", fontSize: 60}}>{`00${index + 1}`}</span>*/}
-                </div>
+                </motion.div>
                 {/*index === courses.length - 1 && 
                   <motion.div whileHover="shown" initial="hidden" animate="hidden" variants={addCourseVariants} className="main__courses-list-element-content-add" style={{position: "absolute", top: 0, right: 0, width: 210, height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
                     <Link to={`../addCourse`}>
@@ -317,7 +351,7 @@ export default function Courses({ setCourseInEdit }) {
                   </motion.div>
                   
                 } */}
-              </div>
+              </motion.div>
             
             </motion.li>
           })}

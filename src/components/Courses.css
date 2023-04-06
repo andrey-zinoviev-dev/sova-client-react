@@ -10,6 +10,8 @@
   background-size: cover;
   position: relative;
   overflow: hidden;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 .main__courses-list {
@@ -29,8 +31,8 @@
   border-radius: 9px;
   /* width: 100%; */
   display: grid;
-  grid-template-columns: repeat(4, 320px);
-  row-gap: 15px;
+  grid-template-columns: repeat(4, 280px);
+  gap: 15px;
 }
 
 .main__courses-list-element {
