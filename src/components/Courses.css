@@ -12,6 +12,7 @@
   overflow: hidden;
   max-width: 1280px;
   margin: 0 auto;
+  padding: 25px;
 }
 
 .main__courses-list {
@@ -31,7 +32,7 @@
   border-radius: 9px;
   /* width: 100%; */
   display: grid;
-  grid-template-columns: repeat(4, 280px);
+  grid-template-columns: repeat(4, 1fr);
   gap: 15px;
 }
 
@@ -274,7 +275,11 @@
     left: 60px;
   } */
 }
-
+@media screen and (max-width: 1290px) {
+  .main__courses {
+    max-width: 1024px;
+  }
+}
 @media screen and (max-width: 1279px) {
   .main_courses-wrapper {
     /* margin: 0 15% 0 0; */
@@ -286,6 +291,9 @@
     padding: 45px;
     
   } */
+  .main__courses {
+    max-width: 1024px;
+  }
   .main__courses-content {
     padding: 45px;
   }

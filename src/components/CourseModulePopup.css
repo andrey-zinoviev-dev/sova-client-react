@@ -1,14 +1,20 @@
 .popup__modules {
   position: relative;
   z-index: 10;
-  width: 50%;
+  /* width: 50%;
     height: 70%;
-    border-radius: 10px;
+    border-radius: 10px; */
+  width: 100%;
+  height: 100%;
+  padding: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
     /* border: 3px solid white; */
     backdrop-filter: blur(5px);
     box-shadow: 0 0 10px white, 0 0 30px white;
   text-align: left;
-  padding: 2%;
+  /* padding: 2%; */
   box-sizing: border-box;
 }
 
@@ -16,7 +22,8 @@
   min-width: 30px;
   position: absolute;
   top: 0;
-  right: -50px;
+  right: 0;
+  /* right: -50px; */
 }
 
 .popup__modules-course-div {

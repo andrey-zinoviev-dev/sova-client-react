@@ -3,17 +3,19 @@ import Slider from 'react-touch-drag-slider'
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight, faArrowLeft, faArrowRight, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faArrowLeft, faArrowRight, faPen, faXmark,faMicrophoneLines } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Dashboard from "./Dashboard";
 import Menu from "./Menu";
 import CourseModulesPopup from "./CourseModulesPopup";
+import ModulesList from "./ModulesList";
 // import AddCourse from "./AddCourse";
 import './Courses.css';
 import {  
   apiGetCourses
 } from '../api';
 import EditCourse from "./EditCourse";
+import SovaLogo from '../images/sova_logo_icon.png';
 
 export default function Courses({ setCourseInEdit }) {
   //contexts
@@ -26,6 +28,7 @@ export default function Courses({ setCourseInEdit }) {
   const [isEditCourse, setIsEditCourse] = React.useState(false);
   const [courseCover, setCourseCover] = React.useState("");
   const [courseIndex, setCourseIndex] = React.useState(0);
+  const [selectedModule, setSelectedModule] = React.useState(false);
 
   //variants
   const spanMotion = {
@@ -69,10 +72,12 @@ export default function Courses({ setCourseInEdit }) {
 
   const liBackground = {
     rest: {
-      backgroundColor: "rgb(54, 58, 59)"
+      backgroundColor: "rgb(54, 58, 59)",
+      boxShadow: "0 0 0px rgba(222,228,67,255)",
     },
     hover: {
-      backgroundColor: "rgba(222,228,67,255)"
+      backgroundColor: "rgba(222,228,67,255)",
+      boxShadow: "0 0 25px rgba(222,228,67,255)"
     }
   };
 
@@ -106,7 +111,7 @@ export default function Courses({ setCourseInEdit }) {
 
   const liChildrenVariant = {
     rest: {
-      translate: "0 75%",
+      translate: "0 65%",
       transition: {
         duration: 0.5,
         ease: "easeInOut",
@@ -188,9 +193,10 @@ export default function Courses({ setCourseInEdit }) {
     // ulRef.current.scrollLeft += ulRef.current.clientWidth * parseInt(evt.target.textContent);
   }
 
-  function showCoursePopup(course) {
+  function showCoursePopup(course, index) {
     // console.log(course);
     setSelectedCourse(course);
+    setCourseIndex(index);
     setModulesPopupOpened(true);
   //  const courseModules = course.modules;
   //  console.log(courseModules);
@@ -222,17 +228,17 @@ export default function Courses({ setCourseInEdit }) {
   }, []);
 
   React.useEffect(() => {
-    console.log(courseIndex);
-  }, [courseIndex]);
+    console.log(selectedModule)
+  }, [selectedModule]);
 
   return (
     <>
       {/* <Dashboard /> */}
       <section className="main__courses">
         <Menu user={loggedInUser} />
-        <div style={{color: "white"}}>
-          <h2>Чем можно позаниматься</h2>
-          <p>Например, стать профессионалом в одном из следующих направлений или во всех сразу. Да- все, везде и сразу</p>
+        <div style={{color: "white", margin: "25px 0"}}>
+          <h2 style={{margin: 0}}>Чем можно позаниматься</h2>
+          <p style={{margin: 0}}>Например, стать профессионалом в одном из следующих направлений или во всех сразу. Да- все, везде и сразу</p>
         </div>
 
         {/* <Slider activeIndex={0} threshHold={100}>
@@ -315,14 +321,17 @@ export default function Courses({ setCourseInEdit }) {
 
         <ul ref={ulRef} className="main__courses-list">
           {courses.map((course, index) => {
-            return <motion.li initial="rest" whileHover="hover" animate="rest" variants={liBackground} className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: 280, height: 380, /*backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center",*/ position: "relative", borderRadius: 12}}>
+            return <motion.li onClick={() => {
+              showCoursePopup(course, index);
+            }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, /*backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center",*/ position: "relative", borderRadius: 12}}>
         
               <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", boxSizing: "border-box", padding: "20px 35px"}}>
                 <motion.div variants={liVariant} style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 30}}>
                   <div style={{width: 15, height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
                   <p style={{margin: 0, fontSize: 18}}>{index + 1}</p>
                 </motion.div>
-                <motion.div variants={liChildrenVariant}>
+                <FontAwesomeIcon icon={faMicrophoneLines} style={{fontSize: 36}}/>
+                <motion.div variants={liChildrenVariant} style={{height: 80, display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between"}}>
                   {/*<motion.button onClick={() => {
                     setSelectedCourse(course);
                     setIsEditCourse(true);
@@ -331,7 +340,7 @@ export default function Courses({ setCourseInEdit }) {
                   </motion.button>
                   }*/}
                   <h3 style={{margin: 0}}>{course.name}</h3>
-                  <p style={{margin: "50px 0 0 0"}}>{course.description}</p>
+                  <p style={{margin: 0}}>{course.description}</p>
                   {/*<p className="main__courses-para">{course.description}</p>
                   <span>{index === courses.length - 1 && "последний курс"}</span>
                   <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
@@ -428,10 +437,44 @@ export default function Courses({ setCourseInEdit }) {
 
       <CourseModulesPopup modulesPopupOpened={modulesPopupOpened}>
         <div className="popup__modules">
-          <div className="popup__modules-course-div">
-            <span className="popup__modules-course-span">{/*`0 ${courses.length > 0 && courseIndex + 1} Курс`*/}</span>
+          {/* <div className="popup__modules-course-div">
+            <span className="popup__modules-course-span">{}</span>
+          </div> */}
+          <img style={{width: "50%", height: "100%", objectFit: "cover"}} src={selectedCourse.cover}></img>
+          <div style={{width: "50%", boxSizing: "border-box", padding: "0 45px", position: "relative"}}>
+            <h3 style={{margin: "0 0 30px 0"}} className="popup__modules-headline">{selectedCourse.name}</h3>
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+              <span style={{lineHeight: 1.5}} className="popup__modules-topics">Темы курса</span>
+              <div style={{width: "75%", height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
+            </div>
+            
+            <button className="popup__close popup__close_modules" onClick={closeCoursePopup}>X</button>
+            {!selectedModule ? <ul className="popup__modules-list">
+              {selectedCourse._id && selectedCourse.modules.map((module, index) => {
+                return <motion.li className="popup__modules-list-element" whileHover="hover" initial="rest" variants={liMotion} key={module._id}>
+                  
+                  {/* <Link className="popup__modules-list-element-link" to={`courses/${selectedCourse._id}/modules/${module._id}`}>
+                    <span>{`0${index + 1} ${module.name}`}</span>
+                  </Link> */}
+                  <span onClick={() => {
+                    setSelectedModule(true);
+                  }}>{`0${index + 1} ${module.name}`}</span>
+                </motion.li>
+              })}
+            </ul> : <ModulesList selectedModuleLessons={selectedCourse.modules}/>}
           </div>
-          <h3 className="popup__modules-headline">{/*courses.length > 0 && courses[courseIndex].name*/}{selectedCourse.name}</h3>
+
+        </div>
+        <div className="popup__overlay"></div>
+      </CourseModulesPopup>
+
+      {/* <CourseModulesPopup modulesPopupOpened={modulesPopupOpened}>
+        <div className="popup__modules">
+          <div className="popup__modules-course-div">
+            <span className="popup__modules-course-span">{}</span>
+          </div>
+          <img src={selectedCourse.cover}></img>
+          <h3 className="popup__modules-headline">{}{selectedCourse.name}</h3>
           <span className="popup__modules-topics">Темы курса</span>
           <button className="popup__close popup__close_modules" onClick={closeCoursePopup}>X</button>
           <ul className="popup__modules-list">
@@ -443,23 +486,11 @@ export default function Courses({ setCourseInEdit }) {
                 </Link>
               </motion.li>
             })}
-            {/* {courses.length > 0 ? courses[courseIndex].modules.map((module, index) => {
-              return <motion.li whileHover="hover" initial="rest" variants={liMotion} className="popup__modules-list-element" key={module._id}>
-                <Link className="popup__modules-list-element-link" to={`courses/${courses[courseIndex]._id}/modules/${module._id}`}>
-                  <div className="popup__modules-list-element-order">
-                    <span>{`0${index + 1}`}</span><span>{module.name}</span>
-                  </div>
-                  <div>
-                    <span></span>
-                    <motion.span variants={spanMotion}>&gt;</motion.span>
-                  </div>
-                </Link>
-              </motion.li>
-            }) : <li>У курса пока нет модулей, но это скоро изменится</li> } */}
           </ul>
         </div>
         <div className="popup__overlay"></div>
-      </CourseModulesPopup>
+      </CourseModulesPopup> */}
+
       {isEditCourse && <EditCourse>
         <div style={{textAlign: "left", position: "relative"}}>
           <button onClick={() => {

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import MenuSide from "./MenuSide";
+import SovaLogo from '../images/sova_logo_icon.png';
 
 export default function Menu({ user }) {
     //navigation
@@ -18,9 +19,9 @@ export default function Menu({ user }) {
         navigateTo("/addCourse");
     }
     return(
-        <div style={{/*position: "absolute", top: 0, left: 0,*/ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box", padding: "20px 0", zIndex: 10, backdropFilter: "blur(3px)"}}>
+        <div style={{/*position: "absolute", top: 0, left: 0,*/ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box", zIndex: 10}}>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 55}}>
-                <img style={{maxWidth: 50}} src="https://cdn.icon-icons.com/icons2/3053/PNG/512/steam_alt_macos_bigsur_icon_189698.png"/>
+                <img style={{maxWidth: 50}} src="https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png"/>
                 <p style={{margin: 0, fontSize: 18, color: "white"}}>С Возвращением, {user.name}</p>
             </div>
 
