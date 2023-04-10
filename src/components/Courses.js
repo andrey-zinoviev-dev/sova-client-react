@@ -28,7 +28,7 @@ export default function Courses({ setCourseInEdit }) {
   const [isEditCourse, setIsEditCourse] = React.useState(false);
   const [courseCover, setCourseCover] = React.useState("");
   const [courseIndex, setCourseIndex] = React.useState(0);
-  const [selectedModule, setSelectedModule] = React.useState(false);
+  const [selectedModule, setSelectedModule] = React.useState({});
 
   //variants
   const spanMotion = {
@@ -69,15 +69,17 @@ export default function Courses({ setCourseInEdit }) {
       },
     },
   };
-
+  //#f1926a(peach color)
   const liBackground = {
     rest: {
+      // backgroundColor: "rgb(54, 58, 59)",
+      // boxShadow: "0 0 0px rgba(222,228,67,255)",
       backgroundColor: "rgb(54, 58, 59)",
-      boxShadow: "0 0 0px rgba(222,228,67,255)",
+      boxShadow: "0 0 0px #c4d8f7",
     },
     hover: {
-      backgroundColor: "rgba(222,228,67,255)",
-      boxShadow: "0 0 25px rgba(222,228,67,255)"
+      backgroundColor: "#c4d8f7",
+      boxShadow: "0 0 25px #c4d8f7"
     }
   };
 
@@ -226,10 +228,6 @@ export default function Courses({ setCourseInEdit }) {
       })
     }
   }, []);
-
-  React.useEffect(() => {
-    console.log(selectedModule)
-  }, [selectedModule]);
 
   return (
     <>
@@ -444,24 +442,33 @@ export default function Courses({ setCourseInEdit }) {
           <div style={{width: "50%", boxSizing: "border-box", padding: "0 45px", position: "relative"}}>
             <h3 style={{margin: "0 0 30px 0"}} className="popup__modules-headline">{selectedCourse.name}</h3>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-              <span style={{lineHeight: 1.5}} className="popup__modules-topics">Темы курса</span>
-              <div style={{width: "75%", height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
+              <button onClick={() => {
+                setSelectedModule(() => {
+                  return {};
+                });
+              }} style={{lineHeight: 1.5, backgroundColor: "transparent", border: "none", fontSize: 18, color: selectedModule._id ? "rgb(211, 124, 82)" : "rgb(255, 255, 255)", fontWeight: 700, padding: 0}}>Темы курса</button>
+              {selectedModule._id && <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", minWidth: 90}}>
+                <FontAwesomeIcon icon={faArrowRight} style={{color: "white", fontSize: 18}}/>
+                <span style={{color: "white", fontSize: 18}}>Модуль</span>
+              </div>}
+              
+              <div style={{width: "70%", height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
             </div>
             
             <button className="popup__close popup__close_modules" onClick={closeCoursePopup}>X</button>
-            {!selectedModule ? <ul className="popup__modules-list">
+            {!selectedModule._id ? <ul className="popup__modules-list">
               {selectedCourse._id && selectedCourse.modules.map((module, index) => {
-                return <motion.li className="popup__modules-list-element" whileHover="hover" initial="rest" variants={liMotion} key={module._id}>
+                return <motion.li onClick={() => {
+                  setSelectedModule(module);
+                }} className="popup__modules-list-element" whileHover="hover" initial="rest" variants={liMotion} key={module._id}>
                   
                   {/* <Link className="popup__modules-list-element-link" to={`courses/${selectedCourse._id}/modules/${module._id}`}>
                     <span>{`0${index + 1} ${module.name}`}</span>
                   </Link> */}
-                  <span onClick={() => {
-                    setSelectedModule(true);
-                  }}>{`0${index + 1} ${module.name}`}</span>
+                  <span>{`0${index + 1} ${module.name}`}</span>
                 </motion.li>
               })}
-            </ul> : <ModulesList selectedModuleLessons={selectedCourse.modules}/>}
+            </ul> : <ModulesList selectedModuleLessons={selectedModule.lessons}/>}
           </div>
 
         </div>
