@@ -452,7 +452,7 @@ export default function Courses({ setCourseInEdit }) {
                 <span style={{color: "white", fontSize: 18}}>Модуль</span>
               </div>}
               
-              <div style={{width: "70%", height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
+              <div style={{width: window.innerWidth < 1440 ? "62%" : "75%", height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
             </div>
             
             <button className="popup__close popup__close_modules" onClick={closeCoursePopup}>X</button>
@@ -468,7 +468,7 @@ export default function Courses({ setCourseInEdit }) {
                   <span>{`0${index + 1} ${module.name}`}</span>
                 </motion.li>
               })}
-            </ul> : <ModulesList selectedModuleLessons={selectedModule.lessons}/>}
+            </ul> : <ModulesList selectedModule={selectedModule}/>}
           </div>
 
         </div>

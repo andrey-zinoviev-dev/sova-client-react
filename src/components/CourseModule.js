@@ -29,11 +29,11 @@ export default function CourseModule(props) {
   const userToken = localStorage.getItem('token');
   const sessionStorage = localStorage.getItem('sessionID');
 
-  const {courseID, moduleID} = useParams();
+  const {courseID, moduleID, lessonID} = useParams();
   
   // const [courseAuthor, setCourseAuthor] = React.useState({});
   const [courseModule, setCourseModule] = React.useState({});
-
+  const [moduleLesson, setModuleLesson] = React.useState({});
   const [messages, setMessages] = React.useState([]);
   const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
@@ -361,7 +361,7 @@ export default function CourseModule(props) {
   //   }
     
   // }, [props.user._id, courseAuthor._id]);
-
+  // console.log(lessonID);
   React.useEffect(() => {
  
     if(userToken && loggedInUser._id) {
@@ -369,6 +369,9 @@ export default function CourseModule(props) {
       .then((moduleData) => {
         // console.log(moduleData);
         setCourseModule(moduleData);
+        setModuleLesson(moduleData.lessons.find((lesson) => {
+          return lesson._id === lessonID;
+        }))
         editor.commands.setContent(moduleData.layout);
         // localStorage.setItem('')
         // setCourseAuthor(moduleData.course.author);
@@ -382,6 +385,10 @@ export default function CourseModule(props) {
     }
 
   }, [moduleID, userToken, loggedInUser._id, editor]);
+
+  React.useEffect(() => {
+    console.log(moduleLesson);
+  }, [moduleLesson]);
 
   React.useEffect(() => {
     // socket.current = io('http://api.sova-courses.site');
@@ -502,7 +509,7 @@ export default function CourseModule(props) {
           </div>
           <motion.div variants={textVariants}>
             <div style={{padding: "0 0 0 15px"}}>
-              <p>Курс</p>
+              {/* <p>Курс</p> */}
               <h3>{courseModule._id && courseModule.course.name}</h3>
               <p>Модули</p>
             </div>
@@ -534,7 +541,7 @@ export default function CourseModule(props) {
         </div>
         {!chatIsOpened ?
           <div style={{maxWidth: 768, width: '100%'}}>
-            <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>Курс {courseModule._id && courseModule.course.name}</h3>
+            <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>{moduleLesson._id && moduleLesson.title}</h3>
             <EditorContent editor={editor} />
             {/* <p>{courseModule._id && courseModule.name}</p>
             <p>{courseModule.description}</p>
