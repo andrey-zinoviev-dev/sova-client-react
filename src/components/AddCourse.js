@@ -5,6 +5,7 @@ import AddStep1 from "./AddStep1";
 import AddStep2 from "./AddStep2";
 import AddStep3 from "./AddStep3";
 import AddModule from "./AddModule";
+import AddStepModule from "./AddStepModule";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
@@ -37,7 +38,7 @@ export default function AddCourse() {
       case 0:
         return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       case 1: 
-        return <AddModule />
+        return <AddStepModule formData={formData}/>
       case 2:
         return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 3:

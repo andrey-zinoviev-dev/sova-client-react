@@ -1,8 +1,11 @@
 import React from "react";
 
+
 export default function AddModule() {
   const [moduleFormOpened, setModuleFormOpened] = React.useState(false);
   const [modulesAdded, setModulesAdded] = React.useState([]);
+
+
   return (
     <div style={{width: "100%", height: "100%", overflow: "auto"}}>
       <div style={{ padding: "0 45px 30px", display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 0 40px 0", borderBottom: "2px solid white"}}>
