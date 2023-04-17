@@ -152,18 +152,18 @@
     padding: 15px 30px;
 }
 
-.ProseMirror::-webkit-scrollbar {
+.ProseMirror::-webkit-scrollbar, .addCourse__form-moduleLesson-list-scroll::-webkit-scrollbar {
     width: 7px;
     /* background-color: red; */
 }
 
-.ProseMirror::-webkit-scrollbar-track {
+.ProseMirror::-webkit-scrollbar-track, .addCourse__form-moduleLesson-list-scroll::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.5);
     margin: 10px 0;
 }
 
-.ProseMirror::-webkit-scrollbar-thumb {
+.ProseMirror::-webkit-scrollbar-thumb, .addCourse__form-moduleLesson-list-scroll::-webkit-scrollbar-thumb {
     border-radius: 9px;
     background-color: rgb(226, 100, 59);
 }
@@ -190,6 +190,15 @@
     border-radius: 7px;
     background: transparent;
     color: rgb(226, 100, 59);
+}
+
+.addCourse__form-moduleLesson::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+.addCourse__form-moduleLesson-modules {
+
 }
 
 @media screen and (max-width: 1439px) {

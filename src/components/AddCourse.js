@@ -224,7 +224,7 @@ export default function AddCourse() {
 
             // });
 
-          }} style={{/*width: 'calc(100% - 600px)',*/width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", padding: window.innerWidth < 1439 ? "45px 0": "75px 0" /*padding: "45px 75px"*/}}>
+          }} style={{/*width: 'calc(100% - 600px)',*/width: window.innerWidth < 1440 ? "calc(100% - 370px)" : "calc(100% - 500px)", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", padding: window.innerWidth < 1439 ? "45px 0": "75px 0" /*padding: "45px 75px"*/}}>
             {renderStep()}
             {/* <div className="addCourse__form-buttons-wrapper" style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box", padding:  "0 75px"}}>
               <motion.button className="addCourse__form-buttons-wrapper-button" type="button" style={{display: formStep < 1 ? "none": "inline-block", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15}} onClick={() =>{

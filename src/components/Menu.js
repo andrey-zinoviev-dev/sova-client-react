@@ -22,7 +22,7 @@ export default function Menu({ user }) {
         <div style={{/*position: "absolute", top: 0, left: 0,*/ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box", zIndex: 10}}>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 55}}>
                 <img style={{maxWidth: 50}} src="https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png"/>
-                <p style={{margin: 0, fontSize: 18, color: "white"}}>С Возвращением, {user.name}</p>
+                <p style={{margin: 0, fontSize: 18, color: "white"}}>С Возвращением, <span style={{color: "rgb(211, 124, 82)"}}>{user.name}</span></p>
             </div>
 
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 15}}>
