@@ -26,9 +26,12 @@ export default function AddCourse() {
       name: "",
       description: "",
     },
-    module: {
-      text: "",
-    },
+    modules: [
+
+    ],
+    // module: {
+    //   text: "",
+    // },
   });
   const [selectedFiles, setSelectedFiles] = React.useState([]);
 
@@ -38,7 +41,7 @@ export default function AddCourse() {
       case 0:
         return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       case 1: 
-        return <AddStepModule formData={formData}/>
+        return <AddStepModule formData={formData} setFormData={setFormData}/>
       case 2:
         return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 3:
@@ -103,70 +106,70 @@ export default function AddCourse() {
     prevStepRef.current = formStep;
   }, [formStep]);
 
-  React.useEffect(() => {
-    // console.log(selectedFiles);
-    // console.log(formData.module.text.content);
-    if(formData.module.text.content) {
-      setSelectedFiles((prevValue) => {
-        // console.log(prevValue);
-        const contentFilteredArray = formData.module.text.content.filter((contentFile) => {
-          return contentFile.type === 'image' || contentFile.type === 'video'
-        });
-        // console.log(contentFilteredArray);
-        const newFilesArray = prevValue.map((newFile, array) => {
-          if(/[А-Я]/.test(newFile.name)) {
-            // console.log('test ciryllic');
-            const renamedFile = new File([newFile], cyrillicToTranslit.transform(newFile.name, "_"), {
-              type: newFile.type,
-              lastModified: newFile.lastModified,
-            });
-            renamedFile.clientPath = newFile.clientPath;
-            renamedFile.match = contentFilteredArray.some((layoutFile) => {
-              return layoutFile.attrs.src === renamedFile.clientPath;
-            });
-            return renamedFile;
-          }
-          const newFilename = newFile.name.replace(" ", "");
-          console.log(newFilename);
-          const renamedFile = new File([newFile], newFilename, {
-            type: newFile.type,
-            lastModified: newFile.lastModified,
-          });
-          renamedFile.clientPath = newFile.clientPath;
-          renamedFile.match = contentFilteredArray.some((layoutFile) => {
-            return layoutFile.attrs.src === newFile.clientPath;
-          });
-          console.log(newFile);
-          return renamedFile;
-        });
-        // console.log(newFilesArray);
-        return newFilesArray.filter((file) => {
-          return file.match !== false;
-        });
-        // return [{}, {}, {}];
-          // const newFilesArray = [...prevValue].map((newFile, array) => {
-          //   console.log(newFile);
-          //   return {
-          //     newFile,
-          //     match: formData.module.text.content.filter((contentFile) => {
-          //       return contentFile.type === 'image' || contentFile.type === 'video'
-          //     }).some((layoutFile) => {
-          //       return layoutFile.attrs.src === newFile.clientPath;
-          //     })
-          //   };
-          // });
-          // console.log(newFilesArray);
-          // return newFilesArray.filter((newFile) => {
-          //   return newFile.match === true;
-          // });
+  // React.useEffect(() => {
+  //   // console.log(selectedFiles);
+  //   // console.log(formData.module.text.content);
+  //   if(formData.module.text.content) {
+  //     setSelectedFiles((prevValue) => {
+  //       // console.log(prevValue);
+  //       const contentFilteredArray = formData.module.text.content.filter((contentFile) => {
+  //         return contentFile.type === 'image' || contentFile.type === 'video'
+  //       });
+  //       // console.log(contentFilteredArray);
+  //       const newFilesArray = prevValue.map((newFile, array) => {
+  //         if(/[А-Я]/.test(newFile.name)) {
+  //           // console.log('test ciryllic');
+  //           const renamedFile = new File([newFile], cyrillicToTranslit.transform(newFile.name, "_"), {
+  //             type: newFile.type,
+  //             lastModified: newFile.lastModified,
+  //           });
+  //           renamedFile.clientPath = newFile.clientPath;
+  //           renamedFile.match = contentFilteredArray.some((layoutFile) => {
+  //             return layoutFile.attrs.src === renamedFile.clientPath;
+  //           });
+  //           return renamedFile;
+  //         }
+  //         const newFilename = newFile.name.replace(" ", "");
+  //         console.log(newFilename);
+  //         const renamedFile = new File([newFile], newFilename, {
+  //           type: newFile.type,
+  //           lastModified: newFile.lastModified,
+  //         });
+  //         renamedFile.clientPath = newFile.clientPath;
+  //         renamedFile.match = contentFilteredArray.some((layoutFile) => {
+  //           return layoutFile.attrs.src === newFile.clientPath;
+  //         });
+  //         console.log(newFile);
+  //         return renamedFile;
+  //       });
+  //       // console.log(newFilesArray);
+  //       return newFilesArray.filter((file) => {
+  //         return file.match !== false;
+  //       });
+  //       // return [{}, {}, {}];
+  //         // const newFilesArray = [...prevValue].map((newFile, array) => {
+  //         //   console.log(newFile);
+  //         //   return {
+  //         //     newFile,
+  //         //     match: formData.module.text.content.filter((contentFile) => {
+  //         //       return contentFile.type === 'image' || contentFile.type === 'video'
+  //         //     }).some((layoutFile) => {
+  //         //       return layoutFile.attrs.src === newFile.clientPath;
+  //         //     })
+  //         //   };
+  //         // });
+  //         // console.log(newFilesArray);
+  //         // return newFilesArray.filter((newFile) => {
+  //         //   return newFile.match === true;
+  //         // });
 
-      })
-      // const filesLocal = [...selectedFiles];
-      // console.log(filesLocal);
+  //     })
+  //     // const filesLocal = [...selectedFiles];
+  //     // console.log(filesLocal);
 
-      // setSelectedFiles([]);
-    }
-  }, [formData.module.text.content]);
+  //     // setSelectedFiles([]);
+  //   }
+  // }, [formData.module.text.content]);
 
   return (
     <section className="addCourse">

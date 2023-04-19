@@ -4,7 +4,7 @@ import { faXmark , faAngleRight, faArrowLeft} from "@fortawesome/free-solid-svg-
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from "../context/userContext"; 
 import { motion } from "framer-motion";
-export default function AddStepModule({formData}) {
+export default function AddStepModule({formData, setFormData}) {
     //derived states
     const {course} = formData;
 
@@ -14,19 +14,19 @@ export default function AddStepModule({formData}) {
     const moduleLessonBlockRef = React.useRef();
 
     //states
-    const [modulesOfCourse, setModulesOfCourse] = React.useState([]);
+    // const [modulesOfCourse, setModulesOfCourse] = React.useState([]);
     const [moduleDivOpened, setModuleDivOpened] = React.useState(false);
     const [selectedModule, setSelectedModule] = React.useState({});
     const [lessonPopupOpened, setLessonPopupOpened] = React.useState(false);
-    const [lessonsOfModule, setLessonsOfModule] = React.useState([]);
+    // const [lessonsOfModule, setLessonsOfModule] = React.useState([]);
 
     //user
     const loggedInUser = React.useContext(UserContext);
 
     // React.useEffect(() => {
-    //     console.log(loggedInUser);
+    //     // console.log(loggedInUser);
     //     console.log(formData);
-    // }, []);
+    // }, [formData]);
 
     return (
         <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between"}}>
@@ -43,8 +43,8 @@ export default function AddStepModule({formData}) {
                     </div>
         
                     {<ul className="addCourse__form-moduleLesson-list-scroll" style={{padding: "20px 45px", boxSizing: "border-box", margin: 0, listStyle: "none", borderTop: "2px solid white", lineHeight: "2", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 15, maxHeight: 500, overflow: "hidden auto"}}>
-                        {modulesOfCourse.length > 0 ? 
-                            modulesOfCourse.map((moduleOfCourse, index) => {
+                        {formData.modules.length > 0 ? 
+                            formData.modules.map((moduleOfCourse, index) => {
                                 return <motion.li key={index} whileHover={{border: "2px solid rgb(226, 100, 59 / 100%)"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative"}}>
                                     <button type="button" onClick={() => {
                                         moduleLessonBlockRef.current.scrollTo({top: 0, left: moduleLessonBlockRef.current.clientWidth, behavior: "smooth" });
@@ -53,7 +53,7 @@ export default function AddStepModule({formData}) {
                                         <div style={{display: "flex", flexDirection:"column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 60}}>
                                             <span style={{fontWeight: 700, fontSize: 21}}>{moduleOfCourse.title}</span> 
                                             <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: 150, fontSize: 16, gap: 10}}>
-                                                <span style={{height: 20, maxWidth: "70px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "rgb(226, 100, 59)"}}>{moduleOfCourse.course.name}</span>
+                                                <span style={{height: 20, maxWidth: "70px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "rgb(226, 100, 59)"}}>{formData.course.name}</span>
                                                 <span>&#8212;</span>
                                                 <span>{moduleOfCourse.author.name}</span>
                                             </div>
@@ -73,7 +73,7 @@ export default function AddStepModule({formData}) {
                         </li> */}
                     </ul>}
                 </div>
-                <div style={{flex: "1 0 100%", width: "100%", display: modulesOfCourse.length > 0 ? "block" : "none"}}>
+                <div style={{flex: "1 0 100%", width: "100%", display: formData.modules.length> 0 ? "block" : "none"}}>
                     <div style={{boxSizing: "border-box", padding: "0 45px", margin: "0 0 35px 0", display: "flex", alignItems: "center", justifyContent: "space-between"}}>
                         <button type="button" onClick={() => {
                             moduleLessonBlockRef.current.scrollTo({top: 0, left: -moduleLessonBlockRef.current.clientWidth, behavior: "smooth" });
@@ -89,7 +89,7 @@ export default function AddStepModule({formData}) {
                         </button>
                     </div>
                     <ul className="addCourse__form-moduleLesson-list-scroll" style={{padding: "20px 45px", boxSizing: "border-box", margin: 0, listStyle: "none", borderTop: "2px solid white", lineHeight: "2", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 15}}>
-                        {lessonsOfModule.length > 0 ? lessonsOfModule.map((lessonOfModue, index) => {
+                        {/* {lessonsOfModule.length > 0 ? lessonsOfModule.map((lessonOfModue, index) => {
                             return <li key={index} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", minHeight: 80, padding: "10px 45px", position: "relative"}}>
                                 <span style={{fontWeight: 700, fontSize: 21}}>
                                     {lessonOfModue.title}
@@ -100,7 +100,7 @@ export default function AddStepModule({formData}) {
                             </li>
                         }) : <li key={0} style={{padding: "0 0 0 45px", boxSizing: "border-box", fontSize: 18, textAlign: "center"}}>
                             Уроков для модуля нет
-                        </li>}
+                        </li>} */}
                     </ul>
                 </div>
             </div>
@@ -130,14 +130,17 @@ export default function AddStepModule({formData}) {
                             <input ref={moduleNameRef} className="addCourse__form-input" style={{margin: "20px 0 0 0", width: "100%"}}></input>
                         </div>
                         <button type="button" onClick={() => {
-                            const objWithModule = {};
+                            const objWithModule = {lessons: []};
                             objWithModule.title = moduleNameRef.current.value;
-                            objWithModule.course = formData.course;
+                            // objWithModule.course = formData.course;
                             objWithModule.author = loggedInUser;
-
-                            setModulesOfCourse((prevValue) => {
-                                return [...prevValue, objWithModule];
-                            });
+                            setFormData((prevValue) => {
+                                return {...prevValue, modules: [...prevValue.modules, objWithModule]};
+                            })
+                            // setModulesOfCourse((prevValue) => {
+                            //     return [...prevValue, objWithModule];
+                            // });
+                            
                             setModuleDivOpened(false);
 
                         }} style={{minWidth: 120, minHeight: 40, padding: 0, margin: "30px 0 0 0", borderRadius: 9, backgroundColor: "transparent", border: "2px solid rgb(226, 100, 59)", color: "rgb(225, 100, 59)"}}>Готово</button>
@@ -163,12 +166,31 @@ export default function AddStepModule({formData}) {
                             <input ref={lessonNameRef} className="addCourse__form-input" style={{margin: "20px 0 0 0", width: "100%"}}></input>
                         </div>
                         <button type="button" onClick={() => {
-                            console.log('lesson to add to module');
+                            // console.log('lesson to add to module');
                             const objWithLesson = {};
                             objWithLesson.title = lessonNameRef.current.value;
                             objWithLesson.module = selectedModule;
-                            setLessonsOfModule((prevValue) => {
-                                return [...prevValue, objWithLesson];
+                            // console.log(selectedModule);
+                            // console.log(objWithLesson);
+                            setFormData((prevValue) => {
+                                const { modules } = prevValue;
+                                // console.log(modules);
+                                // console.log(objWithLesson);
+                                const newModulesArray = modules.map((module) => {
+                                    let moduleToUpdate;
+                                    if(module.title ===  objWithLesson.module.title) {
+                                        moduleToUpdate = module;
+                                        moduleToUpdate.lessons.push(objWithLesson);
+                                        return moduleToUpdate;
+                                    }
+                                    return module;
+                                //     const moduleToUpdate = module.title ===  objWithLesson.module.title && module;
+                                //     // console.log(moduleToUpdate);
+                                //     moduleToUpdate.lessons.push(objWithLesson);
+                                //     return moduleToUpdate ? moduleToUpdate : module;
+                                });
+                                
+                                return {...prevValue, modules: [...newModulesArray]};
                             });
                             setLessonPopupOpened(false);
                         }} style={{minWidth: 120, minHeight: 40, padding: 0, margin: "30px 0 0 0", borderRadius: 9, backgroundColor: "transparent", border: "2px solid rgb(226, 100, 59)", color: "rgb(225, 100, 59)"}}>Готово</button>
