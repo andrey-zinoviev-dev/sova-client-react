@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 export default function AddStepModule({formData, setFormData}) {
     //derived states
     const {course} = formData;
+    const {modules} = formData;
 
     //refs
     const moduleNameRef = React.useRef();
@@ -23,10 +24,13 @@ export default function AddStepModule({formData, setFormData}) {
     //user
     const loggedInUser = React.useContext(UserContext);
 
-    // React.useEffect(() => {
-    //     // console.log(loggedInUser);
-    //     console.log(formData);
-    // }, [formData]);
+    React.useEffect(() => {
+        // console.log(loggedInUser);
+        const { modules } = formData;
+        console.log(modules);
+        console.log(selectedModule);
+
+    }, [formData, selectedModule]);
 
     return (
         <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between"}}>
@@ -60,7 +64,14 @@ export default function AddStepModule({formData, setFormData}) {
                                         </div>
                                         <FontAwesomeIcon style={{color: "rgb(226, 100, 59)", fontSize: 22}} icon={faAngleRight} />
                                     </button>
-                                    <button type="button" style={{position: "absolute", top: 3, left: 3, border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
+                                    <button type="button" onClick={() => {
+                                        setFormData((prevValue) => {
+                                            const filteredArray = prevValue.modules.filter((courseModule) => {
+                                                return courseModule.title !== moduleOfCourse.title;
+                                            });
+                                            return {...prevValue, modules: filteredArray}
+                                        });
+                                    }} style={{position: "absolute", top: 3, left: 3, border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
                                         <FontAwesomeIcon icon={faTrashCan} />
                                     </button>
                                 </motion.li>
@@ -89,18 +100,42 @@ export default function AddStepModule({formData, setFormData}) {
                         </button>
                     </div>
                     <ul className="addCourse__form-moduleLesson-list-scroll" style={{padding: "20px 45px", boxSizing: "border-box", margin: 0, listStyle: "none", borderTop: "2px solid white", lineHeight: "2", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 15}}>
-                        {/* {lessonsOfModule.length > 0 ? lessonsOfModule.map((lessonOfModue, index) => {
+                        {selectedModule.lessons && selectedModule.lessons.length > 0 ? selectedModule.lessons.map((lessonOfModue, index, array) => {
                             return <li key={index} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", minHeight: 80, padding: "10px 45px", position: "relative"}}>
                                 <span style={{fontWeight: 700, fontSize: 21}}>
                                     {lessonOfModue.title}
                                 </span>
-                                <button type="button" style={{position: "absolute", top: 3, left: 3, border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
+                                <button type="button" onClick={() => {
+                                    setFormData((prevValue) => {
+                                        // const filteredArray = selectedModule.lessons.filter((moduleLesson) => {
+                                        //     return moduleLesson.title !== lessonOfModue.title;
+                                        // });
+                                        const updatedModulesArray = prevValue.modules.map((courseModule) => {
+
+                                            return courseModule.title === selectedModule.title ? {...courseModule, lessons: [...courseModule.lessons].filter((moduleLesson) => {
+                                                return moduleLesson.title !== lessonOfModue.title
+                                            })} : courseModule;
+                                        });
+                                        console.log(updatedModulesArray);
+                                        //find module and update array of its lessons by filtered Array in formData state variable
+                                        return {...prevValue, modules: updatedModulesArray};
+                                    });
+
+                                    setSelectedModule((prevValue) => {
+                                        return {...prevValue, lessons: [...prevValue.lessons].filter((moduleLesson) => {
+                                            return moduleLesson.title !== lessonOfModue.title;
+                                        })}
+                                    });
+                                }} style={{position: "absolute", top: 3, left: 3, border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
                                     <FontAwesomeIcon icon={faTrashCan} />
                                 </button>
                             </li>
                         }) : <li key={0} style={{padding: "0 0 0 45px", boxSizing: "border-box", fontSize: 18, textAlign: "center"}}>
                             Уроков для модуля нет
-                        </li>} */}
+                        </li>}
+                        {/* {selectedModule.title && console.log(modules.find((courseModule) => {
+                            return courseModule.title === selectedModule.title;
+                        }).lessons)} */}
                     </ul>
                 </div>
             </div>
@@ -192,6 +227,9 @@ export default function AddStepModule({formData, setFormData}) {
                                 
                                 return {...prevValue, modules: [...newModulesArray]};
                             });
+                            // setSelectedModule((prevValue) => {
+                            //     return {...prevValue, lessons: [...prevValue.lessons, objWithLesson]}
+                            // });
                             setLessonPopupOpened(false);
                         }} style={{minWidth: 120, minHeight: 40, padding: 0, margin: "30px 0 0 0", borderRadius: 9, backgroundColor: "transparent", border: "2px solid rgb(226, 100, 59)", color: "rgb(225, 100, 59)"}}>Готово</button>
                     </div>
