@@ -4,7 +4,7 @@ import { faXmark , faAngleRight, faArrowLeft} from "@fortawesome/free-solid-svg-
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from "../context/userContext"; 
 import { motion } from "framer-motion";
-export default function AddStepModule({formData, setFormData}) {
+export default function AddStepModule({formData, setFormData, setFormStep}) {
     //derived states
     const {course} = formData;
     const {modules} = formData;
@@ -24,13 +24,13 @@ export default function AddStepModule({formData, setFormData}) {
     //user
     const loggedInUser = React.useContext(UserContext);
 
-    React.useEffect(() => {
-        // console.log(loggedInUser);
-        const { modules } = formData;
-        console.log(modules);
-        console.log(selectedModule);
+    // React.useEffect(() => {
+    //     // console.log(loggedInUser);
+    //     const { modules } = formData;
+    //     console.log(modules);
+    //     console.log(selectedModule);
 
-    }, [formData, selectedModule]);
+    // }, [formData, selectedModule]);
 
     return (
         <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between"}}>
@@ -142,12 +142,17 @@ export default function AddStepModule({formData, setFormData}) {
 
             <div style={{padding: "0 45px", boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
                 <button type="button" onClick={() => {
-                    console.log('prev step from lessons and modules')
+                    setFormStep((prevValue) => {
+                        return prevValue -= 1;
+                    });
                 }} style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border:"2px solid rgb(226, 100, 59)"}}>Назад к курсу</button>
                 <button onClick={() => {
-                    console.log('next step from lessons and modules');
+                    setFormStep((prevValue) => {
+                        return prevValue += 1;
+                    });
                 }} type="button" style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</button>
             </div>
+
             {moduleDivOpened && <div style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "90px 0", backdropFilter: "blur(2px)"}}>
                 <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", flexDirection: "column", boxSizing: "border-box", padding: 30, border: "2px solid rgb(226, 100, 59)", borderRadius: 12,}}>
                     <button style={{backgroundColor: "transparent", color: "white", border: "none", fontSize: 18, padding: 0, alignSelf: "flex-end", display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 15, minHeight: 30, minWidth: 100, margin: "0 15px 0 0"}} onClick={() => {

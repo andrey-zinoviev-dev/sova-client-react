@@ -41,7 +41,7 @@ export default function AddCourse() {
       case 0:
         return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       case 1: 
-        return <AddStepModule formData={formData} setFormData={setFormData}/>
+        return <AddStepModule formData={formData} setFormData={setFormData} setFormStep={setFormStep}/>
       case 2:
         return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 3:
