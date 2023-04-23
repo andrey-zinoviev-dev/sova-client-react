@@ -234,8 +234,8 @@ export default function Courses({ setCourseInEdit }) {
       {/* <Dashboard /> */}
       <section className="main__courses">
         <Menu user={loggedInUser} />
-        <div style={{color: "white", margin: "25px 0"}}>
-          <h2 style={{margin: 0}}>Чем можно позаниматься</h2>
+        <div style={{color: "white", margin: "50px 0"}}>
+          <h2 style={{margin: "0 0 25px 0"}}>Чем можно позаниматься</h2>
           <p style={{margin: 0}}>Например, стать профессионалом в одном из следующих направлений или во всех сразу. Да- все, везде и сразу</p>
         </div>
 
@@ -321,15 +321,16 @@ export default function Courses({ setCourseInEdit }) {
           {courses.map((course, index) => {
             return <motion.li onClick={() => {
               showCoursePopup(course, index);
-            }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, /*backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center",*/ position: "relative", borderRadius: 12}}>
+            }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 450, /*backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center",*/ position: "relative", borderRadius: 12}}>
         
               <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", boxSizing: "border-box", padding: "20px 35px"}}>
-                <motion.div variants={liVariant} style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 30}}>
-                  <div style={{width: 15, height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
-                  <p style={{margin: 0, fontSize: 18}}>{index + 1}</p>
+                <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60}}>
+                  <div style={{width: 20, height: 3, backgroundColor: "rgb(211, 124, 82)", order: 2, margin: "0 0 0 3px"}}></div>
+                  <p style={{margin: 0, fontSize: 36, fontWeight: 500, fontFamily: "Manrope, sans-serif", order: 1, letterSpacing: 2, color: "rgb(255 255 255 /75%)"}}>0{index + 1}</p>
                 </motion.div>
-                <FontAwesomeIcon icon={faMicrophoneLines} style={{fontSize: 36}}/>
-                <motion.div variants={liChildrenVariant} style={{height: 80, display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between"}}>
+                <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12}} alt={course.title} src={course.cover}></img>
+                {/* <FontAwesomeIcon icon={faMicrophoneLines} style={{fontSize: 36}}/> */}
+                <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between"}}>
                   {/*<motion.button onClick={() => {
                     setSelectedCourse(course);
                     setIsEditCourse(true);
@@ -338,7 +339,7 @@ export default function Courses({ setCourseInEdit }) {
                   </motion.button>
                   }*/}
                   <h3 style={{margin: 0}}>{course.name}</h3>
-                  <p style={{margin: 0}}>{course.description}</p>
+                  {/* <p style={{margin: 0}}>{course.description}</p> */}
                   {/*<p className="main__courses-para">{course.description}</p>
                   <span>{index === courses.length - 1 && "последний курс"}</span>
                   <motion.button whileHover={{backgroundColor: "#d37c52", color: "rgb(255, 255, 255)", transition: {duration: 0.2, ease: "easeInOut"}}} onClick={() => {
