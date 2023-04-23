@@ -11,7 +11,8 @@ import { motion } from "framer-motion";
 
 export default function AddStep2({ formData, setFormData, formStep, setFormStep, setSelectedFiles }) {
   const { modules } = formData;
-  console.log(modules);
+  // console.log(modules);
+
   //refs
 
 
@@ -19,6 +20,7 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
   const [disableButton, setDisableButton] = React.useState(false);
   const [filesToUpload, setFilesToUpload] = React.useState([]);
   const [contentEditIsOpened, setContentEditIsOpened] = React.useState(false);
+  const [selectedModule, setSelectedModule] = React.useState({});
 
   //functions
   function handleNextClick() {
@@ -120,10 +122,11 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
           {modules.map((courseModule, index) => {
             return <li key={index} onClick={() => {
               setContentEditIsOpened(true);
+              setSelectedModule(courseModule);
             }}>{courseModule.title}</li>
           })}
         </ul> :
-        <AddCourseContent />
+        <AddCourseContent setContentEditIsOpened={setContentEditIsOpened} formData={formData} selectedModule={selectedModule}/>
       }
       <div className="addCourse__form-stepwrapper-editor" style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent:"center", width: "100%", height: "100%"}}>
         {/* <TipTapButtons editor={editor} formData={formData} setSelectedFiles={setSelectedFiles}/>

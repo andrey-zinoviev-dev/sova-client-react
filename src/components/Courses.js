@@ -76,10 +76,12 @@ export default function Courses({ setCourseInEdit }) {
       // boxShadow: "0 0 0px rgba(222,228,67,255)",
       backgroundColor: "rgb(54, 58, 59)",
       boxShadow: "0 0 0px #c4d8f7",
+      scale: 1
     },
     hover: {
       backgroundColor: "#c4d8f7",
-      boxShadow: "0 0 25px #c4d8f7"
+      boxShadow: "0 0 25px #c4d8f7",
+      scale: 1.025
     }
   };
 
@@ -92,43 +94,52 @@ export default function Courses({ setCourseInEdit }) {
     }
   }
 
-  const liVariant = {
+  const liContentIndex = {
     rest: {
-      width: 25,
-      transition: {
-        duration: 0.55,
-        ease: "easeOut",
-        type: "tween",
-      }
+      color: "rgba(255, 255, 255, 0.75)"
     },
     hover: {
-      width: "100%",
-      transition: {
-        duration: 0.55,
-        ease: "easeIn",
-        type: "tween",
-      }
-    }
-  };
-
-  const liChildrenVariant = {
-    rest: {
-      translate: "0 65%",
-      transition: {
-        duration: 0.5,
-        ease: "easeInOut",
-        type: "tween"
-      }
-    },
-    hover: {
-      translate: "0 0%",
-      transition: {
-        duration: 0.5,
-        ease: "easeInOut",
-        type: "tween"
-      }
+      color: "rgba(0, 0, 0, 1)"
     }
   }
+
+  // const liVariant = {
+  //   rest: {
+  //     width: 25,
+  //     transition: {
+  //       duration: 0.55,
+  //       ease: "easeOut",
+  //       type: "tween",
+  //     }
+  //   },
+  //   hover: {
+  //     width: "100%",
+  //     transition: {
+  //       duration: 0.55,
+  //       ease: "easeIn",
+  //       type: "tween",
+  //     }
+  //   }
+  // };
+
+  // const liChildrenVariant = {
+  //   rest: {
+  //     translate: "0 65%",
+  //     transition: {
+  //       duration: 0.5,
+  //       ease: "easeInOut",
+  //       type: "tween"
+  //     }
+  //   },
+  //   hover: {
+  //     translate: "0 0%",
+  //     transition: {
+  //       duration: 0.5,
+  //       ease: "easeInOut",
+  //       type: "tween"
+  //     }
+  //   }
+  // }
 
   //animations
   const pulseButton = {
@@ -324,9 +335,9 @@ export default function Courses({ setCourseInEdit }) {
             }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 450, /*backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center",*/ position: "relative", borderRadius: 12}}>
         
               <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", boxSizing: "border-box", padding: "20px 35px"}}>
-                <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60}}>
+                <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60}} variants={liContentIndex}>
                   <div style={{width: 20, height: 3, backgroundColor: "rgb(211, 124, 82)", order: 2, margin: "0 0 0 3px"}}></div>
-                  <p style={{margin: 0, fontSize: 36, fontWeight: 500, fontFamily: "Manrope, sans-serif", order: 1, letterSpacing: 2, color: "rgb(255 255 255 /75%)"}}>0{index + 1}</p>
+                  <p style={{margin: 0, fontSize: 36, fontWeight: 500, fontFamily: "Manrope, sans-serif", order: 1, letterSpacing: 2}}>0{index + 1}</p>
                 </motion.div>
                 <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12}} alt={course.title} src={course.cover}></img>
                 {/* <FontAwesomeIcon icon={faMicrophoneLines} style={{fontSize: 36}}/> */}

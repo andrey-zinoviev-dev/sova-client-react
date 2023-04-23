@@ -202,7 +202,7 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                     <div style={{minWidth: 450, minHeight: 320, boxSizing: "border-box", padding: 15}}>
                         <p style={{fontSize: 21}}>Модуль <span style={{color: "rgb(226, 100, 59)", fontWeight: 700, margin: "0 0 0 15px"}}>{selectedModule.title}</span></p>
                         <div style={{disaply: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column"}}>
-                            <label style={{fontSize: 18}}>Название модуля</label>
+                            <label style={{fontSize: 18}}>Название урока</label>
                             <input ref={lessonNameRef} className="addCourse__form-input" style={{margin: "20px 0 0 0", width: "100%"}}></input>
                         </div>
                         <button type="button" onClick={() => {
