@@ -10,8 +10,12 @@ import { Node, mergeAttributes } from "@tiptap/react";
 import { motion } from "framer-motion";
 
 export default function AddStep2({ formData, setFormData, formStep, setFormStep, setSelectedFiles }) {
+  //derived state
   const { modules } = formData;
-  // console.log(modules);
+  const {course} = formData;
+  const lessons = modules.map((courseModule) => {
+    return courseModule.lessons;
+  }).flat();
 
   //refs
 
@@ -117,26 +121,41 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
   
   return (
     <div className="addCourse__form-stepwrapper" style={{width: "100%", height: "100%", display: "flex", flexDirection: "column", boxSizing: "border-box", padding: "0 75px", textAlign: "left"}}>
-      <h2 style={{margin: "0 0 10px 0"}}>Этап 2 добавления курса</h2>
-      {!contentEditIsOpened ? <ul>
-          {modules.map((courseModule, index) => {
-            return <li key={index} onClick={() => {
-              setContentEditIsOpened(true);
-              setSelectedModule(courseModule);
-            }}>{courseModule.title}</li>
-          })}
-        </ul> :
+      <h2 style={{margin: "0 0 35px 0"}}>Этап 2 добавления курса <span style={{color: "rgb(226, 100, 59)", fontWeight: 700}}>{course.name}</span></h2>
+      
+      {!contentEditIsOpened ? 
+        <div style={{height: "calc(100% - 30px)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch"}}>
+          <p style={{margin: "0 0 50px 0", fontSize: 18}}>К какому уроку добавить контент?</p>
+          <ul style={{margin: "0 0 auto 0", padding: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 20, maxHeight: 500, overflow: "hidden auto"}}>
+            {/* {modules.map((courseModule, index) => {
+              return <li key={index} onClick={() => {
+                setContentEditIsOpened(true);
+                setSelectedModule(courseModule);
+              }} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", minHeight: 80, padding: "10px 45px", position: "relative"}}>{courseModule.title}</li>
+            })} */}
+            {lessons.map((moduleLesson) => {
+              return <li onClick={() => {
+                setContentEditIsOpened(true);
+                setSelectedModule(moduleLesson.module);
+              }} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", minHeight: 60, padding: "10px 45px", position: "relative"}} key={moduleLesson.title}>
+                <span>{moduleLesson.title}</span>
+                <span>{moduleLesson.module.title}</span>
+              </li>
+            })}
+          </ul>
+          <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", minHeight: 40}}>
+            <motion.button onClick={handleBackClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Назад</motion.button>
+            <motion.button onClick={handleNextClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</motion.button>
+          </div>
+        </div> 
+        :
         <AddCourseContent setContentEditIsOpened={setContentEditIsOpened} formData={formData} selectedModule={selectedModule}/>
       }
-      <div className="addCourse__form-stepwrapper-editor" style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent:"center", width: "100%", height: "100%"}}>
-        {/* <TipTapButtons editor={editor} formData={formData} setSelectedFiles={setSelectedFiles}/>
-        <EditorContent tabIndex="-1" className="addCourse__form-stepwrapper-editor-div" editor={editor} /> */}
-      </div>
-      <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", minHeight: 40}}>
-        <motion.button onClick={handleBackClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Назад</motion.button>
-        {/* <motion.button onClick={handleNextClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ pointerEvents: disableButton && "none", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: disableButton ? "rgb(255 255 255 / 30%)" : "rgb(255 255 255 / 100%)", border: disableButton ? "2px solid rgb(255 255 255 /30%)" : "2px solid rgb(226, 100, 59)"}}>Далее</motion.button> */}
-        <motion.button onClick={handleNextClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</motion.button>
-      </div>
+      {/* <div className="addCourse__form-stepwrapper-editor" style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent:"center", width: "100%", height: "100%"}}>
+        <TipTapButtons editor={editor} formData={formData} setSelectedFiles={setSelectedFiles}/>
+        <EditorContent tabIndex="-1" className="addCourse__form-stepwrapper-editor-div" editor={editor} />
+      </div> */}
+
     </div>
   )
 }

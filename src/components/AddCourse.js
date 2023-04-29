@@ -44,8 +44,8 @@ export default function AddCourse() {
         return <AddStepModule formData={formData} setFormData={setFormData} setFormStep={setFormStep}/>
       case 2:
         return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
-      case 3:
-        return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
+      // case 3:
+      //   return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       default:
         break;
     }
@@ -227,7 +227,7 @@ export default function AddCourse() {
 
             // });
 
-          }} style={{/*width: 'calc(100% - 600px)',*/width: window.innerWidth < 1440 ? "calc(100% - 370px)" : "calc(100% - 500px)", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", padding: window.innerWidth < 1439 ? "45px 0": "75px 0" /*padding: "45px 75px"*/}}>
+          }} style={{/*width: 'calc(100% - 600px)',*/width: window.innerWidth < 1440 ? "calc(100% - 370px)" : "calc(100% - 500px)", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", /*padding: "45px 75px"*/}}>
             {renderStep()}
             {/* <div className="addCourse__form-buttons-wrapper" style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box", padding:  "0 75px"}}>
               <motion.button className="addCourse__form-buttons-wrapper-button" type="button" style={{display: formStep < 1 ? "none": "inline-block", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15}} onClick={() =>{

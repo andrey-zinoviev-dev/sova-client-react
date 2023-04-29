@@ -32,23 +32,25 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep})
                     <h2 style={{margin: 0}}>Добавим название и описание нового курса</h2>
                     <p style={{margin: 0}}>Введите данные нового курса, чтобы добавить новый курс.</p>
                 </div>
+                <div style={{margin: "50px 0 auto 0", minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch"}}>
+                    <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 80}}>
+                        <label>Название курса</label>
+                        <input className="addCourse__form-input" placeholder="Введите название курса" value={course.name} onChange={(evt) => {
+                            setFormData({...formData, course: {
+                                ...formData.course, name: evt.target.value,
+                            }})
+                        }}></input>
+                    </div>
+                    <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 80}}>
+                        <label>Описание курса</label>
+                        <input className="addCourse__form-input" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
+                            setFormData({...formData, course: {
+                                ...formData.course, description: evt.target.value,
+                            }})
+                        }}></input>
+                    </div>
+                </div>
 
-                <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 80}}>
-                    <label>Название курса</label>
-                    <input className="addCourse__form-input" placeholder="Введите название курса" value={course.name} onChange={(evt) => {
-                        setFormData({...formData, course: {
-                            ...formData.course, name: evt.target.value,
-                        }})
-                    }}></input>
-                </div>
-                <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 80}}>
-                    <label>Описание курса</label>
-                    <input className="addCourse__form-input" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
-                        setFormData({...formData, course: {
-                            ...formData.course, description: evt.target.value,
-                        }})
-                    }}></input>
-                </div>
             </div>
 
             <div style={{display: "flex", alignItems: "stretch", justifyContent: "flex-start", minHeight: 40}}>

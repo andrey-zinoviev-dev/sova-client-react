@@ -481,6 +481,7 @@ export default function Courses({ setCourseInEdit }) {
                 </motion.li>
               })}
             </ul> : <ModulesList selectedModule={selectedModule}/>}
+            <p>{selectedCourse.description}</p>
           </div>
 
         </div>
