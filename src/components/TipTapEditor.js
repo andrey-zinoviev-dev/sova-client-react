@@ -1,4 +1,5 @@
 import React from "react";
+import TipTapButtons from "./TipTapButtons";
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -9,10 +10,17 @@ export default function TipTapEditor() {
         extensions: [
             StarterKit
         ],
-        content: '<p>Тут можно создать контент урока</p>'
+        content: '<p>Тут можно создать контент урока</p>',
+        onUpdate: ({editor}) => {
+            console.log(editor.getJSON());
+        },
     });
 
     return (
-        <EditorContent editor={editor} />
+        <>
+            <TipTapButtons editor={editor} />
+            <EditorContent style={{height: "calc(100% - 125px)"}} editor={editor} />
+        </>
+        
     );
 };

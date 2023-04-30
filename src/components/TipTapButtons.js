@@ -24,13 +24,14 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     console.log(/[А-Я]/.test(image.name));
     image.clientPath = relPath;
 
-    setImage((prevValue) => {
-      return {...prevValue, image}
-    });
+    // setImage((prevValue) => {
+    //   return {...prevValue, image}
+    // });
 
-    setSelectedFiles((prevValue) => {
-      return [...prevValue, image]
-    });
+    // setSelectedFiles((prevValue) => {
+    //   return [...prevValue, image]
+    // });
+
     // console.log(evt.target.files[0]);
     // const fileReader = new FileReader();
 
@@ -54,12 +55,13 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     // } 
     const relPath = window.URL.createObjectURL(video);
     video.clientPath = relPath;
-    setVideo((prevValue) => {
-      return {...prevValue, video};
-    });
-    setSelectedFiles((prevValue) => {
-      return [...prevValue, video]
-    });
+
+    // setVideo((prevValue) => {
+    //   return {...prevValue, video};
+    // });
+    // setSelectedFiles((prevValue) => {
+    //   return [...prevValue, video]
+    // });
     
   }
 
@@ -94,8 +96,12 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
   //   console.log(formData);
   // }, [formData])
 
+  React.useEffect(() => {
+    console.log(editor);
+  }, [editor])
+
   return (
-    <ul className="addCourse__form-stepwrapper-menu-list" style={{padding: 0, margin: "0 0 20px 0", listStyle: "none", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 9}}>
+    editor && <ul className="addCourse__form-stepwrapper-menu-list" style={{padding: 0, margin: "0 0 20px 0", listStyle: "none", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 9}}>
       <li className="addCourse__form-stepwrapper-menu-list-element">
         <button style={{fontWeight: 700}} className={editor.isActive('bold') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'}  type="button" onClick={() => {
           return editor.chain().focus().toggleBold().run()

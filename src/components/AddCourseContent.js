@@ -8,7 +8,7 @@ export default function AddCourseContent({setContentEditIsOpened, formData, sele
   const [selectedLesson, setSelectedLesson] = React.useState({});
 
   return (
-    <div style={{margin: "0 0 auto 0"}}>
+    <div style={{height: "calc(100% - 65px)"}}>
       <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 250, margin: "0 auto 25px 0"}}>
         <button type="button" style={{backgroundColor: "transparent", fontSize: 20, color: "white", border: "none"}} onClick={() => {
           setContentEditIsOpened(false)
@@ -41,6 +41,10 @@ export default function AddCourseContent({setContentEditIsOpened, formData, sele
         })}
       </ul>} */}
       <TipTapEditor></TipTapEditor>  
+      <div style={{margin: "25px 0 0 0", display: "flex", alignItems: "stretch", justifyContent: "space-between", minHeight: 40, width: "100%", boxSizing: "border-box"}}>
+                <button type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)", color: "rgb(255 255 255 / 100%)"}} style={{  fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color:  "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Назад</button>
+                <button type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)", color: "rgb(255 255 255 / 100%)"}} style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Загрузить</button>
+      </div>
     </div>
   )
 }
