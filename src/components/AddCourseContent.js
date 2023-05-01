@@ -9,7 +9,7 @@ export default function AddCourseContent({setContentEditIsOpened, formData, sele
 
   return (
     <div style={{height: "calc(100% - 65px)"}}>
-      <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 250, margin: "0 auto 25px 0"}}>
+      <div className="addCourse__form-stepwrapper-content-edit" style={{display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 250}}>
         <button type="button" style={{backgroundColor: "transparent", fontSize: 20, color: "white", border: "none"}} onClick={() => {
           setContentEditIsOpened(false)
         }}>

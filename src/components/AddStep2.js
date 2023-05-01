@@ -121,8 +121,7 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
   
   return (
     <div className="addCourse__form-stepwrapper" style={{width: "100%", height: "100%", display: "flex", flexDirection: "column", boxSizing: "border-box", padding: "0 75px", textAlign: "left"}}>
-      <h2 style={{margin: "0 0 35px 0"}}>Этап 2 добавления курса <span style={{color: "rgb(226, 100, 59)", fontWeight: 700}}>{course.name}</span></h2>
-      
+      <h2 className="addCourse__form-stepwrapper-headline">Этап 2 добавления курса <span style={{color: "rgb(226, 100, 59)", fontWeight: 700}}>{course.name}</span></h2>
       {!contentEditIsOpened ? 
         <div style={{height: "calc(100% - 30px)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch"}}>
           <p style={{margin: "0 0 50px 0", fontSize: 18}}>К какому уроку добавить контент?</p>
