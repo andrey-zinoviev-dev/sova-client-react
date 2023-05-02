@@ -43,7 +43,9 @@ export default function AddCourseContent({setContentEditIsOpened, formData, setF
       <TipTapEditor formData={formData} setFormData={setFormData} selectedModule={selectedModule} selectedLesson={selectedLesson}></TipTapEditor>  
       <div style={{margin: "25px 0 0 0", display: "flex", alignItems: "stretch", justifyContent: "space-between", minHeight: 40, width: "100%", boxSizing: "border-box"}}>
         <button type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)", color: "rgb(255 255 255 / 100%)"}} style={{  fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color:  "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Назад</button>
-        <button type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)", color: "rgb(255 255 255 / 100%)"}} style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Загрузить</button>
+        <button type="button" onClick={(() => {
+          console.log(formData);
+        })} whileHover={{backgroundColor: "rgb(226 100 59 / 100%)", color: "rgb(255 255 255 / 100%)"}} style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</button>
       </div>
     </div>
   )
