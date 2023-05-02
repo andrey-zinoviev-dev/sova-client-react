@@ -25,6 +25,7 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
   const [filesToUpload, setFilesToUpload] = React.useState([]);
   const [contentEditIsOpened, setContentEditIsOpened] = React.useState(false);
   const [selectedModule, setSelectedModule] = React.useState({});
+  const [selectedLesson, setSelectedLesson] = React.useState({});
 
   //functions
   function handleNextClick() {
@@ -136,6 +137,7 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
               return <li onClick={() => {
                 setContentEditIsOpened(true);
                 setSelectedModule(moduleLesson.module);
+                setSelectedLesson(moduleLesson);
               }} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", minHeight: 60, padding: "10px 45px", position: "relative"}} key={moduleLesson.title}>
                 <span>{moduleLesson.title}</span>
                 <span>{moduleLesson.module.title}</span>
@@ -148,7 +150,7 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
           </div>
         </div> 
         :
-        <AddCourseContent setContentEditIsOpened={setContentEditIsOpened} formData={formData} selectedModule={selectedModule}/>
+        <AddCourseContent setContentEditIsOpened={setContentEditIsOpened} formData={formData} setFormData={setFormData} selectedModule={selectedModule} selectedLesson={selectedLesson}/>
       }
       {/* <div className="addCourse__form-stepwrapper-editor" style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent:"center", width: "100%", height: "100%"}}>
         <TipTapButtons editor={editor} formData={formData} setSelectedFiles={setSelectedFiles}/>

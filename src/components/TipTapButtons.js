@@ -96,9 +96,9 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
   //   console.log(formData);
   // }, [formData])
 
-  React.useEffect(() => {
-    console.log(editor);
-  }, [editor])
+  // React.useEffect(() => {
+  //   console.log(editor);
+  // }, [editor])
 
   return (
     editor && <ul className="addCourse__form-stepwrapper-menu-list" style={{padding: 0, margin: "0 0 20px 0", listStyle: "none", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 9}}>
