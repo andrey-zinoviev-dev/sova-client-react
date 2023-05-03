@@ -150,7 +150,7 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
           </div>
         </div> 
         :
-        <AddCourseContent setContentEditIsOpened={setContentEditIsOpened} formData={formData} setFormData={setFormData} selectedModule={selectedModule} selectedLesson={selectedLesson}/>
+        <AddCourseContent setContentEditIsOpened={setContentEditIsOpened} formData={formData} setFormData={setFormData} selectedModule={selectedModule} selectedLesson={selectedLesson} setSelectedFiles={setSelectedFiles}/>
       }
       {/* <div className="addCourse__form-stepwrapper-editor" style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent:"center", width: "100%", height: "100%"}}>
         <TipTapButtons editor={editor} formData={formData} setSelectedFiles={setSelectedFiles}/>

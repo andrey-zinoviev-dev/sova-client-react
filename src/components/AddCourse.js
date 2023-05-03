@@ -29,6 +29,9 @@ export default function AddCourse() {
     modules: [
 
     ],
+    // files: [
+
+    // ],
     // module: {
     //   text: "",
     // },
@@ -84,7 +87,8 @@ export default function AddCourse() {
     // console.log(formStep);
     const step = Array.from(stepsRef.current.children)[formStep];
     const prevStep = Array.from(stepsRef.current.children)[prevStepRef.current];
-
+    // console.log(step);
+    // console.log(prevStep);
     step.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgb(226, 100, 59)';
     step.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'transparent';
     step.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
@@ -105,6 +109,10 @@ export default function AddCourse() {
     }
     prevStepRef.current = formStep;
   }, [formStep]);
+
+  React.useEffect(() => {
+    console.log(selectedFiles);
+  }, [selectedFiles]);
 
   // React.useEffect(() => {
   //   // console.log(selectedFiles);
@@ -178,7 +186,6 @@ export default function AddCourse() {
        
       </div> */}
       <div className="addCourse__navigation">
-      {/* <img src="https://d10j3mvrs1suex.cloudfront.net/u/516665/ebc1a0a065ca47fcaf444f6c2e229a0d39335176/original/flea-47-simon-campbell-supertone-studio.jpg/!!/b%3AW1sicmVzaXplIiwxMDAwXSxbIm1heCJdLFsid2UiXV0%3D/meta%3AeyJzcmNCdWNrZXQiOiJiemdsZmlsZXMifQ%3D%3D.jpg"></img> */}
           <div className="addCourse__headline-wrapper">
             <h2 style={{margin: "0 0 10px 0"}}>Добавить новый курс</h2>
             <p style={{margin: 0}}>Через эту форму можно добавить новый курс</p>

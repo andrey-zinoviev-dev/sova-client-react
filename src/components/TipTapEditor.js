@@ -5,10 +5,11 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 
-export default function TipTapEditor({formData, setFormData, selectedModule, selectedLesson}) {
+export default function TipTapEditor({formData, setFormData, selectedModule, selectedLesson, setSelectedFiles}) {
     const editor = useEditor({
         extensions: [
-            StarterKit
+            StarterKit,
+            Image
         ],
         content: '<p>Тут можно создать контент урока</p>',
         onUpdate: ({editor}) => {
@@ -22,7 +23,7 @@ export default function TipTapEditor({formData, setFormData, selectedModule, sel
                     }
                     return courseModule;
                 });
-                console.log(prevValue);
+                // console.log(prevValue);
 
                 return {...prevValue, modules: [...updatedModules]};
             });
@@ -36,7 +37,7 @@ export default function TipTapEditor({formData, setFormData, selectedModule, sel
     }, [editor, selectedLesson.layout]);
     return (
         <>
-            <TipTapButtons editor={editor} />
+            <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
             <EditorContent style={{height: "calc(100% - 125px)"}} editor={editor} />
         </>
         

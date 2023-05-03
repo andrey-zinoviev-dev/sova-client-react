@@ -24,13 +24,13 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     console.log(/[А-Я]/.test(image.name));
     image.clientPath = relPath;
 
-    // setImage((prevValue) => {
-    //   return {...prevValue, image}
-    // });
+    setImage((prevValue) => {
+      return {...prevValue, image}
+    });
 
-    // setSelectedFiles((prevValue) => {
-    //   return [...prevValue, image]
-    // });
+    setSelectedFiles((prevValue) => {
+      return [...prevValue, image]
+    });
 
     // console.log(evt.target.files[0]);
     // const fileReader = new FileReader();
@@ -56,12 +56,12 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     const relPath = window.URL.createObjectURL(video);
     video.clientPath = relPath;
 
-    // setVideo((prevValue) => {
-    //   return {...prevValue, video};
-    // });
-    // setSelectedFiles((prevValue) => {
-    //   return [...prevValue, video]
-    // });
+    setVideo((prevValue) => {
+      return {...prevValue, video};
+    });
+    setSelectedFiles((prevValue) => {
+      return [...prevValue, video]
+    });
     
   }
 
@@ -69,7 +69,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
 
   React.useEffect(() => {
     if(image.image) {
-      editor.chain().focus().setImage({ src: image.image.clientPath, title: image.image.name}).run();
+      editor && editor.chain().focus().setImage({ src: image.image.clientPath, title: image.image.name}).run();
     };
     // console.log(Object.keys(image));
     // if(imageSrc.length > 0) {
@@ -83,7 +83,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     // console.log(video);
     if(video.video) {
       // console.log(video);
-      editor.chain().focus().insertContent(`<video src="${video.video.clientPath}" title=${/[А-Я]/.test(video.video.name) ? cyrillicToTranslit.transform(video.video.name, "_") : video.video.name.replace(" ", "")}></video>`).run();
+      editor && editor.chain().focus().insertContent(`<video src="${video.video.clientPath}" title=${/[А-Я]/.test(video.video.name) ? cyrillicToTranslit.transform(video.video.name, "_") : video.video.name.replace(" ", "")}></video>`).run();
       // console.log(Object.keys(video.video));
     };
     // if(videoSrc.length > 0) {
