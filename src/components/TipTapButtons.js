@@ -59,9 +59,11 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     setVideo((prevValue) => {
       return {...prevValue, video};
     });
+
     setSelectedFiles((prevValue) => {
       return [...prevValue, video]
     });
+
     
   }
 
@@ -77,7 +79,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     // }
     
     // window.URL.revokeObjectURL(imageSrc);
-  }, [image.image]);
+  }, [image.image, editor]);
 
   React.useEffect(() => {
     // console.log(video);
@@ -90,7 +92,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     //   editor.chain().focus().insertContent(`<video src="${videoSrc}"></video>`).run();
     // }
     
-  }, [video.video]);
+  }, [video.video, editor]);
 
   // React.useEffect(() => {
   //   console.log(formData);
