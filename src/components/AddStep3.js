@@ -12,7 +12,7 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
     const [editable, setEditable] = React.useState(false);
     // const [contentZone, setContentZone] = React.useState(false);
 
-    const { course, module } = formData;
+    // const { course, module } = formData;
 
       //crete Video extension
   const Video = Node.create({
@@ -52,11 +52,11 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
   });
 
 
-    const editor = useEditor({
-      editable,
-      content: module.text,
-      extensions: [StarterKit, Image.configure(), Video,],
-    });
+    // const editor = useEditor({
+    //   editable,
+    //   content: module.text,
+    //   extensions: [StarterKit, Image.configure(), Video,],
+    // });
 
     //refs
     const sliderRef = React.useRef();
@@ -74,7 +74,7 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
 
     function handleBackClick() {
         setFormStep((prevValue) => {
-            return prevValue - 1;
+            return prevValue -= 1;
         });
     };
 
@@ -87,14 +87,17 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
     };
 
     React.useEffect(() => {
-        console.log(module);
-    }, [module])
+        console.log(formData);
+    }, [formData])
 
     return (
         <>
-                <div className="addCourse__form-stepwrapper" ref={sliderRef} style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-start", overflow: "scroll hidden",boxSizing: "border-box"}}>
+            <h2>
+                Этап проверки контента
+            </h2>
+                {/* <div className="addCourse__form-stepwrapper" ref={sliderRef} style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-start", overflow: "scroll hidden",boxSizing: "border-box"}}> */}
             {/* <h3 style={{margin: 0}}>Проверим, что бодует добавлено</h3> */}
-            <div style={{flex: "1 0 100%", boxSizing: "border-box", padding: "0 75px", height: "100%"}}>
+            {/* <div style={{flex: "1 0 100%", boxSizing: "border-box", padding: "0 75px", height: "100%"}}>
                 <div style={{margin: "0 0 20px 0", textAlign: "left"}}>
                     <span>Шаг {formStep + 1}/3</span>
                     <h3 style={{margin: "10px 0 0 0"}}>Проверим, что бодует добавлено в новый курс</h3>
@@ -129,16 +132,16 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
                         <FontAwesomeIcon style={{fontSize: 18}} icon={faCircleRight} />
                     </motion.button>
                 </div>
-            </div>
+            </div> */}
                     
-            <div style={{flex: "1 0 100%", boxSizing: "border-box", padding: "0 75px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
+            {/* <div style={{flex: "1 0 100%", boxSizing: "border-box", padding: "0 75px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                 <h2 style={{margin: 0}}>Что будет в модуле</h2>
                 <motion.button whileHover={{backgroundColor: "rgb(226, 100, 59)", color:"rgb(255, 255, 255)"}} style={{padding: "0 10px", minWidth: 175, minHeight: 50, border: "2px solid rgb(226, 100, 59)", backgroundColor: "rgba(226, 100, 59, 0)", color: "rgb(226, 100, 59)", display: "inline-flex", justifyContent: "space-between", alignItems: "center", fontSize: 16, margin: "auto 0", borderRadius: 7}} type="button" onClick={scrollToCourseDetails}>
                     <FontAwesomeIcon style={{fontSize: 18}} icon={faCircleLeft} />
                     <span>К деталям курса</span>    
                 </motion.button>
-                <EditorContent className="addCourse__form-stepwrapper-editor-div" style={{width: "100%", height: "100%", /*maxHeight: 475,*/ display: "flex", alignItems: "flex-start", justifyContent: "center",  overflow: "auto", boxSizing:"border-box", borderRadius: 15, margin: "auto 0"}} editor={editor}/>
-            </div>      
+                <EditorContent className="addCourse__form-stepwrapper-editor-div" style={{width: "100%", height: "100%", display: "flex", alignItems: "flex-start", justifyContent: "center",  overflow: "auto", boxSizing:"border-box", borderRadius: 15, margin: "auto 0"}} editor={editor}/>
+            </div>       */}
             {/* <div style={{minHeight: 120, width: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", margin: "30px 0"}}>
                 <div style={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box", padding: "10px 20px"}}>
                     <span>Название новго курса</span>
@@ -150,11 +153,15 @@ export default function AddStep3({ formData, setFormData, formStep, setFormStep 
                 </div>
             </div> */}
 
-        </div>
-            <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", minHeight: 40, width: "100%", boxSizing: "border-box", padding: "0 75px"}}>
+        {/* </div> */}
+            {/* <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", minHeight: 40, width: "100%", boxSizing: "border-box", padding: "0 75px"}}>
                 <motion.button onClick={handleBackClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)", color: "rgb(255 255 255 / 100%)"}} style={{  fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color:  "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Назад</motion.button>
                 <motion.button type="submit" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)", color: "rgb(255 255 255 / 100%)"}} style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Загрузить</motion.button>
-            </div>
+            </div> */}
+        <div>
+            <button onClick={handleBackClick}>Назад к контенту</button>
+            <button>Загрузить</button>
+        </div>
         </>
 
 

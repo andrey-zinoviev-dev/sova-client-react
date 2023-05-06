@@ -30,13 +30,13 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
   //functions
   function handleNextClick() {
     setFormStep((prevValue) => {
-      return prevValue + 1;
+      return prevValue += 1;
     })
   };
 
   function handleBackClick() {
     setFormStep((prevValue) => {
-      return prevValue - 1;
+      return prevValue -= 1;
     })
   };
 
@@ -118,7 +118,21 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
   //   return null;
   // }
 
-
+  React.useEffect(() => {
+    selectedLesson.module && selectedLesson.title && selectedLesson.layout &&
+    setFormData((prevValue) => {
+      const newModules = prevValue.modules.map((prevModule) => {
+        if(prevModule.title === selectedLesson.module.title) {
+          const newLessons = prevModule.lessons.map((lesson) => {
+            return lesson.title === selectedLesson.title ? {...lesson, layout: selectedLesson.layout} : lesson;
+          });
+          return {...prevModule, lessons: newLessons};
+        }
+        return prevModule;
+      });
+      return {...prevValue, modules: newModules};
+    });
+  }, [selectedLesson.layout]);
   
   return (
     <div className="addCourse__form-stepwrapper" style={{width: "100%", height: "100%", display: "flex", flexDirection: "column", boxSizing: "border-box", padding: "0 75px", textAlign: "left"}}>
@@ -150,7 +164,7 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
           </div>
         </div> 
         :
-        <AddCourseContent setContentEditIsOpened={setContentEditIsOpened} formData={formData} setFormData={setFormData} selectedModule={selectedModule} selectedLesson={selectedLesson} setSelectedFiles={setSelectedFiles}/>
+        <AddCourseContent setContentEditIsOpened={setContentEditIsOpened} formData={formData} setFormData={setFormData} selectedModule={selectedModule} selectedLesson={selectedLesson} setSelectedLesson={setSelectedLesson} setSelectedFiles={setSelectedFiles}/>
       }
       {/* <div className="addCourse__form-stepwrapper-editor" style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent:"center", width: "100%", height: "100%"}}>
         <TipTapButtons editor={editor} formData={formData} setSelectedFiles={setSelectedFiles}/>

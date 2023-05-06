@@ -8,10 +8,12 @@ import AddModule from "./AddModule";
 import AddStepModule from "./AddStepModule";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-svg-icons";
+import { faChartBar } from "@fortawesome/free-regular-svg-icons";
 import { motion } from "framer-motion";
 import { UserContext } from '../context/userContext';
 import { apiCreateCourse } from '../api';
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
+
 
 export default function AddCourse() {
   //token
@@ -47,8 +49,8 @@ export default function AddCourse() {
         return <AddStepModule formData={formData} setFormData={setFormData} setFormStep={setFormStep}/>
       case 2:
         return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
-      // case 3:
-      //   return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
+      case 3:
+        return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       default:
         break;
     }
@@ -71,7 +73,11 @@ export default function AddCourse() {
       icon: faSignature,
     }, 
     {
-      description: "Содержание курса",
+      description: "Добавление модулей и уроков",
+      icon: faChartBar,
+    },
+    {
+      description: "Содержание уроков",
       icon: faKeyboard
     }, 
     {
@@ -84,31 +90,35 @@ export default function AddCourse() {
   const cyrillicToTranslit = new CyrillicToTranslit();
 
   React.useEffect(() => {
-    // console.log(formStep);
-    const step = Array.from(stepsRef.current.children)[formStep];
-    const prevStep = Array.from(stepsRef.current.children)[prevStepRef.current];
-    // console.log(step);
-    // console.log(prevStep);
-    step.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgb(226, 100, 59)';
-    step.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'transparent';
-    step.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
-    step.querySelector('.addCourse__navigation-list-element-logo').style.color = "rgba(255, 255, 255, 1)";
+    console.log(formStep);
+  }, [formStep])
 
-    if(formStep > prevStepRef.current) {
-      console.log('next step');
-      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'rgb(226, 100, 59)';
-      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgb(226, 100, 59)';
-      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.color = "rgba(255, 255, 255, 1)";
-      prevStep.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgb(226, 100, 59)';
-    } else if(formStep < prevStepRef.current) {
-      console.log('prev step');
-      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgba(255, 255, 255, 0.5)';
-      prevStep.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'transparent';
-      prevStep.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+  // React.useEffect(() => {
+  //   // console.log(formStep);
+  //   const step = Array.from(stepsRef.current.children)[formStep];
+  //   const prevStep = Array.from(stepsRef.current.children)[prevStepRef.current];
+  //   // console.log(step);
+  //   // console.log(prevStep);
+  //   step.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgb(226, 100, 59)';
+  //   step.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'transparent';
+  //   step.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+  //   step.querySelector('.addCourse__navigation-list-element-logo').style.color = "rgba(255, 255, 255, 1)";
 
-    }
-    prevStepRef.current = formStep;
-  }, [formStep]);
+  //   if(formStep > prevStepRef.current) {
+  //     console.log('next step');
+  //     prevStep.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'rgb(226, 100, 59)';
+  //     prevStep.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgb(226, 100, 59)';
+  //     prevStep.querySelector('.addCourse__navigation-list-element-logo').style.color = "rgba(255, 255, 255, 1)";
+  //     prevStep.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgb(226, 100, 59)';
+  //   } else if(formStep < prevStepRef.current) {
+  //     console.log('prev step');
+  //     prevStep.querySelector('.addCourse__navigation-list-element-logo').style.border = '2px solid rgba(255, 255, 255, 0.5)';
+  //     prevStep.querySelector('.addCourse__navigation-list-element-logo').style.backgroundColor = 'transparent';
+  //     prevStep.querySelector('.addCourse__navigation-list-element-step-connection').style.backgroundColor = 'rgba(255, 255, 255, 0.5)';
+
+  //   }
+  //   prevStepRef.current = formStep;
+  // }, [formStep]);
 
   React.useEffect(() => {
     console.log(selectedFiles);
@@ -201,7 +211,7 @@ export default function AddCourse() {
                 <div className="addCourse__navigation-list-element-logo" style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)", position: "relative"}}>
                   <FontAwesomeIcon icon={step.icon} />
                 </div>
-                <div className="addCourse__navigation-list-element-step-connection" style={{display: index === stepsArray.length -1 && "none", position: "absolute", top: window.innerWidth < 1439 ? "96%" : "93%", right: window.innerWidth < 1439 ? "9.5%" : "7.5%", width: 4, height: /*"135%"*/ "180%", backgroundColor: "rgba(255, 255, 255, 0.5)"}}></div>
+                {/* <div className="addCourse__navigation-list-element-step-connection" style={{display: index === stepsArray.length -1 && "none", position: "absolute", top: window.innerWidth < 1439 ? "96%" : "93%", right: window.innerWidth < 1439 ? "9.5%" : "7.5%", width: 4, height: "135%" "180%", backgroundColor: "rgba(255, 255, 255, 0.5)"}}></div> */}
               </li>
             })}
 
