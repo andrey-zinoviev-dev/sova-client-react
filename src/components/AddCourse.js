@@ -220,11 +220,12 @@ export default function AddCourse() {
 
           <form className="addCourse__form" onSubmit={(evt) => {
             evt.preventDefault();
+            // console.log(formData);
             // console.log(selectedFiles)
             const form = new FormData();
             form.append("author", JSON.stringify(loggedInUser));
             form.append("course", JSON.stringify(formData.course));
-            form.append("module", JSON.stringify(formData.module));
+            form.append("modules", JSON.stringify(formData.modules));
             // form.append("files", JSON.stringify(selectedFiles));
             
             
@@ -235,10 +236,12 @@ export default function AddCourse() {
             });
 
             // console.log(form);
+
             apiCreateCourse(userToken, form)
             .then((data) => {
               console.log(data);
             });
+
             // apiUploadFilesToCourse(userToken, form)
             // .then(() => {
 

@@ -209,7 +209,7 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                             // console.log('lesson to add to module');
                             const objWithLesson = {};
                             objWithLesson.title = lessonNameRef.current.value;
-                            objWithLesson.module = selectedModule;
+                            objWithLesson.module = {title: selectedModule.title};
                             // console.log(selectedModule);
                             // console.log(objWithLesson);
                             setFormData((prevValue) => {

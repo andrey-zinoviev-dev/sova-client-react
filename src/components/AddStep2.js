@@ -8,6 +8,8 @@ import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSquareCheck } from "@fortawesome/free-regular-svg-icons";
 
 export default function AddStep2({ formData, setFormData, formStep, setFormStep, setSelectedFiles }) {
   //derived state
@@ -153,14 +155,17 @@ export default function AddStep2({ formData, setFormData, formStep, setFormStep,
                 setSelectedModule(moduleLesson.module);
                 setSelectedLesson(moduleLesson);
               }} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", minHeight: 60, padding: "10px 45px", position: "relative"}} key={moduleLesson.title}>
-                <span>{moduleLesson.title}</span>
-                <span>{moduleLesson.module.title}</span>
+                <div>
+                  <span style={{fontWeight: 700, margin: "0 25px 0 0"}}>{moduleLesson.title}</span>
+                  <span style={{color: "rgb(226, 100, 59)"}}>{moduleLesson.module.title}</span>
+                </div>
+                {moduleLesson.layout && <FontAwesomeIcon style={{fontSize: 25, color: "#b0cd37"}} icon={faSquareCheck} />}
               </li>
             })}
           </ul>
           <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", minHeight: 40}}>
             <motion.button onClick={handleBackClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Назад</motion.button>
-            <motion.button onClick={handleNextClick} type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</motion.button>
+            <motion.button type="submit" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{ fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</motion.button>
           </div>
         </div> 
         :
