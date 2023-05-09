@@ -73,15 +73,16 @@ export default function Courses({ setCourseInEdit }) {
   const liBackground = {
     rest: {
       // backgroundColor: "rgb(54, 58, 59)",
-      // boxShadow: "0 0 0px rgba(222,228,67,255)",
+      boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px",
       backgroundColor: "rgb(54, 58, 59)",
-      boxShadow: "0 0 0px #c4d8f7",
+      // boxShadow: "0 0 0px #c4d8f7",
       scale: 1
     },
     hover: {
-      backgroundColor: "#c4d8f7",
-      boxShadow: "0 0 25px #c4d8f7",
-      scale: 1.025
+      // backgroundColor: "#c4d8f7",
+      backgroundColor: "rgb(211, 124, 82)",
+      // boxShadow: "7px 7px 5px #c4d8f7",
+      scale: 1.005
     }
   };
 
@@ -332,7 +333,7 @@ export default function Courses({ setCourseInEdit }) {
           {courses.map((course, index) => {
             return <motion.li onClick={() => {
               showCoursePopup(course, index);
-            }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 450, /*backgroundImage: `url(${course.cover})`, backgroundSize: "cover", backgroundPosition: "center",*/ position: "relative", borderRadius: 12}}>
+            }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 450, backgroundColor: "#393d3e", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 12}}>
         
               <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", boxSizing: "border-box", padding: "20px 35px"}}>
                 <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60}} variants={liContentIndex}>
@@ -477,7 +478,7 @@ export default function Courses({ setCourseInEdit }) {
                   {/* <Link className="popup__modules-list-element-link" to={`courses/${selectedCourse._id}/modules/${module._id}`}>
                     <span>{`0${index + 1} ${module.name}`}</span>
                   </Link> */}
-                  <span>{`0${index + 1} ${module.name}`}</span>
+                  <span>{`0${index + 1} ${module.title}`}</span>
                 </motion.li>
               })}
             </ul> : <ModulesList selectedModule={selectedModule}/>}
