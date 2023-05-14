@@ -74,8 +74,8 @@ function apiGetCourse(courseID, token) {
   })
 }
 
-function apiGetCourseModule(moduleID, token) {
-  return fetch(`${apiAdress}/modules/${moduleID}`, {
+function apiGetLesson(courseID, moduleID, lessonID, token) {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -149,7 +149,7 @@ export {
   apiGetCourse,
   apiCreateCourse,
   apiUploadFilesToCourse,
-  apiGetCourseModule,
+  apiGetLesson,
   apiGetUserMessages,
   apiSendMessage,
 }

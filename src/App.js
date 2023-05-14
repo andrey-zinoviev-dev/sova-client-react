@@ -160,7 +160,7 @@ function App() {
         {/* <Dashboard></Dashboard> */}
         <Routes>
           <Route path='addCourse' element={<AddCourse />}></Route>
-          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule/>}></Route>
+          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule />}></Route>
           <Route path='/' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>

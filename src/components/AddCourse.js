@@ -27,6 +27,7 @@ export default function AddCourse() {
     course: {
       name: "",
       description: "",
+      cover: {},
     },
     modules: [
 
@@ -44,7 +45,7 @@ export default function AddCourse() {
   function renderStep() {
     switch (formStep) {
       case 0:
-        return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
+        return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 1: 
         return <AddStepModule formData={formData} setFormData={setFormData} setFormStep={setFormStep}/>
       case 2:
@@ -90,8 +91,8 @@ export default function AddCourse() {
   const cyrillicToTranslit = new CyrillicToTranslit();
 
   React.useEffect(() => {
-    console.log(formStep);
-  }, [formStep])
+    console.log(formData);
+  }, [formData])
 
   // React.useEffect(() => {
   //   // console.log(formStep);
@@ -120,9 +121,9 @@ export default function AddCourse() {
   //   prevStepRef.current = formStep;
   // }, [formStep]);
 
-  React.useEffect(() => {
-    console.log(selectedFiles);
-  }, [selectedFiles]);
+  // React.useEffect(() => {
+  //   console.log(selectedFiles);
+  // }, [selectedFiles]);
 
   // React.useEffect(() => {
   //   // console.log(selectedFiles);

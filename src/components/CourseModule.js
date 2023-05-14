@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareCaretDown, faBars } from '@fortawesome/free-solid-svg-icons';
-import { apiGetCourseModule, apiGetUserMessages, apiSendMessage } from "../api";
+import { apiGetLesson, apiGetUserMessages, apiSendMessage } from "../api";
 import { UserContext } from '../context/userContext';
 import Chat from './Chat';
 // import { SocketContext } from "../socketio/socketIO";
@@ -88,6 +88,11 @@ export default function CourseModule(props) {
 
   //editor
   const editor = useEditor({
+    editorProps: {
+      attributes: {
+        class: "module-text"
+      },
+    },
     editable,
     extensions: [
       StarterKit,
@@ -111,6 +116,9 @@ export default function CourseModule(props) {
 
   //history
   const location = useLocation();
+  const { state } = location;
+  const { selectedCourse } = state;
+  
   //Context
   const loggedInUser = React.useContext(UserContext);
 
@@ -363,32 +371,41 @@ export default function CourseModule(props) {
   // }, [props.user._id, courseAuthor._id]);
   // console.log(lessonID);
   React.useEffect(() => {
- 
-    if(userToken && loggedInUser._id) {
-      apiGetCourseModule(moduleID, userToken)
-      .then((moduleData) => {
-        // console.log(moduleData);
-        setCourseModule(moduleData);
-        setModuleLesson(moduleData.lessons.find((lesson) => {
-          return lesson._id === lessonID;
-        }))
-        editor.commands.setContent(moduleData.layout);
-        // localStorage.setItem('')
-        // setCourseAuthor(moduleData.course.author);
-        setStudents(moduleData.students);
-      });
-
-      apiGetUserMessages(moduleID, userToken)
-      .then((messagesData) => {
-        setMessages(messagesData);
+    // console.log(userToken);
+    if(loggedInUser._id) {
+      apiGetLesson(courseID, moduleID, lessonID, userToken)
+      .then((doc) => {
+        console.log(doc);
+        editor.commands.setContent(doc.layout);
       })
     }
+    // if(userToken && loggedInUser._id) {
+    //   apiGetCourseModule(moduleID, userToken)
+    //   .then((moduleData) => {
+    //     // console.log(moduleData);
+    //     setCourseModule(moduleData);
+    //     setModuleLesson(moduleData.lessons.find((lesson) => {
+    //       return lesson._id === lessonID;
+    //     }))
+    //     // editor.commands.setContent(moduleData.layout);
+    //     // localStorage.setItem('')
+    //     // setCourseAuthor(moduleData.course.author);
+    //     setStudents(moduleData.students);
+    //   });
 
-  }, [moduleID, userToken, loggedInUser._id, editor]);
+      // apiGetUserMessages(moduleID, userToken)
+      // .then((messagesData) => {
+      //   setMessages(messagesData);
+      // })
+    // }
 
-  React.useEffect(() => {
-    console.log(moduleLesson);
-  }, [moduleLesson]);
+    
+
+  }, [moduleID, loggedInUser._id, editor]);
+
+  // React.useEffect(() => {
+  //   console.log(moduleLesson);
+  // }, [moduleLesson]);
 
   React.useEffect(() => {
     // socket.current = io('http://api.sova-courses.site');
@@ -510,18 +527,25 @@ export default function CourseModule(props) {
           <motion.div variants={textVariants}>
             <div style={{padding: "0 0 0 15px"}}>
               {/* <p>Курс</p> */}
-              <h3>{courseModule._id && courseModule.course.name}</h3>
+              <h3>{selectedCourse.title}</h3>
               <p>Модули</p>
             </div>
 
             <ul style={{padding: 0, listStyle: "none", lineHeight: 2}}>
-              {courseModule._id && courseModule.course.modules.map((module) => {
+              {/* {courseModule._id && courseModule.course.modules.map((module) => {
                 return <motion.li whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} key={module._id} className="side__links-link" style={{fontWeight: 700, borderLeft: module._id === courseModule._id && "3px solid black"}}>
                   <NavLink to={`../courses/${courseID}/modules/${module._id}`} style={{textDecoration: "none", color: "black"}} >
                     {module.name}
 
                   </NavLink>
                 </motion.li>
+              })} */}
+              {selectedCourse.modules.map((module) => {
+                return <li key={module._id}>
+                  <button onClick={() => {}}>
+                    {module.title}
+                  </button>
+                </li>
               })}
             </ul>
           </motion.div>
@@ -542,7 +566,7 @@ export default function CourseModule(props) {
         {!chatIsOpened ?
           <div style={{maxWidth: 768, width: '100%'}}>
             <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>{moduleLesson._id && moduleLesson.title}</h3>
-            <EditorContent editor={editor} />
+            <EditorContent editor={editor} style={{backgroundColor: "transparent", border: "none", boxShadow: "none"}}/>
             {/* <p>{courseModule._id && courseModule.name}</p>
             <p>{courseModule.description}</p>
             <p>Вот на этой картинке можно изучить строение гортани</p>

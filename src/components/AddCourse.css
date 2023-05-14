@@ -79,6 +79,19 @@
     margin: 0 auto 25px 0;
 }
 
+.addForm__first-step-title {
+    min-height: 160px;
+    padding: 0 0 30px 0;
+}
+
+.addForm__first-step-content {
+    margin: 25px 0 auto 0;
+}
+
+.addCourse__form-div {
+    min-height: 80px;
+}
+
 .addCourse__form-input {
     width: 100%;
     box-sizing: border-box;
@@ -222,6 +235,12 @@
 
 }
 
+.module-text {
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
 @media screen and (max-width: 1919px) {
     .addCourse__form {
         padding: 45px 0;
@@ -251,5 +270,18 @@
 
     .addCourse__form-stepwrapper-editor-div {
         max-height: 450px;
+    }
+
+    .addForm__first-step-title {
+        min-height: 140px;
+        padding: 0 0 20px 0;
+    }
+
+    .addForm__first-step-content {
+        margin: 15px 0 0 auto;
+    }
+
+    .addCourse__form-div {
+        min-height: 70px;
     }
 }

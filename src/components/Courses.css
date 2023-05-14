@@ -13,7 +13,8 @@
   max-width: 1280px;
   margin: 0 auto;
   /* padding: 25px; */
-  padding: 40px 25px;
+  padding: 40px 25px; 
+  
 }
 
 .main__courses-list {
@@ -35,6 +36,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 25px;
+  font-family: 'Carlito', sans-serif;
 }
 
 .main__courses-list-element {

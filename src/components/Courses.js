@@ -333,16 +333,16 @@ export default function Courses({ setCourseInEdit }) {
           {courses.map((course, index) => {
             return <motion.li onClick={() => {
               showCoursePopup(course, index);
-            }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 450, backgroundColor: "#393d3e", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 12}}>
+            }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, maxWidth: 250, backgroundColor: "#393d3e", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 12}}>
         
-              <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", boxSizing: "border-box", padding: "20px 35px"}}>
-                <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60}} variants={liContentIndex}>
-                  <div style={{width: 20, height: 3, backgroundColor: "rgb(211, 124, 82)", order: 2, margin: "0 0 0 3px"}}></div>
+              <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", boxSizing: "border-box", padding: "20px 35px"}}>
+                <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60, margin: "0 0 20px 0"}} variants={liContentIndex}>
+                  <div style={{width: 35, height: 3, backgroundColor: "rgb(211, 124, 82)", order: 2, margin: "0 0 0 3px"}}></div>
                   <p style={{margin: 0, fontSize: 36, fontWeight: 500, fontFamily: "Manrope, sans-serif", order: 1, letterSpacing: 2}}>0{index + 1}</p>
                 </motion.div>
-                <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12}} alt={course.title} src={course.cover}></img>
+                <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12, order: 3}} alt={course.title} src={course.cover}></img>
                 {/* <FontAwesomeIcon icon={faMicrophoneLines} style={{fontSize: 36}}/> */}
-                <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between"}}>
+                <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", margin: "0 0 20px 0", textAlign: "left", order: 2, width: "100%", height: 25}}>
                   {/*<motion.button onClick={() => {
                     setSelectedCourse(course);
                     setIsEditCourse(true);
@@ -350,7 +350,7 @@ export default function Courses({ setCourseInEdit }) {
                     <FontAwesomeIcon icon={faPen}/>
                   </motion.button>
                   }*/}
-                  <h3 style={{margin: 0}}>{course.name}</h3>
+                  <h3 style={{margin: 0, width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{course.name}</h3>
                   {/* <p style={{margin: 0}}>{course.description}</p> */}
                   {/*<p className="main__courses-para">{course.description}</p>
                   <span>{index === courses.length - 1 && "последний курс"}</span>
@@ -451,7 +451,7 @@ export default function Courses({ setCourseInEdit }) {
           {/* <div className="popup__modules-course-div">
             <span className="popup__modules-course-span">{}</span>
           </div> */}
-          <img style={{width: "50%", height: "100%", objectFit: "cover"}} src={selectedCourse.cover}></img>
+          <img style={{width: "50%", height: "100%", objectFit: "cover", borderRadius: 12}} alt={selectedCourse.cover} src={selectedCourse.cover}></img>
           <div style={{width: "50%", boxSizing: "border-box", padding: "0 45px", position: "relative"}}>
             <h3 style={{margin: "0 0 30px 0"}} className="popup__modules-headline">{selectedCourse.name}</h3>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
@@ -472,7 +472,7 @@ export default function Courses({ setCourseInEdit }) {
             {!selectedModule._id ? <ul className="popup__modules-list">
               {selectedCourse._id && selectedCourse.modules.map((module, index) => {
                 return <motion.li onClick={() => {
-                  setSelectedModule(module);
+                  setSelectedModule({...module, course: selectedCourse._id});
                 }} className="popup__modules-list-element" whileHover="hover" initial="rest" variants={liMotion} key={module._id}>
                   
                   {/* <Link className="popup__modules-list-element-link" to={`courses/${selectedCourse._id}/modules/${module._id}`}>
@@ -481,7 +481,7 @@ export default function Courses({ setCourseInEdit }) {
                   <span>{`0${index + 1} ${module.title}`}</span>
                 </motion.li>
               })}
-            </ul> : <ModulesList selectedModule={selectedModule}/>}
+            </ul> : <ModulesList  selectedModule={selectedModule} selectedCourse={selectedCourse}/>}
             <p>{selectedCourse.description}</p>
           </div>
 
