@@ -1,6 +1,6 @@
 import './CourseModule.css';
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareCaretDown, faBars } from '@fortawesome/free-solid-svg-icons';
@@ -25,6 +25,8 @@ import { Node, mergeAttributes } from "@tiptap/react";
 // import Messages from './Messages';
 
 export default function CourseModule(props) {
+  //variables
+  // let lessons;
   // const socket = React.useContext(SocketContext);
   const userToken = localStorage.getItem('token');
   const sessionStorage = localStorage.getItem('sessionID');
@@ -40,11 +42,21 @@ export default function CourseModule(props) {
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
   const [adminIsOnline, setAdminIsOnline] = React.useState(false);
   const [userId, setUserId] = React.useState("");
+  // const [lessons, setLessons] = React.useState([]);
 
   const [editable, setEditable] = React.useState(false);
 
+  //location
+  const location = useLocation();
+  const { state } = location;
+  const { selectedCourse } = state;
+
   //variables derived from courseModule state variable
   const admin = courseModule._id ? {...courseModule.course.author, online: adminIsOnline} : {};
+  const module = selectedCourse.modules.find((module) => {
+    return module._id === moduleID;
+  });
+  const lessons = module.lessons;
   // const filteredMessages = messages.filter((message) => {
   //   return message.user._id === studentId;
   // });
@@ -86,6 +98,9 @@ export default function CourseModule(props) {
     },
   });
 
+  //navigate
+  const navigate = useNavigate();
+
   //editor
   const editor = useEditor({
     editorProps: {
@@ -114,11 +129,6 @@ export default function CourseModule(props) {
     return student._id === userId;
   })
 
-  //history
-  const location = useLocation();
-  const { state } = location;
-  const { selectedCourse } = state;
-  
   //Context
   const loggedInUser = React.useContext(UserContext);
 
@@ -375,8 +385,9 @@ export default function CourseModule(props) {
     if(loggedInUser._id) {
       apiGetLesson(courseID, moduleID, lessonID, userToken)
       .then((doc) => {
-        console.log(doc);
-        editor.commands.setContent(doc.layout);
+        const { module, lesson } = doc;
+        console.log(lessons);
+        editor.commands.setContent(lesson.layout);
       })
     }
     // if(userToken && loggedInUser._id) {
@@ -540,10 +551,15 @@ export default function CourseModule(props) {
                   </NavLink>
                 </motion.li>
               })} */}
-              {selectedCourse.modules.map((module) => {
+              {lessons.length > 0  && lessons.map((lesson) => {
                 return <li key={module._id}>
-                  <button onClick={() => {}}>
-                    {module.title}
+                  <button onClick={() => {
+                    navigate(`../courses/${selectedCourse._id}/modules/${module._id}/lessons/${lesson._id}`, {
+                      state: {selectedCourse}
+                    });
+                    window.location.reload(true);
+                  }}>
+                    {lesson.title}
                   </button>
                 </li>
               })}

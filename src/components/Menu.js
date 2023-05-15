@@ -26,9 +26,9 @@ export default function Menu({ user }) {
             </div>
 
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 15}}>
-                <button onClick={addCourse} style={{width: 32, height: 32, fontSize: 24, backgroundColor: "rgba(255, 255, 255, 0)", color: "white", padding: 0, border: "none"}}>
+                {user.admin && <button onClick={addCourse} style={{width: 32, height: 32, fontSize: 24, backgroundColor: "rgba(255, 255, 255, 0)", color: "white", padding: 0, border: "none"}}>
                     <FontAwesomeIcon icon={faFileCirclePlus}/>
-                </button>
+                </button>}
                 <button onClick={openMenu} style={{width: 32, height: 32, backgroundColor: "rgba(255, 255, 255, 0)", color: "white", fontWeight: 700, border: "2px solid rgb(211, 124, 82", borderRadius: "51%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, padding: 0 }}>
                     {user.name[0]}
                 </button>
