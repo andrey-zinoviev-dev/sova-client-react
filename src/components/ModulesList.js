@@ -8,10 +8,10 @@ function ModulesList({selectedModule, selectedCourse}) {
         rest: {border: '2px solid rgba(211, 124, 82, 0)', transition: { ease: "easeInOut", duration: 0.25 }},
         hover: {border: '2px solid rgba(211, 124, 82, 1)', transition: { ease: "easeInOut", duration: 0.25 }},
     }
-    React.useEffect(()=> {
-        console.log(selectedModule);
-        console.log(selectedCourse);
-    }, [selectedModule, selectedCourse])
+    // React.useEffect(()=> {
+    //     console.log(selectedModule);
+    //     console.log(selectedCourse);
+    // }, [selectedModule, selectedCourse])
 
     return (
         <ul style={{listStyle: "none", padding: 0, lineHeight: 2.5}}>

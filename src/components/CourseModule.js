@@ -37,7 +37,7 @@ export default function CourseModule(props) {
   const [courseModule, setCourseModule] = React.useState({});
   const [moduleLesson, setModuleLesson] = React.useState({});
   const [messages, setMessages] = React.useState([]);
-  const [students, setStudents] = React.useState([]);
+  // const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
   const [adminIsOnline, setAdminIsOnline] = React.useState(false);
@@ -56,7 +56,12 @@ export default function CourseModule(props) {
   const module = selectedCourse.modules.find((module) => {
     return module._id === moduleID;
   });
+  const courseAuthor = module.author;
   const lessons = module.lessons;
+  const currentLesson = lessons.find((lesson) => {
+    return lesson._id === lessonID;
+  });
+  let contact;
   // const filteredMessages = messages.filter((message) => {
   //   return message.user._id === studentId;
   // });
@@ -125,9 +130,9 @@ export default function CourseModule(props) {
     // }
   });
 
-  const selectedStudent = students.find((student) => {
-    return student._id === userId;
-  })
+  // const selectedStudent = students.find((student) => {
+  //   return student._id === userId;
+  // });
 
   //Context
   const loggedInUser = React.useContext(UserContext);
@@ -146,9 +151,11 @@ export default function CourseModule(props) {
   };
 
   function filterChatToUser(userId) {
+    contact = userId;
     // console.log(userId);
-    // console.log(userId);
-    setUserId(userId);
+
+    // setUserId(userId);
+    
     // console.log(filteredMessages);
   };
 
@@ -386,7 +393,7 @@ export default function CourseModule(props) {
       apiGetLesson(courseID, moduleID, lessonID, userToken)
       .then((doc) => {
         const { module, lesson } = doc;
-        console.log(lessons);
+        // console.log(lessons);
         editor.commands.setContent(lesson.layout);
       })
     }
@@ -418,84 +425,84 @@ export default function CourseModule(props) {
   //   console.log(moduleLesson);
   // }, [moduleLesson]);
 
-  React.useEffect(() => {
-    // socket.current = io('http://api.sova-courses.site');
-    socket.current = io('http://localhost:3000');
+  // React.useEffect(() => {
+  //   // socket.current = io('http://api.sova-courses.site');
+  //   socket.current = io('http://localhost:3000');
     
-    if(loggedInUser._id && admin._id && students.length > 0) { 
-      // console.log('yes');
+  //   if(loggedInUser._id && admin._id && students.length > 0) { 
+  //     // console.log('yes');
    
-      if(sessionStorage) {
-        socket.current.auth = { localsessionID: sessionStorage };
-        socket.current.connect();
-      };
+  //     if(sessionStorage) {
+  //       socket.current.auth = { localsessionID: sessionStorage };
+  //       socket.current.connect();
+  //     };
 
-      socket.current.emit('userConnected', loggedInUser);
+  //     socket.current.emit('userConnected', loggedInUser);
   
-      socket.current.on('session', ({ sessionID, userID, users }) => {
-        // console.log(sessionID);
-        localStorage.setItem('sessionID', sessionID);
-        socket.current.userID = userID;
-        socket.current.username = loggedInUser.name;
-        if(loggedInUser.admin) {
+  //     socket.current.on('session', ({ sessionID, userID, users }) => {
+  //       // console.log(sessionID);
+  //       localStorage.setItem('sessionID', sessionID);
+  //       socket.current.userID = userID;
+  //       socket.current.username = loggedInUser.name;
+  //       if(loggedInUser.admin) {
           
-          const onlineUsers = users.filter((user) => {
-            return user.online && user.userID !== loggedInUser._id;
-          });
+  //         const onlineUsers = users.filter((user) => {
+  //           return user.online && user.userID !== loggedInUser._id;
+  //         });
 
-          const onlineStudents = students.map((student) => {
-            const onlineStudent = onlineUsers.find((onlineUser) => {
-              return onlineUser.userID === student._id;
-            });
+  //         const onlineStudents = students.map((student) => {
+  //           const onlineStudent = onlineUsers.find((onlineUser) => {
+  //             return onlineUser.userID === student._id;
+  //           });
             
-            return onlineStudent && onlineStudent.userID === student._id ? {...student, online: true} : student; 
-          });
-          setStudents(onlineStudents);
+  //           return onlineStudent && onlineStudent.userID === student._id ? {...student, online: true} : student; 
+  //         });
+  //         setStudents(onlineStudents);
 
-        } else {
+  //       } else {
          
-          const adminOnline = users.find((user) => {
-            return user.userID === admin._id && user.online;
-          });
-          adminOnline && setAdminIsOnline(true);
+  //         const adminOnline = users.find((user) => {
+  //           return user.userID === admin._id && user.online;
+  //         });
+  //         adminOnline && setAdminIsOnline(true);
 
-        }
-      });
+  //       }
+  //     });
   
-      socket.current.on('user is online', (({ userID, username, online}) => {
-        if(loggedInUser.admin) {
+  //     socket.current.on('user is online', (({ userID, username, online}) => {
+  //       if(loggedInUser.admin) {
 
 
-          const onlineStudents = students.map((student) => {
-            return student._id === userID ? {...student, online: true} : student;
-          });
+  //         const onlineStudents = students.map((student) => {
+  //           return student._id === userID ? {...student, online: true} : student;
+  //         });
 
-          setStudents(onlineStudents);
+  //         setStudents(onlineStudents);
       
-        } else {
-          setAdminIsOnline(true);
+  //       } else {
+  //         setAdminIsOnline(true);
 
-        }
+  //       }
         
 
-      }));
+  //     }));
 
-      socket.current.on('private message', (data) => {
-        setMessages((prevValue) => {
-          return [...prevValue, data];
-        });
-      });
+  //     socket.current.on('private message', (data) => {
+  //       setMessages((prevValue) => {
+  //         return [...prevValue, data];
+  //       });
+  //     });
   
-      //remove socket connection on component not rendered
-      return () => {
-        socket.current.off('session');
-        socket.current.off('user is online');
-        socket.current.off('private message');
-        socket.current.close();
-      }
-    }
+  //     //remove socket connection on component not rendered
+  //     return () => {
+  //       socket.current.off('session');
+  //       socket.current.off('user is online');
+  //       socket.current.off('private message');
+  //       socket.current.close();
+  //     }
+  //   }
 
-  }, [sessionStorage, loggedInUser._id, students.length, admin._id]);
+  // }, [sessionStorage, loggedInUser._id, students.length, admin._id]);
 
   // React.useEffect(() => {
   //   console.log(editor, courseModule.layout);
@@ -592,9 +599,9 @@ export default function CourseModule(props) {
           <div style={{maxWidth: 768, width: '100%'}}>
             <h3>Чат здесь</h3>
             <Chat>
-              <Contacts contacts={students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
+              <Contacts courseAuthor={courseAuthor} students={currentLesson.students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
               <div style={{width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden"}}>
-                <Messages messages={messages} selectedStudent={selectedStudent} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
+                <Messages messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               

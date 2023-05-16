@@ -1,14 +1,18 @@
 import React from "react";
 import { UserContext } from "../context/userContext";
 import { motion } from "framer-motion";
-export default function Contacts ({contacts, admin, userId, filterChatToUser}) {
+export default function Contacts ({contacts, admin, filterChatToUser, students, courseAuthor, userId}) {
   const loggedInUser = React.useContext(UserContext);
   // const [contactId, setContactId] = React.useState("");
 
   //functions
-  function showContactId(id) {
-    filterChatToUser(id);
-  };
+  // function showContactId(student) {
+  //   console.log(student);
+  //   // filterChatToUser(id);
+  // };
+
+  //variables
+  let contact = {};
   // React.useEffect(() => {
   //   console.log(userId);
   // }, [userId]);
@@ -33,9 +37,21 @@ export default function Contacts ({contacts, admin, userId, filterChatToUser}) {
           // <li style={{display:"flex", justifyContent:"flex-start", alignItems:"center", padding: "10px 20px", boxSizing: "border-box"}}>
           //   <p style={{margin: 0}}>Пока нет студентов в модуле, но их всегда можно добавить!</p>
           // </li>
-          <p>Тут должен быть список учеников</p>
+          students.length > 0 && students.map((student) => {
+            return <li key={student._id}>
+              <button onClick={() => {
+                filterChatToUser(student);
+                // showContactId(student)
+              }}>{student.name}</button>  
+            </li>
+          })
           : 
-          <p>Тут должен быть админ модуля</p>
+          <li key={courseAuthor._id}>
+            <button onClick={() => {
+              filterChatToUser(courseAuthor);
+              // showContactId(courseAuthor);
+            }}>{courseAuthor.name}</button>
+          </li>
           // <motion.li initial={{backgroundColor: "rgba(255, 255, 255, 0)"}} whileHover={{backgroundColor: "rgba(224, 224, 224, 1)"}} key={admin._id} onClick={() => {
           //   showContactId(admin._id);
           // }} style={{display:"flex", justifyContent:"flex-start", alignItems:"center", padding: "10px 20px", cursor:"pointer", boxSizing: "border-box"}}>
