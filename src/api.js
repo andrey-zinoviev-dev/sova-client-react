@@ -141,6 +141,19 @@ function apiSendMessage(token, message) {
   })
 };
 
+function apiGetAllStudents(token) {
+  return fetch(`${apiAdress}/students`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
 export {
   apiLogin,
   apiRegister,
@@ -152,4 +165,5 @@ export {
   apiGetLesson,
   apiGetUserMessages,
   apiSendMessage,
+  apiGetAllStudents
 }

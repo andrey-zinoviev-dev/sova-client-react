@@ -61,6 +61,7 @@ export default function CourseModule(props) {
   const currentLesson = lessons.find((lesson) => {
     return lesson._id === lessonID;
   });
+  console.log(module);
   let contact;
   // const filteredMessages = messages.filter((message) => {
   //   return message.user._id === studentId;
@@ -599,7 +600,7 @@ export default function CourseModule(props) {
           <div style={{maxWidth: 768, width: '100%'}}>
             <h3>Чат здесь</h3>
             <Chat>
-              <Contacts courseAuthor={courseAuthor} students={currentLesson.students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
+              <Contacts courseAuthor={courseAuthor} students={module.students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
               <div style={{width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%", display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden"}}>
                 <Messages messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>

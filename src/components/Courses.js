@@ -12,7 +12,8 @@ import ModulesList from "./ModulesList";
 // import AddCourse from "./AddCourse";
 import './Courses.css';
 import {  
-  apiGetCourses
+  apiGetCourses,
+  apiGetAllStudents,
 } from '../api';
 import EditCourse from "./EditCourse";
 import SovaLogo from '../images/sova_logo_icon.png';
@@ -22,13 +23,19 @@ export default function Courses({ setCourseInEdit }) {
   const loggedInUser = React.useContext(UserContext);
 
   //state variables
-  const [courses, setCourses] = React.useState([]);
+  const [coursesData, setCoursesData] = React.useState({
+    courses: [],
+    allStudents: [],
+  });
   const [selectedCourse, setSelectedCourse] = React.useState({});
   const [modulesPopupOpened, setModulesPopupOpened] = React.useState(false);
   const [isEditCourse, setIsEditCourse] = React.useState(false);
   const [courseCover, setCourseCover] = React.useState("");
   const [courseIndex, setCourseIndex] = React.useState(0);
   const [selectedModule, setSelectedModule] = React.useState({});
+
+  //derived states
+  let courseSelectTest = {};
 
   //variants
   const spanMotion = {
@@ -230,16 +237,30 @@ export default function Courses({ setCourseInEdit }) {
     const userToken = localStorage.getItem('token');
 
     if(userToken) {
-      apiGetCourses(userToken)
-      .then((data) => {
-        // console.log(data);
-        if(!data) {
-          return;
-        }
-        return setCourses(data);
+      const coursesFromApi = apiGetCourses(userToken)
+      // .then((data) => {
+      //   // console.log(data);
+      //   if(!data) {
+      //     return;
+      //   }
+      //   return setCourses(data);
+      // });
+
+      const allStudentsFromApi = apiGetAllStudents(userToken)
+      // .then((data) => {
+      //   console.log(data);
+      // })
+      Promise.all([coursesFromApi, allStudentsFromApi])
+      .then(([coursesReceived, studentsReceived]) => {
+        setCoursesData({courses: coursesReceived, allStudents: studentsReceived});
+        
       })
     }
   }, []);
+
+  React.useEffect(() => {
+    console.log(coursesData);
+  }, [coursesData]);
 
   return (
     <>
@@ -330,19 +351,20 @@ export default function Courses({ setCourseInEdit }) {
         </ul> */}
 
         <ul ref={ulRef} className="main__courses-list">
-          {courses.map((course, index) => {
-            return <motion.li onClick={() => {
-              showCoursePopup(course, index);
-            }} initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, maxWidth: 250, backgroundColor: "#393d3e", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 12}}>
-        
-              <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", boxSizing: "border-box", padding: "20px 35px"}}>
-                <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60, margin: "0 0 20px 0"}} variants={liContentIndex}>
-                  <div style={{width: 35, height: 3, backgroundColor: "rgb(211, 124, 82)", order: 2, margin: "0 0 0 3px"}}></div>
-                  <p style={{margin: 0, fontSize: 36, fontWeight: 500, fontFamily: "Manrope, sans-serif", order: 1, letterSpacing: 2}}>0{index + 1}</p>
-                </motion.div>
-                <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12, order: 3}} alt={course.title} src={course.cover}></img>
+          {coursesData && coursesData.courses.map((course, index) => {
+            return <motion.li initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, maxWidth: 250, backgroundColor: "#393d3e", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 12}}>
+              <button onClick={() => {
+                showCoursePopup(course, index);
+              }} style={{position: "relative", height: "100%", backgroundColor: "transparent", borderRadius: 12, border: "none", boxSizing: "border-box", padding: "20px 35px"}}>
+                <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center"}}>
+                  <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60, margin: "0 0 20px 0"}} variants={liContentIndex}>
+                    <div style={{width: 35, height: 3, backgroundColor: "rgb(211, 124, 82)", order: 2, margin: "0 0 0 3px"}}></div>
+                    <p style={{margin: 0, fontSize: 36, fontWeight: 500, fontFamily: "Manrope, sans-serif", order: 1, letterSpacing: 2}}>0{index + 1}</p>
+
+                  </motion.div>
+                  <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12, order: 3}} alt={course.title} src={course.cover}></img>
                 {/* <FontAwesomeIcon icon={faMicrophoneLines} style={{fontSize: 36}}/> */}
-                <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", margin: "0 0 20px 0", textAlign: "left", order: 2, width: "100%", height: 25}}>
+                  <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", margin: "0 0 20px 0", textAlign: "left", order: 2, width: "100%", height: 25}}>
                   {/*<motion.button onClick={() => {
                     setSelectedCourse(course);
                     setIsEditCourse(true);
@@ -350,7 +372,7 @@ export default function Courses({ setCourseInEdit }) {
                     <FontAwesomeIcon icon={faPen}/>
                   </motion.button>
                   }*/}
-                  <h3 style={{margin: 0, width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{course.name}</h3>
+                    <h3 style={{margin: 0, width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{course.name}</h3>
                   {/* <p style={{margin: 0}}>{course.description}</p> */}
                   {/*<p className="main__courses-para">{course.description}</p>
                   <span>{index === courses.length - 1 && "последний курс"}</span>
@@ -358,7 +380,7 @@ export default function Courses({ setCourseInEdit }) {
                     showCoursePopup(course);
                   }} className="main_courses-btn">Открыть</motion.button>
                 <span style={{color: "rgb(255 255 255/ 45%)", fontSize: 60}}>{`00${index + 1}`}</span>*/}
-                </motion.div>
+                  </motion.div>
                 {/*index === courses.length - 1 && 
                   <motion.div whileHover="shown" initial="hidden" animate="hidden" variants={addCourseVariants} className="main__courses-list-element-content-add" style={{position: "absolute", top: 0, right: 0, width: 210, height: "100%", display: "flex", alignItems: "center", justifyContent: "center"}}>
                     <Link to={`../addCourse`}>
@@ -371,7 +393,15 @@ export default function Courses({ setCourseInEdit }) {
                   </motion.div>
                   
                 } */}
-              </motion.div>
+                </motion.div>
+              </button>
+              {loggedInUser._id && loggedInUser.admin && <button onClick={() => {
+                setIsEditCourse(true);
+                setSelectedCourse(course);
+              }} style={{position: "absolute", top: "5%", right: "5%", justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12, zIndex: 6}}>
+                <FontAwesomeIcon icon={faPen}/>
+              </button>}
+             
             
             </motion.li>
           })}
@@ -481,7 +511,7 @@ export default function Courses({ setCourseInEdit }) {
                   <span>{`0${index + 1} ${module.title}`}</span>
                 </motion.li>
               })}
-            </ul> : <ModulesList  selectedModule={selectedModule} selectedCourse={selectedCourse}/>}
+            </ul> : <ModulesList selectedModule={selectedModule} selectedCourse={selectedCourse}/>}
             <p>{selectedCourse.description}</p>
           </div>
 
@@ -515,7 +545,8 @@ export default function Courses({ setCourseInEdit }) {
       {isEditCourse && <EditCourse>
         <div style={{textAlign: "left", position: "relative"}}>
           <button onClick={() => {
-            setIsEditCourse(false)
+            setIsEditCourse(false);
+            setSelectedCourse({});
             }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
@@ -531,6 +562,14 @@ export default function Courses({ setCourseInEdit }) {
               <textarea ref={courseDescRef} style={{width: "100%", height: 350, boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
                 console.log(evt.target.value);
               }}></textarea>
+              <div>
+                <h3>Добавить ученика к курсу</h3>
+                <select>
+                  {coursesData.allStudents.map((student) => {
+                    return <option key={student._id} value={student.email}>{student.email}</option>
+                  })}
+                </select>
+              </div>
             </div>
             <div style={{textAlign: "left", margin: "30px 0 0 0"}}>
               <span style={{display: "block"}}>Текущая обложка курса</span>
