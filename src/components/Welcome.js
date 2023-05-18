@@ -77,13 +77,29 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
 
         <Dashboard></Dashboard>
         <div className='welcome__content'>
-          <h1>Здраааааааасте, тут можно стать вокальным экспертом</h1>
-          <p>Проходи курсы по вокалу от Саши Совы здесь, становись экспертом здесь, у себя, везде. А потом тренируй остальных, ибо ты уже эксперт(ка)</p>
-          <div className='welcome__content-buttons-wrapper'>
-            <button className="welcome__button header__button_login" onClick={openWelcomePopupLogin} >Войти</button>
-            <button className="welcome__button header__button_register" onClick={openWelcomePopupRegister} >Зарегистрироваться</button>
-            <span className='welcome__span'>SASHA SOVA INC. BE STELLAR, SING STELLAR</span>
+          <div className='welcome__content-left'>
+            <h1 className='welcome__content-headline'>SOVA<span style={{color: "rgba(252,101,48,75%)"}}>.</span></h1>
+            <span className='welcome__content-left-span'>BE STELLAR, SING STELLAR</span>
           </div>
+        
+          <div className='welcome__content-right'>
+            {/* <span></span> */}
+            <img className='welcome__content-right-img' src='https://soyuzmicrophones.com/wp-content/uploads/2019/03/front-page-hero.jpg'></img>
+            
+            {/* <div> */}
+              
+              {/* <button className="welcome__button header__button_login" onClick={openWelcomePopupLogin} >Войти</button>
+              <button className="welcome__button header__button_register" onClick={openWelcomePopupRegister} >Зарегистрироваться</button> */}
+            {/* </div> */}
+
+          </div>
+
+          <div className='welcome__content-proceed'>
+              <button className='welcome__content-button' onClick={openWelcomePopupLogin}>Войти</button>
+          </div>
+          
+          {/* <p>Проходи курсы по вокалу от Саши Совы здесь, становись экспертом здесь, у себя, везде. А потом тренируй остальных, ибо ты уже эксперт(ка)</p> */}
+
          
         </div>
         <footer className='welcome__footer'>
@@ -91,22 +107,26 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
             <ul className='welcome__links-list'>
               <li className='welcome__links-list-element'>
                 <button className='welcome__links-list-element-button'>
-                  <FontAwesomeIcon className='welcome__links-list-element-icon' icon={faFacebookF} />
+                  Fb.
+                  {/* <FontAwesomeIcon className='welcome__links-list-element-icon' icon={faFacebookF} /> */}
                 </button>
               </li>
               <li className='welcome__links-list-element'>
                 <button className='welcome__links-list-element-button'>
-                  <FontAwesomeIcon className='welcome__links-list-element-icon' icon={faVk} />
+                  Vk.
+                  {/* <FontAwesomeIcon className='welcome__links-list-element-icon' icon={faVk} /> */}
                 </button>
               </li>
               <li className='welcome__links-list-element'>
                 <button className='welcome__links-list-element-button'>
-                  <FontAwesomeIcon className='welcome__links-list-element-icon' icon={faYoutube} />
+                  Yt.
+                  {/* <FontAwesomeIcon className='welcome__links-list-element-icon' icon={faYoutube} /> */}
                 </button>
               </li>
               <li className='welcome__links-list-element'>
                 <button className='welcome__links-list-element-button'>
-                  <FontAwesomeIcon className='welcome__links-list-element-icon' icon={faInstagram} />
+                  In.
+                  {/* <FontAwesomeIcon className='welcome__links-list-element-icon' icon={faInstagram} /> */}
                 </button>
               </li>
             </ul>
