@@ -92,15 +92,16 @@ function App() {
       if(!token) {
         return //process error
       }
+      console.log(token);
       // console.log(token);
-      localStorage.setItem('token', token);
-      //get current user
-      return apiGetCurrentUser(token)
-      .then((userDoc) => {
-        setuser(userDoc);
-        setLoggedIn(true);
-        // navigate('/courses')
-      })
+      // localStorage.setItem('token', token);
+      // //get current user
+      // return apiGetCurrentUser(token)
+      // .then((userDoc) => {
+      //   setuser(userDoc);
+      //   setLoggedIn(true);
+      //   // navigate('/courses')
+      // })
     })
    
   };
@@ -111,15 +112,15 @@ function App() {
       if(!token) {
         return;
       }
-      
-      return apiGetCurrentUser(token)
-      .then((userDoc) => {
-        localStorage.setItem('token', token);
-        // console.log(userDoc);
-        setuser(userDoc);
-        setLoggedIn(true);
-        // navigate('/courses')
-      })
+      console.log(token);
+      // return apiGetCurrentUser(token)
+      // .then((userDoc) => {
+      //   localStorage.setItem('token', token);
+      //   // console.log(userDoc);
+      //   setuser(userDoc);
+      //   setLoggedIn(true);
+      //   // navigate('/courses')
+      // })
 
     })
 

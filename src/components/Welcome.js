@@ -158,43 +158,18 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
         </div>
       </motion.div> */}
       <div className="popup__left-wrapper">
-        <img className="popup__left-logo" src={SovaLogo}></img>
-        <div style={{overflow: "hidden", padding: "5% 10%", boxSizing: "border-box", minHeight: 207}}>
-          <motion.div animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={textAnimationVariants}>
-            <span className="popup__left-span">SOVA STUDIO</span>
-            <h3 className="popup__left-headline">{loginButtonPressed ? "Добро пожаловать! Присоединяйся к семье, стань профессионалом" : "С возвращением! Входи, чтобы поскорее вернуться к занятиям"}</h3>
-
-          </motion.div>
-          <motion.button whileHover={{scale: 1.1, backgroundColor:"rgba(0, 0, 0)", color:"#f8f205", transition: {duration: 0.25}}} whileTap={{scale: 0.85, transition: {duration: 0.15}}} className='popup__left-button' onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</motion.button>
-        </div>
-      </div>
-      <div style={{width: "100%", height: "100%", backdropFilter: "blur(2px)", position: "relative", zIndex: 15}}>
-        <motion.div animate={loginButtonPressed ? "registerForm" : "loginForm" } variants={animationVariants} style={{width: window.innerWidth > 768 ? "100%" : "200%", height: window.innerWidth > 768 ?  "200%" : "100%", display: "flex", flexDirection: window.innerWidth > 768 ? "column" : "row"}}>
-          <div className="" style={{width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
-            <div className="popup__form-wrapper">
-              <button className="popup__close" onClick={closePopups}>Закрыть</button>
-              <h3 className="popup__headline">Вход</h3>
-              <form className="popup__form" onSubmit={ submitloginForm }>
-                <motion.input ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-                <motion.input ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
-                <button className="popup__form-button" type="submit" data-type="login">Войти</button>
-              </form>
-            </div>
-          </div>
-          <div className="" style={{width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
-            <div className="popup__form-wrapper">
-              <button className="popup__close" onClick={closePopups}>Закрыть</button>
-              <h3 className="popup__headline">Регистрация</h3>
-              <form className="popup__form" onSubmit={(evt) => {submitregisterForm(evt)}}>
-                <motion.input ref={registerEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-                <motion.input ref={registerPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
-                <button className="popup__form-button" type="submit" data-type="login">Зарегистрироваться</button>
-              </form>
-            </div>
-          </div>
-        </motion.div>
+        <img className="popup__left-logo" src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
+        <h3 className='popup__left-wrapper-headline'>Войти</h3>
       </div>
 
+      <div className='popup__right-wrapper'>
+        <form className="popup__form" onSubmit={(evt) => {submitregisterForm(evt)}}>
+          <button className="popup__close" onClick={closePopups}>Закрыть</button>
+          <input ref={registerEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
+          <input ref={registerPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+          <button className="popup__form-button" type="submit" data-type="login">Войти</button>
+        </form>
+      </div>
       <div className="popup__overlay">
 
       </div>
