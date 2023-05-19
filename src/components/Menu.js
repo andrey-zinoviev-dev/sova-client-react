@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import MenuSide from "./MenuSide";
 import SovaLogo from '../images/sova_logo_icon.png';
 
-export default function Menu({ user }) {
+export default function Menu({ user, logout, setPopupOpened }) {
     //navigation
     const navigateTo = useNavigate();
     //states
@@ -33,7 +33,7 @@ export default function Menu({ user }) {
                     <span style={{textTransform: "capitalize"}}>{user.email[0]}</span>
                 </button>
             </div>
-            <MenuSide openedMenu={openedMenu} setOpenedMenu={setOpenedMenu}/>
+            <MenuSide openedMenu={openedMenu} setOpenedMenu={setOpenedMenu} setPopupOpened={setPopupOpened} logout={logout}/>
             {/* <ul style={{margin: 0, padding: 0, listStyle: "none"}}>
                 <li>
                     <button>Кнопка пользователя</button>

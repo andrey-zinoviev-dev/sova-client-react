@@ -9,7 +9,7 @@ import EditCourse from "./EditCourse";
 // import Course from "./Course";
 import { UserContext } from '../context/userContext';
 
-export default function Main(props) {
+export default function Main({logout, registerFormSubmit}) {
 
   const userFromContext = React.useContext(UserContext);
 
@@ -23,7 +23,7 @@ export default function Main(props) {
       {/* <Navigation openLoginPopup={props.openLoginPopup} openRegisterPopup={props.openRegisterPopup}></Navigation>
       <Welcome></Welcome> */}
       {/* <Dashboard></Dashboard> */}
-      <Courses></Courses>
+      <Courses logout={logout} registerFormSubmit={registerFormSubmit}></Courses>
     </main>
   )
 }

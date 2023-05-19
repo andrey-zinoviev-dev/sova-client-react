@@ -35,32 +35,33 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
   const registerEmailRef = React.useRef();
   const registerPasswordRef = React.useRef();
 
-  const [welcomePopupOpened, setWelcomePopupOpened] = React.useState(false);
+  const [popupOpened, setPopupOpened] = React.useState(false);
   const [loginButtonPressed, setLoginButtonPressed] = React.useState(true);
   // const [initiateAnimation, setInitiateAnimation] = React.useState(0);
 
   function openWelcomePopupLogin() {
     // console.log('app is rendered');
-    setWelcomePopupOpened(true);
+    setPopupOpened(true);
     setLoginButtonPressed(true);
   };
 
-  function openWelcomePopupRegister() {
-    // console.log('app is rendered');
-    setWelcomePopupOpened(true);
-    setLoginButtonPressed(false);
-  };
+  // function openWelcomePopupRegister() {
+  //   // console.log('app is rendered');
+  //   setWelcomePopupOpened(true);
+  //   setLoginButtonPressed(false);
+  // };
 
   function closePopups() {
-    setWelcomePopupOpened(false);
+    setPopupOpened(false);
     // setLoginButtonPressed(false);
     // setInitiateAnimation(0);
   };
 
   function submitloginForm(evt) {
+    evt.preventDefault();
     // console.log(loginEmailRef.current, loginPasswordRef.current);
     const objToPost = {email: loginEmailRef.current.value, password: loginPasswordRef.current.value};
-    loginFormSubmit(evt, objToPost)
+    loginFormSubmit(objToPost)
   }
 
   function submitregisterForm(evt) {
@@ -134,7 +135,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
         </footer>
         <div className='filter'></div>
     </section>
-    <PopupWithForm welcomePopupOpened={welcomePopupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
+    <PopupWithForm popupOpened={popupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
       {/* <motion.div className="popup__left-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm" } variants={animationVariants}>
         <img className="popup__left-logo" src={SovaLogo}></img>
         <div style={{overflow: "hidden", padding: "5% 10%", boxSizing: "border-box"}}>
@@ -163,10 +164,10 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
       </div>
 
       <div className='popup__right-wrapper'>
-        <form className="popup__form" onSubmit={(evt) => {submitregisterForm(evt)}}>
+        <form className="popup__form" onSubmit={(evt) => {submitloginForm(evt)}}>
           <button className="popup__close" onClick={closePopups}>Закрыть</button>
-          <input ref={registerEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-          <input ref={registerPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+          <input ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
+          <input ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
           <button className="popup__form-button" type="submit" data-type="login">Войти</button>
         </form>
       </div>

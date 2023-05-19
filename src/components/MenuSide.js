@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
-function MenuSide({ openedMenu, setOpenedMenu }) {
+function MenuSide({ openedMenu, setOpenedMenu, logout, setPopupOpened}) {
     //animate objs
     const sideMenuVariants = {
         closed: {
@@ -34,17 +34,22 @@ function MenuSide({ openedMenu, setOpenedMenu }) {
                     </motion.button>
                 </li>
                 <li style={{width: "100%", height: 35}}>
+                    <motion.button onClick={setPopupOpened} whileHover={{color: "#d37c52"}} style={{width: "100%", height: "100%", backgroundColor: "transparent", border: "none", color: "rgb(255,255,255)", fontSize: 18, fontWeight: 700}}>
+                        Добавить ученика к платформе
+                    </motion.button>
+                </li>
+                <li style={{width: "100%", height: 35}}>
                     <motion.button whileHover={{color: "#d37c52"}} style={{width: "100%", height: "100%", backgroundColor: "transparent", border: "none", color: "rgb(255,255,255)", fontSize: 18, fontWeight: 700}}>
                         Настройки
                     </motion.button>
                 </li>
-                <li style={{width: "100%", height: 35}}>
+                {/* <li style={{width: "100%", height: 35}}>
                     <motion.button whileHover={{color: "#d37c52"}} style={{width: "100%", height: "100%", backgroundColor: "transparent", border: "none", color: "rgb(255,255,255)", fontSize: 18, fontWeight: 700}}>
                         Изменить курс
                     </motion.button>
-                </li>
+                </li> */}
                 <li style={{width: "100%", height: 35}}>
-                    <motion.button whileHover={{color: "#d37c52"}} style={{width: "100%", height: "100%", backgroundColor: "transparent", border: "none", color: "rgb(255,255,255)", fontSize: 18, fontWeight: 700}}>
+                    <motion.button onClick={logout} whileHover={{color: "#d37c52"}} style={{width: "100%", height: "100%", backgroundColor: "transparent", border: "none", color: "rgb(255,255,255)", fontSize: 18, fontWeight: 700}}>
                         Выйти
                     </motion.button>
                 </li>

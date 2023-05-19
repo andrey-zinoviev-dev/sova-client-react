@@ -83,8 +83,8 @@ function App() {
   //   // setregisterPopupOpened(false);
   // };
 
-  function loginFormSubmit(evt, formData) {
-    evt.preventDefault();
+  function loginFormSubmit(formData) {
+    
     // console.log(formData);
     apiLogin(formData)
     .then(({token}) => {
@@ -92,16 +92,16 @@ function App() {
       if(!token) {
         return //process error
       }
-      console.log(token);
+      
       // console.log(token);
-      // localStorage.setItem('token', token);
+      localStorage.setItem('token', token);
       // //get current user
-      // return apiGetCurrentUser(token)
-      // .then((userDoc) => {
-      //   setuser(userDoc);
-      //   setLoggedIn(true);
-      //   // navigate('/courses')
-      // })
+      return apiGetCurrentUser(token)
+      .then((userDoc) => {
+        setuser(userDoc);
+        setLoggedIn(true);
+        // navigate('/courses')
+      })
     })
    
   };
@@ -141,6 +141,11 @@ function App() {
     };
   }
 
+  function logout() {
+    setLoggedIn(false);
+    localStorage.removeItem('token');
+  }
+
   // //test
   // function switchToLoggedInComponent() {
   //   // setLoggedIn(true);
@@ -162,7 +167,7 @@ function App() {
         <Routes>
           <Route path='addCourse' element={<AddCourse />}></Route>
           <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule />}></Route>
-          <Route path='/' element={loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
+          <Route path='/' element={loggedIn ? <Main logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
     </div>

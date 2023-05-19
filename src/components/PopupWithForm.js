@@ -1,10 +1,10 @@
 import React from "react";
 import './PopupWithForm.css';
 
-export default function PopupWithForm({ welcomePopupOpened, children }) {
+export default function PopupWithForm({ popupOpened, children }) {
 
     return (
-        <section className={welcomePopupOpened ? "popup popup_login popup_opened" : "popup popup_login"}>
+        <section className={popupOpened ? "popup popup_opened" : "popup"}>
             {children}
         </section >
         

@@ -104,8 +104,11 @@
   align-items: flex-start;
 }
 .welcome__content-headline {
-  margin: 45px 0 0 0;
+  /* margin: 45px 0 0 0;
   font-size: 80px;
+  letter-spacing: 10px; */
+  margin: 120px 0 0 0;
+  font-size: 210px;
   letter-spacing: 10px;
 }
 .welcome__content-buttons-wrapper {
@@ -216,6 +219,11 @@
 }
 
 @media screen and (max-width: 1439px) {
+  .welcome__content-headline {
+    margin: 45px 0 0 0;
+    font-size: 80px;
+    letter-spacing: 10px;
+  }
   .welcome__content-right-img {
     max-width: 360px;
   }
