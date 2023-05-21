@@ -32,6 +32,7 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
   const [selectedModule, setSelectedModule] = React.useState({});
   const [addStudentOpened, setAddStudentOpened] = React.useState(false);
   const [popupOpened, setPopupOpened] = React.useState(false);
+  const [studentsToAddToCourse, setStudentsToAddToCourse] = React.useState(new Set([]));
 
   //derived states
   let courseSelectTest = {};
@@ -173,8 +174,8 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
   }, []);
 
   React.useEffect(() => {
-    console.log(coursesData);
-  }, [coursesData]);
+    console.log(studentsToAddToCourse);
+  }, [studentsToAddToCourse]);
 
   return (
     <>
@@ -268,34 +269,56 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
             <FontAwesomeIcon icon={faXmark} />
           </button>
           <h2 style={{fontSize: 36}}>Редактировать курс</h2>
-          <form style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", textAlign: "left", minHeight: 500}}>
+          <form style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", minHeight: 500}}>
             <div style={{margin: '0 0 30px 0'}}>
               <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-name">Название</label>
               <input ref={courseNameRef} style={{width: "100%", boxSizing: "border-box", borderRadius: 12, padding: "10px 20px", border: "none", fontSize: 16}} id="course-name" value={selectedCourse.name} onChange={() => {}}></input>
             </div>
-            <div>
-              <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-desc">Описание</label>
-              
-              <textarea ref={courseDescRef} style={{width: "100%", height: 350, boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
-                console.log(evt.target.value);
-              }}></textarea>
-              <div>
-                <h3>Добавить ученика к курсу</h3>
-                <select>
-                  {coursesData.allStudents.map((student) => {
-                    return <option key={student._id} value={student.email}>{student.email}</option>
-                  })}
-                </select>
+            <div style={{display: "flex", justifyContent: "space-between", alignItems: "stretch", gap: 50,}}>
+              <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
+                <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-desc">Описание</label>
+                
+                <textarea ref={courseDescRef} style={{resize: "none", width: "100%", height: "100%", boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
+                  console.log(evt.target.value);
+                }}></textarea>
+              </div>
+              <div style={{textAlign: "left", width: "100%"}}>
+                <span style={{display: "block"}}>Текущая обложка курса</span>
+                <img style={{objectFit: "cover", width: "75%", aspectRatio: "16/10", boxSizing: "border-box", borderRadius: 9, border: "2px solid white", margin: "30px 0"}} src={courseCover.length > 0 ? courseCover : selectedCourse.cover} alt="Обложка курса"></img>
+                <button type="button" style={{display: "block", boxSizing: "border-box", padding: "10px 20px", border: "2px solid white", color: "white", borderRadius: 12, backgroundColor: "transparent", fontSize: 18}}>
+                  <label style={{cursor: "pointer"}} htmlFor="course-cover">Изменить обложку</label>
+                </button>
+                <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
               </div>
             </div>
-            <div style={{textAlign: "left", margin: "30px 0 0 0"}}>
-              <span style={{display: "block"}}>Текущая обложка курса</span>
-              <img style={{height: 250, objectFit: "cover", width: 500, boxSizing: "border-box", borderRadius: 9, border: "2px solid white", margin: "30px 0"}} src={courseCover.length > 0 ? courseCover : selectedCourse.cover} alt="Обложка курса"></img>
-              <button type="button" style={{display: "block", boxSizing: "border-box", padding: "10px 20px", border: "2px solid white", color: "white", borderRadius: 12, backgroundColor: "transparent", fontSize: 18}}>
-                <label style={{cursor: "pointer"}} htmlFor="course-cover">Изменить обложку</label>
-              </button>
-              <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
+            <div>
+              <h3>Добавить ученика к курсу</h3>
+              <ul style={{margin: 0, maxWidth: 480, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", boxSizing: "border-box", padding: 0, listStyle: "none", textAlign: "left", lineHeight: 1.5, gap: 20}}>
+                {coursesData.allStudents.map((student, index) => {
+                  return <motion.li whileHover={{backgroundColor: "rgb(255, 255, 255)", color: "rgb(0, 0, 0)"}} 
+                    key={student._id} 
+                    style={{ width: 200, height: 40, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", boxSizing: "border-box", border: "2px solid white", borderRadius: 9}}>
+                    <button type="button" style={{width: "100%", height: "100%", boxSizing: "border-box", padding: 0,}} onClick={(evt) => {
+                      // setStudentClicked(true);!
+                      // evt.target.style.backgroundColor = 'red';
+                      setStudentsToAddToCourse((prevValue) => {
+                        
+                        if(prevValue.has(student._id)) {
+                          // console.log(prevValue);
+                          const setToInsert = new Set(prevValue);
+                          setToInsert.delete(student._id);
+                          return setToInsert;
+                        } else {
+                          return new Set(prevValue).add(student._id);
+                        }
+                        
+                      })
+                    }}>{student.email}</button>
+                  </motion.li>
+                })}
+              </ul>
             </div>
+            <button>Обновить курс</button>
           </form>
         </div>
       </EditCourse>}
