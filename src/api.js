@@ -152,6 +152,21 @@ function apiGetAllStudents(token) {
   .then((res) => {
     return res.json();
   })
+};
+
+function addStudentsToCourse(token, updateData) {
+  // console.log(updateData);
+  return fetch(`${apiAdress}/addStudents`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+    body: JSON.stringify(updateData),
+  })
+  .then((res) => {
+    return res.json();
+  })
 }
 
 export {
@@ -165,5 +180,6 @@ export {
   apiGetLesson,
   apiGetUserMessages,
   apiSendMessage,
-  apiGetAllStudents
+  apiGetAllStudents,
+  addStudentsToCourse
 }

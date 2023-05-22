@@ -12,12 +12,16 @@ import './Courses.css';
 import {  
   apiGetCourses,
   apiGetAllStudents,
+  addStudentsToCourse
 } from '../api';
 import EditCourse from "./EditCourse";
 
 export default function Courses({ setCourseInEdit, logout, registerFormSubmit }) {
   //contexts
   const loggedInUser = React.useContext(UserContext);
+
+  //token
+  const token = localStorage.getItem('token');
 
   //state variables
   const [coursesData, setCoursesData] = React.useState({
@@ -167,15 +171,15 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
       // })
       Promise.all([coursesFromApi, allStudentsFromApi])
       .then(([coursesReceived, studentsReceived]) => {
+        console.log(studentsReceived);
         setCoursesData({courses: coursesReceived, allStudents: studentsReceived});
-        
       })
     }
   }, []);
 
-  React.useEffect(() => {
-    console.log(studentsToAddToCourse);
-  }, [studentsToAddToCourse]);
+  // React.useEffect(() => {
+  //   console.log(studentsToAddToCourse);
+  // }, [studentsToAddToCourse]);
 
   return (
     <>
@@ -291,10 +295,22 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
                 <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
               </div>
             </div>
+            
+            
+          </form>
+          <form onSubmit={(evt) => {
+            evt.preventDefault();
+            addStudentsToCourse(token, {courseId: selectedCourse._id, students: Array.from(studentsToAddToCourse)})
+            .then((data) => {
+              console.log(data);
+            })
+          }}>
             <div>
               <h3>Добавить ученика к курсу</h3>
               <ul style={{margin: 0, maxWidth: 480, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", boxSizing: "border-box", padding: 0, listStyle: "none", textAlign: "left", lineHeight: 1.5, gap: 20}}>
-                {coursesData.allStudents.map((student, index) => {
+                {coursesData.allStudents.filter((student) => {
+                  return !selectedCourse.students.includes(student._id)
+                }).map((student, index) => {
                   return <motion.li whileHover={{backgroundColor: "rgb(255, 255, 255)", color: "rgb(0, 0, 0)"}} 
                     key={student._id} 
                     style={{ width: 200, height: 40, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", boxSizing: "border-box", border: "2px solid white", borderRadius: 9}}>
@@ -317,8 +333,8 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
                   </motion.li>
                 })}
               </ul>
+              <button type="submit">Добавить учеников к курсу</button>
             </div>
-            <button>Обновить курс</button>
           </form>
         </div>
       </EditCourse>}
