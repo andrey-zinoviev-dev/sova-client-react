@@ -114,8 +114,8 @@ function apiUploadFilesToCourse(token, files) {
   })
 }
 
-function apiGetUserMessages(moduleID, token) {
-  return fetch(`${apiAdress}/modules/${moduleID}/messages`, {
+function apiGetConversation(token, userId) {
+  return fetch(`${apiAdress}/contact/${userId}/messages`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -178,7 +178,7 @@ export {
   apiCreateCourse,
   apiUploadFilesToCourse,
   apiGetLesson,
-  apiGetUserMessages,
+  apiGetConversation,
   apiSendMessage,
   apiGetAllStudents,
   addStudentsToCourse

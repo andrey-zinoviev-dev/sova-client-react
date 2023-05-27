@@ -275,30 +275,8 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
           </button>
           <h2 style={{fontSize: 36}}>Редактировать курс</h2>
           <form style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
-            {/* <div style={{margin: '0 0 30px 0'}}>
-              
-            </div> */}
             <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-name">Название</label>
             <input ref={courseNameRef} style={{width: "100%", boxSizing: "border-box", borderRadius: 12, padding: "10px 20px", border: "none", fontSize: 16}} id="course-name" value={selectedCourse.name} onChange={() => {}}></input>
-            {/* <div style={{display: "flex", justifyContent: "space-between", alignItems: "stretch", gap: 50,}}>
-              <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
-                <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-desc">Описание</label>
-                
-                <textarea ref={courseDescRef} style={{resize: "none", width: "100%", height: "100%", boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
-                  console.log(evt.target.value);
-                }}></textarea>
-              </div>
-              <div style={{textAlign: "left", width: "100%"}}>
-                <span style={{display: "block"}}>Текущая обложка курса</span>
-                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", boxSizing: "border-box", borderRadius: 9, border: "2px solid white", margin: "30px 0"}} src={courseCover.length > 0 ? courseCover : selectedCourse.cover} alt="Обложка курса"></img>
-                <button type="button" style={{display: "block", boxSizing: "border-box", padding: "10px 20px", border: "2px solid white", color: "white", borderRadius: 12, backgroundColor: "transparent", fontSize: 18}}>
-                  <label style={{cursor: "pointer"}} htmlFor="course-cover">Изменить обложку</label>
-                </button>
-                <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
-              </div>
-            </div> */}
-            
-            
           </form>
           <form style={{display: "flex", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
             <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
@@ -328,9 +306,9 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
                 });
                 return {...prevValue, courses: updatedCourses}
               });
-              // setSelectedCourse((prevValue) => {
-              //   return {...prevValue, students: updatedCourse.students};
-              // });
+              setSelectedCourse((prevValue) => {
+                return {...prevValue, students: updatedCourse.students};
+              });
             })
           }}>
             <h3>Добавить ученика к курсу</h3>
@@ -339,23 +317,6 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
                 return !selectedCourse.students.includes(student._id)
               }).map((student, index) => {
                 return <Student key={student._id} student={student} setStudentsToAddToCourse={setStudentsToAddToCourse}/>
-                // return <li 
-                //   key={student._id} 
-                //   style={{ width: 200, height: 40, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", boxSizing: "border-box", border: "none", borderRadius: 9}}>
-                //     <motion.button whileHover={{backgroundColor: "rgb(255, 255, 255)", color: "rgb(0, 0, 0)"}} type="button" className="main__courses-student" onClick={(evt) => {
-                //       setStudentsToAddToCourse((prevValue) => {
-                //         if(prevValue.has(student._id)) {
-                         
-                //           const setToInsert = new Set(prevValue);
-                //           setToInsert.delete(student._id);
-                //           return setToInsert;
-                //         } else {
-                //           return new Set(prevValue).add(student._id);
-                //         }
-                        
-                //       })
-                //     }}>{student.email}</motion.button>
-                // </li>
               })}
             </ul>
             <motion.button whileHover={{backgroundColor: "rgba(211, 124, 82, 1)"}} type="submit" style={{margin: "25px 0 0 0", height: 40, boxSizing: "border-box", padding: 10, border: "2px solid rgb(211, 124, 82)", borderRadius: 9, backgroundColor: "rgba(211, 124, 82, 0)", color: "rgb(255, 255, 255)", fontWeight: 700}}>Добавить учеников к курсу</motion.button>

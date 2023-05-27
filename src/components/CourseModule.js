@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareCaretDown, faBars } from '@fortawesome/free-solid-svg-icons';
-import { apiGetLesson, apiGetUserMessages, apiSendMessage } from "../api";
+import { apiGetLesson, apiGetConversation, apiSendMessage } from "../api";
 import { UserContext } from '../context/userContext';
 import Chat from './Chat';
 // import { SocketContext } from "../socketio/socketIO";
@@ -41,7 +41,8 @@ export default function CourseModule(props) {
   const [menuOpened, setMenuOpened] = React.useState(false);
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
   const [adminIsOnline, setAdminIsOnline] = React.useState(false);
-  const [userId, setUserId] = React.useState("");
+  const [userId, setUserId] = React.useState({});
+  
   // const [lessons, setLessons] = React.useState([]);
 
   const [editable, setEditable] = React.useState(false);
@@ -50,7 +51,8 @@ export default function CourseModule(props) {
   const location = useLocation();
   const { state } = location;
   const { selectedCourse } = state;
-  console.log(selectedCourse);
+  // console.log(selectedCourse);
+ 
   //variables derived from courseModule state variable
   const admin = courseModule._id ? {...courseModule.course.author, online: adminIsOnline} : {};
   const module = selectedCourse.modules.find((module) => {
@@ -61,8 +63,8 @@ export default function CourseModule(props) {
   const currentLesson = lessons.find((lesson) => {
     return lesson._id === lessonID;
   });
-  console.log(module);
-  let contact;
+  // console.log(module);
+  let conversation = undefined;
   // const filteredMessages = messages.filter((message) => {
   //   return message.user._id === studentId;
   // });
@@ -151,13 +153,8 @@ export default function CourseModule(props) {
     setChatIsOpened(false);
   };
 
-  function filterChatToUser(userId) {
-    contact = userId;
-    // console.log(userId);
-
-    // setUserId(userId);
-    
-    // console.log(filteredMessages);
+  function filterChatToUser(user) {
+    setUserId(user);
   };
 
   function resetContact() {
@@ -167,14 +164,12 @@ export default function CourseModule(props) {
   function sendMessage(obj, formRef) {
     
     apiSendMessage(userToken, obj)
-    .then((message) => {
-      console.log(message);
-      setMessages((prevValue) => {
-        return [...prevValue, message];
-      });
+    .then((updatedConversation) => {
+      // console.log(message);
+      setMessages(updatedConversation.messages);
 
       //uncomment futher!!!
-      socket.current.emit('message', message);
+      // socket.current.emit('message', message);
       
       formRef.reset();
     });
@@ -513,6 +508,21 @@ export default function CourseModule(props) {
     
   // }, [editor, courseModule.layout])
 
+  React.useEffect(() => {
+    // console.log(userId);
+
+    userId._id && apiGetConversation(userToken, userId._id)
+    .then((data) => {
+      // console.log(data);
+      if(data.message) {
+        return setMessages([]);
+        
+      }
+      return setMessages(data.messages);
+    });
+
+  }, [userId]);
+
   return (
     <motion.section className='module'>
       
@@ -535,7 +545,8 @@ export default function CourseModule(props) {
           </ul>
         </motion.div>
       </motion.div> */}
-      <ModuleSide menuOpened={menuOpened}>
+
+      {/* <ModuleSide menuOpened={menuOpened}>
         <motion.div  style={{position: "relative", padding: "15px 0 0 0", textAlign: "left", boxSizing: "border-box"}}>
           <motion.button whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} onClick={showSideMenu} style={{ width: 60, height: 60, border: "none", backgroundColor: "rgba(255, 255, 255, 0)", position: "absolute", top: 0, right: 0, zIndex: 15}}>
             <FontAwesomeIcon icon={faSquareCaretDown} style={{fontSize: '30px'}}/>
@@ -545,20 +556,13 @@ export default function CourseModule(props) {
           </div>
           <motion.div variants={textVariants}>
             <div style={{padding: "0 0 0 15px"}}>
-              {/* <p>Курс</p> */}
+             
               <h3>{selectedCourse.title}</h3>
               <p>Модули</p>
             </div>
 
             <ul style={{padding: 0, listStyle: "none", lineHeight: 2}}>
-              {/* {courseModule._id && courseModule.course.modules.map((module) => {
-                return <motion.li whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} key={module._id} className="side__links-link" style={{fontWeight: 700, borderLeft: module._id === courseModule._id && "3px solid black"}}>
-                  <NavLink to={`../courses/${courseID}/modules/${module._id}`} style={{textDecoration: "none", color: "black"}} >
-                    {module.name}
 
-                  </NavLink>
-                </motion.li>
-              })} */}
               {lessons.length > 0  && lessons.map((lesson) => {
                 return <li key={module._id}>
                   <button onClick={() => {
@@ -574,7 +578,8 @@ export default function CourseModule(props) {
             </ul>
           </motion.div>
         </motion.div>
-      </ModuleSide>
+      </ModuleSide> */}
+
       <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center'}} initial={"closed"} className='module__content'>
         <div>
           <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
@@ -606,38 +611,6 @@ export default function CourseModule(props) {
                 <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               
-              {/* <ul style={{minHeight: 210, margin: 0, minWidth: 210, borderRight: '1px solid rgba(193,200,205, 0.7)', padding: 0}}>
-                {loggedInUser.admin? 
-                  students.length > 0 && students.map((student) => {
-                    return <li key={student._id} style={{display: "flex", alignItems: "center", boxSizing: "border-box"}}>
-                      <button onClick={() => {
-                        filterChatToUser(student._id)
-                      }} style={{cursor:"pointer", width: "100%", padding: "5px 15px", backgroundColor: "transparent", border: "none", borderBottom: "1px solid lightgrey", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box"}}>
-                        <div style={{position: "relative"}}>
-                          <img style={{maxWidth: 50, borderRadius: "51%"}} src='https://images.assetsdelivery.com/compings_v2/thesomeday123/thesomeday1231709/thesomeday123170900021.jpg'></img>
-                          <span style={{position: "absolute", bottom: 5, right: 5, minWidth: 10, minHeight: 10, borderRadius: 9, backgroundColor: student.online ? "yellowgreen": '#fe4a29'}}></span>
-                        </div>
-                        <p>{student.name}</p>
-                      </button>
-                    </li>
-                  })
-                  :
-                  <li style={{display: "flex", alignItems: "center", boxSizing: "border-box"}}>
-                    <button onClick={() => {
-                      filterChatToUser(admin._id)
-                    }} style={{cursor:"pointer", width: "100%", padding: "5px 15px", backgroundColor: "transparent", border: "none", borderBottom: "1px solid lightgrey", display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box"}}>
-                      <div style={{position: "relative"}}>
-                        <img style={{maxWidth: 50, borderRadius: "51%"}} src='https://images.assetsdelivery.com/compings_v2/thesomeday123/thesomeday1231709/thesomeday123170900021.jpg'></img>
-                        <span style={{position: "absolute", bottom: 5, right: 5, minWidth: 10, minHeight: 10, borderRadius: 9, backgroundColor: admin.online ? "green" : '#fe4a29'}}></span>
-                      </div>
-                      <p>{admin.name}</p>
-                    </button>
-                  </li>
-                }
-              </ul>
-              <div>
-                {studentId.length > 0 ? <form><button>Отправить</button></form> : <p>Выберите чат, чтобы написать</p>}
-              </div> */}
             </Chat>
           </div>
         }

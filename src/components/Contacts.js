@@ -1,4 +1,5 @@
 import React from "react";
+import Contact from "./Contact";
 import { UserContext } from "../context/userContext";
 import { motion } from "framer-motion";
 export default function Contacts ({contacts, admin, filterChatToUser, students, courseAuthor, userId}) {
@@ -16,7 +17,7 @@ export default function Contacts ({contacts, admin, filterChatToUser, students, 
   // React.useEffect(() => {
   //   console.log(userId);
   // }, [userId]);
-  
+  // console.log(students);
   return (
     <div style={{minWidth: window.innerWidth > 767 && 200, borderRight: "1px solid lightgrey", width: window.innerWidth < 768 && userId.length > 0 ? "0%" : "100%", overflow: "hidden"}}>
       <ul style={{listStyle: "none", margin: 0, padding: 0, boxSizing: "border-box"}}>
@@ -38,20 +39,22 @@ export default function Contacts ({contacts, admin, filterChatToUser, students, 
           //   <p style={{margin: 0}}>Пока нет студентов в модуле, но их всегда можно добавить!</p>
           // </li>
           students.length > 0 && students.map((student) => {
-            return <li key={student._id}>
-              <button onClick={() => {
-                filterChatToUser(student);
-                // showContactId(student)
-              }}>{student.name}</button>  
-            </li>
+            // return <li key={student._id}>
+            //   <button onClick={() => {
+            //     filterChatToUser(student);
+               
+            //   }}>{student.name}</button>  
+            // </li>
+            return <Contact key={student._id} contact={student} filterChatToUser={filterChatToUser}/>
           })
           : 
-          <li key={courseAuthor._id}>
-            <button onClick={() => {
-              filterChatToUser(courseAuthor);
-              // showContactId(courseAuthor);
-            }}>{courseAuthor.name}</button>
-          </li>
+          <Contact key={courseAuthor._id} contact={courseAuthor._id}/>
+          // <li key={courseAuthor._id}>
+          //   <button onClick={() => {
+          //     filterChatToUser(courseAuthor);
+             
+          //   }}>{courseAuthor.name}</button>
+          // </li>
           // <motion.li initial={{backgroundColor: "rgba(255, 255, 255, 0)"}} whileHover={{backgroundColor: "rgba(224, 224, 224, 1)"}} key={admin._id} onClick={() => {
           //   showContactId(admin._id);
           // }} style={{display:"flex", justifyContent:"flex-start", alignItems:"center", padding: "10px 20px", cursor:"pointer", boxSizing: "border-box"}}>
