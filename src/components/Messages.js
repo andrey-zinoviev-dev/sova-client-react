@@ -1,10 +1,11 @@
 import React from "react";
+import { UserContext } from "../context/userContext";
 import { apiGetConversation } from "../api";
 // import { apiSendMessage } from "../api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 export default function Messages ({ conversation, messages, selectedStudent, admin, moduleID, userId, user, resetContact }) {
-  // const userToken = localStorage.getItem('token');
+  const loggedInUser = React.useContext(UserContext);
 
   //refs
   const ulRef = React.useRef();
@@ -32,10 +33,13 @@ export default function Messages ({ conversation, messages, selectedStudent, adm
   //     ulRef.current.scrollTo({top: 900, left:0, behavior: "smooth"});
   //   }
   // }, [userId]);
+  React.useEffect(() => {
+    console.log(userId);
+  }, [userId])
   
-  // React.useEffect(() => {
-  //   console.log(userId);
-  // }, [userId])
+  React.useEffect(() => {
+    console.log(messages);
+  }, [messages])
 
   return (
     <>
@@ -56,7 +60,7 @@ export default function Messages ({ conversation, messages, selectedStudent, adm
               //   {message.text}
               // </li>
               // :
-              return <li key={message._id} /*style={{alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 300, maxHeight:300, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", overflow: "hidden"}}*/>
+              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start"}}/*style={{alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 300, maxHeight:300, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", overflow: "hidden"}}*/>
                  {/* <ul style={{width: "100%", height: "100%", padding: 0}}>
                   {message.files.map((file, index) => {
                     return <li key={Date.parse(new Date())} style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>

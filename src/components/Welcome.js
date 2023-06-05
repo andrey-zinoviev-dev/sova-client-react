@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 import Dashboard from './Dashboard';
 import PopupWithForm from './PopupWithForm';
 
-import SovaLogo from '../images/sova_logo_icon.png';
+import SovaLogo from '../images/Rectangle_12.png';
 import './Welcome.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faVk, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons';
@@ -78,14 +78,20 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
 
         <Dashboard></Dashboard>
         <div className='welcome__content'>
-          <div className='welcome__content-left'>
+          <div style={{maxWidth: 420, textAlign: "left", margin: "0 0 0 15%"}}>
+            <h1 style={{fontSize: 84, margin: 0, textTransform: "uppercase"}}>sasha sova</h1>
+            <button onClick={() => {
+              setPopupOpened(true);
+            }} style={{minWidth: 180, minHeight: 45, padding: 0, border: "2px solid white", borderRadius: 9, backgroundColor: "transparent", color: "white", margin: "15px 0 0 0"}}>войти</button>
+          </div>
+          {/* <div className='welcome__content-left'>
             <h1 className='welcome__content-headline'>SOVA<span style={{color: "rgba(252,101,48,75%)"}}>.</span></h1>
             <span className='welcome__content-left-span'>BE STELLAR, SING STELLAR</span>
-          </div>
+          </div> */}
         
-          <div className='welcome__content-right'>
+          {/* <div className='welcome__content-right'> */}
             {/* <span></span> */}
-            <img className='welcome__content-right-img' src='https://soyuzmicrophones.com/wp-content/uploads/2019/03/front-page-hero.jpg'></img>
+            {/* <img className='welcome__content-right-img' src='https://soyuzmicrophones.com/wp-content/uploads/2019/03/front-page-hero.jpg'></img> */}
             
             {/* <div> */}
               
@@ -95,14 +101,14 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
 
           </div>
 
-          <div className='welcome__content-proceed'>
+          {/* <div className='welcome__content-proceed'>
               <button className='welcome__content-button' onClick={openWelcomePopupLogin}>Войти</button>
-          </div>
+          </div> */}
           
           {/* <p>Проходи курсы по вокалу от Саши Совы здесь, становись экспертом здесь, у себя, везде. А потом тренируй остальных, ибо ты уже эксперт(ка)</p> */}
 
          
-        </div>
+        {/* </div> */}
         <footer className='welcome__footer'>
           <nav className='welcome__footer-nav'>
             <ul className='welcome__links-list'>
@@ -133,7 +139,8 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
             </ul>
           </nav>
         </footer>
-        <div className='filter'></div>
+        <img src={SovaLogo} style={{position: "absolute", top: 0, left: "20%", width: "100%", height: "100%", objectFit: "cover"}}></img>
+        {/* <div className='filter'></div> */}
     </section>
     <PopupWithForm popupOpened={popupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
       {/* <motion.div className="popup__left-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm" } variants={animationVariants}>

@@ -26,12 +26,13 @@
   justify-content: space-between;
   gap: 10px;
   font-size: 18px;
+  font-family: 'Carlito', sans-serif;
 }
 
 .header__nav-list-element-link {
   text-decoration: none;
   color: rgba(255, 255, 255, 1);
-  font-weight: 700;
+  /* font-weight: 700; */
   transition: color 0.5s ease-in-out;
 }
 

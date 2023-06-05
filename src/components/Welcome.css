@@ -3,7 +3,8 @@
   /* background-image: url(https://sun1-99.userapi.com/0XTa_dZrKLlSYyJ55tiU4MGpkPS2K6sjmjMxyA/VrplHgNDx3Y.jpg); */
   /* background-size: cover;
   background-position: center; */
-  background-color: #424856;
+  /* background-color: #424856; */
+  background-color: black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -92,7 +93,8 @@
   z-index: 2;
   display: flex;
   justify-content: space-between;
-  align-items: stretch;
+  /* align-items: stretch; */
+  align-items: center;
   box-sizing: border-box;
   padding: 0 10%;
   /* max-width: 720px; */

@@ -48,7 +48,7 @@ export default function Contacts ({contacts, admin, filterChatToUser, students, 
             return <Contact key={student._id} contact={student} filterChatToUser={filterChatToUser}/>
           })
           : 
-          <Contact key={courseAuthor._id} contact={courseAuthor._id}/>
+          <Contact key={courseAuthor._id} contact={courseAuthor} filterChatToUser={filterChatToUser}/>
           // <li key={courseAuthor._id}>
           //   <button onClick={() => {
           //     filterChatToUser(courseAuthor);

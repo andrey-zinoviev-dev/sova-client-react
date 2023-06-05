@@ -58,7 +58,7 @@ export default function CourseModule(props) {
   const module = selectedCourse.modules.find((module) => {
     return module._id === moduleID;
   });
-  const courseAuthor = module.author;
+  const courseAuthor = selectedCourse.author;
   const lessons = module.lessons;
   const currentLesson = lessons.find((lesson) => {
     return lesson._id === lessonID;
