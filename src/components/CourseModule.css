@@ -1,5 +1,6 @@
 .module {
   /* background-color: #d37c52; */
+  background-color: black;
   display: flex;
   min-height: 100vh;
   /* padding: 1% 1% 1% 0; */
@@ -14,7 +15,8 @@
   top: 0;
   left: 0;
   height: 100%;
-  background-color: #d37c52;
+  background-color: #292A2F;
+  /* background-color: #d37c52; */
 }
 
 .module__menu_opened {
@@ -26,7 +28,7 @@
   box-sizing: border-box;
   padding: 0;
   border-radius: 9px 0 0 9px;
-  background-color: white;
+  /* background-color: white; */
   padding: 5% 15%;
   text-align: left;
   font-family: 'Monda', sans-serif;

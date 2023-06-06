@@ -1,9 +1,23 @@
 .module__side {
-  background-color: #d37c52;
+  /* background-color: #d37c52; */
+  background-color: #292A2F;
   position: fixed;
   height: 100%;
   width: 310px;
   z-index: 30;
+}
+
+.module__side-button {
+  background-color: transparent;
+  
+}
+
+.module__side-button svg path {
+  transition: all 0.25s ease-in-out;
+}
+
+.module__side-button:hover svg path {
+  fill: white;
 }
 
 @media screen and (max-width: 767px) {
