@@ -1,13 +1,15 @@
 .lesson__div-chat {
-  border: 1px solid #2a2e37;
+  border: 2px solid rgba(93, 176, 199, 75%);
+  /* border: 1px solid #2a2e37; */
   border-radius: 9px;
-  background-color: #f4f3f8;
+  /* background-color: #f4f3f8; */
   display: flex;
   justify-content: space-between;
   align-items: stretch;
   box-sizing: border-box;
   min-height: 420px;
   overflow: hidden;
+  box-shadow: 10px 10px 15px rgba(93, 176, 199, 35%)
   /* padding: 2em 0; */
   
 }
