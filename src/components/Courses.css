@@ -297,6 +297,9 @@
   .main_courses-wrapper {
     /* margin: 20% 30% 0 0; */
   }
+  .main__courses-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
   /* .main__courses-span {
     left: 60px;
   } */

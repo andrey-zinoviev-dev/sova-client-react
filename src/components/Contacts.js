@@ -21,7 +21,7 @@ export default function Contacts ({contacts, admin, filterChatToUser, students, 
   // }, [userId]);
   // console.log(students);
   return (
-    <div style={{/*minWidth: window.innerWidth > 767 && 200, width: window.innerWidth < 768 && userId.length > 0 ? "0%" : "100%",*/ width: 280, backgroundColor: "#1F1F21", border: "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: 20}}>
+    <div className="lesson__div-chat-contacts" style={{/*minWidth: window.innerWidth > 767 && 200, width: window.innerWidth < 768 && userId.length > 0 ? "0%" : "100%",*/ width: 230, backgroundColor: "#1F1F21", border: "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: 20, boxSizing: "border-box", padding: "15px 0"}}>
       <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 15, minWidth: 200}}>
         <img style={{width: 40, aspectRatio: "1/1", borderRadius: "51%", objectFit: "cover"}} src={Avatar} alt="аватар"></img>
         <h3 style={{color: "white", margin: 0}}>Контакты</h3>

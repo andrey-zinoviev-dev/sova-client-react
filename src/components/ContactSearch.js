@@ -1,16 +1,14 @@
 import React from "react";
-import SearchPic from '../images/magnifying-glass-solid_1.png'
+import SearchPic from '../images/magnifying-glass-solid_1.png';
+import './ContactSearch.css';
 export default function ContactSearch() {
   return (
-    <form style={{width: 200, height: 30}} onSubmit={(evt) => {
+    <form className="lesson__div-chat-contacts-form" style={{width: 200, height: 30, position: "relative"}} onSubmit={(evt) => {
       evt.preventDefault();
       console.log('ues');
     }}>
-      <div style={{position: "relative"}}>
-        <img src={SearchPic} alt="лупа"></img>
-        <input style={{borderRadius: 15, width: "100%", height: "100%", boxSizing: "border-box"}} placeholder="Поиск"></input>
-      </div>
-      
+      <img style={{aspectRatio: "1/1", width: 15, position: "absolute", top: 7, left: 10}} src={SearchPic} alt="лупа"></img>
+      <input className="lesson__div-chat-contacts-form-input" style={{borderRadius: 15, width: "100%", height: "100%", boxSizing: "border-box", padding: "0 0 0 35px", backgroundColor: "#292A2F", border: "none"}} placeholder="Поиск"></input>
     </form>
   )
 };

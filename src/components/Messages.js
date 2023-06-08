@@ -44,11 +44,11 @@ export default function Messages ({ conversation, messages, selectedStudent, adm
   return (
     <>
       {userId._id && 
-        <div style={{width: "100%", boxSizing: "border-box", padding: "15px 20px", borderBottom: "1px solid lightgrey"}}>
-          <button style={{backgroundColor: "transparent", border: "none", color: "rgb(211, 124, 82)", fontSize: 15}} onClick={resetContact}>
+        <div style={{width: "100%", boxSizing: "border-box", padding: "15px 20px", borderBottom: "1px solid lightgrey", display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
+          <button style={{backgroundColor: "transparent", border: "none", color: "rgb(93, 176, 199)", fontSize: 18, margin: "3px 10px 0 0"}} onClick={resetContact}>
             <FontAwesomeIcon icon={faArrowLeft} />
           </button>
-          <h3 style={{margin: 0}}>{user.admin ? userId.email : admin && admin.name}</h3>
+          <h3 style={{margin: 0}}>{userId._id && userId.email}</h3>
         </div>
       }
        {userId._id ?
@@ -60,7 +60,7 @@ export default function Messages ({ conversation, messages, selectedStudent, adm
               //   {message.text}
               // </li>
               // :
-              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start"}}/*style={{alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 300, maxHeight:300, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", overflow: "hidden"}}*/>
+              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start", width: 160, minHeight: 40, backgroundColor: message.user === loggedInUser._id ? "#5DB0C7" : "#2D2C32", border: "none", borderRadius: 15, boxSizing: "content-box", padding: "5px 0 5px 15px", display: "flex", justifyContent: "flex-start", alignItems: "center"}}/*style={{alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 300, maxHeight:300, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", overflow: "hidden"}}*/>
                  {/* <ul style={{width: "100%", height: "100%", padding: 0}}>
                   {message.files.map((file, index) => {
                     return <li key={Date.parse(new Date())} style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
