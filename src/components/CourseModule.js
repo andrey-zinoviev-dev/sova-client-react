@@ -26,7 +26,8 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 // import Messages from './Messages';
 
-export default function CourseModule(props) {
+export default function CourseModule({ socket }) {
+  console.log(socket);
   //variables
   // let lessons;
   // const socket = React.useContext(SocketContext);
@@ -167,11 +168,17 @@ export default function CourseModule(props) {
     
     apiSendMessage(userToken, obj)
     .then((updatedConversation) => {
+      const { lastMessage } = updatedConversation;
+      setMessages((prevValue) => {
+        return [...prevValue, lastMessage];
+      });
+      // console.log(addedMessage);
       // console.log(message);
-      setMessages(updatedConversation.messages);
+      // setMessages(updatedConversation.messages);
 
       //uncomment futher!!!
-      // socket.current.emit('message', message);
+      socket.emit('message', lastMessage);
+      // socket.current.emit('message', lastMessage);
       
       formRef.reset();
     });
@@ -223,7 +230,7 @@ export default function CourseModule(props) {
   }
 
   //socket io ref
-  const socket = React.useRef(null);
+  // const socket = React.useRef(null);
   
   //functions
   // function updateFormData(evt, user) {

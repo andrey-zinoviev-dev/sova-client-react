@@ -9,7 +9,7 @@ import EditCourse from "./EditCourse";
 // import Course from "./Course";
 import { UserContext } from '../context/userContext';
 
-export default function Main({logout, registerFormSubmit}) {
+export default function Main({socket, logout, registerFormSubmit}) {
 
   const userFromContext = React.useContext(UserContext);
 

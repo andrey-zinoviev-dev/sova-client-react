@@ -1,6 +1,7 @@
 import './App.css';
 import React, {useState, useEffect, useRef } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
+import { socket } from './socketio/socketIO';
 import Welcome from './components/Welcome';
 import Main from './components/Main';
 // import Login from './components/Login';
@@ -34,6 +35,10 @@ function App() {
   
   //useEffect
   useEffect(() => {
+    //functions inside effect
+    function onMessage(message) {
+      console.log(message);
+    }
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
     const localsessionID = localStorage.getItem('sessionID');
@@ -48,9 +53,16 @@ function App() {
         // console.log(userFetched);
         setuser(userFetched);
         setLoggedIn(true);
+   
+        socket.connect();
+        socket.emit('user connected', userFetched);
       });
 
-      
+      socket.on('private message', (data) => {
+        // console.log(data);
+        onMessage(data);
+      });
+
       // const fetchedCourses = apiGetCourses(userToken)
       // .then((coursesFetched) => {
       //   return coursesFetched;
@@ -71,6 +83,10 @@ function App() {
 
       // });
       
+    };
+    return () => {
+      socket.disconnect();
+      // socket.off('message', onMessage);
     };
 
   }, []);
@@ -166,7 +182,7 @@ function App() {
         {/* <Dashboard></Dashboard> */}
         <Routes>
           <Route path='addCourse' element={<AddCourse />}></Route>
-          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule />}></Route>
+          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule socket={socket} />}></Route>
           <Route path='/' element={loggedIn ? <Main logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
