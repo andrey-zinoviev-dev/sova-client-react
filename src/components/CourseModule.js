@@ -16,7 +16,7 @@ import Contacts from './Contacts';
 import MessageForm from './MessageForm';
 import Messages from './Messages';
 import ModuleSide from './ModuleSide';
-
+import SelectedFiles from "./SelectedFiles";
 import { NavLink, useLocation } from "react-router-dom";
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -27,7 +27,7 @@ import { Node, mergeAttributes } from "@tiptap/react";
 // import Messages from './Messages';
 
 export default function CourseModule({ socket }) {
-  console.log(socket);
+  // console.log(socket);
   //variables
   // let lessons;
   // const socket = React.useContext(SocketContext);
@@ -49,6 +49,7 @@ export default function CourseModule({ socket }) {
   // const [lessons, setLessons] = React.useState([]);
 
   const [editable, setEditable] = React.useState(false);
+  const [selectedFiles, setSelectedFiles] = React.useState([]);
 
   //location
   const location = useLocation();
@@ -531,6 +532,22 @@ export default function CourseModule({ socket }) {
   // }, [editor, courseModule.layout])
 
   React.useEffect(() => {
+    //functions in effect
+    function showMessage(data) {
+      setMessages((prevValue) => {
+        return [...prevValue, data];
+      })
+    };
+
+    socket.on('private message', showMessage);
+
+    return () => {
+      socket.off('private message', showMessage);
+    };
+
+  }, [])
+
+  React.useEffect(() => {
     // console.log(userId);
 
     userId._id && apiGetConversation(userToken, userId._id)
@@ -707,12 +724,11 @@ export default function CourseModule({ socket }) {
           </div>
           :
           <div style={{maxWidth: 768, width: '100%'}}>
-            <h3>Чат здесь</h3>
             <Chat>
               <Contacts courseAuthor={courseAuthor} students={selectedCourse.students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
               <div style={{/*width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%",*/ width: "calc(100% - 230px)", maxHeight: 420, display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden", backgroundColor: "#1A191E", color: "white"}}>
-                <Messages messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
-                <MessageForm sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
+                <Messages selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
+                <MessageForm setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               
             </Chat>
@@ -720,7 +736,7 @@ export default function CourseModule({ socket }) {
         }
       </motion.div>
       
-      
+      <SelectedFiles selectedFiles={selectedFiles}/>
       {/* <p>Модуль {module.name}</p>
       <p>{module.description}</p>
       <ul>

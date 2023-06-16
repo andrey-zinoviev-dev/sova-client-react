@@ -28,7 +28,8 @@ function App() {
   // const [registerPopupOpened, setregisterPopupOpened] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setuser] = useState({});
-  const [courses, setCourses] = useState([]);
+  // const [messages, setMessages] = useState([]);
+  // const [courses, setCourses] = useState([]);
 
   //useNavigate
   // const navigate = useNavigate();
@@ -38,7 +39,7 @@ function App() {
     //functions inside effect
     function onMessage(message) {
       console.log(message);
-    }
+    };
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
     const localsessionID = localStorage.getItem('sessionID');
@@ -58,10 +59,10 @@ function App() {
         socket.emit('user connected', userFetched);
       });
 
-      socket.on('private message', (data) => {
-        // console.log(data);
-        onMessage(data);
-      });
+      // socket.on('private message', (data) => {
+      //   // console.log(data);
+      //   onMessage(data);
+      // });
 
       // const fetchedCourses = apiGetCourses(userToken)
       // .then((coursesFetched) => {
@@ -86,7 +87,7 @@ function App() {
     };
     return () => {
       socket.disconnect();
-      // socket.off('message', onMessage);
+      // socket.off('private message', onMessage);
     };
 
   }, []);
