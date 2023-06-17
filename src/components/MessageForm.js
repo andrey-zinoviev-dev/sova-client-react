@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faPaperclip, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 
-export default function MessageForm({ setSelectedFiles, sendMessage, userId, userToken, moduleID, user }) {
+export default function MessageForm({ selectedFiles, setSelectedFiles, sendMessage, userId, userToken, moduleID, user }) {
   //states
   // const [selectedFiles, setSelectedFiles] = React.useState([]);
   // const [emptyMessageInput, setEmptyMessageInput] = React.useState("");
@@ -35,9 +35,9 @@ export default function MessageForm({ setSelectedFiles, sendMessage, userId, use
     formData.append("user", user._id);
  
     //uncomment futher!!!
-    // Array.from(selectedFiles).forEach((file) => {
-    //   formData.append("files", file);
-    // });
+    Array.from(selectedFiles).forEach((file) => {
+      formData.append("files", file);
+    });
 
     // console.log('message shall be sent here');
     // const obj = {text: inputRef.current.value, user: user._id, to: userId, moduleID: moduleID, file: selectedFile};
