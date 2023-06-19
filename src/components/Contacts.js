@@ -2,7 +2,7 @@ import React from "react";
 import Contact from "./Contact";
 import ContactSearch from './ContactSearch';
 import { UserContext } from "../context/userContext";
-import Avatar from '../images/IMG-20230525-WA0014 (1).jpg'
+import Avatar from '../images/IMG-20230525-WA0014 (1).jpg';
 import { motion } from "framer-motion";
 export default function Contacts ({contacts, admin, filterChatToUser, students, courseAuthor, userId}) {
   const loggedInUser = React.useContext(UserContext);

@@ -59,7 +59,7 @@ export default function Messages ({ selectedFiles, conversation, messages, selec
       }
        {userId._id ?
         
-          <ul ref={ulRef} style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", height: "calc(768px - 130px)", gap: 20, overflowY: "auto"}}>
+          <ul className='lesson__div-chat-conversation-messages' ref={ulRef} style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", gap: 20, overflowY: "auto"}}>
             {messages.length > 0 ? messages.map((message) => {
               // return message.files.length === 0 ?
               // <li key={message._id} style={{backgroundColor: message.user === user._id ? "#d37c52" : "white", alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 35, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 20px", boxSizing: "border-box"}}>

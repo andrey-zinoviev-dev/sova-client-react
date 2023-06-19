@@ -177,3 +177,16 @@
   border: none;
   font-size: 18px;
 }
+
+.lesson__div-chat-conversation-messages {
+  height: calc(768px - 131px);
+}
+
+@media screen and (max-width: 1439px) {
+  .lesson__div-chat {
+    height: 540px
+  }
+  .lesson__div-chat-conversation-messages {
+    height: calc(540px - 131px);
+  }
+}

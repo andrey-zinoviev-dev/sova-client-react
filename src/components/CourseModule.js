@@ -538,14 +538,25 @@ export default function CourseModule({ socket }) {
         return [...prevValue, data];
       })
     };
+      
+    function showConnectedUser(data) {
+      console.log(data);
+      console.log(loggedInUser);
+    };
 
-    socket.on('private message', showMessage);
+    if(loggedInUser._id) {
+      socket.on('private message', showMessage);
+      socket.on('show connected user', showConnectedUser)
+    }
+
+    // socket.on('show connected user', showConnectedUser)
 
     return () => {
       socket.off('private message', showMessage);
+      socket.off('show connected user', showConnectedUser);
     };
 
-  }, [])
+  }, [loggedInUser])
 
   React.useEffect(() => {
     // console.log(userId);
@@ -701,7 +712,7 @@ export default function CourseModule({ socket }) {
         <p style={{color: "white", fontWeight: 700, textTransform: "uppercase", rotate: "-90deg", letterSpacing: 5, margin: "auto 0"}}>меню</p>
       </ModuleSide>
 
-      <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between"}} initial={"closed"} className='module__content'>
+      <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "flex-start"}} initial={"closed"} className='module__content'>
         <div>
           <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
             {window.innerWidth < 768 && <li>
@@ -726,7 +737,7 @@ export default function CourseModule({ socket }) {
           <div style={{maxWidth: 1024, width: '100%', margin: "auto 0"}}>
             <Chat>
               <Contacts courseAuthor={courseAuthor} students={selectedCourse.students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
-              <div style={{/*width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%",*/ width: "calc(100% - 230px)", /*maxHeight: 420,*/ display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden", backgroundColor: "#1A191E", color: "white"}}>
+              <div className='lesson__div-chat-conversation' style={{/*width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%",*/ width: "calc(100% - 230px)", /*maxHeight: 420,*/ display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden", backgroundColor: "#1A191E", color: "white"}}>
                 <Messages selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
