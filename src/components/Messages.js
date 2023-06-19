@@ -45,7 +45,7 @@ export default function Messages ({ selectedFiles, conversation, messages, selec
   return (
     <>
       {userId._id && 
-        <div style={{width: "100%", boxSizing: "border-box", padding: "15px 20px", borderBottom: "1px solid lightgrey", display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
+        <div style={{width: "100%", boxSizing: "border-box", padding: "15px 20px", borderBottom: "1px solid lightgrey", display: "flex", alignItems: "center", justifyContent: "flex-start", backgroundColor: "rgb(31, 31, 33)"}}>
           <button style={{backgroundColor: "transparent", border: "none", color: "rgb(93, 176, 199)", fontSize: 18, margin: "3px 10px 0 0"}} onClick={resetContact}>
             <FontAwesomeIcon icon={faArrowLeft} />
           </button>
@@ -59,14 +59,14 @@ export default function Messages ({ selectedFiles, conversation, messages, selec
       }
        {userId._id ?
         
-          <ul ref={ulRef} style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", height: 410, gap: 20, overflowY: "auto"}}>
+          <ul ref={ulRef} style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", height: "calc(768px - 130px)", gap: 20, overflowY: "auto"}}>
             {messages.length > 0 ? messages.map((message) => {
               // return message.files.length === 0 ?
               // <li key={message._id} style={{backgroundColor: message.user === user._id ? "#d37c52" : "white", alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 35, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 20px", boxSizing: "border-box"}}>
               //   {message.text}
               // </li>
               // :
-              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start", width: 160, minHeight: 40, backgroundColor: message.user === loggedInUser._id ? "#5DB0C7" : "#2D2C32", border: "none", borderRadius: 15, boxSizing: "content-box", padding: "5px 0 5px 15px", display: "flex", justifyContent: "flex-start", alignItems: "center"}}/*style={{alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 300, maxHeight:300, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "flex-start", justifyContent: "center", boxSizing: "border-box", overflow: "hidden"}}*/>
+              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start", /*width: 160,*/ maxWidth: 210, backgroundColor: message.user === loggedInUser._id ? "#5DB0C7" : "#2D2C32", border: "none", borderRadius: 15, boxSizing: "content-box", padding: "5px 15px 5px 15px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-start", alignItems: "flex-start"}}>
                  {/* <ul style={{width: "100%", height: "100%", padding: 0}}>
                   {message.files.map((file, index) => {
                     return <li key={Date.parse(new Date())} style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
@@ -74,7 +74,16 @@ export default function Messages ({ selectedFiles, conversation, messages, selec
                     </li>
                   })}
                 </ul> */}
-                {message.text}
+                <p style={{margin: 0}}>{message.text}</p>
+                {message.files.length > 0 && 
+                  <ul style={{padding: 0, listStyle: "none", margin: "0 0 10px 0"}}>
+                    {message.files.map((file) => {
+                      return <li key={file.path} style={{display: "flex", alignSelf: "center", justifyContent: "center"}}>
+                        {file.mimetype.includes('image') && <img style={{width: "100%", borderRadius: 9}} src={file.path} alt={file.originalname} />}
+                        {file.mimetype.includes('audio') && <audio controls src={file.path} style={{maxWidth: 300}}/>}
+                      </li>
+                    })}
+                  </ul>}
               </li>
             }) 
             : 

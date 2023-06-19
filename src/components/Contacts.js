@@ -21,13 +21,13 @@ export default function Contacts ({contacts, admin, filterChatToUser, students, 
   // }, [userId]);
   // console.log(students);
   return (
-    <div className="lesson__div-chat-contacts" style={{/*minWidth: window.innerWidth > 767 && 200, width: window.innerWidth < 768 && userId.length > 0 ? "0%" : "100%",*/ width: 230, backgroundColor: "#1F1F21", border: "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: 20, boxSizing: "border-box", padding: "15px 0"}}>
+    <div className="lesson__div-chat-contacts" style={{/*minWidth: window.innerWidth > 767 && 200, width: window.innerWidth < 768 && userId.length > 0 ? "0%" : "100%",*/ width: 230, backgroundColor: "#1F1F21", border: "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: 20, boxSizing: "border-box", padding: "15px 0", borderRight: "2px solid rgba(93, 176, 199, 0.5)"}}>
       <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 15, minWidth: 200}}>
         <img style={{width: 40, aspectRatio: "1/1", borderRadius: "51%", objectFit: "cover"}} src={Avatar} alt="аватар"></img>
         <h3 style={{color: "white", margin: 0}}>Контакты</h3>
       </div>
       <ContactSearch />
-      <ul style={{listStyle: "none", margin: 0, padding: 0, boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", gap: 20}}>
+      <ul style={{listStyle: "none", margin: "25px 0 0 0", padding: 0, boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", gap: 20}}>
         {loggedInUser.admin ?
           // contacts.length > 0 ? contacts.map((contact) => {
           //   return <motion.li initial={{backgroundColor: "rgba(255, 255, 255, 0)"}} whileHover={{backgroundColor: "rgba(224, 224, 224, 1)"}} key={contact._id} onClick={() => {

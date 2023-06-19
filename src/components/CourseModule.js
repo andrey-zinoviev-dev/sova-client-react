@@ -701,7 +701,7 @@ export default function CourseModule({ socket }) {
         <p style={{color: "white", fontWeight: 700, textTransform: "uppercase", rotate: "-90deg", letterSpacing: 5, margin: "auto 0"}}>меню</p>
       </ModuleSide>
 
-      <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center'}} initial={"closed"} className='module__content'>
+      <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between"}} initial={"closed"} className='module__content'>
         <div>
           <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
             {window.innerWidth < 768 && <li>
@@ -723,10 +723,10 @@ export default function CourseModule({ socket }) {
             <img style={{maxWidth: 768}} className='module__content-img' src={courseModule._id && courseModule.images[0]} alt="Гортань спереди"></img> */}
           </div>
           :
-          <div style={{maxWidth: 768, width: '100%'}}>
+          <div style={{maxWidth: 1024, width: '100%', margin: "auto 0"}}>
             <Chat>
               <Contacts courseAuthor={courseAuthor} students={selectedCourse.students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
-              <div style={{/*width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%",*/ width: "calc(100% - 230px)", maxHeight: 420, display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden", backgroundColor: "#1A191E", color: "white"}}>
+              <div style={{/*width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%",*/ width: "calc(100% - 230px)", /*maxHeight: 420,*/ display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden", backgroundColor: "#1A191E", color: "white"}}>
                 <Messages selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>

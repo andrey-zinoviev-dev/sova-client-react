@@ -94,17 +94,20 @@ export default function MessageForm({ selectedFiles, setSelectedFiles, sendMessa
       </motion.div> */}
   
       {userId._id && 
-          <form encType="multipart/form-data" ref={formRef} style={{position: "relative", width: "100%", boxSizing: "border-box", padding: "0 20px 15px 20px", display: "flex", alignItems: "center", justifyContent: "space-between"}} onSubmit={submitMessage}>
+          <form encType="multipart/form-data" ref={formRef} style={{position: "relative", width: "100%", boxSizing: "border-box", padding: "15px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgb(31, 31, 33)"}} onSubmit={submitMessage}>
             <input style={{display: "none"}} onChange={handleFileChange} type="file" name="file" ref={inputFileRef} multiple="multiple"></input>
-            <input ref={inputRef} style={{outline:"none", width: "100%", maxWidth: 420, height: "100%", padding: "0 0 0 25px", border:"none", boxSizing: "border-box", borderRadius: 9, backgroundColor: "#26272C", caretColor: "rgb(199, 199, 201)", color: "white"}} placeholder="Напишите что-нибудь хорошее..." name="text"></input>
-            <button type="button" onClick={() => {
-              openFileUpload();
-            }} style={{minWidth: 40, minHeight: 40, backgroundColor: "#5DB0C7", borderRadius: "51%", padding: 0, border: "none", top: 5, right: 10}}>
-              <FontAwesomeIcon style={{fontSize: 17, color: "white"}} icon={faPaperclip} />
-            </button>
-            <button type="submit" style={{minWidth: 40, minHeight: 40, backgroundColor: "#5DB0C7", borderRadius: "51%", padding: 0, border: "none", top: 5, right: 10}}>
-              <FontAwesomeIcon style={{fontSize: 17, color: "white", margin: "0 3px 0 0"}} icon={faPaperPlane} />
-            </button>
+            <input ref={inputRef} style={{outline:"none", width: "100%", maxWidth: 580, height: "100%", padding: "0 0 0 25px", border:"none", boxSizing: "border-box", borderRadius: 9, backgroundColor: "#26272C", caretColor: "rgb(199, 199, 201)", color: "white"}} placeholder="Напишите что-нибудь хорошее..." name="text"></input>
+            <div style={{display: "flex", alignItems: "center", gap: 20}}>
+              <button type="button" onClick={() => {
+                openFileUpload();
+              }} style={{minWidth: 40, minHeight: 40, backgroundColor: "#5DB0C7", borderRadius: "51%", padding: 0, border: "none", top: 5, right: 10}}>
+                <FontAwesomeIcon style={{fontSize: 17, color: "white"}} icon={faPaperclip} />
+              </button>
+              <button type="submit" style={{minWidth: 40, minHeight: 40, backgroundColor: "#5DB0C7", borderRadius: "51%", padding: 0, border: "none", top: 5, right: 10}}>
+                <FontAwesomeIcon style={{fontSize: 17, color: "white", margin: "0 3px 0 0"}} icon={faPaperPlane} />
+              </button>
+            </div>
+
             {/* <button onClick={openFileUpload} type="button" style={{position: "absolute", top: 5, left: 10, minWidth: 30, minHeight: 30, border: "none", backgroundColor: "rgba(234, 162, 127, 0.3)", padding: 0, boxSizing: "border-box", borderRadius: 5, display: "flex", justifyContent: "center", alignItems: "center"}}>
               <FontAwesomeIcon style={{fontSize: 20, color: "rgb(234, 162, 127)"}} icon={faPaperclip} />
             </button> */}

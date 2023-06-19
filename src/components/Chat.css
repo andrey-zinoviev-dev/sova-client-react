@@ -7,7 +7,8 @@
   justify-content: space-between;
   align-items: stretch;
   box-sizing: border-box;
-  min-height: 420px;
+  /* min-height: 420px; */
+  height: 768px;
   overflow: hidden;
   box-shadow: 10px 10px 15px rgba(93, 176, 199, 35%)
   /* padding: 2em 0; */
