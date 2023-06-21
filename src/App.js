@@ -36,10 +36,6 @@ function App() {
   
   //useEffect
   useEffect(() => {
-    //functions inside effect
-    function onMessage(message) {
-      console.log(message);
-    };
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
     const localsessionID = localStorage.getItem('sessionID');
@@ -86,7 +82,9 @@ function App() {
       
     };
     return () => {
-      socket.disconnect();
+      // socket.disconnect();
+      socket.close();
+      // socket.off('user connected', userFetched);
       // socket.off('private message', onMessage);
     };
 
@@ -184,7 +182,7 @@ function App() {
         <Routes>
           <Route path='addCourse' element={<AddCourse />}></Route>
           <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule socket={socket} />}></Route>
-          <Route path='/' element={loggedIn ? <Main logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
+          <Route path='/' element={loggedIn ? <Main socket={socket} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
     </div>

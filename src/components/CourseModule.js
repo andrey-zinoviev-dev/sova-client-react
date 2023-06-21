@@ -50,6 +50,8 @@ export default function CourseModule({ socket }) {
 
   const [editable, setEditable] = React.useState(false);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [students, setStudents] = React.useState([]);
+  const [courseAuthor, setCourseAuthor] = React.useState({});
 
   //location
   const location = useLocation();
@@ -62,7 +64,7 @@ export default function CourseModule({ socket }) {
   const module = selectedCourse.modules.find((module) => {
     return module._id === moduleID;
   });
-  const courseAuthor = selectedCourse.author;
+  // const courseAuthor = selectedCourse.author;
   const lessons = module.lessons;
   const currentLesson = lessons.find((lesson) => {
     return lesson._id === lessonID;
@@ -406,6 +408,12 @@ export default function CourseModule({ socket }) {
     
   // }, [props.user._id, courseAuthor._id]);
   // console.log(lessonID);
+
+  React.useEffect(() => {
+    setCourseAuthor(selectedCourse.author);
+    setStudents(selectedCourse.students);
+  }, []);
+
   React.useEffect(() => {
     // console.log(userToken);
     if(loggedInUser._id) {
@@ -533,20 +541,80 @@ export default function CourseModule({ socket }) {
 
   React.useEffect(() => {
     //functions in effect
+    // function showOnlineUsers(data) {
+    //   console.log(data);
+    // };
+
     function showMessage(data) {
       setMessages((prevValue) => {
         return [...prevValue, data];
       })
     };
-      
+
+    function showAllOnlineUsers(data) {
+      if(loggedInUser.admin) {
+        const studentsOnline = data.filter((user) => {
+          return user.admin === false;
+        });
+        console.log(studentsOnline);
+        // setStudents((prevValue) => {
+        //   return prevValue.map((prevStudent) => {
+        //     const foundStudent = studentsOnline.find((student) => {
+        //       return student.userId === prevStudent._id;
+        //     });
+        //     return foundStudent ? {...prevStudent, online: true} : prevStudent;
+        //     // return studentsOnline.includes(prevStudent) ? {...prevStudent, online: true} : prevStudent;
+        //   })
+        // })
+
+      } else {
+        const adminsOnline = data.filter((user) => {
+          return user.admin === true;
+        });
+        console.log(adminsOnline);
+        // setCourseAuthor((prevValue) => {
+        //   const foundAdmin = adminsOnline.find((admin) => {
+        //     return admin.userId === prevValue._id;
+        //   });
+        //   if(foundAdmin) {
+        //     return {...prevValue, online: true};
+        //   }
+        // })
+      }
+    }
+
     function showConnectedUser(data) {
+      // console.log(data);
+      // console.log(loggedInUser);
+      if(loggedInUser.admin) {
+        // console.log(selectedCourse.students);
+        setStudents((prevValue) => {
+          return prevValue.map((prevStudent) => {
+            return prevStudent._id === data._id ? {...prevStudent, online: true} : prevStudent;
+          });
+        });
+      } else {
+        // console.log(selectedCourse.author);
+        setCourseAuthor((prevValue) => {
+          return {...prevValue, online: true};
+        })
+      }
+    };
+
+    function showDisconnectEvent(data) {
       console.log(data);
-      console.log(loggedInUser);
     };
 
     if(loggedInUser._id) {
       socket.on('private message', showMessage);
-      socket.on('show connected user', showConnectedUser)
+      // socket.on('test', showOnlineUsers)
+      socket.on('show connected user', showConnectedUser);
+      socket.on('show all connected users', showAllOnlineUsers);
+      // socket.on('user to disconnect', showDisconnectEvent);
+      // socket.on('disconnect', () => {
+      //   console.log('evt');
+      // })
+      // socket.on('disconnect', showDisconnectEvent)
     }
 
     // socket.on('show connected user', showConnectedUser)
@@ -554,9 +622,14 @@ export default function CourseModule({ socket }) {
     return () => {
       socket.off('private message', showMessage);
       socket.off('show connected user', showConnectedUser);
+      socket.off('show all connected users', showAllOnlineUsers);
+      // socket.off('user to disconnect', showDisconnectEvent)
+
     };
 
-  }, [loggedInUser])
+  }, [loggedInUser]);
+
+  // console.log(selectedCourse);
 
   React.useEffect(() => {
     // console.log(userId);
@@ -736,7 +809,7 @@ export default function CourseModule({ socket }) {
           :
           <div style={{maxWidth: 1024, width: '100%', margin: "auto 0"}}>
             <Chat>
-              <Contacts courseAuthor={courseAuthor} students={selectedCourse.students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
+              <Contacts courseAuthor={courseAuthor} students={students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
               <div className='lesson__div-chat-conversation' style={{/*width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%",*/ width: "calc(100% - 230px)", /*maxHeight: 420,*/ display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden", backgroundColor: "#1A191E", color: "white"}}>
                 <Messages selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>

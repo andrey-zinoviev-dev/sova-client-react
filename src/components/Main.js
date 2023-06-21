@@ -23,7 +23,7 @@ export default function Main({socket, logout, registerFormSubmit}) {
       {/* <Navigation openLoginPopup={props.openLoginPopup} openRegisterPopup={props.openRegisterPopup}></Navigation>
       <Welcome></Welcome> */}
       {/* <Dashboard></Dashboard> */}
-      <Courses logout={logout} registerFormSubmit={registerFormSubmit}></Courses>
+      <Courses socket={socket} logout={logout} registerFormSubmit={registerFormSubmit}></Courses>
     </main>
   )
 }

@@ -17,7 +17,7 @@ import {
 import EditCourse from "./EditCourse";
 import Student from "./Student";
 
-export default function Courses({ setCourseInEdit, logout, registerFormSubmit }) {
+export default function Courses({ socket, setCourseInEdit, logout, registerFormSubmit }) {
   //contexts
   const loggedInUser = React.useContext(UserContext);
 
@@ -177,6 +177,19 @@ export default function Courses({ setCourseInEdit, logout, registerFormSubmit })
       })
     }
   }, []);
+
+  // React.useEffect(() => {
+  //   function showOnlineUsers (data) {
+  //     console.log(data.filter((user) => {
+  //       return user.admin !== true;
+  //     }));
+  //   }
+  //   socket.on('online users', showOnlineUsers);
+
+  //   return () => {
+  //     socket.off('online users', showOnlineUsers);
+  //   }
+  // }, []);
 
   React.useEffect(() => {
     console.log(coursesData);
