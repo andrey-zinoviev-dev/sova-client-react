@@ -26,7 +26,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 // import Messages from './Messages';
 
-export default function CourseModule({ socket }) {
+export default function CourseModule({ onlineUsers, socket }) {
   // console.log(socket);
   //variables
   // let lessons;
@@ -410,6 +410,7 @@ export default function CourseModule({ socket }) {
   // console.log(lessonID);
 
   React.useEffect(() => {
+
     setCourseAuthor(selectedCourse.author);
     setStudents(selectedCourse.students);
   }, []);
@@ -540,61 +541,50 @@ export default function CourseModule({ socket }) {
   // }, [editor, courseModule.layout])
 
   React.useEffect(() => {
-    //functions in effect
-    // function showOnlineUsers(data) {
-    //   console.log(data);
-    // };
+    //show online users
+    if(loggedInUser.admin) {
+      const onlineStudents = onlineUsers.filter((onlineUser) => {
+        return onlineUser.admin !== true;
+      });
+      setStudents((prevValue) => {
+        return prevValue.map((updateStudent) => {
+          const foundOnlineStudent = onlineStudents.find((onlineStudent) => {
+            return onlineStudent.userId === updateStudent._id;
+          })
+          return foundOnlineStudent ? {...updateStudent, online: true} : updateStudent;
+          // return onlineStudents.includes(updateStudent) ? {...updateStudent, online: true} : updateStudent;
+        })
+      });
 
+    } else {
+      const onlineAdmins = onlineUsers.filter((onlineUser) => {
+        return onlineUser.admin !== false;
+      });
+      setCourseAuthor((prevValue) => {
+        const foundOnlineAdmin = onlineAdmins.find((onlineAdmin) => {
+          return onlineAdmin.userId === prevValue._id;
+        });
+        return foundOnlineAdmin ? {...prevValue, online: true} : prevValue;
+      })
+    }
+  }, [loggedInUser, onlineUsers])
+
+  React.useEffect(() => {
+    //functions in effect
     function showMessage(data) {
       setMessages((prevValue) => {
         return [...prevValue, data];
       })
     };
 
-    function showAllOnlineUsers(data) {
-      if(loggedInUser.admin) {
-        const studentsOnline = data.filter((user) => {
-          return user.admin === false;
-        });
-        console.log(studentsOnline);
-        // setStudents((prevValue) => {
-        //   return prevValue.map((prevStudent) => {
-        //     const foundStudent = studentsOnline.find((student) => {
-        //       return student.userId === prevStudent._id;
-        //     });
-        //     return foundStudent ? {...prevStudent, online: true} : prevStudent;
-        //     // return studentsOnline.includes(prevStudent) ? {...prevStudent, online: true} : prevStudent;
-        //   })
-        // })
-
-      } else {
-        const adminsOnline = data.filter((user) => {
-          return user.admin === true;
-        });
-        console.log(adminsOnline);
-        // setCourseAuthor((prevValue) => {
-        //   const foundAdmin = adminsOnline.find((admin) => {
-        //     return admin.userId === prevValue._id;
-        //   });
-        //   if(foundAdmin) {
-        //     return {...prevValue, online: true};
-        //   }
-        // })
-      }
-    }
-
     function showConnectedUser(data) {
-      // console.log(data);
-      // console.log(loggedInUser);
       if(loggedInUser.admin) {
-        // console.log(selectedCourse.students);
         setStudents((prevValue) => {
           return prevValue.map((prevStudent) => {
             return prevStudent._id === data._id ? {...prevStudent, online: true} : prevStudent;
           });
         });
       } else {
-        // console.log(selectedCourse.author);
         setCourseAuthor((prevValue) => {
           return {...prevValue, online: true};
         })
@@ -603,40 +593,40 @@ export default function CourseModule({ socket }) {
 
     function showDisconnectEvent(data) {
       console.log(data);
+      if(data && data.admin) {
+        setCourseAuthor((prevValue) => {
+          return {...prevValue, online: false};
+        })
+      } else if(data && !data.admin){
+        setStudents((prevStudents) => {
+          const updatedStudents = prevStudents.map((prevStudent) => {
+            return prevStudent._id === data.userId ? {...prevStudent, online: false} : prevStudent;
+          });
+
+          return updatedStudents;
+
+        });
+      }
     };
 
     if(loggedInUser._id) {
       socket.on('private message', showMessage);
-      // socket.on('test', showOnlineUsers)
       socket.on('show connected user', showConnectedUser);
-      socket.on('show all connected users', showAllOnlineUsers);
-      // socket.on('user to disconnect', showDisconnectEvent);
-      // socket.on('disconnect', () => {
-      //   console.log('evt');
-      // })
-      // socket.on('disconnect', showDisconnectEvent)
+      socket.on('user to disconnect', showDisconnectEvent)
     }
-
-    // socket.on('show connected user', showConnectedUser)
 
     return () => {
       socket.off('private message', showMessage);
       socket.off('show connected user', showConnectedUser);
-      socket.off('show all connected users', showAllOnlineUsers);
-      // socket.off('user to disconnect', showDisconnectEvent)
+      socket.off('user to disconnect', showDisconnectEvent)
 
     };
 
   }, [loggedInUser]);
 
-  // console.log(selectedCourse);
-
   React.useEffect(() => {
-    // console.log(userId);
-
     userId._id && apiGetConversation(userToken, userId._id)
     .then((data) => {
-      // console.log(data);
       if(data.message) {
         return setMessages([]);
         
@@ -649,26 +639,6 @@ export default function CourseModule({ socket }) {
   return (
     <motion.section className='module'>
       
-      {/* <motion.div className='module__menu' initial="closed" animate={menuOpened ? "opened" : "closed"} variants={menuVariants}>
-        <div style={{position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", margin: "0 0 20px 0", minHeight: 59}}>
-          <motion.img initial="closed" animate={menuOpened ? "opened" : "closed"} variants={imgVariants} style={{maxWidth: '30px', margin: "0px 0px 0px 20px"}} src={SovaLogo} alt="Логотип"></motion.img>
-          <motion.button whileHover={{backgroundColor: "rgba(255, 255, 255, 1)"}} onClick={showSideMenu} style={{backgroundColor: "rgba(255, 255, 255, 0)", border: "none"}}>
-            <FontAwesomeIcon icon={faSquareCaretDown} style={{fontSize: '30px'}}/>
-          </motion.button>
-        </div>
-        
-        <motion.div  variants={sideContentVariants} style={{width: 360, display: "flex", opacity: menuOpened ? 1 : 0, flexDirection: "column", alignItems: "flex-start", boxSizing: "border-box", fontWeight: 700}}>
-          <motion.p variants={linkVariants} style={{padding: '0 5%'}}>Курс</motion.p>
-          <motion.h3 variants={linkVariants} style={{margin: '5% 0', padding: '0 5%', fontSize: '36px', letterSpacing: '2px', fontWeight: 700}}>{module._id && module.course.name}</motion.h3>
-          <motion.span variants={linkVariants} style={{padding: '0 5%'}}>Модули</motion.span>
-          <ul  className='module__navigation-list'>
-            {module._id && module.course.modules.map((courseModule, index) => {
-              return <motion.li key={index} className="module__navigation-list-li" style={{padding: '15px 20px', borderLeft: courseModule._id === module._id && "4px solid rgb(0, 0, 0)", fontSize: '18px'}}>{courseModule.description}</motion.li>
-            })}
-          </ul>
-        </motion.div>
-      </motion.div> */}
-
       <ModuleSide menuOpened={menuOpened}>
         <div  style={{position: "relative", padding: "15px", textAlign: "left", boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "flex-end", width: "100%", height: 90}}>
           {/* <div style={{padding: "0 0 0 15px"}}>
@@ -756,6 +726,8 @@ export default function CourseModule({ socket }) {
           <button className='module__side-button' onClick={showSideMenu} style={{ width: 30, height: 30, border: "none", padding: 0}}>
             <svg className='module__side-button-svg' width={30} height={30} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path className='module__side-button-svg-path' fill='#5DB0C7' d="M384 432c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0zm64-16c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320zM224 352c-6.7 0-13-2.8-17.6-7.7l-104-112c-6.5-7-8.2-17.2-4.4-25.9s12.5-14.4 22-14.4l208 0c9.5 0 18.2 5.7 22 14.4s2.1 18.9-4.4 25.9l-104 112c-4.5 4.9-10.9 7.7-17.6 7.7z"/></svg>
           </button>
+          
+          
             {/* <motion.img initial="closed" animate={menuOpened ? "opened" : "closed"} variants={imgVariants} style={{maxWidth: '25px'}} src={SovaLogo} alt="Логотип"></motion.img> */}
           {/* </div> */}
           {/* <motion.div variants={textVariants}>
@@ -782,7 +754,15 @@ export default function CourseModule({ socket }) {
             </ul>
           </motion.div> */}
         </div>
-        <p style={{color: "white", fontWeight: 700, textTransform: "uppercase", rotate: "-90deg", letterSpacing: 5, margin: "auto 0"}}>меню</p>
+        {menuOpened ? <div style={{width: "100%", textAlign: "left", boxSizing: "border-box", padding: "0 20px", margin: "15px 0 0 0", color: "white"}}>
+              {/* <h3></h3> */}
+              <h3 style={{margin: "0 0 10px 0"}}>Модули</h3>
+                <ul style={{lineHeight: 2, }}>
+                  {selectedCourse.modules.map((courseModule) => {
+                    return <li key={courseModule._id}>{courseModule.title}</li>
+                  })}
+                </ul>
+        </div> : <p style={{color: "white", fontWeight: 700, textTransform: "uppercase", rotate: "-90deg", letterSpacing: 5, margin: "auto 0"}}>меню</p>}
       </ModuleSide>
 
       <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "flex-start"}} initial={"closed"} className='module__content'>

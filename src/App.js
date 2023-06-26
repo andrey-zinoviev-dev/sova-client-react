@@ -28,6 +28,7 @@ function App() {
   // const [registerPopupOpened, setregisterPopupOpened] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setuser] = useState({});
+  const [onlineUsers, setOnlineUsers] = useState([]);
   // const [messages, setMessages] = useState([]);
   // const [courses, setCourses] = useState([]);
 
@@ -36,6 +37,42 @@ function App() {
   
   //useEffect
   useEffect(() => {
+    //effect functions
+    function showAllOnlineUsers(data) {
+      // console.log(data);
+      setOnlineUsers(data.filter((socketUser) => {
+        return socketUser.online === true;
+      }))
+      // if(loggedInUser.admin) {
+      //   const studentsOnline = data.filter((user) => {
+      //     return user.admin === false && user.online === true;
+      //   });
+      //   // console.log(studentsOnline);
+      //   setStudents((prevValue) => {
+      //     return prevValue.map((prevStudent) => {
+      //       const foundStudent = studentsOnline.find((student) => {
+      //         return student.userId === prevStudent._id;
+      //       });
+      //       return foundStudent ? {...prevStudent, online: true} : prevStudent;
+      //       // return studentsOnline.includes(prevStudent) ? {...prevStudent, online: true} : prevStudent;
+      //     })
+      //   })
+
+      // } else {
+      //   const adminsOnline = data.filter((user) => {
+      //     return user.admin === true && user.online === true;
+      //   });
+      //   // console.log(adminsOnline);
+      //   setCourseAuthor((prevValue) => {
+      //     const foundAdmin = adminsOnline.find((admin) => {
+      //       return admin.userId === prevValue._id;
+      //     });
+      //     if(foundAdmin) {
+      //       return {...prevValue, online: true};
+      //     }
+      //   })
+      // }
+    }
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
     const localsessionID = localStorage.getItem('sessionID');
@@ -53,6 +90,7 @@ function App() {
    
         socket.connect();
         socket.emit('user connected', userFetched);
+        socket.on('show all connected users', showAllOnlineUsers);
       });
 
       // socket.on('private message', (data) => {
@@ -84,6 +122,7 @@ function App() {
     return () => {
       // socket.disconnect();
       socket.close();
+      socket.off('show all connected users', showAllOnlineUsers);
       // socket.off('user connected', userFetched);
       // socket.off('private message', onMessage);
     };
@@ -181,7 +220,7 @@ function App() {
         {/* <Dashboard></Dashboard> */}
         <Routes>
           <Route path='addCourse' element={<AddCourse />}></Route>
-          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule socket={socket} />}></Route>
+          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule socket={socket} onlineUsers={onlineUsers} />}></Route>
           <Route path='/' element={loggedIn ? <Main socket={socket} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
