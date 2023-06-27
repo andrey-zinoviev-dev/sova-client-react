@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export default function ModuleSide({children, menuOpened}) {
   const menuVariants = {
     closed: {width: 60, transition: {duration: 0.75, ease: "easeInOut", delay: 0.3}},
-    opened: {width: 310, transition: {duration: 0.75, ease: "easeInOut", }},
+    opened: {width: 310, transition: {duration: 0.75, ease: "easeInOut", delay: 0.3}},
   };
 
   const menuVariantsMobile = {

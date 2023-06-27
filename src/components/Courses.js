@@ -172,7 +172,6 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
       // })
       Promise.all([coursesFromApi, allStudentsFromApi])
       .then(([coursesReceived, studentsReceived]) => {
-        // console.log(studentsReceived);
         setCoursesData({courses: coursesReceived, allStudents: studentsReceived});
       })
     }
@@ -213,7 +212,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
               }} style={{position: "relative", height: "100%", backgroundColor: "transparent", borderRadius: 12, border: "none", boxSizing: "border-box", padding: "20px 35px"}}>
                 <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center"}}>
                   <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60, margin: "0 0 20px 0"}} variants={liContentIndex}>
-                    <div style={{width: 35, height: 3, backgroundColor: "rgb(211, 124, 82)", order: 2, margin: "0 0 0 3px"}}></div>
+                    <div style={{width: 35, height: 3, backgroundColor: "rgb(93, 176, 199)", order: 2, margin: "0 0 0 3px"}}></div>
                     <p style={{margin: 0, fontSize: 36, fontWeight: 500, fontFamily: "Manrope, sans-serif", order: 1, letterSpacing: 2}}>0{index + 1}</p>
                   </motion.div>
                   <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12, order: 3}} alt={course.title} src={course.cover}></img>
@@ -327,12 +326,14 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
             <h3>Добавить ученика к курсу</h3>
             <ul style={{margin: 0, maxWidth: 480, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", boxSizing: "border-box", padding: 0, listStyle: "none", textAlign: "left", lineHeight: 1.5, gap: 20}}>
               {coursesData.allStudents.filter((student) => {
-                return !selectedCourse.students.includes(student._id)
+                return !selectedCourse.students.find((courseStudent) => {
+                  return courseStudent._id === student._id; 
+              });
               }).map((student, index) => {
                 return <Student key={student._id} student={student} setStudentsToAddToCourse={setStudentsToAddToCourse}/>
               })}
             </ul>
-            <motion.button whileHover={{backgroundColor: "rgba(211, 124, 82, 1)"}} type="submit" style={{margin: "25px 0 0 0", height: 40, boxSizing: "border-box", padding: 10, border: "2px solid rgb(211, 124, 82)", borderRadius: 9, backgroundColor: "rgba(211, 124, 82, 0)", color: "rgb(255, 255, 255)", fontWeight: 700}}>Добавить учеников к курсу</motion.button>
+            <motion.button whileHover={{backgroundColor: "rgb(93, 176, 199)"}} type="submit" style={{margin: "25px 0 0 0", height: 40, boxSizing: "border-box", padding: 10, border: "2px solid rgb(93, 176, 199)", borderRadius: 9, backgroundColor: "rgba(211, 124, 82, 0)", color: "rgb(255, 255, 255)", fontWeight: 700}}>Добавить учеников к курсу</motion.button>
           </form>
         </div>
       </EditCourse>}

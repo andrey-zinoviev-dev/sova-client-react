@@ -80,9 +80,9 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
         <div className='welcome__content'>
           <div style={{maxWidth: 420, textAlign: "left", margin: "0 0 0 15%"}}>
             <h1 style={{fontSize: 84, margin: 0, textTransform: "uppercase"}}>sasha sova</h1>
-            <button onClick={() => {
+            <motion.button whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
               setPopupOpened(true);
-            }} style={{minWidth: 180, minHeight: 45, padding: 0, border: "2px solid white", borderRadius: 9, backgroundColor: "transparent", color: "white", margin: "15px 0 0 0"}}>войти</button>
+            }} style={{minWidth: 180, minHeight: 45, padding: 0, border: "2px solid rgb(93, 176, 199)", borderRadius: 9, backgroundColor: "rgba(93, 176, 199, 0)", color: "white", margin: "15px 0 0 0", fontWeight: 700}}>войти</motion.button>
           </div>
           {/* <div className='welcome__content-left'>
             <h1 className='welcome__content-headline'>SOVA<span style={{color: "rgba(252,101,48,75%)"}}>.</span></h1>

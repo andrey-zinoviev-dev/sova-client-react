@@ -188,114 +188,49 @@ export default function CourseModule({ onlineUsers, socket }) {
   };
 
   //variants
-
-
-  const menuVariantsMobile = {
-
-  }
-
-  const textVariants = {
-    closed: { opacity: 0, transition: {duration: 0.45, ease: "easeInOut"}},
-    opened: { opacity: 1, transition: {duration: 0.45, ease: "easeInOut"}}
-  };
-
-  const imgVariants = {
-    closed: {opacity: 0, transition: {duration: 0.25, ease: "linear"}},
-    opened: {opacity: 1, transition: {duration: 0.25, ease: "linear"}}
-  };
-
-  const sideContentVariants = {
-    closed: {transition: {staggerChildren: 0.5, staggerDirection: -1}},
-    opened: {transition: {staggerChildren: 0.5, staggerDirection: 1}},
-  };
-
-  const linkVariants = {
-    closed: {opacity: 0, transition: {duration: 0.5}},
-    opened: {opacity: 1, transition: {duration: 0.5}},
-  };
-
-  const contentVariants = {
-    closed: {transition: {duration: 0.5, ease: "easeInOut"}},
-    opened: {transition: {duration: 0.5, ease: "easeInOut"}},
-  }
-
   const sideLogoVariants = {
     closed: {
       opacity: 0,
-      transition: {duration: 0.5, ease: "easeInOut", delay: 0.05},
-      transitionEnd: { display: "none"}
+      transition: {duration: 0.5, ease: "easeInOut", delay: 0},
+      // transitionEnd: { display: "none"}
     },
     opened: {
       opacity: 1,
-      display: "block",
-      transition: {duration: 0.5, ease: "easeInOut", delay: 0.05},
+      // display: "block",
+      transition: {duration: 0.5, ease: "easeInOut", delay: 0.5},
     }
   }
 
-  //socket io ref
-  // const socket = React.useRef(null);
-  
-  //functions
-  // function updateFormData(evt, user) {
-  //   const { name, value } = evt.target;
-    
-  //   setMessageData({...messageData, [name]: value, from: props.user._id, to: user});
-  // }
+  const sideNavigationVariants = {
+    closed: {
+      opacity: 0,
+      // display: "none",
+      transition: {duration: 0.25, ease: "easeInOut", delay: 0},
+      transitionEnd: { display: "none"}
+    }, 
+    opened: {
+      opacity: 1,
+      display: "block",
+      transition: {duration: 0.25, ease: "easeInOut", delay: 0.5},
+      // transitionEnd: {
+      //   display: "block"
+      // }
+    }
+  };
 
-  // function sendMessage(evt) {
-  //   props.submitForm(evt);
-  //   socket.current.emit('message', messageData);
-  //   console.log(messageData);
-  //   // console.log(props.user._id);
-  //   const newMessages = [...messages, messageData];
-    
-  //   //send messages to server
-  //   apiSendMessage(moduleID, userToken, messageData)
-  //   .then((data) => {
-  //     console.log(data);
-  //     setMessages(newMessages);
-  //     evt.target.reset();
-  //   });
-  // }
-
-  //useEffect
-  // React.useEffect(() => {
-    
-  //   const userToken = localStorage.getItem('token');
-
-  //     apiGetCourse(courseID, userToken)
-  //     .then((course) => {
-        
-  //       const newCourseData = Object.assign({}, course);
-  //       //set course author
-
-  //       setCourseAuthor({...course.author, online: false});
-
-  //       setCourseData(newCourseData);
-
-  //       const moduleIndex = newCourseData.modules.findIndex((module) => {
-  //         return module._id === moduleID;
-  //       });
-  //       const module = newCourseData.modules[moduleIndex];
-  //       const newModule = Object.assign({}, module);
-        
-  //       //set students
-  //       const offlineStudents = module.students.map((student) => {
-  //         return {...student, online: false};
-  //       });
-
-  //       // studentsRef.current = offlineStudents;
-  //       setStudents(offlineStudents);
-  //       setModule(newModule);
-
-  //       const newImages = [...module.images];
-  //       setModuleImages(newImages);
-  //     });
-
-
-  //   }
-  // }, []);
-
+  const sideSpanVariants = {
+    opened: {
+      opacity: 0,
+      // // display: "none",
+      transition: {duration: 0.25, ease: "easeInOut", delay: 0},
+      transitionEnd: { display: "none"}
+    }, 
+    closed: {
+      opacity: 1,
+      display: "block",
+      transition: {duration: 0.5, ease: "easeInOut", delay: 0.5},
+    }
+  }
   //socket io use effect
   // React.useEffect(() => {
   //   if(props.user._id && courseAuthor._id && students.length > 0) {
@@ -645,7 +580,7 @@ export default function CourseModule({ onlineUsers, socket }) {
             
 
           </div> */}
-          <motion.svg variants={sideLogoVariants} animate={menuOpened ? "opened" : "closed"} style={{margin: "0 auto 0 0"}} version="1.0" xmlns="http://www.w3.org/2000/svg"
+          <motion.svg initial="closed" variants={sideLogoVariants} animate={menuOpened ? "opened" : "closed"} style={{margin: "0 auto 0 0"}} version="1.0" xmlns="http://www.w3.org/2000/svg"
             width="35px" height="60px" viewBox="0 0 940.000000 1847.000000"
             preserveAspectRatio="xMidYMid meet">
 
@@ -754,15 +689,19 @@ export default function CourseModule({ onlineUsers, socket }) {
             </ul>
           </motion.div> */}
         </div>
-        {menuOpened ? <div style={{width: "100%", textAlign: "left", boxSizing: "border-box", padding: "0 20px", margin: "15px 0 0 0", color: "white"}}>
+        
+        <motion.div variants={sideNavigationVariants} initial="closed" animate={menuOpened ? "opened" : "closed"} style={{width: "100%", textAlign: "left", boxSizing: "border-box", margin: "15px 0 0 0", color: "white"}}>
               {/* <h3></h3> */}
-              <h3 style={{margin: "0 0 10px 0"}}>Модули</h3>
-                <ul style={{lineHeight: 2, }}>
-                  {selectedCourse.modules.map((courseModule) => {
-                    return <li key={courseModule._id}>{courseModule.title}</li>
-                  })}
-                </ul>
-        </div> : <p style={{color: "white", fontWeight: 700, textTransform: "uppercase", rotate: "-90deg", letterSpacing: 5, margin: "auto 0"}}>меню</p>}
+          {/* <span style={{margin: "0 0 10px 0"}}>Модуль</span> */}
+          <h3 style={{boxSizing: "border-box", padding: "0 20px"}}>{module.title}</h3>
+          <ul style={{ lineHeight: 2, padding: 0, listStyle: "none", color: "rgb(255 255 255/75%)", margin: 0, width: "100%" }}>
+            {module.lessons.map((moduleLesson) => {
+              return <li key={moduleLesson._id} style={{boxSizing: "border-box", padding: "0 20px", borderLeft: lessonID === moduleLesson._id && "2px solid rgb(93, 176, 199)" }}>{moduleLesson.title}</li>
+            })}
+          </ul>
+        </motion.div> 
+        
+        <motion.p variants={sideSpanVariants} initial="closed" animate={menuOpened ? "opened" : "closed"} style={{color: "white", fontWeight: 700, textTransform: "uppercase", rotate: "-90deg", letterSpacing: 5, margin: "auto 0"}}>меню</motion.p>
       </ModuleSide>
 
       <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "flex-start"}} initial={"closed"} className='module__content'>

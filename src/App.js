@@ -39,10 +39,11 @@ function App() {
   useEffect(() => {
     //effect functions
     function showAllOnlineUsers(data) {
-      // console.log(data);
+      
       setOnlineUsers(data.filter((socketUser) => {
         return socketUser.online === true;
-      }))
+      }));
+      // console.log(data);
       // if(loggedInUser.admin) {
       //   const studentsOnline = data.filter((user) => {
       //     return user.admin === false && user.online === true;
