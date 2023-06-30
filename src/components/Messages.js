@@ -15,33 +15,6 @@ export default function Messages ({ selectedFiles, conversation, messages, selec
   //local storage
   const userToken = localStorage.getItem('token');
 
-  //variables
-  // const members = [user._id, userId];
-  // const contactMessages = messages.filter((message) => {
-  //   return message.conversation.members.every((member) => {
-  //     return members.includes(member);
-  //   })
-  //   // return message.user._id === selectedContact;
-  // });
-  
-  //functions
-  // function backToContacts() {
-  //   console.log("back to contacts");
-  // }
-
-  // React.useEffect(() => {
-  //   if(userId.length > 0){
-  //     ulRef.current.scrollTo({top: 900, left:0, behavior: "smooth"});
-  //   }
-  // }, [userId]);
-  // React.useEffect(() => {
-  //   console.log(userId);
-  // }, [userId])
-  
-  // React.useEffect(() => {
-  //   console.log(messages);
-  // }, [messages])
-
   return (
     <>
       {userId._id && 
@@ -66,7 +39,7 @@ export default function Messages ({ selectedFiles, conversation, messages, selec
               //   {message.text}
               // </li>
               // :
-              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start", /*width: 160,*/ maxWidth: 210, backgroundColor: message.user === loggedInUser._id ? "#5DB0C7" : "#2D2C32", border: "none", borderRadius: 15, boxSizing: "content-box", padding: "5px 15px 5px 15px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-start", alignItems: "flex-start"}}>
+              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start", maxWidth: 300, /*width: 160, maxWidth: 210,*/ backgroundColor: message.user === loggedInUser._id ? "#5DB0C7" : "#2D2C32", border: "none", borderRadius: 15, boxSizing: "content-box", padding: "10px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-start", alignItems: "flex-start"}}>
                  {/* <ul style={{width: "100%", height: "100%", padding: 0}}>
                   {message.files.map((file, index) => {
                     return <li key={Date.parse(new Date())} style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
@@ -79,8 +52,9 @@ export default function Messages ({ selectedFiles, conversation, messages, selec
                   <ul style={{padding: 0, listStyle: "none", margin: "0 0 10px 0"}}>
                     {message.files.map((file) => {
                       return <li key={file.path} style={{display: "flex", alignSelf: "center", justifyContent: "center"}}>
-                        {file.mimetype.includes('image') && <img style={{width: "100%", borderRadius: 9}} src={file.path} alt={file.originalname} />}
+                        {file.mimetype.includes('image') && <img style={{width: "100%", borderRadius: 9, maxWidth: 220}} src={file.path} alt={file.originalname} />}
                         {file.mimetype.includes('audio') && <audio controls src={file.path} style={{maxWidth: 300}}/>}
+                        {file.mimetype.includes('video') && <video muted controls src={file.path} style={{width: "100%", borderRadius: 9}}/>}
                       </li>
                     })}
                   </ul>}

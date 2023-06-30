@@ -171,6 +171,7 @@ export default function CourseModule({ onlineUsers, socket }) {
     
     apiSendMessage(userToken, obj)
     .then((updatedConversation) => {
+      setSelectedFiles([]);
       const { lastMessage } = updatedConversation;
       setMessages((prevValue) => {
         return [...prevValue, lastMessage];
@@ -733,13 +734,13 @@ export default function CourseModule({ onlineUsers, socket }) {
                 <Messages selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
-              
+              <SelectedFiles selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             </Chat>
           </div>
         }
       </motion.div>
       
-      <SelectedFiles selectedFiles={selectedFiles}/>
+      
       {/* <p>Модуль {module.name}</p>
       <p>{module.description}</p>
       <ul>

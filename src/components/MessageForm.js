@@ -52,8 +52,12 @@ export default function MessageForm({ selectedFiles, setSelectedFiles, sendMessa
   }
 
   function handleFileChange(evt) {
+    const objectToProcess = evt.target.files[0];
+    const relPath = window.URL.createObjectURL(objectToProcess);
+    console.log(relPath);
+    objectToProcess.relPath = relPath;
     return setSelectedFiles((prevValue) => {
-      return [...prevValue, ...evt.target.files];
+      return [...prevValue, objectToProcess];
     });
   }
 
