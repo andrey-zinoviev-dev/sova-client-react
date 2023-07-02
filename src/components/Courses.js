@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faPen, faXmark} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faPen, faXmark, faLock } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Menu from "./Menu";
 import CourseModulesPopup from "./CourseModulesPopup";
@@ -15,7 +15,7 @@ import {
   addStudentsToCourse
 } from '../api';
 import EditCourse from "./EditCourse";
-import Student from "./Student";
+import Student from "./Student"
 
 export default function Courses({ socket, setCourseInEdit, logout, registerFormSubmit }) {
   //contexts
@@ -85,34 +85,49 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
   const liBackground = {
     rest: {
       // backgroundColor: "rgb(54, 58, 59)",
-      boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px",
-      backgroundColor: "rgb(54, 58, 59)",
+      // boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px",
+      // backgroundColor: "rgb(54, 58, 59)",
       // boxShadow: "0 0 0px #c4d8f7",
+      backgroundColor: "#0D0D0D",
       scale: 1
     },
     hover: {
       // backgroundColor: "#c4d8f7",
-      backgroundColor: "rgb(211, 124, 82)",
+      // backgroundColor: "rgb(211, 124, 82)",
       // boxShadow: "7px 7px 5px #c4d8f7",
+      backgroundColor: "rgb(93, 176, 199)",
       scale: 1.005
     }
   };
 
   const liContent = {
     rest: {
+      border: "2px solid rgb(93, 176, 199)",
+      color: "rgb(93, 176, 199)",
+    },
+    hover: {
+      border: "2px solid rgba(255, 255, 255, 1)",
       color: "rgba(255, 255, 255, 1)"
-    },
-    hover: {
-      color: "rgba(0, 0, 0, 1)"
     }
-  }
+  };
 
-  const liContentIndex = {
+  const dotColor = {
     rest: {
-      color: "rgba(255, 255, 255, 0.75)"
+      // border: "2px solid rgb(93, 176, 199)",
+      backgroundColor: "rgb(93, 176, 199)",
     },
     hover: {
-      color: "rgba(0, 0, 0, 1)"
+      // border: "2px solid rgba(255, 255, 255, 1)",
+      backgroundColor: "rgba(255, 255, 255, 1)"
+    }
+  };
+
+  const authorColor = {
+    rest: {
+      color: "rgb(64, 64, 64)"
+    },
+    hover: {
+      color: "rgba(252, 249, 249, 0.65)",
     }
   }
 
@@ -198,35 +213,56 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     <>
       {/* <Dashboard /> */}
       <section className="main__courses">
-        <Menu user={loggedInUser} logout={logout} setPopupOpened={setPopupOpened}/>
-        <div style={{color: "white", margin: "50px 0"}}>
-          <h2 style={{margin: "0 0 25px 0"}}>Чем можно позаниматься</h2>
-          <p style={{margin: 0}}>Например, стать профессионалом в одном из следующих направлений или во всех сразу. Да- все, везде и сразу</p>
+        {/* <Menu user={loggedInUser} logout={logout} setPopupOpened={setPopupOpened}/> */}
+        {/* <div style={{color: "white"}}> */}
+          
+          {/* <p style={{margin: 0}}>Например, стать профессионалом в одном из следующих направлений или во всех сразу. Да- все, везде и сразу</p> */}
+        {/* </div> */}
+        <h2 style={{margin: "0px 0px 50px 0", maxWidth: 450, textAlign: "left", fontSize: 35, fontWeight: 400, color: "#747374"}}>Изучай музыку и становись профессионалом вместе с экспертами <span style={{color: "white"}}>Sova Studio</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
+        <div style={{width: 270, backgroundColor: "#5DB0C7", color: "white", boxSizing: "border-box", borderRadius: 5, fontSize: 18, margin: "0 0 50px 0"}}>
+          <p style={{margin: 0}}>выбрать из списка снизу</p>
         </div>
-
         <ul ref={ulRef} className="main__courses-list">
           {coursesData && coursesData.courses.map((course, index) => {
-            return <motion.li initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, maxWidth: 250, backgroundColor: "#393d3e", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 12}}>
+            return <motion.li initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, backgroundColor: "#0D0D0D", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
+              
               <button onClick={() => {
                 showCoursePopup(course, index);
-              }} style={{position: "relative", height: "100%", backgroundColor: "transparent", borderRadius: 12, border: "none", boxSizing: "border-box", padding: "20px 35px"}}>
-                <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center"}}>
-                  <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60, margin: "0 0 20px 0"}} variants={liContentIndex}>
+              }} style={{position: "relative", width: "100%", boxSizing: "border-box", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
+                
+                <div style={{display: "flex", alignItems: "flex-end", justifyContent: "space-between", minWidth: 35, fontSize: 28, color: "white"}}>
+                    <p style={{margin: 0}}>0{index + 1}</p>
+                    <motion.div variants={dotColor} style={{backgroundColor: "#5DB0C7", width: 5, height: 5, borderRadius: "51%", margin: "0 0 6px 0"}}></motion.div>
+                  </div>
+                  {/* <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12, order: 3}} alt={course.title} src={course.cover}></img> */}
+                <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", textAlign: "left", order: 2, width: "100%"}}>
+                  <h3 style={{margin: 0, letterSpacing: 2, width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "white", fontSize: 24}}>{course.name}</h3>
+                  <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-end", margin: "10px 0 0 0"}}>
+                    <motion.p variants={authorColor} style={{margin: 0, color: "#404040", color: "#404040", fontSize: 20}}>{course.author.name}</motion.p>
+                    <button style={{backgroundColor: "transparent", border: "none", padding: 0, width: 25, height: 25}}>
+                      <FontAwesomeIcon style={{color: "#404040", width: "100%", height: "100%" }} icon={faLock} />
+                    </button>
+                  </div>
+
+                </motion.div>
+                {/* <motion.div variants={liContent} style={{height: "100%", color: "white", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center"}}> */}
+
+                  {/* <motion.div style={{display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column", width: "100%", minHeight: 60, margin: "0 0 20px 0"}} variants={liContentIndex}>
                     <div style={{width: 35, height: 3, backgroundColor: "rgb(93, 176, 199)", order: 2, margin: "0 0 0 3px"}}></div>
                     <p style={{margin: 0, fontSize: 36, fontWeight: 500, fontFamily: "Manrope, sans-serif", order: 1, letterSpacing: 2}}>0{index + 1}</p>
-                  </motion.div>
-                  <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12, order: 3}} alt={course.title} src={course.cover}></img>
-                  <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", margin: "0 0 20px 0", textAlign: "left", order: 2, width: "100%", height: 25}}>
-                    <h3 style={{margin: 0, width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{course.name}</h3>
-                  </motion.div>
-                </motion.div>
+                  </motion.div> */}
+
+                {/* </motion.div> */}
               </button>
-              {loggedInUser._id && loggedInUser.admin && <button onClick={() => {
-                setIsEditCourse(true);
-                setSelectedCourse(course);
-              }} style={{position: "absolute", top: "5%", right: "5%", justifyContent: "center", alignItems: "center", width: 30, height: 30, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)", fontSize: 12, zIndex: 6}}>
-                <FontAwesomeIcon icon={faPen}/>
-              </button>}
+              
+              {loggedInUser._id && loggedInUser.admin &&
+                <motion.button variants={liContent} onClick={() => {
+                  setIsEditCourse(true);
+                  setSelectedCourse(course);
+                }} style={{position: "absolute", top: "6.5%", right: 35, display: 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10, zIndex: 6}}>
+                  <FontAwesomeIcon icon={faPen}/>
+                </motion.button>
+              }
              
             
             </motion.li>
