@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faPen, faXmark, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faPen, faXmark, faLock, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Menu from "./Menu";
 import CourseModulesPopup from "./CourseModulesPopup";
@@ -82,6 +82,23 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     },
   };
   //#f1926a(peach color)
+  const liGradient = {
+    rest: {
+      translate: "0 -100%",
+      transition: {
+        duration: 0.35,
+        ease: "easeInOut",
+      }
+    },
+    hover: {
+      translate: "0 0%",
+      transition: {
+        duration: 0.35,
+        ease: "easeInOut",
+      }
+    }
+  };
+
   const liBackground = {
     rest: {
       // backgroundColor: "rgb(54, 58, 59)",
@@ -218,22 +235,34 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
           
           {/* <p style={{margin: 0}}>Например, стать профессионалом в одном из следующих направлений или во всех сразу. Да- все, везде и сразу</p> */}
         {/* </div> */}
-        <h2 style={{margin: "0px 0px 50px 0", maxWidth: 450, textAlign: "left", fontSize: 35, fontWeight: 400, color: "#747374"}}>Изучай музыку и становись профессионалом вместе с экспертами <span style={{color: "white"}}>Sova Studio</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
-        <div style={{width: 270, backgroundColor: "#5DB0C7", color: "white", boxSizing: "border-box", borderRadius: 5, fontSize: 18, margin: "0 0 50px 0"}}>
-          <p style={{margin: 0}}>выбрать из списка снизу</p>
+        <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", width: "100%"}}>
+          <h2 style={{maxWidth: 450, textAlign: "left", fontSize: 48, fontWeight: 400, color: "#747374", margin: 0}}>Изучай музыку и становись профессионалом вместе с экспертами <span style={{color: "white"}}>Sova Studio</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
+          {/* <div style={{width: 270, backgroundColor: "#5DB0C7", color: "white", boxSizing: "border-box", borderRadius: 5, fontSize: 18, margin: "0 0 50px 0"}}>
+            
+          </div> */}
+          <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", minWidth: 390}}>
+              <button style={{padding: 0, width: 75, height: 75, border: "none", backgroundColor: "rgb(93, 176, 199)", boxSizing: "border-box", fontSize: 20, color: "white"}}>
+                <FontAwesomeIcon icon={faAnglesDown} />
+              </button>
+              <p style={{margin: 0, color: "white", backgroundColor: "rgb(93, 176, 199)", borderRadius: 2}}>выбрать из списка снизу</p>
+            </div>
+            <button style={{width: 50, height: 50, padding: 0, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontWeight: 500, fontSize: 20, alignSelf: "flex-start"}}>{loggedInUser.name[0]}</button>
+          </div>
+          
         </div>
         <ul ref={ulRef} className="main__courses-list">
           {coursesData && coursesData.courses.map((course, index) => {
-            return <motion.li initial="rest" whileHover="hover" animate="rest" variants={liBackground}  className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, backgroundColor: "#0D0D0D", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
-              
+            return <motion.li initial="rest" whileHover="hover" animate="rest" /*variants={liBackground}*/ className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, /*backgroundColor: "#0D0D0D",*/ boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
+              <motion.div variants={liGradient} style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundImage: "linear-gradient(180deg, rgb(93, 176, 199) 5%, transparent 75%)"}}></motion.div>
               <button onClick={() => {
                 showCoursePopup(course, index);
-              }} style={{position: "relative", width: "100%", boxSizing: "border-box", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
+              }} style={{position: "relative", width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
                 
                 <div style={{display: "flex", alignItems: "flex-end", justifyContent: "space-between", minWidth: 35, fontSize: 28, color: "white"}}>
-                    <p style={{margin: 0}}>0{index + 1}</p>
-                    <motion.div variants={dotColor} style={{backgroundColor: "#5DB0C7", width: 5, height: 5, borderRadius: "51%", margin: "0 0 6px 0"}}></motion.div>
-                  </div>
+                  <p style={{margin: 0}}>0{index + 1}</p>
+                  <motion.div variants={dotColor} style={{backgroundColor: "#5DB0C7", width: 5, height: 5, borderRadius: "51%", margin: "0 0 6px 0"}}></motion.div>
+                </div>
                   {/* <img style={{width: "100%", aspectRatio: "1/1", objectFit: "cover", borderRadius: 12, order: 3}} alt={course.title} src={course.cover}></img> */}
                 <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", textAlign: "left", order: 2, width: "100%"}}>
                   <h3 style={{margin: 0, letterSpacing: 2, width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "white", fontSize: 24}}>{course.name}</h3>

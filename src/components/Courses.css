@@ -38,10 +38,13 @@
   border-radius: 9px;
   /* width: 100%; */
   display: grid;
-  /* grid-template-columns: repeat(4, 1fr); */
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-columns: repeat(5, 1fr); */
+  /* grid-template-columns: repeat(4, 270px); */
   gap: 25px;
   font-family: 'Carlito', sans-serif;
+  width: 100%;
+  margin: auto 0;
 }
 
 .main__courses-list-element {
