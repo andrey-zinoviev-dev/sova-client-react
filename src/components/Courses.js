@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faPen, faXmark, faLock, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Menu from "./Menu";
+import Dashboard from "./Dashboard";
 import CourseModulesPopup from "./CourseModulesPopup";
 import ModulesList from "./ModulesList";
 import PopupWithForm from "./PopupWithForm";
@@ -228,32 +229,31 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
 
   return (
     <>
-      {/* <Dashboard /> */}
       <section className="main__courses">
+        <Dashboard />
         {/* <Menu user={loggedInUser} logout={logout} setPopupOpened={setPopupOpened}/> */}
         {/* <div style={{color: "white"}}> */}
           
           {/* <p style={{margin: 0}}>Например, стать профессионалом в одном из следующих направлений или во всех сразу. Да- все, везде и сразу</p> */}
         {/* </div> */}
         <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", width: "100%"}}>
-          <h2 style={{maxWidth: 450, textAlign: "left", fontSize: 48, fontWeight: 400, color: "#747374", margin: 0}}>Изучай музыку и становись профессионалом вместе с экспертами <span style={{color: "white"}}>Sova Studio</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
+          <h2 className="main__courses-headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}>Изучай музыку и становись профессионалом вместе с экспертами <span style={{color: "rgb(93, 176, 199)"}}>Sova Studio</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
           {/* <div style={{width: 270, backgroundColor: "#5DB0C7", color: "white", boxSizing: "border-box", borderRadius: 5, fontSize: 18, margin: "0 0 50px 0"}}>
             
           </div> */}
-          <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
-            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", minWidth: 390}}>
+          {/* <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}> */}
+            {/* <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", minWidth: 390}}>
               <button style={{padding: 0, width: 75, height: 75, border: "none", backgroundColor: "rgb(93, 176, 199)", boxSizing: "border-box", fontSize: 20, color: "white"}}>
                 <FontAwesomeIcon icon={faAnglesDown} />
               </button>
               <p style={{margin: 0, color: "white", backgroundColor: "rgb(93, 176, 199)", borderRadius: 2}}>выбрать из списка снизу</p>
-            </div>
-            <button style={{width: 50, height: 50, padding: 0, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontWeight: 500, fontSize: 20, alignSelf: "flex-start"}}>{loggedInUser.name[0]}</button>
-          </div>
+            </div> */}
+          {/* </div> */}
           
         </div>
         <ul ref={ulRef} className="main__courses-list">
           {coursesData && coursesData.courses.map((course, index) => {
-            return <motion.li initial="rest" whileHover="hover" animate="rest" /*variants={liBackground}*/ className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", height: 380, /*backgroundColor: "#0D0D0D",*/ boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
+            return <motion.li initial="rest" whileHover="hover" animate="rest" /*variants={liBackground}*/ className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
               <motion.div variants={liGradient} style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundImage: "linear-gradient(180deg, rgb(93, 176, 199) 5%, transparent 75%)"}}></motion.div>
               <button onClick={() => {
                 showCoursePopup(course, index);
