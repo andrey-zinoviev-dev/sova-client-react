@@ -54,17 +54,21 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     }, [selectedImage])
 
     return (
-        <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", padding: "0 0 0 75px", /*minHeight: 400,*/ maxWidth: 540, /*margin: "0px 0px 70px 0"*/ }}>
-            <div style={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch"}}>
-                <div className="addForm__first-step-title" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid rgb(226, 100, 59)", boxSizing: "border-box"}}>
+        <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", /*minHeight: 400,*/ maxWidth: 540, /*margin: "0px 0px 70px 0"*/ }}>
+            {/* <div style={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch"}}> */}
+                {/* <div className="addForm__first-step-title" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid rgb(226, 100, 59)", boxSizing: "border-box"}}>
                     <span>Шаг {formStep + 1}/3</span>
                     <h2 style={{margin: 0}}>Добавим название и описание нового курса</h2>
                     <p style={{margin: 0}}>Введите данные нового курса, чтобы добавить новый курс.</p>
-                </div>
-                <div className="addForm__first-step-content" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch"}}>
-                    <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", gap: 25}}>
+                </div> */}
+                {/* <div className="addForm__first-step-content" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch"}}>
+
+                </div> */}
+
+            {/* </div> */}
+            <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", gap: 50}}>
                         <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
-                            <label>Название курса</label>
+                            {/* <label>Название курса</label> */}
                             <input className="addCourse__form-input" placeholder="Введите название курса" value={course.name} onChange={(evt) => {
                                 setFormData({...formData, course: {
                                     ...formData.course, name: evt.target.value,
@@ -72,7 +76,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                             }}></input>
                         </div>
                         <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
-                            <label>Описание курса</label>
+                            {/* <label>Описание курса</label> */}
                             <input className="addCourse__form-input" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
                                 setFormData({...formData, course: {
                                     ...formData.course, description: evt.target.value,
@@ -81,7 +85,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                         </div>
                         <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
                             <div style={{alignSelf: "flex-start"}}>
-                                <label>Обложка курса</label>
+                                {/* <label>Обложка курса</label> */}
                                 <input style={{margin: "10px 0 0 0"}} className="addCourse__form-input" placeholder="Ссылка на картинку"></input>
                                 <input ref={inputFileRef} type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
                             </div>
@@ -94,9 +98,6 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                             
                         </div>
                     </div>
-                </div>
-                
-            </div>
 
             <div style={{display: "flex", alignItems: "stretch", justifyContent: "flex-start", minHeight: 40}}>
                 <motion.button type="button" onClick={handleNextClick} whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}} disabled={disableButton ? true : false} style={{pointerEvents: disableButton && "none",  fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: disableButton ? "rgb(255 255 255 / 30%)" : "rgb(255 255 255 / 100%)", border: disableButton ? "2px solid rgb(255 255 255 / 30%)" : "2px solid rgb(226, 100, 59)"}}>Далее</motion.button>

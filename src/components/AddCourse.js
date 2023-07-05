@@ -7,13 +7,13 @@ import AddStep3 from "./AddStep3";
 import AddModule from "./AddModule";
 import AddStepModule from "./AddStepModule";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignature, faKeyboard, faListCheck } from "@fortawesome/free-solid-svg-icons";
+import { faSignature, faKeyboard, faListCheck, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChartBar } from "@fortawesome/free-regular-svg-icons";
 import { motion } from "framer-motion";
 import { UserContext } from '../context/userContext';
 import { apiCreateCourse } from '../api';
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
-
+import Dashboard from './Dashboard';
 
 export default function AddCourse() {
   //token
@@ -192,11 +192,21 @@ export default function AddCourse() {
 
   return (
     <section className="addCourse">
+      {/* <Dashboard /> */}
+      <div style={{display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10}}>
+        <button style={{width: 40, height: 30, backgroundColor: "transparent", border: "none", padding: 0, margin: "15px 0 0 0"}}>
+          <FontAwesomeIcon style={{color: "rgb(93, 176, 199)", fontSize: 24}} icon={faArrowLeft} />
+        </button>
+        <h2 className="addCourse__headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}><span style={{color: "white"}}>Вернуться к курсам</span>, либо добавить новый</h2>
+      </div>
+      <div>
+        <p>{formStep + 1} / 4</p>
+      </div>
       {/* <div style={{width: "100%", display: "flex", flexDirection: "column", maxWidth: 1280, margin: "0 auto"}}>
        
        
       </div> */}
-      <div className="addCourse__navigation">
+      {/* <div className="addCourse__navigation">
           <div className="addCourse__headline-wrapper">
             <h2 style={{margin: "0 0 10px 0"}}>Добавить новый курс</h2>
             <p style={{margin: 0}}>Через эту форму можно добавить новый курс</p>
@@ -212,62 +222,36 @@ export default function AddCourse() {
                 <div className="addCourse__navigation-list-element-logo" style={{width: 55, height: 55, display: "flex", justifyContent: "center", alignItems: "center", borderRadius: "51%", backgroundColor: "transparent", border: "2px solid rgba(255, 255, 255, 0.5)", color:"rgba(255, 255, 255, 0.5)", position: "relative"}}>
                   <FontAwesomeIcon icon={step.icon} />
                 </div>
-                {/* <div className="addCourse__navigation-list-element-step-connection" style={{display: index === stepsArray.length -1 && "none", position: "absolute", top: window.innerWidth < 1439 ? "96%" : "93%", right: window.innerWidth < 1439 ? "9.5%" : "7.5%", width: 4, height: "135%" "180%", backgroundColor: "rgba(255, 255, 255, 0.5)"}}></div> */}
+               
               </li>
             })}
 
           </ul>
-        </div>
+        </div> */}
 
           <form className="addCourse__form" onSubmit={(evt) => {
             evt.preventDefault();
-            // console.log(formData);
-            // console.log(selectedFiles)
+
             const form = new FormData();
             form.append("author", JSON.stringify(loggedInUser));
             form.append("course", JSON.stringify(formData.course));
             form.append("modules", JSON.stringify(formData.modules));
-            // form.append("files", JSON.stringify(selectedFiles));
-            
-            
-            
+           
             selectedFiles.forEach((file) => {
-              // console.log(file);
               form.append("files", file);
             });
 
-            // console.log(form);
+          
 
             apiCreateCourse(userToken, form)
             .then((data) => {
               console.log(data);
             });
 
-            // apiUploadFilesToCourse(userToken, form)
-            // .then(() => {
-
-            // });
-
-          }} style={{/*width: 'calc(100% - 600px)',*/width: window.innerWidth < 1440 ? "calc(100% - 370px)" : "calc(100% - 500px)", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box", /*padding: "45px 75px"*/}}>
+          }} style={{width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", boxSizing: "border-box",}}>
             {renderStep()}
-            {/* <div className="addCourse__form-buttons-wrapper" style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", boxSizing: "border-box", padding:  "0 75px"}}>
-              <motion.button className="addCourse__form-buttons-wrapper-button" type="button" style={{display: formStep < 1 ? "none": "inline-block", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15}} onClick={() =>{
-                formStep > 0 &&
-                setFormStep((prevStep) => {
-                  return prevStep - 1;
-                });
-              }}>Назад</motion.button>
-              <motion.button className="addCourse__form-buttons-wrapper-button" ref={nextButtonRef} disabled={(formData.course.name.length === 0 || formData.course.description.length === 0) && true} type="button" onClick={() =>{
-                // console.log(formData);
-                formStep < 2 && 
-                setFormStep((prevStep) => {
-                  return prevStep + 1;
-                });
-              }}  style={{pointerEvents: (formData.course.name.length === 0 || formData.course.description.length === 0) && "none", fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, border: formData.course.name.length === 0 || formData.course.description.length === 0 ? "2px solid rgb(255 255 255 / 30%)" : "2px solid rgb(226, 100, 59)", color: formData.course.name.length === 0 || formData.course.description.length === 0 ? "rgb(255 255 255 / 30%)" : "rgb(255 255 255 / 100%)"}}>Вперед</motion.button>
-            </div> */}
-            
           </form>
-      {/* <div></div> */}
+   
     </section>
   )
 }
