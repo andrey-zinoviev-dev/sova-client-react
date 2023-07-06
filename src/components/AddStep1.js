@@ -54,7 +54,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     }, [selectedImage])
 
     return (
-        <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", /*minHeight: 400,*/ maxWidth: 540, /*margin: "0px 0px 70px 0"*/ }}>
+        <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between" }}>
             {/* <div style={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch"}}> */}
                 {/* <div className="addForm__first-step-title" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid rgb(226, 100, 59)", boxSizing: "border-box"}}>
                     <span>Шаг {formStep + 1}/3</span>
@@ -66,42 +66,45 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                 </div> */}
 
             {/* </div> */}
-            <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", gap: 50}}>
-                        <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
-                            {/* <label>Название курса</label> */}
-                            <input className="addCourse__form-input" placeholder="Введите название курса" value={course.name} onChange={(evt) => {
-                                setFormData({...formData, course: {
-                                    ...formData.course, name: evt.target.value,
-                                }})
-                            }}></input>
-                        </div>
-                        <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
-                            {/* <label>Описание курса</label> */}
-                            <input className="addCourse__form-input" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
-                                setFormData({...formData, course: {
-                                    ...formData.course, description: evt.target.value,
-                                }})
-                            }}></input>
-                        </div>
-                        <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
-                            <div style={{alignSelf: "flex-start"}}>
-                                {/* <label>Обложка курса</label> */}
-                                <input style={{margin: "10px 0 0 0"}} className="addCourse__form-input" placeholder="Ссылка на картинку"></input>
-                                <input ref={inputFileRef} type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
+            {/* <div> */}
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 768, margin: "35px auto 35px 0", width: "100%"}}>
+                <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", gap: 50, height: 230}}>
+                            <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
+                                {/* <label>Название курса</label> */}
+                                <input className="addCourse__form-input" placeholder="Введите название курса" value={course.name} onChange={(evt) => {
+                                    setFormData({...formData, course: {
+                                        ...formData.course, name: evt.target.value,
+                                    }})
+                                }}></input>
                             </div>
-                            <div style={{position: "relative", boxSizing: "border-box", padding: "25px 0 0 0"}}>
-                                <img ref={imgRef} style={{width: 210, borderRadius: 12, aspectRatio: "1/1", objectFit: "cover", objectPosition: "top"}} src="https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4=" alt="обложка курса"/>
-                                <button onClick={openFileInput} type="button" style={{position: "absolute", bottom: -10, right: -10, width: 45, height: 45, border: "none", borderRadius: "51%", fontSize: 20, display: "flex", justifyContent: "center", alignItems: "center"}}>
-                                    <FontAwesomeIcon icon={faCamera} />
-                                </button>
+                            <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
+                                {/* <label>Описание курса</label> */}
+                                <input className="addCourse__form-input" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
+                                    setFormData({...formData, course: {
+                                        ...formData.course, description: evt.target.value,
+                                    }})
+                                }}></input>
                             </div>
-                            
+                            <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
+                                <div style={{width: "100%"}}>
+                                    {/* <label>Обложка курса</label> */}
+                                    <input className="addCourse__form-input" placeholder="Ссылка на картинку"></input>
+                                    <input ref={inputFileRef} type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
+                                </div>                            
+                            </div>
                         </div>
-                    </div>
-
-            <div style={{display: "flex", alignItems: "stretch", justifyContent: "flex-start", minHeight: 40}}>
-                <motion.button type="button" onClick={handleNextClick} whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}} disabled={disableButton ? true : false} style={{pointerEvents: disableButton && "none",  fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: disableButton ? "rgb(255 255 255 / 30%)" : "rgb(255 255 255 / 100%)", border: disableButton ? "2px solid rgb(255 255 255 / 30%)" : "2px solid rgb(226, 100, 59)"}}>Далее</motion.button>
+                <div style={{position: "relative", boxSizing: "border-box", display: "flex"}}>
+                    <img ref={imgRef} style={{width: 230, borderRadius: 12, aspectRatio: "1/1", objectFit: "cover", objectPosition: "top"}} src="https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4=" alt="обложка курса"/>
+                    <button onClick={openFileInput} type="button" style={{position: "absolute", bottom: -10, right: -10, width: 45, height: 45, border: "none", borderRadius: "51%", fontSize: 20, display: "flex", justifyContent: "center", alignItems: "center"}}>
+                        <FontAwesomeIcon icon={faCamera} />
+                    </button>
+                </div>
             </div>
+
+            {/* </div> */}
+
+            <motion.button type="button" onClick={handleNextClick} whileHover={{backgroundColor: "rgb(93, 176, 199)", color: "rgb(255, 255, 255)"}} style={{alignSelf: "flex-end",  fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Продолжить</motion.button>
+
         </div>
     )
 }
