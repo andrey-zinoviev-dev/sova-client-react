@@ -46,7 +46,7 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                         </button>
                     </div>
         
-                    {<ul className="addCourse__form-moduleLesson-list-scroll" style={{padding: "20px 45px", boxSizing: "border-box", margin: 0, listStyle: "none", borderTop: "2px solid white", lineHeight: "2", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 15, maxHeight: 500, overflow: "hidden auto"}}>
+                    {<ul className="addCourse__form-moduleLesson-list-scroll" style={{padding: "20px 45px", boxSizing: "border-box", margin: 0, listStyle: "none", lineHeight: "2", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 15, maxHeight: 500, overflow: "hidden auto"}}>
                         {formData.modules.length > 0 ? 
                             formData.modules.map((moduleOfCourse, index) => {
                                 return <motion.li key={index} whileHover={{border: "2px solid rgb(226, 100, 59 / 100%)"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative"}}>
@@ -76,7 +76,7 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                                     </button>
                                 </motion.li>
                             }) : <li style={{padding: "0 0 0 45px", boxSizing: "border-box", fontSize: 18, textAlign: "center"}}>
-                            <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
+                            {/* <p style={{margin: 0}}>Модулей нет, но их можно добавить</p> */}
                         </li>
                         }
                         {/* <li style={{padding: "0 0 0 45px", boxSizing: "border-box", fontSize: 18, textAlign: "center"}}>

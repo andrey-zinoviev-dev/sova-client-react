@@ -193,15 +193,15 @@ export default function AddCourse() {
   return (
     <section className="addCourse">
       {/* <Dashboard /> */}
-      <div style={{display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10}}>
-        <button style={{width: 40, height: 30, backgroundColor: "transparent", border: "none", padding: 0, margin: "5px 0 0 0"}}>
-          <FontAwesomeIcon style={{color: "rgb(93, 176, 199)", fontSize: 24}} icon={faArrowLeft} />
-        </button>
-        <h2 className="addCourse__headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}><span style={{color: "white"}}>Вернуться к курсам</span>, либо добавить новый</h2>
-      </div>
-      <div style={{width: "100%", boxSizing: "border-box", padding: "0 50px"}}>
-        <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 25, maxWidth: 360, margin: "0 auto 0 0"}}>
-          <div style={{display: "flex", alignItems: "center", justifyContent: "center", minWidth: 90, minHeight: 90, borderRadius: "50%", backgroundImage: "radial-gradient(closest-side, black 75%, transparent 80%, transparent 100%), conic-gradient(rgb(116, 115, 116) 75%, rgb(93, 176, 199) 0%)"}}>
+      <div style={{width: "100%", display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10}}>
+        <div style={{display: "flex"}}>
+          <button style={{width: 40, height: 30, backgroundColor: "transparent", border: "none", padding: 0, margin: "5px 0 0 0"}}>
+            <FontAwesomeIcon style={{color: "rgb(93, 176, 199)", fontSize: 24}} icon={faArrowLeft} />
+          </button>
+          <h2 className="addCourse__headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}><span style={{color: "white"}}>Вернуться к курсам</span>, либо добавить новый</h2>
+        </div>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", gap: 25, maxWidth: 360}}>
+          <div style={{display: "flex", alignItems: "center", justifyContent: "center", minWidth: 80, minHeight: 80, borderRadius: "50%", backgroundImage: "radial-gradient(closest-side, black 75%, transparent 80%, transparent 100%), conic-gradient(rgb(116, 115, 116) 75%, rgb(93, 176, 199) 0%)"}}>
             {/* <progress value="25" style={{visibility: "hidden", width: 0, height: 0}}></progress> */}
             <p>{formStep + 1} / 4</p>
           </div>
@@ -210,7 +210,12 @@ export default function AddCourse() {
             Название, описание и обложка курса
           </p>
         </div>
-        <form className="addCourse__form" onSubmit={(evt) => {
+      </div>
+      {/* <div style={{width: "100%", boxSizing: "border-box", padding: "0 50px"}}>
+
+
+      </div> */}
+      <form className="addCourse__form" onSubmit={(evt) => {
               evt.preventDefault();
 
               const form = new FormData();
@@ -232,8 +237,7 @@ export default function AddCourse() {
             }} style={{width: "100%", height: "100%", boxSizing: "border-box",}}>
               {renderStep()}
               {/* <motion.button type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</motion.button> */}
-          </form>
-      </div>
+      </form>
 
       {/* <div style={{width: "100%", display: "flex", flexDirection: "column", maxWidth: 1280, margin: "0 auto"}}>
        

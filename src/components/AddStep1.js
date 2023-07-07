@@ -68,7 +68,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
             {/* </div> */}
             {/* <div> */}
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 768, margin: "35px auto 35px 0", width: "100%"}}>
-                <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", gap: 50, height: 230}}>
+                <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", height: 230}}>
                             <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Название курса</label> */}
                                 <input className="addCourse__form-input" placeholder="Введите название курса" value={course.name} onChange={(evt) => {

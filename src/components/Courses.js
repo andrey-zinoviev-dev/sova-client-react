@@ -87,14 +87,14 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     rest: {
       translate: "0 -100%",
       transition: {
-        duration: 0.35,
+        duration: 0.5,
         ease: "easeInOut",
       }
     },
     hover: {
       translate: "0 0%",
       transition: {
-        duration: 0.35,
+        duration: 0.5,
         ease: "easeInOut",
       }
     }
