@@ -54,7 +54,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     }, [selectedImage])
 
     return (
-        <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between" }}>
+        <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box", padding: "0 40px" }}>
             {/* <div style={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch"}}> */}
                 {/* <div className="addForm__first-step-title" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid rgb(226, 100, 59)", boxSizing: "border-box"}}>
                     <span>Шаг {formStep + 1}/3</span>
@@ -67,7 +67,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
 
             {/* </div> */}
             {/* <div> */}
-            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", maxWidth: 768, margin: "35px auto 35px 0", width: "100%"}}>
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", margin: "35px auto", width: "100%"}}>
                 <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", height: 230}}>
                             <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Название курса</label> */}
