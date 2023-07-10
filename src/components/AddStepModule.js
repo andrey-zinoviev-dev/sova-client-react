@@ -1,9 +1,11 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark , faAngleRight, faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import { faXmark , faAngleRight, faArrowLeft, faPlus} from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from "../context/userContext"; 
 import { motion } from "framer-motion";
+import EmptyLogo from '../images/Group_20.png';
+
 export default function AddStepModule({formData, setFormData, setFormStep}) {
     //derived states
     const {course} = formData;
@@ -33,7 +35,7 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
     // }, [formData, selectedModule]);
 
     return (
-        <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "flex-start"}}>
+        <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
             {/* <div className="addCourse__form-moduleLesson" ref={moduleLessonBlockRef} style={{display: "flex", alignItems: "flex-start", justifyContent: "space-between", overflow: "auto hidden", width: "100%"}}> */}
                 {/* <div style={{flex: "1 0 100%", width: "100%"}}> */}
                     {/* <div style={{boxSizing: "border-box", padding: "0 45px", margin: "0 0 35px 0", display: "flex", alignItems: "center", justifyContent: "space-between"}}> */}
@@ -92,18 +94,18 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                     </ul>
                 </div> */}
             {/* </div> */}
-            <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+            {modules.length <= 0 && <div style={{textAlign: "center"}}>
                 {/* <button type="button" onClick={() => {
                     setModuleDivOpened(true);
                 }} style={{display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box", padding: 0, minWidth: 120, minHeight: 120, backgroundColor: "transparent", borderRadius: 5, color: "white", border: "2px solid  rgb(93, 176, 199)"}}>
                     <svg style={{display: "block", width: 20, height: 20, borderRadius: "51%", border: "2px solid white"}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" fill="white"><path style={{fill: "white", scale: "0.7", translate: "15% 15%"}} d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
                     
                 </button> */}
-                {formData.modules.length <= 0 && <p style={{margin: 0}}>Модулей нет, но их можно добавить</p> }
-            </div>
-            {<ul className="addCourse__form-moduleLesson-list-scroll" style={{padding: "20px 45px", boxSizing: "border-box", margin: 0, listStyle: "none", lineHeight: "2", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 15, maxHeight: 500, overflow: "hidden auto"}}>
-                            {formData.modules.length > 0 && 
-                                formData.modules.map((moduleOfCourse, index) => {
+                <img style={{maxWidth: 90, margin: "0 0 20px 0"}} src={EmptyLogo} alt="" />
+                <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
+            </div>}
+            {modules.length > 0 && <ul className="addCourse__form-moduleLesson-list-scroll" style={{padding: "20px 45px", boxSizing: "border-box", margin: 0, listStyle: "none", lineHeight: "2", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 15, maxHeight: 500, overflow: "hidden auto"}}>
+                {modules.map((moduleOfCourse, index) => {
                                     return <motion.li key={index} whileHover={{border: "2px solid rgb(226, 100, 59 / 100%)"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative"}}>
                                         <button type="button" onClick={() => {
                                             moduleLessonBlockRef.current.scrollTo({top: 0, left: moduleLessonBlockRef.current.clientWidth, behavior: "smooth" });
@@ -140,12 +142,17 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                             </li> */}
             </ul>}
 
-            <div style={{padding: "0 45px", boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", margin: "auto 0 0 0"}}>
+            <div style={{padding: "0 45px", boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
                 <button type="button" onClick={() => {
                     setFormStep((prevValue) => {
                         return prevValue -= 1;
                     });
                 }} style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Назад к курсу</button>
+                <button type="button" style={{width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
+                    setModuleDivOpened(true);
+                }}>
+                    <FontAwesomeIcon icon={faPlus} />
+                </button>
                 <button onClick={() => {
                     setFormStep((prevValue) => {
                         return prevValue += 1;
@@ -154,7 +161,7 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
             </div>
 
             {moduleDivOpened && <div style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "90px 0", backdropFilter: "blur(2px)"}}>
-                <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", flexDirection: "column", boxSizing: "border-box", padding: 30, border: "2px solid rgb(226, 100, 59)", borderRadius: 12,}}>
+                <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", flexDirection: "column", boxSizing: "border-box", padding: 30, border: "2px solid rgb(93, 176, 199)", borderRadius: 5}}>
                     <button style={{backgroundColor: "transparent", color: "white", border: "none", fontSize: 18, padding: 0, alignSelf: "flex-end", display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 15, minHeight: 30, minWidth: 100, margin: "0 15px 0 0"}} onClick={() => {
                         setModuleDivOpened(false);
                     }}>
@@ -166,7 +173,11 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                     <div style={{minWidth: 450, minHeight: 320, boxSizing: "border-box", padding: 15}}>
                         <p style={{fontSize: 21}}>Курс <span style={{color: "rgb(226, 100, 59)", fontWeight: 700, margin: "0 0 0 15px"}}>{course.name}</span></p>
                         <div style={{disaply: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column"}}>
-                            <label style={{fontSize: 18}}>Название модуля</label>
+                            {/* <label style={{fontSize: 18}}>Название модуля</label> */}
+                            <input ref={moduleNameRef} className="addCourse__form-input" style={{margin: "20px 0 0 0", width: "100%"}}></input>
+                        </div>
+                        <div style={{disaply: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column"}}>
+                            {/* <label style={{fontSize: 18}}>Обложка модуля</label> */}
                             <input ref={moduleNameRef} className="addCourse__form-input" style={{margin: "20px 0 0 0", width: "100%"}}></input>
                         </div>
                         <button type="button" onClick={() => {
