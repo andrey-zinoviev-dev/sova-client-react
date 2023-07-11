@@ -48,10 +48,10 @@ export default function AddCourse() {
         return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 1: 
         return <AddStepModule formData={formData} setFormData={setFormData} setFormStep={setFormStep}/>
-      case 2:
-        return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
-      case 3:
-        return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
+      // case 2:
+      //   return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
+      // case 3:
+      //   return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       default:
         break;
     }
@@ -209,7 +209,7 @@ export default function AddCourse() {
             <span style={{display: "block"}}>Этап {formStep + 1}</span>
             {formStep + 1 === 1 && 'Название, описание и обложка курса'}
             {formStep + 1 === 2 && 'Модули и уроки курса'}
-            {formStep + 1 >= 3 && 'Контент уроков'}
+            {/* {formStep + 1 >= 3 && 'Контент уроков'} */}
           </p>
         </div>
         {/* <button style={{width: 50, height: 50, padding: 0, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", borderRadius: 5, color: "rgb(93, 176, 199)", fontWeight: 500, fontSize: 20}}>S</button> */}

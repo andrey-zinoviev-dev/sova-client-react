@@ -13,6 +13,7 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
 
     //refs
     const moduleNameRef = React.useRef();
+    const moduleCoverRef = React.useRef();
     const lessonNameRef = React.useRef();
     const moduleLessonBlockRef = React.useRef();
 
@@ -104,45 +105,27 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                 <img style={{maxWidth: 90, margin: "0 0 20px 0"}} src={EmptyLogo} alt="" />
                 <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
             </div>}
-            {modules.length > 0 && <ul className="addCourse__form-moduleLesson-list-scroll" style={{padding: "20px 45px", boxSizing: "border-box", margin: 0, listStyle: "none", lineHeight: "2", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "stretch", gap: 15, maxHeight: 500, overflow: "hidden auto"}}>
+            {modules.length > 0 && <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(5, 280px)", gridAutoRows: "280px", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", overflow: "hidden auto", gap: "45px", margin: "0 auto", maxHeight: 605}}>
                 {modules.map((moduleOfCourse, index) => {
-                                    return <motion.li key={index} whileHover={{border: "2px solid rgb(226, 100, 59 / 100%)"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "left", backgroundColor: "#242827", borderRadius: 12, border: "2px solid rgb(226, 100, 59 / 0%)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative"}}>
-                                        <button type="button" onClick={() => {
-                                            moduleLessonBlockRef.current.scrollTo({top: 0, left: moduleLessonBlockRef.current.clientWidth, behavior: "smooth" });
-                                            setSelectedModule(moduleOfCourse);
-                                        }} style={{width: "100%", borderRadius: 12, border: "none", boxSizing: "border-box", padding: "10px 45px", backgroundColor: "transparent", display: "flex", alignItems: "center", justifyContent: "space-between", color: "white"}}>
-                                            <div style={{display: "flex", flexDirection:"column", justifyContent: "space-between", alignItems: "flex-start", minHeight: 60}}>
-                                                <span style={{fontWeight: 700, fontSize: 21}}>{moduleOfCourse.title}</span> 
-                                                <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", maxWidth: 150, fontSize: 16, gap: 10}}>
-                                                    <span style={{height: 20, maxWidth: "70px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "rgb(226, 100, 59)"}}>{formData.course.name}</span>
-                                                    <span>&#8212;</span>
-                                                    <span>{moduleOfCourse.author.name}</span>
-                                                </div>
-                                            </div>
-                                            <FontAwesomeIcon style={{color: "rgb(226, 100, 59)", fontSize: 22}} icon={faAngleRight} />
-                                        </button>
-                                        <button type="button" onClick={() => {
-                                            setFormData((prevValue) => {
-                                                const filteredArray = prevValue.modules.filter((courseModule) => {
-                                                    return courseModule.title !== moduleOfCourse.title;
-                                                });
-                                                return {...prevValue, modules: filteredArray}
-                                            });
-                                        }} style={{position: "absolute", top: 3, left: 3, border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
-                                            <FontAwesomeIcon icon={faTrashCan} />
-                                        </button>
-                                    </motion.li>
-                                }) 
-                            //     : <li style={{padding: "0 0 0 45px", boxSizing: "border-box", fontSize: 18, textAlign: "center"}}>
-                            //     <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
-                            // </li>
-                            }
-                            {/* <li style={{padding: "0 0 0 45px", boxSizing: "border-box", fontSize: 18, textAlign: "center"}}>
-                                <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
-                            </li> */}
+                    return <motion.li key={index} whileHover={{border: "2px solid rgb(255, 255, 255)"}} style={{boxSizing: "border-box", padding: "15px 40px", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", fontSize: 18, textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", maxHeight: 605}}>
+                        <button type="button" onClick={() => {
+                            setFormData((prevValue) => {
+                                const filteredArray = prevValue.modules.filter((courseModule) => {
+                                    return courseModule.title !== moduleOfCourse.title;
+                                });
+                                return {...prevValue, modules: filteredArray}
+                            });
+                        }} style={{position: "absolute", top: 5, right: 5, border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
+                            <FontAwesomeIcon icon={faTrashCan} />
+                        </button>
+                            <h3 style={{margin: 0, width: "100%", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis"}}>{moduleOfCourse.title}</h3>
+                            <img style={{maxWidth: 140, borderRadius: 9, aspectRatio: "1 / 1", objectFit: "cover"}} src={moduleOfCourse.cover} alt={moduleOfCourse.title}></img>
+                            <p style={{margin: 0, width: "100%"}}>{moduleOfCourse.lessons.length > 0 ? `Уроки ${moduleOfCourse.lessons.length}` : "Уроков в модуле нет"}</p>
+                    </motion.li>
+                })}     
             </ul>}
 
-            <div style={{padding: "0 45px", boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
+            <div style={{boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
                 <button type="button" onClick={() => {
                     setFormStep((prevValue) => {
                         return prevValue -= 1;
@@ -170,33 +153,33 @@ export default function AddStepModule({formData, setFormData, setFormStep}) {
                         </span>
                         <FontAwesomeIcon icon={faXmark} />   
                     </button>
-                    <div style={{minWidth: 450, minHeight: 320, boxSizing: "border-box", padding: 15}}>
-                        <p style={{fontSize: 21}}>Курс <span style={{color: "rgb(226, 100, 59)", fontWeight: 700, margin: "0 0 0 15px"}}>{course.name}</span></p>
-                        <div style={{disaply: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column"}}>
-                            {/* <label style={{fontSize: 18}}>Название модуля</label> */}
-                            <input ref={moduleNameRef} className="addCourse__form-input" style={{margin: "20px 0 0 0", width: "100%"}}></input>
-                        </div>
-                        <div style={{disaply: "flex", justifyContent: "space-between", alignItems: "flex-start", flexDirection: "column"}}>
-                            {/* <label style={{fontSize: 18}}>Обложка модуля</label> */}
-                            <input ref={moduleNameRef} className="addCourse__form-input" style={{margin: "20px 0 0 0", width: "100%"}}></input>
-                        </div>
-                        <button type="button" onClick={() => {
-                            const objWithModule = {lessons: []};
-                            objWithModule.title = moduleNameRef.current.value;
-                            // objWithModule.course = formData.course;
-                            objWithModule.author = loggedInUser;
-                            setFormData((prevValue) => {
-                                return {...prevValue, modules: [...prevValue.modules, objWithModule]};
-                            })
-                            // setModulesOfCourse((prevValue) => {
-                            //     return [...prevValue, objWithModule];
-                            // });
-                            
-                            setModuleDivOpened(false);
+                    <div>
+                        <div style={{minWidth: 450, minHeight: 280, boxSizing: "border-box", padding: 15, display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between"}}>
+                            <p style={{fontSize: 21, margin: 0}}>Добавление модуля</p>
 
-                        }} style={{minWidth: 120, minHeight: 40, padding: 0, margin: "30px 0 0 0", borderRadius: 9, backgroundColor: "transparent", border: "2px solid rgb(226, 100, 59)", color: "rgb(225, 100, 59)"}}>Готово</button>
+                            <input ref={moduleNameRef} placeholder="Название модуля" className="addCourse__form-input" style={{width: "100%"}}></input>
+                            <input ref={moduleCoverRef} placeholder="обложка модуля" className="addCourse__form-input" style={{ width: "100%"}}></input>
+
+                            <button type="button" onClick={() => {
+                                const objWithModule = {lessons: []};
+                                objWithModule.title = moduleNameRef.current.value;
+                                objWithModule.cover = moduleCoverRef.current.value;
+                                // objWithModule.course = formData.course;
+                                objWithModule.author = loggedInUser;
+                                // objWithModule.lessons.push({title: moduleCoverRef.current.value})
+                                setFormData((prevValue) => {
+                                    return {...prevValue, modules: [...prevValue.modules, objWithModule]};
+                                })
+                                // setModulesOfCourse((prevValue) => {
+                                //     return [...prevValue, objWithModule];
+                                // });
+                                
+                                setModuleDivOpened(false);
+
+                            }} style={{alignSelf: "center", minWidth: 140, minHeight: 45, padding: 0, margin: "30px 0 0 0", borderRadius: 9, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)"}}>Добавить модуль</button>
+                        </div>
+                       
                     </div>
-
                 </div>
             </div>}
 
