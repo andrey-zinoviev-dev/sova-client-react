@@ -184,6 +184,30 @@
     margin-bottom: 15px;
 } */
 
+.addCourse__form-moduleLesson-list-scroll {
+    grid-template-columns: repeat(5, 280px);
+    grid-auto-rows: 280px;
+    max-height: 605px;
+    
+}
+
+.addCourse__form-moduleLesson-list-scroll li {
+    padding: 15px 40px;
+}
+
+.addCourse__form-moduleLesson-list-scroll li img {
+    max-width: 140px;
+}
+
+.addCourse__form-moduleLesson-list-scroll p {
+    font-size: 18px;
+}
+
+.addCourse__form-moduleLesson-list-scroll-element-close {
+    top: 20px; 
+    right: 15px;
+}
+
 .ProseMirror {
     height: 100%;
     caret-color: rgb(226, 100, 59);
@@ -318,5 +342,22 @@
     .addCourse__form-div {
         min-width: 360px;
         /* min-height: 70px; */
+    }
+    .addCourse__form-moduleLesson-list-scroll {
+        grid-template-columns: repeat(4, 200px);
+        grid-auto-rows: 200px;
+    }
+    .addCourse__form-moduleLesson-list-scroll li {
+        padding: 10px;
+    }
+    .addCourse__form-moduleLesson-list-scroll li img {
+        max-width: 100px;
+    }
+    .addCourse__form-moduleLesson-list-scroll p {
+        font-size: 16px;
+    }
+    .addCourse__form-moduleLesson-list-scroll-element-close {
+        top: 15px;
+        right: 10px;
     }
 }

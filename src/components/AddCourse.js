@@ -47,7 +47,7 @@ export default function AddCourse() {
       case 0:
         return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 1: 
-        return <AddStepModule formData={formData} setFormData={setFormData} setFormStep={setFormStep}/>
+        return <AddStepModule formData={formData} setFormData={setFormData} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       // case 2:
       //   return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       // case 3:
@@ -92,7 +92,11 @@ export default function AddCourse() {
 
   React.useEffect(() => {
     console.log(formData);
-  }, [formData])
+  }, [formData]);
+
+  React.useEffect(() => {
+    console.log(selectedFiles)
+  })
 
   // React.useEffect(() => {
   //   // console.log(formStep);

@@ -37,13 +37,13 @@ export default function TipTapEditor({formData, setFormData, selectedModule, sel
     });
 
     React.useEffect(() => {
-        selectedLesson.layout && editor && editor.commands.setContent(selectedLesson.layout);
-    }, [editor, selectedLesson.layout]);
+        // selectedLesson.layout && editor && editor.commands.setContent(selectedLesson.layout);
+    }, [editor]);
 
     return (
         <>
             <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
-            <EditorContent style={{height: "calc(100% - 125px)"}} editor={editor} />
+            <EditorContent style={{height: "100%"}} editor={editor} />
         </>
         
     );
