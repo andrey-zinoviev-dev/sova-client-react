@@ -103,7 +103,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
   // }, [editor])
 
   return (
-    editor && <ul className="addCourse__form-stepwrapper-menu-list" style={{padding: 0, margin: "0 0 20px 0", listStyle: "none", display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 9}}>
+    editor && <ul className="addCourse__form-stepwrapper-menu-list">
       <li className="addCourse__form-stepwrapper-menu-list-element">
         <button style={{fontWeight: 700}} className={editor.isActive('bold') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'}  type="button" onClick={() => {
           return editor.chain().focus().toggleBold().run()
@@ -158,7 +158,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
         </button>
       </li>
       <li>
-        <button type="button" onClick={() => {
+        <button type="button" className={editor.isActive('video') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'} onClick={() => {
           videoInputRef.current.click();
         }}>
           <FontAwesomeIcon icon={faFilm} />

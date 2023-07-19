@@ -235,10 +235,15 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                     <h3 style={{margin: 0}}>Уроки</h3> 
                     <div ref={moduleLessonsRef} style={{display: "flex", width: "100%", height: "100%", overflow: "hidden", margin: "25px 0"}}>
                         <div style={{flex: "100% 1 0", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
-                            <img style={{maxWidth: 90, margin: "0 0 20px 0"}} src={EmptyLogo} alt="" />
-                            <p>Уроков в модуле нет</p>
+                            <img style={{maxWidth: 90, margin: "auto 0 20px 0"}} src={EmptyLogo} alt="" />
+                            <p style={{margin: 0}}>Уроков в модуле нет</p>
+                            <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
+                                moduleLessonsRef.current.scrollTo({top: 0, left: moduleLessonsRef.current.clientWidth, behavior: "smooth"})
+                            }}>
+                                Добавить урок
+                            </button>
                         </div>
-                        <div style={{flex: "100% 1 0", overflow: "auto", boxSizing: "border-box", padding: "0 30px"}}>
+                        <div className="addCourse__addModule-addLesson-lessonContent" style={{flex: "100% 1 0", overflow: "auto", boxSizing: "border-box", padding: "0 30px", textAlign: "center"}}>
                             <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
                                 <button style={{backgroundColor: "transparent", width: 35, height: 35, borderRadius: "50%", border: "2px solid #5DB0C7", color: "#5DB0C7"}} type="button" onClick={() => {
                                     moduleLessonsRef.current.scrollTo({top: 0, left: -moduleLessonsRef.current.clientWidth, behavior: "smooth"})
@@ -248,11 +253,11 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                                 </button>
                                 <h3 style={{margin: "0 auto"}}>Добавить урок</h3>
                             </div>
-                            <form style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", margin: "0 0 50px 0"}}>
+                            <form style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%"}}>
                                 <div style={{display: "flex", alignItems: "flex-start"}}>
-                                    <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "10px 60px 0 0", gap: 10}}>
-                                        <input type="text" />
-                                        <input type="text" />
+                                    <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
+                                        <input className="addCourse__form-input" type="text" placeholder="Название урока" />
+                                        <input className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
                                     </div>
                                     <div style={{display: "flex", alignItems: "flex-end"}}>
                                         <img style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
@@ -267,13 +272,14 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                                 
                             </form>
                             <TipTapEditor></TipTapEditor>
+                            <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
+                                console.log('yes');
+                            }}>
+                                Добавить урок
+                            </button>
                         </div>
                     </div>
-                    <button type="button" style={{width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
-                        moduleLessonsRef.current.scrollTo({top: 0, left: moduleLessonsRef.current.clientWidth, behavior: "smooth"})
-                    }}>
-                        Добавить урок
-                    </button>
+
                 </div>
             </section>}
         </div>

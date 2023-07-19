@@ -84,9 +84,11 @@
     width: 0;
 }
 .addCourse__form-stepwrapper-menu-list-element-button {
-    border-radius: 7px; 
-    border: 2px solid white;
+    /* border-radius: 7px;  */
+    /* border: 2px solid white; */
+    font-weight: 700;
     background-color: transparent;
+    border: none;
     color: white;
 }
 
@@ -174,6 +176,19 @@
     background-color: rgb(226, 100, 59);
 }
 
+.addCourse__form-stepwrapper-menu-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 9px;
+    height: 40px;
+    background-color: #5DB0C7;
+    justify-content: center;
+}
+
 /* .addCourse__form-stepwrapper-editor-div::-webkit-scrollbar-track-piece:start {
     background-color: transparent;
     margin-top: 15px;
@@ -208,27 +223,44 @@
     right: 15px;
 }
 
+.addCourse__addModule-addLesson-lessonContent::-webkit-scrollbar {
+    width: 5px;
+}
+
+.addCourse__addModule-addLesson-lessonContent::-webkit-scrollbar-track {
+    width: 5px;
+    background-color: #EBEBEB;
+    border-radius: 9px;
+}
+
+.addCourse__addModule-addLesson-lessonContent::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: #5DB0C7;
+    border-radius: 9px;
+}
+
 .ProseMirror {
     height: 100%;
     caret-color: rgb(226, 100, 59);
-    border: 2px solid rgb(226, 100, 59);
+    /* border: 2px solid rgb(226, 100, 59); */
     background-color: #242827;
     /* height: 500px; */
-    box-shadow: 5px 5px 10px black;
+    /* box-shadow: 5px 5px 10px black; */
     width: 100%;
     text-align: left;
     overflow-y: auto;
     box-sizing: border-box;
     outline: none;
+    border-radius: 0 0 9px 9px;
     /* border: 2px solid transparent; */
-    border-radius: 15px;
+    /* border-radius: 15px; */
     /* max-height: 780px; */
     padding: 15px 30px;
 }
 
-.ProseMirror:focus {
+/* .ProseMirror:focus {
     border: 2px solid white;
-}
+} */
 
 .ProseMirror::-webkit-scrollbar, .addCourse__form-moduleLesson-list-scroll::-webkit-scrollbar {
     width: 7px;
@@ -265,10 +297,12 @@
 } */
 
 .is-active {
-    border: 2px solid rgb(226, 100, 59);
-    border-radius: 7px;
+    /* border: 2px solid black; */
+    /* border-radius: 7px; */
+    font-weight: 700;
+    border: none;
     background: transparent;
-    color: rgb(226, 100, 59);
+    color: black;
 }
 
 .addCourse__form-moduleLesson::-webkit-scrollbar {

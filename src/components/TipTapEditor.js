@@ -41,10 +41,10 @@ export default function TipTapEditor({formData, setFormData, selectedModule, sel
     }, [editor]);
 
     return (
-        <>
+        <div style={{height: "100%", borderRadius: "9px", border: "2px solid #5DB0C7"}}>
             <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
-            <EditorContent style={{height: "100%"}} editor={editor} />
-        </>
+            <EditorContent style={{height: "calc(100% - 40px)"}} editor={editor} />
+        </div>
         
     );
 };
