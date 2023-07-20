@@ -113,6 +113,10 @@
     /* min-height: 80px; */
 }
 
+.addCourse__addLesson-lessons-list {
+    max-width: 920px;
+}
+
 .addCourse__form-input {
     width: 100%;
     box-sizing: border-box;
@@ -337,6 +341,10 @@
     
     .addCourse {
         padding: 30px 45px;
+    }
+
+    .addCourse__addLesson-lessons-list {
+        max-width: 540px;    
     }
 
     .addCourse__navigation {
