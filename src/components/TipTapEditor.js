@@ -5,7 +5,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 
-export default function TipTapEditor({formData, setFormData, selectedModule, selectedLesson, setSelectedLesson, setSelectedFiles}) {
+export default function TipTapEditor({setLessonContent, formData, setFormData, selectedModule, selectedLesson, setSelectedLesson, setSelectedFiles}) {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -13,26 +13,29 @@ export default function TipTapEditor({formData, setFormData, selectedModule, sel
         ],
         content: '<p>Тут можно создать контент урока</p>',
         onUpdate: ({editor}) => {
-            setSelectedLesson((prevValue) => {
-                return {...prevValue, layout: editor.getJSON()}
-            });
+            setLessonContent((prevValue) => {
+                return {...prevValue, content: editor.getJSON()}
+            })
+        //     setSelectedLesson((prevValue) => {
+        //         return {...prevValue, layout: editor.getJSON()}
+        //     });
 
-            // setFormData((prevValue) => {
-            //     const updatedModules = prevValue.modules.map((courseModule) => {
-            //         if(courseModule.title === selectedModule.title) {
-            //             const updatedModuleLessons = courseModule.lessons.map((lesson) => {
-            //                 return lesson.title === selectedLesson.title ? {...lesson, layout: editor.getJSON()} : lesson
-            //             });
-            //             return {...courseModule, lessons: updatedModuleLessons};
-            //         }
-            //         return courseModule;
-            //     });
-            //     // console.log(prevValue);
+        //     // setFormData((prevValue) => {
+        //     //     const updatedModules = prevValue.modules.map((courseModule) => {
+        //     //         if(courseModule.title === selectedModule.title) {
+        //     //             const updatedModuleLessons = courseModule.lessons.map((lesson) => {
+        //     //                 return lesson.title === selectedLesson.title ? {...lesson, layout: editor.getJSON()} : lesson
+        //     //             });
+        //     //             return {...courseModule, lessons: updatedModuleLessons};
+        //     //         }
+        //     //         return courseModule;
+        //     //     });
+        //     //     // console.log(prevValue);
 
-            //     return {...prevValue, modules: [...updatedModules]};
-            // });
+        //     //     return {...prevValue, modules: [...updatedModules]};
+        //     // });
 
-            // console.log(editor.getJSON());
+        //     // console.log(editor.getJSON());
         },
     });
 
@@ -41,7 +44,7 @@ export default function TipTapEditor({formData, setFormData, selectedModule, sel
     }, [editor]);
 
     return (
-        <div style={{height: "100%", borderRadius: "9px", border: "2px solid #5DB0C7"}}>
+        <div style={{height: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0"}}>
             <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
             <EditorContent style={{height: "calc(100% - 40px)"}} editor={editor} />
         </div>

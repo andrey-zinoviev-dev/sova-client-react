@@ -90,13 +90,13 @@ export default function AddCourse() {
   
   const cyrillicToTranslit = new CyrillicToTranslit();
 
-  React.useEffect(() => {
-    console.log(formData);
-  }, [formData]);
+  // React.useEffect(() => {
+  //   console.log(formData);
+  // }, [formData]);
 
-  React.useEffect(() => {
-    console.log(selectedFiles)
-  })
+  // React.useEffect(() => {
+  //   console.log(selectedFiles)
+  // })
 
   // React.useEffect(() => {
   //   // console.log(formStep);

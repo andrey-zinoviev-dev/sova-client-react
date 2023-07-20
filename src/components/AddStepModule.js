@@ -1,10 +1,12 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faAngleRight, faArrowLeft, faPlus, faCamera} from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from "../context/userContext"; 
 import { motion } from "framer-motion";
 import EmptyLogo from '../images/Group_20.png';
+import LessonImg from '../images/5af7b516f65dd48bf1c3daae143f8fd7.jpg';
 import TipTapEditor from "./TipTapEditor";
 
 export default function AddStepModule({formData, setFormData, setFormStep, setSelectedFiles}) {
@@ -19,14 +21,19 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
     const moduleCoverInputRef = React.useRef();
     const moduleCoverImg = React.useRef();
     const moduleLessonsRef = React.useRef();
+    const lessonTitleRef = React.useRef();
+    const lessonCoverLinkRef = React.useRef();
+    const lessonCoverImg = React.useRef();
+    const lessonCoverInputRef = React.useRef();
 
     //states
     // const [modulesOfCourse, setModulesOfCourse] = React.useState([]);
     const [moduleDivOpened, setModuleDivOpened] = React.useState(false);
-    const [selectedModule, setSelectedModule] = React.useState({});
+    const [selectedModuleTitle, setSelectedModuleTitle] = React.useState({});
     const [lessonPopupOpened, setLessonPopupOpened] = React.useState(false);
     const [lessonAddEnabled, setLessonAddEnabled] = React.useState(false);
     const [selectedModuleCover, setSelectedModuleCover] = React.useState('');
+    const [lessonContent, setLessonContent] = React.useState({title: "", content: {}});
     // const [lessonsOfModule, setLessonsOfModule] = React.useState([]);
 
     //user
@@ -58,8 +65,8 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
     };
 
     React.useEffect(() => {
-        console.log(selectedModuleCover);
-    }, [selectedModuleCover]);
+
+    }, [selectedModuleTitle]);
 
     return (
         <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
@@ -135,6 +142,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                 {modules.map((moduleOfCourse, index) => {
                     return <motion.li onClick={() => {
                         setLessonPopupOpened(true);
+                        setSelectedModuleTitle(moduleOfCourse.title);
                     }} key={index} whileHover={{border: "2px solid rgb(255, 255, 255)", cursor: "pointer"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", maxHeight: 605}}>
                         <button type="button" className="addCourse__form-moduleLesson-list-scroll-element-close" onClick={() => {
                             setFormData((prevValue) => {
@@ -237,6 +245,32 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                         <div style={{flex: "100% 1 0", display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column"}}>
                             <img style={{maxWidth: 90, margin: "auto 0 20px 0"}} src={EmptyLogo} alt="" />
                             <p style={{margin: 0}}>Уроков в модуле нет</p>
+                            <ul style={{width: "100%", maxWidth: 720, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", margin: 0, gap: 15}}>
+                                <li style={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", border: "2px solid white", borderRadius: 9, boxSizing: "border-box", padding: "7px 40px"}}>
+                                    <img style={{maxWidth: 45, maxHeight: 45, borderRadius: "50%"}} src={LessonImg} alt=""></img>
+                                    <p style={{margin: 0, fontWeight: 700}}>Урок 1</p>
+                                    <div>
+                                        <button style={{backgroundColor: "transparent", color: "white", fontSize: 18, border: "none"}}>
+                                            <FontAwesomeIcon icon={faTrashCan} />
+                                        </button>
+                                        <button style={{backgroundColor: "transparent", color: "white", fontSize: 18, border: "none"}}>
+                                            <FontAwesomeIcon icon={faPenToSquare} />
+                                        </button>
+                                    </div>
+                                </li>
+                                <li>
+                                    <img src={LessonImg} alt=""></img>
+                                    <p style={{margin: 0, fontWeight: 700}}>Урок 2</p>
+                                    <div>
+                                        <button style={{backgroundColor: "transparent", color: "white", fontSize: 18, border: "none"}}>
+                                            <FontAwesomeIcon icon={faTrashCan} />
+                                        </button>
+                                        <button style={{backgroundColor: "transparent", color: "white", fontSize: 18, border: "none"}}>
+                                            <FontAwesomeIcon icon={faPenToSquare} />
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
                             <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
                                 moduleLessonsRef.current.scrollTo({top: 0, left: moduleLessonsRef.current.clientWidth, behavior: "smooth"})
                             }}>
@@ -256,13 +290,18 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                             <form style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%"}}>
                                 <div style={{display: "flex", alignItems: "flex-start"}}>
                                     <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
-                                        <input className="addCourse__form-input" type="text" placeholder="Название урока" />
-                                        <input className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
+                                        <input ref={lessonTitleRef} onChange={(evt) => {
+                                            setLessonContent((prevValue) => {
+                                                return {...prevValue, title: evt.target.value};
+                                            });
+                                        }} className="addCourse__form-input" type="text" placeholder="Название урока" />
+                                        <input ref={lessonCoverLinkRef} className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
                                     </div>
                                     <div style={{display: "flex", alignItems: "flex-end"}}>
-                                        <img style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                                        <img alt="обложка урока" ref={lessonCoverImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                                        <input onChange={(evt) => {}} ref={lessonCoverInputRef} style={{display: "none"}} type="file"></input>
                                         <button type="button" onClick={(() => {
-                                            console.log('change pic')
+                                            lessonCoverInputRef.current.click();
                                         })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
                                             <FontAwesomeIcon icon={faCamera} />
                                         </button>
@@ -271,9 +310,23 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
 
                                 
                             </form>
-                            <TipTapEditor></TipTapEditor>
+                            <TipTapEditor setLessonContent={setLessonContent}></TipTapEditor>
                             <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
-                                console.log('yes');
+                                // console.log(modules);
+                                // const lessonObj = {title: lessonTitleRef.current.value, content: lessonContent};
+                                // console.log(lessonContent);
+                                // const updatedModules = modules.map((module) => {
+                                //     return module.title === selectedModule.title ? {...module, lessons:[...module.lessons, lessonContent]} : module;
+                                // });
+                                // setFormData((prevValue) => {
+                                //     return {...prevValue, modules: updatedModules};
+                                // });
+                                setLessonContent({});
+                                moduleLessonsRef.current.scrollTo({top: 0, left: -moduleLessonsRef.current.clientWidth, behavior: "smooth"})
+                                // const updatedModules = modules.map((module) => {
+                                //     return module.title === selectedModule.title ? {...module, lessons:[...module.lessons, lessonObj]} : module;
+                                // });
+                                // console.log(updatedModules);
                             }}>
                                 Добавить урок
                             </button>

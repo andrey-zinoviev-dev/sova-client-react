@@ -187,6 +187,7 @@
     height: 40px;
     background-color: #5DB0C7;
     justify-content: center;
+    border-radius: 5px 5px 0 0;
 }
 
 /* .addCourse__form-stepwrapper-editor-div::-webkit-scrollbar-track-piece:start {
