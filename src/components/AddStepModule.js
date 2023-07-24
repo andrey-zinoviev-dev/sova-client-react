@@ -112,12 +112,12 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
         
     // };
 
-    React.useEffect(() => {
-        // console.log(foundModule);
-        // console.log(foundLesson);
-        // console.log(selectedLessonTitle);
-        console.log(formData);
-    }, [selectedModuleTitle, selectedLessonTitle, formData]);
+    // React.useEffect(() => {
+    //     // console.log(foundModule);
+    //     // console.log(foundLesson);
+    //     // console.log(selectedLessonTitle);
+    //     console.log(formData);
+    // }, [selectedModuleTitle, selectedLessonTitle, formData]);
 
     return (
         <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
@@ -163,10 +163,12 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                     <FontAwesomeIcon icon={faPlus} />
                 </button>
                 <button onClick={() => {
-                    setFormStep((prevValue) => {
-                        return prevValue += 1;
-                    });
-                }} type="button" style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Далее</button>
+                    // setFormStep((prevValue) => {
+                    //     return prevValue += 1;
+                    // });
+                }} type="submit" style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>
+                    Далее
+                </button>
             </div>
 
             {moduleDivOpened && <div style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "90px 0", backdropFilter: "blur(2px)"}}>

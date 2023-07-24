@@ -207,7 +207,7 @@ export default function AddCourse() {
         <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 25, maxWidth: 410, margin: "20px 0 0 0", boxSizing: "border-box", padding: "0 0 0 35px"}}>
           <div style={{display: "flex", alignItems: "center", justifyContent: "center", minWidth: 80, minHeight: 80, borderRadius: "50%", backgroundImage: "radial-gradient(closest-side, black 75%, transparent 80%, transparent 100%), conic-gradient(rgb(116, 115, 116) 75%, rgb(93, 176, 199) 0%)"}}>
             {/* <progress value="25" style={{visibility: "hidden", width: 0, height: 0}}></progress> */}
-            <p>{formStep + 1} / 4</p>
+            <p>{formStep + 1} / 2</p>
           </div>
           <p style={{margin: 0, maxWidth: 280, textAlign: "left"}}>
             <span style={{display: "block"}}>Этап {formStep + 1}</span>
@@ -225,7 +225,7 @@ export default function AddCourse() {
       </div> */}
       <form className="addCourse__form" onSubmit={(evt) => {
               evt.preventDefault();
-
+              // console.log(formData);
               const form = new FormData();
               form.append("author", JSON.stringify(loggedInUser));
               form.append("course", JSON.stringify(formData.course));
