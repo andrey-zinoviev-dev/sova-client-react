@@ -5,17 +5,31 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 
-export default function TipTapEditor({setLessonContent, formData, setFormData, selectedModule, selectedLesson, setSelectedLesson, setSelectedFiles}) {
+export default function TipTapEditor({lessonContent, setLessonContent, foundLesson, foundModule, formData, setFormData, setSelectedFiles}) {
     const editor = useEditor({
         extensions: [
             StarterKit,
-            Image
+            Image,
+            Placeholder.configure({
+                placeholder: "Добавьте контент уроку..."
+            }),
         ],
-        content: '<p>Тут можно создать контент урока</p>',
+        content: foundLesson && foundLesson.content,
+        
         onUpdate: ({editor}) => {
+            foundLesson ? setFormData((prevValue) => {
+                const modulesToUpdate = prevValue.modules.map((module) => {
+                    return module.title === foundModule.title ? {...module, lessons: module.lessons.map((lesson) => {
+                        return lesson.title === foundLesson.title ? {...lesson, content: editor.getJSON()} : lesson;
+                    })} : module;
+                });
+                return {...prevValue, modules: modulesToUpdate};
+            }) :
             setLessonContent((prevValue) => {
+                // console.log('yes');
                 return {...prevValue, content: editor.getJSON()}
             })
+
         //     setSelectedLesson((prevValue) => {
         //         return {...prevValue, layout: editor.getJSON()}
         //     });
@@ -39,12 +53,20 @@ export default function TipTapEditor({setLessonContent, formData, setFormData, s
         },
     });
 
+    // React.useEffect(() => {
+    //     console.log(foundLesson);
+    // }, [foundLesson])
+
     React.useEffect(() => {
-        // selectedLesson.layout && editor && editor.commands.setContent(selectedLesson.layout);
-    }, [editor]);
+        if(editor) {
+            lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
+
+        }
+         
+    }, [lessonContent, editor])
 
     return (
-        <div style={{height: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0"}}>
+        <div style={{height: "100%", width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0"}}>
             <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
             <EditorContent style={{height: "calc(100% - 40px)"}} editor={editor} />
         </div>

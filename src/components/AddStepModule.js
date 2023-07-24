@@ -24,6 +24,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
     const lessonCoverInputRef = React.useRef();
     const editLessonCoverImg = React.useRef();
     const editLessonCoverInput = React.useRef();
+    const lessonAddFormRef = React.useRef();
 
     //states
     // const [modulesOfCourse, setModulesOfCourse] = React.useState([]);
@@ -34,7 +35,10 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
     const [lessonAddEnabled, setLessonAddEnabled] = React.useState(false);
     const [selectedModuleCover, setSelectedModuleCover] = React.useState('');
     const [moduleContent, setModuleContent] = React.useState({title: "", cover: "", lessons: []});
-    const [lessonContent, setLessonContent] = React.useState({title: "", cover: "", content: {}});
+    const [lessonContent, setLessonContent] = React.useState({title: "", cover: "", content: {"type": "doc",
+    "content": [
+      // …
+    ]}});
     const [lessonCoverEditOpened, setLessonCoverEditOpened] = React.useState(false);
     const [lessonContentEditOpened, setLessonContentEditOpened] = React.useState(false);
 
@@ -275,6 +279,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                                                     <motion.svg whileHover={{fill: "#ffffff"}} fill="#5DB0C7" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></motion.svg>
                                                 </motion.button>
                                                 <button type="button" onClick={() => {
+                                                    setSelectedLessonTitle(lesson.title);
                                                     setLessonContentEditOpened(true);
                                                 }} style={{backgroundColor: "transparent", color: "white", fontSize: 18, border: "none"}}>
                                                     <motion.svg whileHover={{fill: "#ffffff"}} fill="#5DB0C7" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></motion.svg>
@@ -291,7 +296,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                                 Добавить урок
                             </button>
                         </div>
-                        <div className="addCourse__addModule-addLesson-lessonContent" style={{flex: "100% 1 0", overflow: "auto", boxSizing: "border-box", padding: "0 30px", textAlign: "center"}}>
+                        <div className="addCourse__addModule-addLesson-lessonContent" style={{flex: "100% 1 0", overflow: "hidden auto", boxSizing: "border-box", padding: "0 30px", textAlign: "center"}}>
                             <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start"}}>
                                 <button style={{backgroundColor: "transparent", width: 35, height: 35, borderRadius: "50%", border: "2px solid #5DB0C7", color: "#5DB0C7"}} type="button" onClick={() => {
                                     moduleLessonsRef.current.scrollTo({top: 0, left: -moduleLessonsRef.current.clientWidth, behavior: "smooth"})
@@ -301,7 +306,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                                 </button>
                                 <h3 style={{margin: "0 auto"}}>Добавить урок</h3>
                             </div>
-                            <form style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%"}}>
+                            <form ref={lessonAddFormRef} style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%"}}>
                                 <div style={{display: "flex", alignItems: "flex-start"}}>
                                     <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
                                         <input ref={lessonTitleRef} onChange={(evt) => {
@@ -324,7 +329,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
 
                                 
                             </form>
-                            <TipTapEditor setLessonContent={setLessonContent}></TipTapEditor>
+                            <TipTapEditor setLessonContent={setLessonContent} lessonContent={lessonContent}></TipTapEditor>
                             <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
                                 // console.log(modules);
                                 // const lessonObj = {title: lessonTitleRef.current.value, content: lessonContent};
@@ -335,7 +340,11 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                                 setFormData((prevValue) => {
                                     return {...prevValue, modules: updatedModules};
                                 });
-                                setLessonContent({});
+                                setLessonContent({title: "", cover: "", content: {"type": "doc",
+                                "content": [
+                                  // …
+                                ]}});
+                                lessonAddFormRef.current.reset();
                                 moduleLessonsRef.current.scrollTo({top: 0, left: -moduleLessonsRef.current.clientWidth, behavior: "smooth"})
                                 // const updatedModules = modules.map((module) => {
                                 //     return module.title === selectedModule.title ? {...module, lessons:[...module.lessons, lessonObj]} : module;
@@ -395,14 +404,17 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
 
             </section>}
             {lessonContentEditOpened && <section style={{display: "flex", alignItems: "center", justifyContent: "center", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 45, backgroundColor: "rgba(0, 0, 0, 0.75)"}}>
-                <div style={{position:"relative", width: "100%", maxWidth: 540, padding: "20px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center"}}>
+                <div style={{position:"relative", width: "100%", maxWidth: 920, height: "100%", maxHeight: 768, padding: "20px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center"}}>
                     <button type="button" onClick={() => {
                         setLessonContentEditOpened(false);
                     }} style={{position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: "50%", border: "2px solid #EB4037", color: "#EB4037", fontSize: 18, backgroundColor: "transparent"}}>
                             <FontAwesomeIcon icon={faXmark} />
                     </button>
                     <h3 style={{margin: "0 0 50px 0"}}>Редактировать контент урока</h3>
-                    
+                    <TipTapEditor foundLesson={foundLesson} foundModule={foundModule} setFormData={setFormData} />
+                    <button type="button" onClick={() => {
+                        setLessonContentEditOpened(false);
+                    }} style={{width: 160, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}}>Обновить контент</button>
                 </div>
             </section>}
         </div>
