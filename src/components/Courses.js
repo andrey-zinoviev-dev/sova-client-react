@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faPen, faXmark, faLock, faAnglesDown } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faPen, faXmark, faLock, faAnglesDown, faCamera } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Menu from "./Menu";
 import Dashboard from "./Dashboard";
@@ -343,7 +343,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
       </CourseModulesPopup>
 
       {isEditCourse && <EditCourse>
-        <div style={{textAlign: "left", position: "relative", width: "50%"}}>
+        <div style={{position: "relative", width: "100%", maxWidth: 920}}>
           <button onClick={() => {
             setIsEditCourse(false);
             setSelectedCourse({});
@@ -351,24 +351,30 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
             <FontAwesomeIcon icon={faXmark} />
           </button>
           <h2 style={{fontSize: 36}}>Редактировать курс</h2>
-          <form style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
+          <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
             <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-name">Название</label>
-            <input ref={courseNameRef} style={{width: "100%", boxSizing: "border-box", borderRadius: 12, padding: "10px 20px", border: "none", fontSize: 16}} id="course-name" value={selectedCourse.name} onChange={() => {}}></input>
+            <input className="course-edit__form__input" ref={courseNameRef} style={{width: "100%", boxSizing: "border-box", borderRadius: 12, padding: "10px 20px", border: "none", fontSize: 16}} id="course-name" value={selectedCourse.name} onChange={() => {}}></input>
           </form>
-          <form style={{display: "flex", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
+          <form className="course-edit__form" style={{display: "flex", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
             <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
-              <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-desc">Описание</label> 
-              <textarea ref={courseDescRef} style={{resize: "none", width: "100%", height: "100%", boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
+              <label style={{display: "block"}} htmlFor="course-desc">Описание</label> 
+              <textarea className="course-edit__form__textarea" ref={courseDescRef} style={{resize: "none", width: "100%", height: "100%", boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
                 console.log(evt.target.value);
               }}></textarea>
             </div>
-            <div style={{textAlign: "left", width: "100%"}}>
+            <div style={{textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
               <span style={{display: "block"}}>Текущая обложка курса</span>
-              <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", boxSizing: "border-box", borderRadius: 9, border: "2px solid white", margin: "30px 0"}} src={courseCover.length > 0 ? courseCover : selectedCourse.cover} alt="Обложка курса"></img>
-              <button type="button" style={{display: "block", boxSizing: "border-box", padding: "10px 20px", border: "2px solid white", color: "white", borderRadius: 12, backgroundColor: "transparent", fontSize: 18}}>
-                <label style={{cursor: "pointer"}} htmlFor="course-cover">Изменить обложку</label>
-              </button>
-              <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
+              <div style={{position: "relative", display: "flex"}}>
+                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} src={courseCover.length > 0 ? courseCover : selectedCourse.cover} alt="Обложка курса"></img>
+                <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
+                                // editLessonCoverInput.current.click();
+                })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>
+                  <p>Изменить обложку</p>
+                  
+                </motion.button>
+                <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
+              </div>
+
             </div>
           </form>
           <form onSubmit={(evt) => {

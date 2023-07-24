@@ -30,7 +30,7 @@ export default function EditCourse({ children }) {
   //   console.log(children);
   // }, [])
   return (
-    <section style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/ 70%)", color: "white", zIndex: 10, display: "flex", justifyContent: "center", alignItems: "flex-start", boxSizing: "border-box", padding: "2% 0", fontSize: 20, overflow: "auto"}}>
+    <section className="course-edit" style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/ 70%)", color: "white", zIndex: 10, display: "flex", justifyContent: "center", alignItems: "flex-start", boxSizing: "border-box", padding: "2% 0", fontSize: 20, overflow: "auto"}}>
       {/* <div style={{textAlign: "left", position: "relative"}}>
         <button onClick={setIsEditCourse(false)} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
           <FontAwesomeIcon icon={faXmark} />
