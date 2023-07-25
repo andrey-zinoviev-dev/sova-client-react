@@ -30,18 +30,22 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     courses: [],
     allStudents: [],
   });
-  const [selectedCourse, setSelectedCourse] = React.useState({});
+  const [selectedCourseTitle, setSelectedCourseTitle] = React.useState("");
   const [modulesPopupOpened, setModulesPopupOpened] = React.useState(false);
   const [isEditCourse, setIsEditCourse] = React.useState(false);
   const [courseCover, setCourseCover] = React.useState("");
-  const [courseIndex, setCourseIndex] = React.useState(0);
+  // const [courseIndex, setCourseIndex] = React.useState(0);
   const [selectedModule, setSelectedModule] = React.useState({});
   const [addStudentOpened, setAddStudentOpened] = React.useState(false);
   const [popupOpened, setPopupOpened] = React.useState(false);
   const [studentsToAddToCourse, setStudentsToAddToCourse] = React.useState(new Set([]));
 
   //derived states
-  let courseSelectTest = {};
+  let foundCourse = coursesData.courses.find((course) => {
+    return course.name === selectedCourseTitle;
+  }) ? coursesData.courses.find((course) => {
+    return course.name === selectedCourseTitle;
+  }) : {name: "", description: "", author: "", modules: [], cover: ""};
 
   //variants
   const spanMotion = {
@@ -167,11 +171,13 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
 
   //functions
 
-  function showCoursePopup(course, index) {
+  function showCoursePopup(courseTitle, index) {
     // console.log(course);
-    setSelectedCourse(course);
-    setCourseIndex(index);
-    setModulesPopupOpened(true);
+    setSelectedCourseTitle(courseTitle);
+    // setCourseIndex(index);
+
+    // setModulesPopupOpened(true);
+
   //  const courseModules = course.modules;
   //  console.log(courseModules);
   }
@@ -224,8 +230,8 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
   // }, []);
 
   React.useEffect(() => {
-    console.log(coursesData);
-  }, [coursesData]);
+    console.log(foundCourse);
+  }, [selectedCourseTitle]);
 
   return (
     <>
@@ -256,7 +262,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
             return <motion.li initial="rest" whileHover="hover" animate="rest" /*variants={liBackground}*/ className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
               <motion.div variants={liGradient} style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundImage: "linear-gradient(180deg, rgb(93, 176, 199) 5%, transparent 75%)"}}></motion.div>
               <button onClick={() => {
-                showCoursePopup(course, index);
+                showCoursePopup(course.name, index);
               }} style={{position: "relative", width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
                 
                 <div style={{display: "flex", alignItems: "flex-end", justifyContent: "space-between", minWidth: 35, fontSize: 28, color: "white"}}>
@@ -286,8 +292,8 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
               
               {loggedInUser._id && loggedInUser.admin &&
                 <motion.button variants={liContent} onClick={() => {
+                  setSelectedCourseTitle(course.name);
                   setIsEditCourse(true);
-                  setSelectedCourse(course);
                 }} style={{position: "absolute", top: "6.5%", right: 35, display: 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10, zIndex: 6}}>
                   <FontAwesomeIcon icon={faPen}/>
                 </motion.button>
@@ -301,10 +307,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
 
       <CourseModulesPopup modulesPopupOpened={modulesPopupOpened}>
         <div className="popup__modules">
-          {/* <div className="popup__modules-course-div">
-            <span className="popup__modules-course-span">{}</span>
-          </div> */}
-          <img style={{width: "50%", height: "100%", objectFit: "cover", borderRadius: 12}} alt={selectedCourse.cover} src={selectedCourse.cover}></img>
+          {/* <img style={{width: "50%", height: "100%", objectFit: "cover", borderRadius: 12}} alt={selectedCourse.cover} src={selectedCourse.cover}></img>
           <div style={{width: "50%", boxSizing: "border-box", padding: "0 45px", position: "relative"}}>
             <h3 style={{margin: "0 0 30px 0"}} className="popup__modules-headline">{selectedCourse.name}</h3>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
@@ -328,15 +331,13 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
                   setSelectedModule({...module, course: selectedCourse._id});
                 }} className="popup__modules-list-element" whileHover="hover" initial="rest" variants={liMotion} key={module._id}>
                   
-                  {/* <Link className="popup__modules-list-element-link" to={`courses/${selectedCourse._id}/modules/${module._id}`}>
-                    <span>{`0${index + 1} ${module.name}`}</span>
-                  </Link> */}
+          
                   <span>{`0${index + 1} ${module.title}`}</span>
                 </motion.li>
               })}
             </ul> : <ModulesList selectedModule={selectedModule} selectedCourse={selectedCourse}/>}
             <p>{selectedCourse.description}</p>
-          </div>
+          </div> */}
 
         </div>
         <div className="popup__overlay"></div>
@@ -346,28 +347,28 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
         <div style={{position: "relative", width: "100%", maxWidth: 920}}>
           <button onClick={() => {
             setIsEditCourse(false);
-            setSelectedCourse({});
+            // setSelectedCourse({});
             }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
           <h2 style={{fontSize: 36}}>Редактировать курс</h2>
           <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
-            <label style={{display: "block", margin: "0 0 25px 0"}} htmlFor="course-name">Название</label>
-            <input className="course-edit__form__input" ref={courseNameRef} style={{width: "100%", boxSizing: "border-box", borderRadius: 12, padding: "10px 20px", border: "none", fontSize: 16}} id="course-name" value={selectedCourse.name} onChange={() => {}}></input>
+            <label style={{display: "block", margin: "0 0 10px 0"}} htmlFor="course-name">Название</label>
+            <input className="course-edit__form-input" ref={courseNameRef} id="course-name" value={foundCourse.name} onChange={() => {}}></input>
           </form>
-          <form className="course-edit__form" style={{display: "flex", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
+          <form className="course-edit__form" style={{display: "flex", maxWidth: "100%", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
             <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
-              <label style={{display: "block"}} htmlFor="course-desc">Описание</label> 
-              <textarea className="course-edit__form__textarea" ref={courseDescRef} style={{resize: "none", width: "100%", height: "100%", boxSizing: "border-box", padding: "10px 20px", borderRadius: 12, fontSize: 16}} value={selectedCourse.description} onChange={(evt) => {
+              <label style={{display: "block", margin: "0 0 20px 0"}} htmlFor="course-desc">Описание</label> 
+              <textarea className="course-edit__form-textarea" ref={courseDescRef} value={foundCourse.description} onChange={(evt) => {
                 console.log(evt.target.value);
               }}></textarea>
             </div>
             <div style={{textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
-              <span style={{display: "block"}}>Текущая обложка курса</span>
+              <span style={{display: "block", margin: "0 0 20px 0"}}>Текущая обложка курса</span>
               <div style={{position: "relative", display: "flex"}}>
-                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} src={courseCover.length > 0 ? courseCover : selectedCourse.cover} alt="Обложка курса"></img>
+                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} src={courseCover.length > 0 ? courseCover : foundCourse.cover} alt="Обложка курса"></img>
                 <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
-                                // editLessonCoverInput.current.click();
+                              
                 })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>
                   <p>Изменить обложку</p>
                   
@@ -377,7 +378,19 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
 
             </div>
           </form>
-          <form onSubmit={(evt) => {
+
+          <ul>
+            {foundCourse.modules.map((module) => {
+              return <li key={module._id}>
+                <h3>{module.title}</h3>
+                <img src={module.cover} alt="обложка модуля"></img>
+              </li>
+            })}
+          </ul>
+
+
+         
+          {/* <form onSubmit={(evt) => {
             evt.preventDefault();
             addStudentsToCourse(token, {courseId: selectedCourse._id, students: Array.from(studentsToAddToCourse)})
             .then((data) => {
@@ -405,7 +418,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
               })}
             </ul>
             <motion.button whileHover={{backgroundColor: "rgb(93, 176, 199)"}} type="submit" style={{margin: "25px 0 0 0", height: 40, boxSizing: "border-box", padding: 10, border: "2px solid rgb(93, 176, 199)", borderRadius: 9, backgroundColor: "rgba(211, 124, 82, 0)", color: "rgb(255, 255, 255)", fontWeight: 700}}>Добавить учеников к курсу</motion.button>
-          </form>
+          </form> */}
         </div>
       </EditCourse>}
 
