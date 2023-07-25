@@ -368,7 +368,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
               <div style={{position: "relative", display: "flex"}}>
                 <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} src={courseCover.length > 0 ? courseCover : foundCourse.cover} alt="Обложка курса"></img>
                 <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
-                              
+                  courseCoverRef.current.click();
                 })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>
                   <p>Изменить обложку</p>
                   
@@ -378,15 +378,19 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
 
             </div>
           </form>
+          <div>
+            <p>Модули</p>
+            <ul style={{display: "grid", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", overflow: "hidden auto", gap: "45px", margin: "0 auto"}}>
+              {foundCourse.modules.map((module) => {
+                return <li key={module._id} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative"}}>
+                  <h3>{module.title}</h3>
+                  <img src={module.cover} alt="обложка модуля"></img>
+                  <p>Уроки {module.lessons.length}</p>
+                </li>
+              })}
+            </ul>
+          </div>
 
-          <ul>
-            {foundCourse.modules.map((module) => {
-              return <li key={module._id}>
-                <h3>{module.title}</h3>
-                <img src={module.cover} alt="обложка модуля"></img>
-              </li>
-            })}
-          </ul>
 
 
          

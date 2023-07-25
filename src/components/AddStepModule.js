@@ -65,20 +65,21 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
         const coverFile = evt.target.files[0];
         const clientPath = window.URL.createObjectURL(coverFile);
         coverFile.clientPath = clientPath;
+        coverFile.title = coverFile.name;
         // moduleCoverImg.current.src = clientPath;
         
         setSelectedFiles((prevValue) => {
             return [...prevValue, coverFile];
         });
 
-        return clientPath;
+        return coverFile;
     };
 
     function handleModuleCoverUpload(evt) {
-        const picPath = handleCoverUpload(evt);
-        moduleCoverImg.current.src = picPath;
+        const picFile = handleCoverUpload(evt);
+        moduleCoverImg.current.src = picFile.clientPath;
         setModuleContent((prevValue) => {
-            return {...prevValue, cover: picPath};
+            return {...prevValue, cover: picFile};
         });
         // setFormData((prevValue) => {
 
@@ -86,16 +87,16 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
     };
 
     function handleLessonCoverUpload(evt) {
-        const picPath = handleCoverUpload(evt);
-        lessonCoverImg.current.src = picPath;
+        const picFile = handleCoverUpload(evt);
+        lessonCoverImg.current.src = picFile.clientPath;
         setLessonContent((prevValue) => {
-            return {...prevValue, cover: picPath};
+            return {...prevValue, cover:picFile};
         });
     };
 
     function handleEditLessonCoverUpload(evt) {
-        const picPath = handleCoverUpload(evt);
-        editLessonCoverImg.current.src = picPath;
+        const picFile = handleCoverUpload(evt);
+        editLessonCoverImg.current.src = picFile.clientPath;
 
     }
 
@@ -145,7 +146,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                             <FontAwesomeIcon icon={faTrashCan} />
                         </button>
                             <h3 style={{margin: 0, width: "100%", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis"}}>{moduleOfCourse.title}</h3>
-                            <img style={{borderRadius: 9, aspectRatio: "1 / 1", objectFit: "cover"}} src={moduleOfCourse.cover} alt={moduleOfCourse.title}></img>
+                            <img style={{borderRadius: 9, aspectRatio: "1 / 1", objectFit: "cover"}} src={moduleOfCourse.cover.clientPath} alt={moduleOfCourse.title}></img>
                             <p style={{margin: 0, width: "100%"}}>{moduleOfCourse.lessons.length > 0 ? `Уроки ${moduleOfCourse.lessons.length}` : "Уроков в модуле нет"}</p>
                     </motion.li>
                 })}     
@@ -253,7 +254,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                                             // setSelectedLessonTitle(lesson.title);
                                         }} key={index} style={{cursor: "pointer", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", border: "2px solid #5DB0C7", borderRadius: 9, boxSizing: "border-box", padding: "7px 40px"}}>
                                             <div style={{position: "relative"}}>
-                                                <img style={{width: 40, aspectRatio: "1/1", borderRadius: "50%", objectFit: "cover"}} src={lesson.cover} alt=""></img>
+                                                <img style={{width: 40, aspectRatio: "1/1", borderRadius: "50%", objectFit: "cover"}} src={lesson.cover.clientPath} alt=""></img>
                                                 <motion.button type="button" onClick={() => {
                                                     setLessonCoverEditOpened(true);
                                                     setSelectedLessonTitle(lesson.title);
