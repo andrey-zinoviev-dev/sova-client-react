@@ -1,19 +1,23 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faPen, faXmark, faLock, faAnglesDown, faCamera } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faPen, faXmark, faLock, faAnglesDown, faCamera, faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from "../context/userContext";
 import Menu from "./Menu";
 import Dashboard from "./Dashboard";
 import CourseModulesPopup from "./CourseModulesPopup";
 import ModulesList from "./ModulesList";
 import PopupWithForm from "./PopupWithForm";
+import AddModulePopup from "./AddModulePopup";
 // import AddCourse from "./AddCourse";
 import './Courses.css';
 import {  
   apiGetCourses,
   apiGetAllStudents,
-  addStudentsToCourse
+  apiAddStudentsToCourse,
+  apiEditCourse,
+  apiDeleteModule,
 } from '../api';
 import EditCourse from "./EditCourse";
 import Student from "./Student"
@@ -30,22 +34,24 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     courses: [],
     allStudents: [],
   });
-  const [selectedCourseTitle, setSelectedCourseTitle] = React.useState("");
+  const [selectedCourseId, setSelectedCourseId] = React.useState("");
+  const [selectedModuleId, setSelectedModuleId] = React.useState("");
   const [modulesPopupOpened, setModulesPopupOpened] = React.useState(false);
   const [isEditCourse, setIsEditCourse] = React.useState(false);
   const [courseCover, setCourseCover] = React.useState("");
   // const [courseIndex, setCourseIndex] = React.useState(0);
-  const [selectedModule, setSelectedModule] = React.useState({});
   const [addStudentOpened, setAddStudentOpened] = React.useState(false);
   const [popupOpened, setPopupOpened] = React.useState(false);
-  const [studentsToAddToCourse, setStudentsToAddToCourse] = React.useState(new Set([]));
+  const [studentsToAddToCourse, setStudentsToAddToCourse] = React.useState([]);
+  const [addModulePopupOpened, setAddModulePopupOpened] = React.useState(false);
+  const [selectedFiles, setSelectedFiles] = React.useState([]);
 
   //derived states
   let foundCourse = coursesData.courses.find((course) => {
-    return course.name === selectedCourseTitle;
+    return course.name === selectedCourseId;
   }) ? coursesData.courses.find((course) => {
-    return course.name === selectedCourseTitle;
-  }) : {name: "", description: "", author: "", modules: [], cover: ""};
+    return course.name === selectedCourseId;
+  }) : {name: "", description: "", author: "", modules: [], cover: "", students: []};
 
   //variants
   const spanMotion = {
@@ -168,12 +174,14 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
   const studentEmailRef = React.useRef();
   const studentNameRef = React.useRef();
   const studentPasswordRef = React.useRef();
+  const addModuleNameRef = React.useRef();
+  const addMoudleImg = React.useRef();
+  const addModuleImgInput = React.useRef();
 
   //functions
-
   function showCoursePopup(courseTitle, index) {
     // console.log(course);
-    setSelectedCourseTitle(courseTitle);
+    setSelectedCourseId(courseTitle);
     // setCourseIndex(index);
 
     // setModulesPopupOpened(true);
@@ -191,6 +199,18 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     setCourseCover(relativePath);
     // setCourseCover(courseCoverRef.current.files[0]);
   };
+
+  function handleModuleCoverUpload(evt) {
+    const newCover = evt.target.files[0];
+    const relativePath = window.URL.createObjectURL(newCover);
+    addMoudleImg.current.src = relativePath;
+    newCover.clientPath = relativePath;
+    newCover.title = newCover.name;
+    // console.log(newCover);
+    setSelectedFiles((prevValue) => {
+      return [...prevValue, newCover];
+    })
+  }
 
   React.useEffect(() => {
     const userToken = localStorage.getItem('token');
@@ -215,23 +235,6 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
       })
     }
   }, []);
-
-  // React.useEffect(() => {
-  //   function showOnlineUsers (data) {
-  //     console.log(data.filter((user) => {
-  //       return user.admin !== true;
-  //     }));
-  //   }
-  //   socket.on('online users', showOnlineUsers);
-
-  //   return () => {
-  //     socket.off('online users', showOnlineUsers);
-  //   }
-  // }, []);
-
-  React.useEffect(() => {
-    console.log(foundCourse);
-  }, [selectedCourseTitle]);
 
   return (
     <>
@@ -292,7 +295,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
               
               {loggedInUser._id && loggedInUser.admin &&
                 <motion.button variants={liContent} onClick={() => {
-                  setSelectedCourseTitle(course.name);
+                  setSelectedCourseId(course.name);
                   setIsEditCourse(true);
                 }} style={{position: "absolute", top: "6.5%", right: 35, display: 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10, zIndex: 6}}>
                   <FontAwesomeIcon icon={faPen}/>
@@ -378,19 +381,100 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
 
             </div>
           </form>
-          <div>
-            <p>Модули</p>
-            <ul style={{display: "grid", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", overflow: "hidden auto", gap: "45px", margin: "0 auto"}}>
+          <div className="course-edit__modules-wrapper">
+            <p style={{margin: "0 0 25px 0"}}>Модули</p>
+            <ul className="course-edit__modules-ul">
               {foundCourse.modules.map((module) => {
-                return <li key={module._id} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative"}}>
-                  <h3>{module.title}</h3>
-                  <img src={module.cover} alt="обложка модуля"></img>
-                  <p>Уроки {module.lessons.length}</p>
-                </li>
+                return <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key={module._id}>
+                  <button type="button" className="course-edit__modules-ul-li-close" onClick={(evt) => {
+                    evt.stopPropagation();
+
+                    apiDeleteModule(foundCourse._id, module._id, token)
+                    .then((data) => {
+                      setCoursesData((prevValue) => {
+                        const updatedCourses = prevValue.courses.map((course) => {
+                          return course._id === data._id ? {...course, modules: data.modules} : course;
+                        });
+                        return {...prevValue, courses: updatedCourses};
+                      })
+                    });
+                  }} style={{position: "absolute", border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  <h3 className="course-edit__modules-ul-li-headline">{module.title}</h3>
+                  <img className="course-edit__modules-ul-li-img" src={module.cover} alt="обложка модуля"></img>
+                  <p className="course-edit__modules-ul-li-p">{module.lessons.length > 0 ? `Уроки ${module.lessons.length}` : `Уроков пока нет`}</p>
+                </motion.li>
               })}
+              <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key="new-module">
+                <h3 className="course-edit__modules-ul-li-headline">Добавить модуль</h3>
+                <button onClick={() => {
+                  setAddModulePopupOpened(true);
+                }} type="button" className="course-edit__modules-ul-li-addButton">
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </motion.li>
             </ul>
           </div>
+          <div className="course-edit__students-wrapper">
+            <p>Ученики</p>
+            <div className="course-edit__students-wrapper-group course-edit__students-wrapper-group_allStudents">
 
+              <p>Кого можно добавить</p>
+
+              <ul className="course-edit__students-wrapper-ul">
+                {coursesData.allStudents.filter((student) => {
+                  return !foundCourse.students.find((courseStudent) => {
+                    return courseStudent.email === student.email;
+                  });
+                }).map((courseStudent) => {
+                  return <motion.li whileHover={{border: "2px solid #5DB0C7"}} className="course-edit__students-wrapper-ul-li" key={courseStudent._id}>
+                    <button onClick={() => {
+                      studentsToAddToCourse.find((studentToAdd) => {
+                        return studentToAdd._id === courseStudent._id;
+                      }) ? setStudentsToAddToCourse((prevValue) => {
+                        return prevValue.filter((prevStudentToAdd) => {
+                          return prevStudentToAdd._id !== courseStudent._id;
+                        })
+                      }) :
+                      setStudentsToAddToCourse((prevValue) => {
+                        return [...prevValue, courseStudent];
+                      })
+                    }} className="course-edit__students-wrapper-ul-li-btn">{courseStudent.email}</button>
+                    {studentsToAddToCourse.find((studentToAdd) => {
+                        return studentToAdd._id === courseStudent._id;
+                      }) && <div className="course-edit__students-wrapper-ul-li-selection-div">
+                      <FontAwesomeIcon icon={faCheck} />
+                    </div>}
+                  </motion.li>
+                })}
+              </ul>
+
+              <button onClick={() => {
+                // console.log(studentsToAddToCourse);
+                apiAddStudentsToCourse(foundCourse._id, token, studentsToAddToCourse)
+                .then((data) => {
+                  setCoursesData((prevData) => {
+                    const updatedCourses = prevData.courses.map((course) => {
+                      return course._id === foundCourse._id ? {...course, students: data.students} : course;
+                    });
+                    return {...prevData, courses: updatedCourses};
+                  })
+                });
+              }} className="course-edit__students-wrapper-btn" type="button">Добавить учеников</button>
+
+            </div>
+            <div className="course-edit__students-wrapper-group course-edit__students-wrapper-group_courseStudents">
+              <p>Кто уже добавлен</p>
+              <ul className="course-edit__students-wrapper-ul">
+                {foundCourse.students.map((courseStudent) => {
+                  return <li whileHover={{border: "2px solid #5DB0C7"}} className="course-edit__students-wrapper-ul-li" key={courseStudent._id}>
+                    <p className="course-edit__students-wrapper-ul-li-p">{courseStudent.email}</p>
+                  </li>
+                })}
+              </ul>
+            </div>
+          </div>
 
 
          
@@ -425,6 +509,76 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
           </form> */}
         </div>
       </EditCourse>}
+
+      {addModulePopupOpened && <AddModulePopup>
+        <div className="course__edit-addModule-wrapper" style={{position: "relative"}}>
+          <button onClick={() => {
+              setAddModulePopupOpened(false);
+              // setSelectedCourse({});
+              }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+            <h3>Добавить модуль</h3>
+            <form onSubmit={(evt) => {
+              evt.preventDefault();
+              // console.log(formData);
+              const form = new FormData();
+              const foundImg = selectedFiles.find((file) => {
+                return file.clientPath === addMoudleImg.current.src;
+              });
+              form.append("moduleData", JSON.stringify({title: addModuleNameRef.current.value, lessons: [], cover: foundImg ? foundImg : addMoudleImg.current.src}));
+              form.append('moduleCover', foundImg);
+
+              apiEditCourse(foundCourse._id, token, form)
+              .then((data) => {
+                console.log(data);
+                setCoursesData((prevValue) => {
+                  const { courses } = prevValue;
+                  const updatedCourses = courses.map((course) => {
+                    return course._id === data._id ? {...course, modules: data.modules} : course;
+                  })
+                  return {...prevValue, courses: updatedCourses};
+                });
+                setAddModulePopupOpened(false);
+              })
+
+            }} className="course__edit-addModule-wrapper-form">
+              <div className="course__edit-addModule-wrapper-form-data">
+                <div className="course__edit-addModule-wrapper-form-data-inputs">
+                  <input ref={addModuleNameRef} className="course__edit-addModule-wrapper-form-input" type="text" placeholder="Название модуля"></input>
+                  <input onChange={(evt) => {
+                    addMoudleImg.current.src = evt.target.value;
+                  }} className="course__edit-addModule-wrapper-form-input" type="text" placeholder="Ссылка на картинку"></input>
+                </div>
+                <div style={{position: "relative", display: "flex", alignItems: "flex-end"}}>
+                  <img alt="обложка модуля" ref={addMoudleImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                  <input ref={addModuleImgInput} onChange={(evt) => {
+                    handleModuleCoverUpload(evt);
+                  }}  style={{display: "none"}} type="file"></input>
+                  <button type="button" onClick={(() => {
+                    addModuleImgInput.current.click();
+                  })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
+                    <FontAwesomeIcon icon={faCamera} />
+                  </button>
+                </div>
+              </div>
+
+              <button type="submit" onClick={() => {
+
+                // console.log(foundCourse);
+                // setCoursesData((prevValue) => {
+                //   const { courses } = prevValue;
+                //   const updatedCourses = courses.map((course) => {
+                //     return course._id === foundCourse._id ? {...course, modules: [...course.modules, {title: addModuleNameRef.current.value, cover: addMoudleImg.current.src, lessons: []}]} : course;
+                //   })
+                //   return {...prevValue, courses: updatedCourses};
+                // });
+                // setAddModulePopupOpened(false);
+              }} className="course__edit-addModule-wrapper-form-btn">Добавить модуль</button>
+            </form>
+        </div>
+        
+      </AddModulePopup>}
 
       <PopupWithForm popupOpened={popupOpened}>
         <div>

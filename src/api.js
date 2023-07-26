@@ -72,7 +72,44 @@ function apiGetCourse(courseID, token) {
   .then((res) => {
     return res.json();
   })
-}
+};
+
+function apiEditCourse(courseID, token, content) {
+  return fetch(`${apiAdress}/courses/${courseID}`, {
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+    },
+    body: content,
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
+function apiDeleteModule(courseID, moduleID, token) {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}`, {
+    method: "DELETE",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
+// function apiAddStudentsToCourse(courseID, token, students) {
+//   return fetch(`${apiAdress}/courses/${courseID}`, {
+//     method: "PUT",
+//     headers: {
+//       'Content-Type': 'application/json',
+//       'Authorization': token,
+//     },
+//     body: JSON.stringify(students)
+//   })
+// }
 
 function apiGetLesson(courseID, moduleID, lessonID, token) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}`, {
@@ -154,20 +191,20 @@ function apiGetAllStudents(token) {
   })
 };
 
-function addStudentsToCourse(token, updateData) {
+function apiAddStudentsToCourse(courseID, token, students) {
   // console.log(updateData);
-  return fetch(`${apiAdress}/addStudents`, {
+  return fetch(`${apiAdress}/courses/${courseID}/students`, {
     method: "PUT",
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token,
     },
-    body: JSON.stringify(updateData),
+    body: JSON.stringify({students: students }),
   })
   .then((res) => {
     return res.json();
   })
-}
+};
 
 export {
   apiLogin,
@@ -176,10 +213,12 @@ export {
   apiGetCourses,
   apiGetCourse,
   apiCreateCourse,
+  apiEditCourse,
+  apiDeleteModule,
   apiUploadFilesToCourse,
   apiGetLesson,
   apiGetConversation,
   apiSendMessage,
   apiGetAllStudents,
-  addStudentsToCourse
+  apiAddStudentsToCourse
 }
