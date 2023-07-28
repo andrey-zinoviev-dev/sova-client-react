@@ -10,6 +10,7 @@ import CourseModulesPopup from "./CourseModulesPopup";
 import ModulesList from "./ModulesList";
 import PopupWithForm from "./PopupWithForm";
 import AddModulePopup from "./AddModulePopup";
+import AddLessonPopup from "./AddLessonPopup";
 // import AddCourse from "./AddCourse";
 import './Courses.css';
 import {  
@@ -18,9 +19,17 @@ import {
   apiAddStudentsToCourse,
   apiEditCourse,
   apiDeleteModule,
+  apiDeleteLesson,
+  apiEditModuleCover,
+  apiEditLessonCover,
+  apiAddLessonToCourse
 } from '../api';
 import EditCourse from "./EditCourse";
+import EditModule from "./EditModule";
+import EditLesson from "./EditLesson";
 import Student from "./Student"
+import TipTapEditor from "./TipTapEditor";
+import EditLessonContent from "./EditLessonContent";
 
 export default function Courses({ socket, setCourseInEdit, logout, registerFormSubmit }) {
   //contexts
@@ -36,15 +45,21 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
   });
   const [selectedCourseId, setSelectedCourseId] = React.useState("");
   const [selectedModuleId, setSelectedModuleId] = React.useState("");
+  const [selectedLessonId, setSelectedLessonId] = React.useState("");
   const [modulesPopupOpened, setModulesPopupOpened] = React.useState(false);
   const [isEditCourse, setIsEditCourse] = React.useState(false);
+  const [isEditModule, setIsEditModule] = React.useState(false);
+  const [isEditLesson, setIsEditLesson] = React.useState(false);
   const [courseCover, setCourseCover] = React.useState("");
-  // const [courseIndex, setCourseIndex] = React.useState(0);
   const [addStudentOpened, setAddStudentOpened] = React.useState(false);
   const [popupOpened, setPopupOpened] = React.useState(false);
   const [studentsToAddToCourse, setStudentsToAddToCourse] = React.useState([]);
   const [addModulePopupOpened, setAddModulePopupOpened] = React.useState(false);
+  const [addLessonPopupOpened, setAddLessonPopupOpened] = React.useState(false);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [lessonContent, setLessonContent] = React.useState({title: "", cover: "", content: {"type": "doc", "content": [
+    // …
+  ]}});
 
   //derived states
   let foundCourse = coursesData.courses.find((course) => {
@@ -53,46 +68,19 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     return course.name === selectedCourseId;
   }) : {name: "", description: "", author: "", modules: [], cover: "", students: []};
 
+  const foundModule = foundCourse.modules.find((module) => {
+    return module._id === selectedModuleId;
+  }) ? foundCourse.modules.find((module) => {
+    return module._id === selectedModuleId;
+  }) : {title: "", author: {}, lessons: []};
+
+  const foundLesson = foundModule.lessons.find((lesson) => {
+    return lesson._id === selectedLessonId;
+  }) ? foundModule.lessons.find((lesson) => {
+    return lesson._id === selectedLessonId;
+  }) : {title: "", cover: "", lessons: []};
+
   //variants
-  const spanMotion = {
-    rest: {color: "rgb(255, 255, 255)", transition: { ease: "easeInOut", duration: 0.25 }},
-    hover: {color: "rgb(211, 124, 82)", transition: { ease: "easeInOut", duration: 0.25 }},
-  };
-
-  const liMotion = {
-    rest: {border: '2px solid rgba(211, 124, 82, 0)', transition: { ease: "easeInOut", duration: 0.25 }},
-    hover: {border: '2px solid rgba(211, 124, 82, 1)', transition: { ease: "easeInOut", duration: 0.25 }},
-  }
-
-  const addCourseVariants = {
-    hidden: {
-      backgroundColor: "rgba(0, 0, 0, 0)",
-    },
-    shown: {
-      backgroundColor: "rgba(0, 0, 0, 0.35)",
-    },
-  }
-
-  const addCourseButton = {
-    hidden: {
-      opacity: 0,
-      transition: {
-        duration: 0.5,
-      },
-      transitionEnd: {
-        display: "none",
-      }
-    },
-    shown: {
-      opacity: 1,
-      scale: 1.1,
-      display: "inline-block",
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-  //#f1926a(peach color)
   const liGradient = {
     rest: {
       translate: "0 -100%",
@@ -107,24 +95,6 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
         duration: 0.5,
         ease: "easeInOut",
       }
-    }
-  };
-
-  const liBackground = {
-    rest: {
-      // backgroundColor: "rgb(54, 58, 59)",
-      // boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px",
-      // backgroundColor: "rgb(54, 58, 59)",
-      // boxShadow: "0 0 0px #c4d8f7",
-      backgroundColor: "#0D0D0D",
-      scale: 1
-    },
-    hover: {
-      // backgroundColor: "#c4d8f7",
-      // backgroundColor: "rgb(211, 124, 82)",
-      // boxShadow: "7px 7px 5px #c4d8f7",
-      backgroundColor: "rgb(93, 176, 199)",
-      scale: 1.005
     }
   };
 
@@ -159,12 +129,6 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     }
   }
 
-  //animations
-  const pulseButton = {
-    // boxShadow: ["0 0 0px rgb(255 255 255 / 70%)", "0 0 7.5px rgb(255 255 255 / 35%)", "0 0 0px rgb(255 255 255 / 0%)"],
-    // scale: [0.95, 1.2, 0.95],
-  }
-
   //refs
   const buttonsRef = React.useRef();
   const ulRef = React.useRef();
@@ -177,17 +141,19 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
   const addModuleNameRef = React.useRef();
   const addMoudleImg = React.useRef();
   const addModuleImgInput = React.useRef();
+  const addLessonImgRef = React.useRef();
+  const addLessonImgInput = React.useRef();
+  const editModuleNameRef = React.useRef();
+  const editModuleImgRef = React.useRef();
+  const editModuleImgInput = React.useRef();
+  const lessonNameRef = React.useRef();
+  const editLessonImgRef = React.useRef();
+  const editLessonImgInput = React.useRef();
 
   //functions
-  function showCoursePopup(courseTitle, index) {
-    // console.log(course);
+  function showCoursePopup(courseTitle) {
     setSelectedCourseId(courseTitle);
-    // setCourseIndex(index);
-
-    // setModulesPopupOpened(true);
-
-  //  const courseModules = course.modules;
-  //  console.log(courseModules);
+    setModulesPopupOpened(true);
   }
 
   function closeCoursePopup() {
@@ -210,6 +176,37 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
     setSelectedFiles((prevValue) => {
       return [...prevValue, newCover];
     })
+  };
+
+  function handleLessonCoverUpload(evt) {
+    const newCover = evt.target.files[0];
+    addLessonImgRef.current.src = window.URL.createObjectURL(newCover);
+    newCover.title = newCover.name;
+    setLessonContent((prevValue) => {
+      return {...prevValue, cover: {title: newCover.title}}
+    });
+    setSelectedFiles((prevValue) => {
+      return [...prevValue, newCover];
+    });
+  }
+
+  function handleModuleEditCoverUpload(evt) {
+    const newCover = evt.target.files[0];
+    const relativePath = window.URL.createObjectURL(newCover);
+    editModuleImgRef.current.src = relativePath;
+    newCover.clientPath = relativePath;
+    newCover.title = newCover.name;
+
+    return newCover;
+  };
+
+  function handleLessonEditCoverUpload(evt) {
+    const newCover = evt.target.files[0];
+    const relativePath = window.URL.createObjectURL(newCover);
+    editLessonImgRef.current.src = relativePath;
+    newCover.clientPath = relativePath;
+    newCover.title = newCover.name;
+    return newCover;
   }
 
   React.useEffect(() => {
@@ -217,24 +214,19 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
 
     if(userToken) {
       const coursesFromApi = apiGetCourses(userToken)
-      // .then((data) => {
-      //   // console.log(data);
-      //   if(!data) {
-      //     return;
-      //   }
-      //   return setCourses(data);
-      // });
 
       const allStudentsFromApi = apiGetAllStudents(userToken)
-      // .then((data) => {
-      //   console.log(data);
-      // })
+
       Promise.all([coursesFromApi, allStudentsFromApi])
       .then(([coursesReceived, studentsReceived]) => {
         setCoursesData({courses: coursesReceived, allStudents: studentsReceived});
       })
     }
   }, []);
+
+  React.useEffect(() => {
+    console.log(selectedFiles);
+  }, [selectedFiles]);
 
   return (
     <>
@@ -265,7 +257,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
             return <motion.li initial="rest" whileHover="hover" animate="rest" /*variants={liBackground}*/ className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
               <motion.div variants={liGradient} style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundImage: "linear-gradient(180deg, rgb(93, 176, 199) 5%, transparent 75%)"}}></motion.div>
               <button onClick={() => {
-                showCoursePopup(course.name, index);
+                showCoursePopup(course.name);
               }} style={{position: "relative", width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
                 
                 <div style={{display: "flex", alignItems: "flex-end", justifyContent: "space-between", minWidth: 35, fontSize: 28, color: "white"}}>
@@ -310,25 +302,25 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
 
       <CourseModulesPopup modulesPopupOpened={modulesPopupOpened}>
         <div className="popup__modules">
-          {/* <img style={{width: "50%", height: "100%", objectFit: "cover", borderRadius: 12}} alt={selectedCourse.cover} src={selectedCourse.cover}></img>
+          <img style={{width: "50%", height: "100%", objectFit: "cover", borderRadius: 12}} alt={foundCourse.cover} src={foundCourse.cover}></img>
           <div style={{width: "50%", boxSizing: "border-box", padding: "0 45px", position: "relative"}}>
-            <h3 style={{margin: "0 0 30px 0"}} className="popup__modules-headline">{selectedCourse.name}</h3>
+            <h3 style={{margin: "0 0 30px 0"}} className="popup__modules-headline">{foundCourse.name}</h3>
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
               <button onClick={() => {
-                setSelectedModule(() => {
-                  return {};
-                });
-              }} style={{lineHeight: 1.5, backgroundColor: "transparent", border: "none", fontSize: 18, color: selectedModule._id ? "rgb(211, 124, 82)" : "rgb(255, 255, 255)", fontWeight: 700, padding: 0}}>Темы курса</button>
-              {selectedModule._id && <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", minWidth: 90}}>
+                // setSelectedModule(() => {
+                //   return {};
+                // });
+              }} style={{lineHeight: 1.5, backgroundColor: "transparent", border: "none", fontSize: 18, color: foundCourse._id ? "rgb(211, 124, 82)" : "rgb(255, 255, 255)", fontWeight: 700, padding: 0}}>Темы курса</button>
+              {/* {selectedModule._id && <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", minWidth: 90}}>
                 <FontAwesomeIcon icon={faArrowRight} style={{color: "white", fontSize: 18}}/>
                 <span style={{color: "white", fontSize: 18}}>Модуль</span>
-              </div>}
+              </div>} */}
               
               <div style={{width: "65%", height: 2, backgroundColor: "rgb(211, 124, 82)"}}></div>
             </div>
             
             <button className="popup__close popup__close_modules" onClick={closeCoursePopup}>X</button>
-            {!selectedModule._id ? <ul className="popup__modules-list">
+            {/* {!selectedModule._id ? <ul className="popup__modules-list">
               {selectedCourse._id && selectedCourse.modules.map((module, index) => {
                 return <motion.li onClick={() => {
                   setSelectedModule({...module, course: selectedCourse._id});
@@ -339,8 +331,8 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
                 </motion.li>
               })}
             </ul> : <ModulesList selectedModule={selectedModule} selectedCourse={selectedCourse}/>}
-            <p>{selectedCourse.description}</p>
-          </div> */}
+            <p>{selectedCourse.description}</p> */}
+          </div>
 
         </div>
         <div className="popup__overlay"></div>
@@ -386,7 +378,13 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
             <ul className="course-edit__modules-ul">
               {foundCourse.modules.map((module) => {
                 return <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key={module._id}>
-                  <button type="button" className="course-edit__modules-ul-li-close" onClick={(evt) => {
+                  <button className="course-edit__modules-ul-li-edit" onClick={() => {
+                    setIsEditModule(true);
+                    setSelectedModuleId(module._id);
+                  }} type="button">
+                    <FontAwesomeIcon icon={faPen} />
+                  </button>
+                  <button type="button" className="course-edit__modules-ul-li-delete" onClick={(evt) => {
                     evt.stopPropagation();
 
                     apiDeleteModule(foundCourse._id, module._id, token)
@@ -396,13 +394,18 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
                           return course._id === data._id ? {...course, modules: data.modules} : course;
                         });
                         return {...prevValue, courses: updatedCourses};
-                      })
+                      });
+
+                      // setSelectedFiles([]);
+
                     });
                   }} style={{position: "absolute", border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>
                   <h3 className="course-edit__modules-ul-li-headline">{module.title}</h3>
+                  
                   <img className="course-edit__modules-ul-li-img" src={module.cover} alt="обложка модуля"></img>
+                  
                   <p className="course-edit__modules-ul-li-p">{module.lessons.length > 0 ? `Уроки ${module.lessons.length}` : `Уроков пока нет`}</p>
                 </motion.li>
               })}
@@ -475,39 +478,8 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
               </ul>
             </div>
           </div>
-
-
-         
-          {/* <form onSubmit={(evt) => {
-            evt.preventDefault();
-            addStudentsToCourse(token, {courseId: selectedCourse._id, students: Array.from(studentsToAddToCourse)})
-            .then((data) => {
-              const {updatedCourse} = data;
-              setCoursesData((prevValue) => {
-                const { courses } = prevValue;
-                const updatedCourses = courses.map((course) => {
-                  return course._id === updatedCourse._id ? {...course, students: updatedCourse.students} : course;
-                });
-                return {...prevValue, courses: updatedCourses}
-              });
-              setSelectedCourse((prevValue) => {
-                return {...prevValue, students: updatedCourse.students};
-              });
-            })
-          }}>
-            <h3>Добавить ученика к курсу</h3>
-            <ul style={{margin: 0, maxWidth: 480, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", boxSizing: "border-box", padding: 0, listStyle: "none", textAlign: "left", lineHeight: 1.5, gap: 20}}>
-              {coursesData.allStudents.filter((student) => {
-                return !selectedCourse.students.find((courseStudent) => {
-                  return courseStudent._id === student._id; 
-              });
-              }).map((student, index) => {
-                return <Student key={student._id} student={student} setStudentsToAddToCourse={setStudentsToAddToCourse}/>
-              })}
-            </ul>
-            <motion.button whileHover={{backgroundColor: "rgb(93, 176, 199)"}} type="submit" style={{margin: "25px 0 0 0", height: 40, boxSizing: "border-box", padding: 10, border: "2px solid rgb(93, 176, 199)", borderRadius: 9, backgroundColor: "rgba(211, 124, 82, 0)", color: "rgb(255, 255, 255)", fontWeight: 700}}>Добавить учеников к курсу</motion.button>
-          </form> */}
         </div>
+
       </EditCourse>}
 
       {addModulePopupOpened && <AddModulePopup>
@@ -517,7 +489,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
               // setSelectedCourse({});
               }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
               <FontAwesomeIcon icon={faXmark} />
-            </button>
+          </button>
             <h3>Добавить модуль</h3>
             <form onSubmit={(evt) => {
               evt.preventDefault();
@@ -554,6 +526,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
                   <img alt="обложка модуля" ref={addMoudleImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
                   <input ref={addModuleImgInput} onChange={(evt) => {
                     handleModuleCoverUpload(evt);
+
                   }}  style={{display: "none"}} type="file"></input>
                   <button type="button" onClick={(() => {
                     addModuleImgInput.current.click();
@@ -563,22 +536,277 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
                 </div>
               </div>
 
-              <button type="submit" onClick={() => {
-
-                // console.log(foundCourse);
-                // setCoursesData((prevValue) => {
-                //   const { courses } = prevValue;
-                //   const updatedCourses = courses.map((course) => {
-                //     return course._id === foundCourse._id ? {...course, modules: [...course.modules, {title: addModuleNameRef.current.value, cover: addMoudleImg.current.src, lessons: []}]} : course;
-                //   })
-                //   return {...prevValue, courses: updatedCourses};
-                // });
-                // setAddModulePopupOpened(false);
-              }} className="course__edit-addModule-wrapper-form-btn">Добавить модуль</button>
+              <button type="submit" className="course__edit-addModule-wrapper-form-btn">Добавить модуль</button>
             </form>
         </div>
         
       </AddModulePopup>}
+
+      {addLessonPopupOpened && <AddLessonPopup>
+        <div className="module-edit__addLesson-wrapper" style={{position: "relative"}}>
+          <button onClick={() => {
+              setAddLessonPopupOpened(false);
+              // setSelectedCourse({});
+              }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
+              <FontAwesomeIcon icon={faXmark} />
+          </button>
+          <h3>Добавить урок</h3>
+          <form onSubmit={(evt) => {
+            evt.preventDefault();
+            // console.log(lessonContent);
+              // console.log(formData);
+              const form = new FormData();
+              // const foundImg = selectedFiles.find((file) => {
+              //   return file.title === lessonContent.cover.title;
+              // });
+              
+              form.append("moduleData", JSON.stringify(lessonContent));
+              // form.append('moduleCover', foundImg);
+              selectedFiles.forEach((file) => {
+                form.append("files", file);
+              });
+
+              apiAddLessonToCourse(foundCourse._id, foundModule._id, token, form)
+              .then((data) => {
+                setCoursesData((prevValue) => {
+                  return {...prevValue, courses: prevValue.courses.map((course) => {
+                    return course._id === data._id ? {...course, modules: data.modules} : course;
+                  })};
+                });
+
+                setAddLessonPopupOpened(false);
+                setLessonContent({title: "", cover: "", content: {"type": "doc", "content": [
+                  // …
+                ]}});
+                setSelectedFiles([]);
+              })
+
+          }} className="course__edit-addLesson-wrapper-form">
+            <div>
+              <div>
+                <input onChange={(evt) => {
+                  setLessonContent((prevValue) => {
+                    return {...prevValue, title: evt.target.value};
+                  })
+                }} type="text" placeholder="Название урока"></input>
+                <input type="text" placeholder="Ссылка на картинку"></input>
+              </div>
+              <div style={{position: "relative", display: "flex", alignItems: "flex-end"}}>
+                <img ref={addLessonImgRef} alt="обложка урока" style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                <input ref={addLessonImgInput} onChange={(evt) => {
+                  handleLessonCoverUpload(evt);
+
+                }} style={{display: "none"}} type="file"></input>
+                <button type="button" onClick={(() => {
+                  addLessonImgInput.current.click();
+                })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
+                  <FontAwesomeIcon icon={faCamera} />
+                </button>
+              </div>
+            </div>
+              {/* <div className="course__edit-addModule-wrapper-form-data">
+                <div className="course__edit-addModule-wrapper-form-data-inputs">
+                  <input ref={addModuleNameRef} className="course__edit-addModule-wrapper-form-input" type="text" placeholder="Название модуля"></input>
+                  <input onChange={(evt) => {
+                    addMoudleImg.current.src = evt.target.value;
+                  }} className="course__edit-addModule-wrapper-form-input" type="text" placeholder="Ссылка на картинку"></input>
+                </div>
+                <div style={{position: "relative", display: "flex", alignItems: "flex-end"}}>
+                  <img alt="обложка модуля" ref={addMoudleImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                  <input ref={addModuleImgInput} onChange={(evt) => {
+                    handleModuleCoverUpload(evt);
+
+                  }}  style={{display: "none"}} type="file"></input>
+                  <button type="button" onClick={(() => {
+                    addModuleImgInput.current.click();
+                  })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
+                    <FontAwesomeIcon icon={faCamera} />
+                  </button>
+                </div>
+              </div> */}
+
+            <button type="submit" className="module-edit__addLesson-wrapper-form-btn">Добавить урок</button>
+          </form>
+          <TipTapEditor lessonContent={lessonContent} setLessonContent={setLessonContent} setSelectedFiles={setSelectedFiles}>
+          </TipTapEditor>
+        </div>
+      </AddLessonPopup>}
+      
+      {isEditModule && <EditModule>
+        <div className="module-edit__wrapper">
+          <button className="module-edit__close-btn" onClick={() => {
+            setIsEditModule(false);
+            }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+          <h3 className="module-edit__headline">Редактировать модуль</h3>
+          <form className="module-edit__form">
+            <div className="module-edit__form-inputs-wrapper">
+              <div className="module-edit__form-inputs-wrapper-title">
+                <p className="module-edit__form-inputs-wrapper-title-p">Название</p>
+                <input ref={editModuleNameRef} className="module-edit__form-inputs-wrapper-title-input" type="text" placeholder="Название модуля" value={foundModule.title}></input>
+                {/* <input onChange={(evt) => {
+                  addMoudleImg.current.src = evt.target.value;
+                }} className="course__edit-addModule-wrapper-form-input" type="text" placeholder="Ссылка на картинку"></input> */}
+              </div>
+              <div className="module-edit__form-inputs-wrapper-cover">
+                <div className="module-edit__form-inputs-wrapper-cover-link">
+                  <p className="module-edit__form-inputs-wrapper-cover-link-p">Обложка</p>
+                  <input className="module-edit__form-inputs-wrapper-title-input" onChange={(evt) => {
+                      const form = new FormData();
+                      form.append("coverFile", JSON.stringify({link: evt.target.value}));
+                      apiEditModuleCover(foundCourse._id, foundModule._id, token, form)
+                      .then((data) => {
+                        setCoursesData((prevValue) => {
+                          const updatedCourses = prevValue.courses.map((course) => {
+                            return course._id === data._id ? {...course, modules: data.modules} : course;
+                          });
+  
+                          return {...prevValue, courses: updatedCourses};
+                        })
+                      })
+                  }} style={{maxWidth: 360}} type="text" placeholder="Ссылка на картинку">
+                  </input>
+                </div>
+                <div style={{position: "relative", display: "flex", alignItems: "flex-end"}}>
+                  <img alt="обложка модуля" ref={editModuleImgRef} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={foundModule.cover ? foundModule.cover : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                  <input ref={editModuleImgInput} onChange={(evt) => {
+                    const coverToSend = handleModuleEditCoverUpload(evt);
+                    const form = new FormData();
+                    form.append("coverFile", JSON.stringify({title: coverToSend.title, clientPath: coverToSend.clientPath}));
+                    form.append('file', coverToSend);
+                    apiEditModuleCover(foundCourse._id, foundModule._id, token, form)
+                    .then((data) => {
+                      
+                      setCoursesData((prevValue) => {
+                        const updatedCourses = prevValue.courses.map((course) => {
+                          return course._id === data._id ? {...course, modules: data.modules} : course;
+                        });
+
+                        return {...prevValue, courses: updatedCourses};
+                      })
+                    })
+
+                  }} style={{display: "none"}} type="file"></input>
+                  <button type="button" onClick={(() => {
+                    editModuleImgInput.current.click();
+                  })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
+                    <FontAwesomeIcon icon={faCamera} />
+                  </button>
+                </div>
+                {/* <button type="button">Изменить обложку</button> */}
+              </div>
+
+            </div>
+          </form>
+          <div>
+            <p>Уроки</p>
+            <ul className="module-edit__lessons-ul">
+              {foundModule.lessons.map((lesson) => {
+                return <motion.li whileHover={{border: "2px solid #ffffff"}} className="module-edit__lessons-ul-li" key={lesson._id}>
+                  <img className="module-edit__lessons-ul-li-img" src={lesson.cover} alt="обложка урока"></img>
+                  <h3 className="module-edit__lessons-ul-li-headline">{lesson.title}</h3>
+                  <div className="module-edit__lessons-ul-li-buttons">
+                    <button onClick={() => {
+                      apiDeleteLesson(foundCourse._id, foundModule._id, lesson._id, token)
+                      .then((data) => {
+                        setCoursesData((prevValue) => {
+                          return {...prevValue, courses: prevValue.courses.map((course) => {
+                            return course._id === data._id ? {...course, modules: data.modules} : course;
+                          })};
+                        });
+                      })
+                      // setCoursesData((prevValue) => {
+                      //   return {...prevValue, courses: prevValue.courses.}
+                      // })
+                      // setSelectedLessonId(lesson._id);
+                    }} className="module-edit__lessons-ul-li-buttons-btn">
+                      <motion.svg whileHover={{fill: "#ffffff"}} fill="#5DB0C7" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></motion.svg>
+                    </button>
+                    <button onClick={() => {
+                     
+                      setSelectedLessonId(lesson._id);
+                      setIsEditLesson(true);
+                    }} className="module-edit__lessons-ul-li-buttons-btn">
+                      <motion.svg whileHover={{fill: "#ffffff"}}  fill="#5DB0C7" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></motion.svg>
+                    </button>
+                  </div>
+                </motion.li>
+                // <motion.li></motion.li>
+              })}
+              <motion.li className="module-edit__lessons-ul-li" key="new-lesson" style={{justifyContent: "center"}}>
+                <button onClick={() => {
+                  setAddLessonPopupOpened(true);
+                }} type="button" className="module-edit__lessons-ul-li-addButton">
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </motion.li>
+            </ul>
+          </div>
+
+        </div>
+
+      </EditModule>}
+
+      {isEditLesson && <EditLesson>
+        <div className="lesson-edit__wrapper">
+          <button className="lesson-edit__close-btn" onClick={() => {
+            setIsEditLesson(false);
+            }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+          <h3 className="lesson-edit__headline">Редактировать урок</h3>
+          <form className="lesson-edit__form">
+            <div className="lesson-edit__form-inputs-wrapper-title">
+              <p className="lesson-edit__form-inputs-wrapper-title-p">Название</p>
+              <input ref={lessonNameRef} value={foundLesson.title} className="lesson-edit__form-inputs-wrapper-title-input" type="text" placeholder="Название урока"></input>
+            </div>
+            <div className="lesson-edit__form-inputs-wrapper-cover">
+              <div className="lesson-edit__form-inputs-wrapper-cover-link">
+                <p className="lesson-edit__form-inputs-wrapper-cover-link-p">Обложка</p>
+                <input className="lesson-edit__form-inputs-wrapper-title-input" onChange={(evt) => {
+                      const form = new FormData();
+                      form.append("coverFile", JSON.stringify({link: evt.target.value}));
+
+                      apiEditLessonCover(foundCourse._id, foundModule._id, foundLesson._id, token, form)
+                      .then((data) => {
+                        setCoursesData((prevValue) => {
+                          return {...prevValue, courses: prevValue.courses.map((course) => {
+                            return course._id === data._id ? {...course, modules: data.modules} : course;
+                          })};
+                        })
+                      });
+                  }} style={{maxWidth: 360}} type="text" placeholder="Ссылка на картинку">
+                </input>
+              </div>
+              <div style={{position: "relative", display: "flex", alignItems: "flex-end"}}>
+                <img alt="обложка урока" ref={editLessonImgRef} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={foundLesson.cover ? foundLesson.cover : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                <input ref={editLessonImgInput} onChange={(evt) => {
+                  const coverToSend = handleLessonEditCoverUpload(evt);
+                  // console.log(coverToSend);
+                  const form = new FormData();
+                  form.append("coverFile", JSON.stringify({title: coverToSend.title, clientPath: coverToSend.clientPath}));
+                  form.append('file', coverToSend);
+                  apiEditLessonCover(foundCourse._id, foundModule._id, foundLesson._id, token, form)
+                  .then((data) => {
+                    setCoursesData((prevValue) => {
+                      return {...prevValue, courses: prevValue.courses.map((course) => {
+                        return course._id === data._id ? {...course, modules: data.modules} : course;
+                      })};
+                    })
+                  });
+                }} style={{display: "none"}} type="file"></input>
+                <button type="button" onClick={(() => {
+                  editLessonImgInput.current.click();
+                })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
+                  <FontAwesomeIcon icon={faCamera} />
+                </button>
+              </div>
+            </div>
+            <EditLessonContent foundCourse={foundCourse} foundModule={foundModule} foundLesson={foundLesson} setCoursesData={setCoursesData}/>
+          </form>
+        </div>  
+      </EditLesson>}
 
       <PopupWithForm popupOpened={popupOpened}>
         <div>

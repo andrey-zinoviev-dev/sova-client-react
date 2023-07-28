@@ -100,16 +100,71 @@ function apiDeleteModule(courseID, moduleID, token) {
   })
 };
 
-// function apiAddStudentsToCourse(courseID, token, students) {
-//   return fetch(`${apiAdress}/courses/${courseID}`, {
-//     method: "PUT",
-//     headers: {
-//       'Content-Type': 'application/json',
-//       'Authorization': token,
-//     },
-//     body: JSON.stringify(students)
-//   })
-// }
+function apiDeleteLesson(courseID, moduleID, lessonID, token) {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}/delete`, {
+    method: "DELETE",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    }
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
+function apiEditModuleCover(courseID, moduleID, token, cover) {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/cover`, {
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+    },
+    body: cover,
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
+function apiEditLessonCover(courseID, moduleID, lessonID, token, cover) {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}/cover`, {
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+    },
+    body: cover,
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
+function apiEditLessonContent(courseID, moduleID, lessonID, token, content) {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}/content`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+    body: JSON.stringify(content),
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
+function apiAddLessonToCourse(courseID, moduleID, token, content) {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}`, {
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+    },
+    body: content,
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
 
 function apiGetLesson(courseID, moduleID, lessonID, token) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}`, {
@@ -215,6 +270,11 @@ export {
   apiCreateCourse,
   apiEditCourse,
   apiDeleteModule,
+  apiDeleteLesson,
+  apiEditModuleCover,
+  apiEditLessonCover,
+  apiEditLessonContent,
+  apiAddLessonToCourse,
   apiUploadFilesToCourse,
   apiGetLesson,
   apiGetConversation,

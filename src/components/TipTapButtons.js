@@ -55,7 +55,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     // } 
     const relPath = window.URL.createObjectURL(video);
     video.clientPath = relPath;
-
+    video.title = video.name;
     setVideo((prevValue) => {
       return {...prevValue, video};
     });

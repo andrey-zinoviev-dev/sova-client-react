@@ -4,46 +4,8 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
-import { Node, mergeAttributes } from "@tiptap/react";
 
-export default function TipTapEditor({lessonContent, setLessonContent, foundLesson, foundModule, formData, setFormData, setSelectedFiles}) {
-    //crete Video extension
-  const Video = Node.create({
-    name: "video",
-    group: "block",
-    selectable: "true",
-    atom: "true",
-    parseHTML() {
-      return [
-        {
-          tag: "video",
-        },
-      ]
-    },
-    addAttributes() {
-      return {
-        "src": {
-          default: null,
-        },
-        "controls" : {
-          default: true,
-        },
-        "controlsList": {
-          default: "nodownload",
-        },
-        "oncontextmenu": {
-          default: "return false"
-        },
-        "title": {
-          default: null,
-        }
-      }
-    },
-    renderHTML({HTMLAttributes}) {
-      return ['video', mergeAttributes(HTMLAttributes)];
-    },
-  });
-
+export default function AddLessonContent({lessonContent, setLessonContent, foundLesson, foundModule, formData, setFormData, setSelectedFiles}) {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -51,9 +13,8 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
             Placeholder.configure({
                 placeholder: "Добавьте контент уроку..."
             }),
-            Video
         ],
-        content: foundLesson ? foundLesson.content : lessonContent.content,
+        content: foundLesson && foundLesson.content,
         
         onUpdate: ({editor}) => {
             foundLesson ? setFormData((prevValue) => {
@@ -106,7 +67,7 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
     }, [lessonContent, editor])
 
     return (
-        <div style={{height: "100%", width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0", overflow: "auto"}}>
+        <div style={{height: "100%", width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0"}}>
             <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
             <EditorContent style={{height: "calc(100% - 40px)"}} editor={editor} />
         </div>
