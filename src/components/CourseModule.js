@@ -167,7 +167,7 @@ export default function CourseModule({ onlineUsers, socket }) {
   };
 
   function resetContact() {
-    setUserId("");
+    setUserId({});
   }
 
   function sendMessage(obj, formRef) {
@@ -567,15 +567,23 @@ export default function CourseModule({ onlineUsers, socket }) {
   }, [loggedInUser]);
 
   React.useEffect(() => {
-    userId._id && apiGetConversation(userToken, userId._id)
+
+    userId._id ? apiGetConversation(userToken, userId._id)
     .then((data) => {
       if(data.message) {
         return setMessages([]);
         
       }
       return setMessages(data.messages);
-    });
+    })
+    :
+    setMessages([]);
+    ;
 
+  }, [userId]);
+
+  React.useEffect(() => {
+    console.log(userId);
   }, [userId]);
 
   return (
@@ -715,7 +723,7 @@ export default function CourseModule({ onlineUsers, socket }) {
         <div>
           <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
             {window.innerWidth < 768 && <li>
-              <button onClick={showSideMenu} style={{backgroundColor: "rgba(0, 0, 0, 0)", border: "none", minWidth: 24, minHeight: 24, color: "#d37c52"}}>
+              <button onClick={showSideMenu} style={{backgroundColor: "rgba(0, 0, 0, 0)", border: "none", minWidth: 24, minHeight: 24, color: "rgba(93, 176, 199, 1)"}}>
                 <FontAwesomeIcon icon={faBars} />
               </button>  
             </li>}
@@ -735,9 +743,9 @@ export default function CourseModule({ onlineUsers, socket }) {
           :
           <div style={{maxWidth: 1024, width: '100%', margin: "auto 0"}}>
             <Chat>
-              <Contacts courseAuthor={courseAuthor} students={students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
-              <div className='lesson__div-chat-conversation' style={{/*width: window.innerWidth < 768 ? userId.length === 0  ? "0%" : "100%" : "100%",*/ width: "calc(100% - 230px)", /*maxHeight: 420,*/ display: "flex", flexDirection: "column", justifyContent: userId.length > 0 ?  "space-between" : "center", alignItems: userId.length > 0 ?  "flex-start" : "center", minHeight: 300, /*maxWidth: "calc(100% - 201px)"*/ overflow: "hidden", backgroundColor: "#1A191E", color: "white"}}>
-                <Messages selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
+              <Contacts messages={messages} courseAuthor={courseAuthor} students={students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
+              <div className='lesson__div-chat-conversation' style={{width: messages.length > 0 && window.innerWidth <= 767 && "100%"}}>
+                <Messages filterChatToUser={filterChatToUser} selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               <SelectedFiles selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>

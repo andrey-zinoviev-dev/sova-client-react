@@ -22,8 +22,8 @@
 .popup__close_modules {
   min-width: 30px;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 15px;
+  right: 15px;
   /* right: -50px; */
 }
 
@@ -196,8 +196,8 @@
     /* padding: 5%; */
   }
   .popup__close_modules {
-    right: 0;
-    top: 0;
+    /* right: 0;
+    top: 0; */
     z-index: 50;
   }
 

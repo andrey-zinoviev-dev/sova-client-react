@@ -10,7 +10,7 @@ export default function ModuleSide({children, menuOpened}) {
 
   const menuVariantsMobile = {
     opened: {left: "0%", transition: {duration: 0.75, ease: "easeInOut", }},
-    closed: {left: "-100%", transition: {duration: 0.75, ease: "easeInOut", delay: 0.3}}
+    closed: {left: window.innerWidth <= 767 ? "-200%" : "-100%", transition: {duration: 0.75, ease: "easeInOut", delay: 0.3}}
   }
 
   return (

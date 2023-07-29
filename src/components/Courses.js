@@ -34,7 +34,7 @@ import EditLesson from "./EditLesson";
 import TipTapEditor from "./TipTapEditor";
 import EditLessonContent from "./EditLessonContent";
 
-export default function Courses({ socket, setCourseInEdit, logout, registerFormSubmit }) {
+export default function Courses({ socket, setCourseInEdit, logout, loggedIn, registerFormSubmit }) {
   //naviagte
   const navigate = useNavigate();
   //contexts
@@ -242,7 +242,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
   return (
     <>
       <section className="main__courses">
-        <Dashboard setAddUserOpened={setAddUserOpened} />
+        <Dashboard setAddUserOpened={setAddUserOpened} logout={logout} loggedIn={loggedIn}/>
 
         <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", width: "100%"}}>
           <h2 className="main__courses-headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}>Изучай музыку и становись профессионалом вместе с экспертами <span style={{color: "rgb(93, 176, 199)"}}>Sova Studio</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
@@ -277,7 +277,7 @@ export default function Courses({ socket, setCourseInEdit, logout, registerFormS
                 <motion.button variants={liContent} onClick={() => {
                   setSelectedCourseId(course._id);
                   setIsEditCourse(true);
-                }} style={{position: "absolute", top: "6.5%", right: 35, zIndex:25, display: 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10}}>
+                }} style={{position: "absolute", top: "6.5%", right: 35, zIndex:25, display: window.innerWidth <= 767 ? "none" : 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10}}>
                   <FontAwesomeIcon icon={faPen}/>
                 </motion.button>
               }

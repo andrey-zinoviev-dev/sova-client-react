@@ -199,9 +199,9 @@ export default function AddCourse() {
       
       <div className="addCourse__progress-wrapper">
         <div style={{display: "flex"}}>
-          <button style={{width: 40, height: 30, backgroundColor: "transparent", border: "none", padding: 0, margin: "5px 0 0 0"}}>
+          {/* <button onClick={() => {}} style={{width: 40, height: 30, backgroundColor: "transparent", border: "none", padding: 0, margin: "5px 0 0 0"}}>
             <FontAwesomeIcon style={{color: "rgb(93, 176, 199)", fontSize: 24}} icon={faArrowLeft} />
-          </button>
+          </button> */}
           <h2 className="addCourse__headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}><span style={{color: "white"}}>Вернуться к курсам</span>, либо добавить новый</h2>
         </div>
         <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 25, maxWidth: 410, margin: "20px 0 0 0", boxSizing: "border-box", padding: "0 0 0 35px"}}>

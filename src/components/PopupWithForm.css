@@ -110,8 +110,9 @@
     align-self: flex-end;
     /* margin: 0 0 0 auto; */
     /* margin: 0 25px 25px auto; */
-    min-height: 30px;
-    min-width: 75px;
+    height: 30px;
+    width: 30px;
+    /* min-width: 75px; */
     background-color: transparent;
     border: 2px solid #f5441e;
     color: #f5441e;
@@ -170,7 +171,8 @@
     /* color: #f8f205; */
     position: relative;
     cursor: pointer;
-    border: 2px solid rgba(252,101,48,75%);
+    border: 2px solid #5DB0C7;
+    border-radius: 5px;
     color: white;
     font-weight: 700;
   
@@ -202,6 +204,9 @@
     .popup {
       flex-direction: column;
     }
+    .popup__left-wrapper {
+      display: none;
+    }
     .popup__left-logo {
       max-width: 50px;
     }
@@ -211,6 +216,10 @@
       align-items: center;
       min-width: 75px;
       max-height: 75px;
+    }
+    .popup__right-wrapper {
+      flex-direction: column;
+      color: white;
     }
     .popup__form {
       min-width: 270px;

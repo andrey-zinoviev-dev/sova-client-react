@@ -4,7 +4,7 @@ import ContactSearch from './ContactSearch';
 import { UserContext } from "../context/userContext";
 import Avatar from '../images/IMG-20230525-WA0014 (1).jpg';
 import { motion } from "framer-motion";
-export default function Contacts ({contacts, admin, filterChatToUser, students, courseAuthor, userId}) {
+export default function Contacts ({messages, contacts, admin, filterChatToUser, students, courseAuthor, userId}) {
   const loggedInUser = React.useContext(UserContext);
   // const [contactId, setContactId] = React.useState("");
 
@@ -14,6 +14,7 @@ export default function Contacts ({contacts, admin, filterChatToUser, students, 
   //   // filterChatToUser(id);
   // };
 
+  React.useEffect(() => {}, [])
   //variables
   let contact = {};
   // React.useEffect(() => {
@@ -21,12 +22,12 @@ export default function Contacts ({contacts, admin, filterChatToUser, students, 
   // }, [userId]);
   // console.log(students);
   return (
-    <div className="lesson__div-chat-contacts" style={{/*minWidth: window.innerWidth > 767 && 200, width: window.innerWidth < 768 && userId.length > 0 ? "0%" : "100%",*/ width: 230, backgroundColor: "#1F1F21", border: "none", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", gap: 20, boxSizing: "border-box", padding: "15px 0", borderRight: "2px solid rgba(93, 176, 199, 0.5)"}}>
+    <div className="lesson__div-chat-contacts" style={{width: messages.length > 0 && window.innerWidth <= 767 && "0%"}}>
       <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 15, minWidth: 200}}>
         <img style={{width: 40, aspectRatio: "1/1", borderRadius: "51%", objectFit: "cover"}} src={Avatar} alt="аватар"></img>
         <h3 style={{color: "white", margin: 0}}>Контакты</h3>
       </div>
-      <ContactSearch />
+      <ContactSearch messages={messages} />
       <ul style={{listStyle: "none", margin: "25px 0 0 0", padding: 0, boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", gap: 20}}>
         {loggedInUser.admin ?
           // contacts.length > 0 ? contacts.map((contact) => {

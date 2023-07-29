@@ -1,9 +1,9 @@
 import React from "react";
 import SearchPic from '../images/magnifying-glass-solid_1.png';
 import './ContactSearch.css';
-export default function ContactSearch() {
+export default function ContactSearch({messages}) {
   return (
-    <form className="lesson__div-chat-contacts-form" style={{width: 200, height: 30, position: "relative"}} onSubmit={(evt) => {
+    <form className="lesson__div-chat-contacts-form" style={{width: 200, height: 30, margin: "25px 0 0 0", position: "relative", display: messages.length > 0 && window.innerWidth <= 767 ? "none" : 'block'}} onSubmit={(evt) => {
       evt.preventDefault();
       console.log('ues');
     }}>

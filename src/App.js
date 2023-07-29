@@ -222,7 +222,7 @@ function App() {
         <Routes>
           <Route path='addCourse' element={<AddCourse />}></Route>
           <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule socket={socket} onlineUsers={onlineUsers} />}></Route>
-          <Route path='/' element={loggedIn ? <Main socket={socket} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
+          <Route path='/' element={loggedIn ? <Main socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
     </div>

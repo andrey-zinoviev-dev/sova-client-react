@@ -11,6 +11,7 @@ import SovaLogo from '../images/Rectangle_12.png';
 import './Welcome.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faVk, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 //framer-motion variants
 const animationVariants = {
@@ -76,13 +77,13 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
     <>
       <section className='welcome'>
 
-        <Dashboard></Dashboard>
+        {/* <Dashboard></Dashboard> */}
         <div className='welcome__content'>
-          <div style={{maxWidth: 420, textAlign: "left", margin: "0 0 0 15%"}}>
-            <h1 style={{fontSize: 84, margin: 0, textTransform: "uppercase"}}>sasha sova</h1>
-            <motion.button whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
+          <div className='welcome__content-wrapper'>
+            <h1 className='welcome__content-headline'>sasha sova</h1>
+            <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
               setPopupOpened(true);
-            }} style={{minWidth: 180, minHeight: 45, padding: 0, border: "2px solid rgb(93, 176, 199)", borderRadius: 9, backgroundColor: "rgba(93, 176, 199, 0)", color: "white", margin: "15px 0 0 0", fontWeight: 700}}>войти</motion.button>
+            }}>войти</motion.button>
           </div>
           {/* <div className='welcome__content-left'>
             <h1 className='welcome__content-headline'>SOVA<span style={{color: "rgba(252,101,48,75%)"}}>.</span></h1>
@@ -139,7 +140,8 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
             </ul>
           </nav>
         </footer>
-        <img src={SovaLogo} style={{position: "absolute", top: 0, left: "20%", width: "100%", height: "100%", objectFit: "cover"}}></img>
+        <img className='welcome__cover' alt='лого сова' src={SovaLogo}></img>
+        <div className='welcome__overlay'></div>
         {/* <div className='filter'></div> */}
     </section>
     <PopupWithForm popupOpened={popupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
@@ -171,8 +173,11 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
       </div>
 
       <div className='popup__right-wrapper'>
+        <h3 className='popup__left-wrapper-headline'>Войти</h3>
         <form className="popup__form" onSubmit={(evt) => {submitloginForm(evt)}}>
-          <button className="popup__close" onClick={closePopups}>Закрыть</button>
+          <button className="popup__close" onClick={closePopups}>
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
           <input ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
           <input ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
           <button className="popup__form-button" type="submit" data-type="login">Войти</button>
