@@ -40,6 +40,7 @@ export default function CourseModule({ onlineUsers, socket }) {
   const [courseModule, setCourseModule] = React.useState({});
   const [moduleLesson, setModuleLesson] = React.useState({});
   const [messages, setMessages] = React.useState([]);
+  // const [currentLesson, setCurrentLesson] = React.useState({});
   // const [students, setStudents] = React.useState([]);
   const [menuOpened, setMenuOpened] = React.useState(false);
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
@@ -56,19 +57,21 @@ export default function CourseModule({ onlineUsers, socket }) {
   //location
   const location = useLocation();
   const { state } = location;
-  const { selectedCourse } = state;
+  const { foundCourse } = state;
+  // console.log(foundCourse);
   // console.log(selectedCourse);
  
   //variables derived from courseModule state variable
   const admin = courseModule._id ? {...courseModule.course.author, online: adminIsOnline} : {};
-  const module = selectedCourse.modules.find((module) => {
+  const module = foundCourse.modules.find((module) => {
     return module._id === moduleID;
   });
   // const courseAuthor = selectedCourse.author;
   const lessons = module.lessons;
   const currentLesson = lessons.find((lesson) => {
     return lesson._id === lessonID;
-  });
+  })
+
   // console.log(module);
   let conversation = undefined;
   // const filteredMessages = messages.filter((message) => {
@@ -131,7 +134,7 @@ export default function CourseModule({ onlineUsers, socket }) {
       //   placeholder: "Здесь можно написать контент для курса",
       // })
     ],
-    content: '',
+    content: currentLesson.content,
     // onUpdate: ({ editor }) => {
     //   setFormData({...formData, module: {
     //     ...formData.module,  text: editor.getJSON()
@@ -347,20 +350,23 @@ export default function CourseModule({ onlineUsers, socket }) {
 
   React.useEffect(() => {
 
-    setCourseAuthor(selectedCourse.author);
-    setStudents(selectedCourse.students);
+    setCourseAuthor(foundCourse.author);
+    setStudents(foundCourse.students);
   }, []);
 
   React.useEffect(() => {
+    // if(editor && currentLesson.content) {
+    //   editor.commands.setContent(currentLesson.content)
+    // }
     // console.log(userToken);
-    if(loggedInUser._id) {
-      apiGetLesson(courseID, moduleID, lessonID, userToken)
-      .then((doc) => {
-        const { module, lesson } = doc;
-        // console.log(lessons);
-        editor.commands.setContent(lesson.layout);
-      })
-    }
+    // if(loggedInUser._id) {
+    //   apiGetLesson(courseID, moduleID, lessonID, userToken)
+    //   .then((doc) => {
+    //     const { module, lesson } = doc;
+    //     // console.log(lessons);
+    //     editor.commands.setContent(lesson.layout);
+    //   })
+    // }
     // if(userToken && loggedInUser._id) {
     //   apiGetCourseModule(moduleID, userToken)
     //   .then((moduleData) => {
@@ -718,7 +724,7 @@ export default function CourseModule({ onlineUsers, socket }) {
           </ul>
         </div>
         {!chatIsOpened ?
-          <div style={{maxWidth: 768, width: '100%'}}>
+          <div style={{maxWidth: 768, width: '100%', color: "white"}}>
             <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>{moduleLesson._id && moduleLesson.title}</h3>
             <EditorContent editor={editor} style={{backgroundColor: "transparent", border: "none", boxShadow: "none"}}/>
             {/* <p>{courseModule._id && courseModule.name}</p>

@@ -47,6 +47,12 @@
   }
 }
 
+@media screen and (max-width: 767px) {
+  .header {
+    margin: 0 0 50px 0;
+  }
+}
+
 /* .header__nav-list-element-link:hover {
   color: #f5441e;
 } */

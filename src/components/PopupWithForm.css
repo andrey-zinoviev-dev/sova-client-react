@@ -115,7 +115,8 @@
     background-color: transparent;
     border: 2px solid #f5441e;
     color: #f5441e;
-    border-radius: 9px;
+    /* border-radius: 9px; */
+    border-radius: 50%;
     cursor: pointer;
     font-weight: 700;
   }
