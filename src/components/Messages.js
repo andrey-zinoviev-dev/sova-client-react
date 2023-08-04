@@ -31,22 +31,13 @@ export default function Messages ({ selectedFiles, conversation, messages, selec
         </div>
       }
        {userId._id ?
+         
         
           <ul className='lesson__div-chat-conversation-messages' ref={ulRef} style={{boxSizing: "border-box", padding: "15px 20px", margin: 0, listStyle: "none", display: "flex", flexDirection: "column", width: "100%", gap: 20, overflowY: "auto"}}>
             {messages.length > 0 ? messages.map((message) => {
-              // return message.files.length === 0 ?
-              // <li key={message._id} style={{backgroundColor: message.user === user._id ? "#d37c52" : "white", alignSelf: message.user === user._id ? "flex-end" : "flex-start",  minWidth: 140, minHeight: 35, maxWidth: 270, borderRadius: "9px", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 20px", boxSizing: "border-box"}}>
-              //   {message.text}
-              // </li>
-              // :
-              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start", maxWidth: 300, /*width: 160, maxWidth: 210,*/ backgroundColor: message.user === loggedInUser._id ? "#5DB0C7" : "#2D2C32", border: "none", borderRadius: 15, boxSizing: "content-box", padding: "10px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-start", alignItems: "flex-start"}}>
-                 {/* <ul style={{width: "100%", height: "100%", padding: 0}}>
-                  {message.files.map((file, index) => {
-                    return <li key={Date.parse(new Date())} style={{display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
-                      {file.mimetype.includes('image') ? <img style={{width: "100%", height: "100%", objectFit: "cover"}} src={`http://api.sova-courses.site/${file.destination.replace('public/', '')}${file.filename}`}></img> : <p>грузить другой файл</p>}
-                    </li>
-                  })}
-                </ul> */}
+
+              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id ? "flex-end" : "flex-start", maxWidth: 300, backgroundColor: message.user === loggedInUser._id ? "#5DB0C7" : "#2D2C32", border: "none", borderRadius: 15, boxSizing: "content-box", padding: "10px", display: "flex", flexDirection: "column", gap: 5, justifyContent: "flex-start", alignItems: "flex-start"}}>
+
                 <p style={{margin: 0}}>{message.text}</p>
                 {message.files.length > 0 && 
                   <ul style={{padding: 0, listStyle: "none", margin: "0 0 10px 0"}}>

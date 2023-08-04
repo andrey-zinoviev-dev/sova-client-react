@@ -1,7 +1,7 @@
 //api variable
-// const apiAdress = 'http://api.sova-courses.site';
+// const apiAdress = 'https://api.sova-courses.site';
 const apiAdress = 'http://localhost:3000';
-
+// 
 //api calls
 function apiLogin(formData) {
   return fetch(`${apiAdress}/login`, {

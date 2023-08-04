@@ -143,8 +143,13 @@
 }
 
 .main__courses-headline {
-  font-size: 48px;
+  font-size: 42px;
   max-width: 450px;
+  text-align: left;
+  font-weight: 400;
+  color: rgb(116, 115, 116);
+  margin: 0 0 50px 0;
+  line-height: 1.5;
   /* margin: auto 0; */
   /* margin: auto 35% auto 0; */
   /* margin: 0;
@@ -254,6 +259,15 @@
   border: none;
   min-width: 18px;
   min-height: 3px;
+}
+
+.main__no-courses {
+  margin: 50px auto;
+  color: white;
+}
+
+.main__no-courses img {
+  max-width: 160px;
 }
 
 .main__courses-navigation-button {
@@ -480,7 +494,7 @@
   gap: 15px;
   margin: 0 auto;
   grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 50px;
+  /* grid-auto-rows: 50px; */
   width: 100%;
 }
 
@@ -512,6 +526,7 @@
 
 .course-edit__students-wrapper-ul-li-btn {
   margin: 0;
+  padding: 15px 0;
   font-size: 18px;
   width: 100%;
   height: 100%;
@@ -519,6 +534,10 @@
   border: none;
   background-color: transparent;
   color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
 }
 
 .course-edit__students-wrapper-btn {
@@ -749,7 +768,8 @@
       /* position: absolute; */
     /* top: 0; */
     /* left: 0; */
-    position: absolute;
+    /* position: absolute; */
+    position: fixed;
     z-index: 95;
     top: 0;
     left: 0;
@@ -771,6 +791,33 @@
   max-width: 720px;
   color: white;
   height: 100%;
+}
+
+.course__edit-addLesson-wrapper-form {
+  margin: 0 0 50px 0;
+}
+
+.course__edit-addLesson-wrapper-form-input {
+  height: 35px;
+  border: none;
+  border-bottom: 2px solid white;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+.course__edit-addLesson-wrapper-form-input:focus {
+  outline: none;
+  border-bottom: 2px solid #5DB0C7;
+}
+
+.course__edit-addLesson-wrapper-form-btn {
+  width: 160px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid #5DB0C7;
+  color: #5DB0C7;
+  background-color: transparent;
+  margin: 25px 0 0px 0;
 }
 
 .lesson-edit {
@@ -890,7 +937,7 @@
 
 .add-user__wrapper {
   width: 100%;
-  max-width: 540px;
+  max-width: 720px;
   position: relative;
 }
 
@@ -914,6 +961,13 @@
   box-sizing: border-box;
   transition: all 0.25s ease-in-out;
   color: #fef9e3;
+  height: 35px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 320px;
+  width: 100%;
+  max-width: 320px;
 }
 
 .add-user__form-input:focus {
@@ -922,15 +976,75 @@
 }
 
 .add-user__form-btn {
-  width: 230px;
-  height: 40px;
+  width: 180px;
+  height: 50px;
   border: 2px solid rgb(93, 176, 199);
   background-color: transparent;
   color: white;
   border-radius: 5px;
   font-size: 18px;
   align-self: center;
-  margin: 50px 0 0 0;
+  /* margin: 50px 0 0 0; */
+}
+
+.add-user__form-select-wrapper {
+  width: 100%;
+  max-width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-user__form-select {
+  padding: 7px;
+    font-size: 16px;
+    background: transparent;
+    color: white;
+    border: 2px solid #5DB0C7;
+    border-radius: 5px;
+    outline: none;
+}
+
+.add-user__form-select:active {
+  border: 2px solid white;
+}
+
+.add-user__form-select-option {
+  background-color: black;
+  color: white;
+}
+
+.add-user__form-ul {
+  display: grid;
+  box-sizing: border-box;
+  padding: 0px;
+  list-style: none;
+  line-height: 2;
+  /* overflow: hidden auto; */
+  gap: 15px;
+  margin: 0 auto;
+  grid-template-columns: repeat(3, 1fr);
+  /* grid-auto-rows: 50px; */
+  width: 100%;
+  margin: 0 0 50px 0;
+}
+
+.add-user__form-ul-li {
+  align-items: center;
+  border: 2px solid #fff;
+  border-radius: 9px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 15px;
+  position: relative;
+}
+
+.add-user__form-ul-li-p {
+  margin: 0;
 }
 
 .add-user__success-p {
@@ -1043,8 +1157,9 @@
     box-sizing: border-box;
   }
   .main__courses-list {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 260px);
     margin: 50px 0 0 0;
+    justify-content: center;
   } 
   .main__courses-headline {
     font-size: 25px;
@@ -1070,7 +1185,7 @@
     right: 10px;
   }
   .main__courses-list {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 240px);
   } 
   .add-user__form {
     padding: 0 20px;

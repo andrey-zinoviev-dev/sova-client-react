@@ -97,13 +97,13 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
     //     console.log(foundLesson);
     // }, [foundLesson])
 
-    React.useEffect(() => {
-        if(editor) {
-            lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
+    // React.useEffect(() => {
+    //     if(editor) {
+    //         // lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
 
-        }
+    //     }
          
-    }, [lessonContent, editor])
+    // }, [lessonContent, editor])
 
     return (
         <div style={{height: "100%", width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0", overflow: "auto"}}>

@@ -69,6 +69,7 @@
   .popup__left-wrapper-headline {
     letter-spacing: 2px;
     text-transform: uppercase;
+    color: white;
   }
 
   .popup__left-span, .popup__left-p {
@@ -96,6 +97,11 @@
     position: relative;
     z-index: 3;
   }
+
+  .popup__right-wrapper-headline {
+    color: white;
+    display: none;
+  }
   
   .popup__form-wrapper {
     display: flex;
@@ -120,6 +126,7 @@
     border-radius: 50%;
     cursor: pointer;
     font-weight: 700;
+    margin: 0 0 25px 0;
   }
   
   .popup__headline {
@@ -139,22 +146,32 @@
     min-height: 35px;
     padding: 10px;
     box-sizing: border-box;
-    border-radius: 9px;
+    font-size: 16px;
+    min-height: 35px;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid white;
+    background-color: transparent;
+    color: white;
     /* border: 2px solid transparent; */
     /* border: none; */
     /* background-color: transparent; */
     /* color: black;
     background-color: #e6e1299c; */
   }
+
+  .popup__form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
   
   .popup__form-input:focus {
     outline: none;
-    /* border: 2px solid #f8f205; */
+    border-bottom: 2px solid #5DB0C7;
   }
 
-  .popup__form-input::placeholder {
+  /* .popup__form-input::placeholder {
     color: black;
-  }
+  } */
   
   .popup__form-button {
     /* min-height: 35px; */
@@ -220,6 +237,9 @@
     .popup__right-wrapper {
       flex-direction: column;
       color: white;
+    }
+    .popup__right-wrapper-headline {
+      display: block;
     }
     .popup__form {
       min-width: 270px;

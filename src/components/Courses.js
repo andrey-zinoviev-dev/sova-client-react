@@ -13,6 +13,7 @@ import PopupWithForm from "./PopupWithForm";
 import AddModulePopup from "./AddModulePopup";
 import AddLessonPopup from "./AddLessonPopup";
 import AddUser from "./AddUser";
+import NoCourses from '../images/Group_20.png'
 // import AddCourse from "./AddCourse";
 import './Courses.css';
 import {  
@@ -84,14 +85,17 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
     return lesson._id === selectedLessonId;
   }) ? foundModule.lessons.find((lesson) => {
     return lesson._id === selectedLessonId;
-  }) : {title: "", cover: "", lessons: []};
+  }) : {title: "", cover: "", content: {"type": "doc", "content": [
+    // …
+  ]}};
 
   //variants
   const liGradient = {
     rest: {
       // translate: "0 -100%",
-      backgroundColor: "rgba(0, 0, 0, 1)",
+      // backgroundColor: "rgba(0, 0, 0, 1)",
       // backDropFilter: "blur(7px)",
+      border: "2px solid rgb(52, 52, 60)",
       transition: {
         duration: 0.5,
         ease: "easeInOut",
@@ -99,8 +103,32 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
     },
     hover: {
       // translate: "0 0%",
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      // backgroundColor: "rgba(0, 0, 0, 0.5)",
       // backDropFilter: "blur(0px)",
+      border: "2px solid #5DB0C7",
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      }
+    }
+  };
+
+  const liGradientDisabled = {
+    rest: {
+      // translate: "0 -100%",
+      // backgroundColor: "rgba(0, 0, 0, 1)",
+      // backDropFilter: "blur(7px)",
+      border: "2px solid rgb(52, 52, 60)",
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      }
+    },
+    hover: {
+      // translate: "0 0%",
+      // backgroundColor: "rgba(0, 0, 0, 0.5)",
+      // backDropFilter: "blur(0px)",
+      border: "2px solid rgb(249, 249, 249)",
       transition: {
         duration: 0.5,
         ease: "easeInOut",
@@ -145,9 +173,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
   const courseNameRef = React.useRef();
   const courseDescRef = React.useRef();
   const courseCoverRef = React.useRef();
-  const studentEmailRef = React.useRef();
-  const studentNameRef = React.useRef();
-  const studentPasswordRef = React.useRef();
+
   const addModuleNameRef = React.useRef();
   const addMoudleImg = React.useRef();
   const addModuleImgInput = React.useRef();
@@ -230,14 +256,24 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
 
       Promise.all([coursesFromApi, allStudentsFromApi])
       .then(([coursesReceived, studentsReceived]) => {
-        setCoursesData({courses: coursesReceived, allStudents: studentsReceived});
+        const coursesToRender =  loggedInUser.admin ? coursesReceived.filter((courseReceived) => {
+          return courseReceived.author._id === loggedInUser._id;
+        }) : coursesReceived.filter((courseReceived) => {
+          return loggedInUser.courses.find((courseToFind) => {
+            return courseToFind._id === courseReceived._id;
+          })
+        });
+
+        // console.log(coursesToRender);
+
+        setCoursesData({courses: coursesToRender, allStudents: studentsReceived});
       })
     }
   }, []);
 
   React.useEffect(() => {
-    console.log(foundModule);
-  }, [selectedModuleId])
+    console.log(studentsToAddToCourse);
+  }, [studentsToAddToCourse])
 
   return (
     <>
@@ -245,16 +281,17 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
         <Dashboard setAddUserOpened={setAddUserOpened} logout={logout} loggedIn={loggedIn}/>
 
         <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", width: "100%"}}>
-          <h2 className="main__courses-headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}>Изучай музыку и становись профессионалом вместе с экспертами <span style={{color: "rgb(93, 176, 199)"}}>Sova Studio</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
+          <h2 className="main__courses-headline" style={{textAlign: "left", fontWeight: 400, color: "#747374"}}>
+          Добро пожаловать в Школу Экстремального вокала<span style={{color: "rgb(93, 176, 199)"}}> Саши Совы</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
         </div>
-        <ul ref={ulRef} className="main__courses-list">
-          {coursesData.courses.length > 0 && coursesData.courses.map((course, index) => {
-            return <motion.li initial="rest" whileHover="hover" animate="rest" /*variants={liBackground}*/ className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/ overflow:"hidden", width: "100%", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
-              <motion.div variants={liGradient} style={{zIndex: 16, position: "absolute", top: 0, left: 0, width: "100%", height: "100%", /*backgroundImage: "linear-gradient(180deg, rgb(93, 176, 199) 5%, transparent 75%)"*/}}></motion.div>
+        {coursesData.courses.length > 0 ?  <ul ref={ulRef} className="main__courses-list">
+          {coursesData.courses.map((course, index) => {
+            return <motion.li variants={course.available ? liGradient : liGradientDisabled} initial="rest" whileHover="hover" animate="rest" /*variants={liBackground}*/ className="main__courses-list-element" key={course._id} style={{/*flex: "1 1 300px",*/overflow:"hidden", width: "100%", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
+              <motion.div style={{zIndex: 16, position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0, 0, 0, 0.35)", /*backgroundImage: "linear-gradient(180deg, rgb(93, 176, 199) 5%, transparent 75%)"*/}}></motion.div>
               <img style={{position: "absolute", top: 0, left: 0, zIndex: 15, width: "100%", height: "100%", objectFit: "cover"}} src={course.cover} alt="обложка курса" />
               <button onClick={() => {
                 showCoursePopup(course._id);
-              }} style={{position: "relative", zIndex: 20, width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
+              }} style={{pointerEvents: !course.available && "none", position: "relative", zIndex: 20, width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
                 
                 <div style={{position: "relative", zIndex: 20, display: "flex", alignItems: "flex-end", justifyContent: "space-between", minWidth: 35, fontSize: 28, color: "white"}}>
                   <p style={{margin: 0}}>0{index + 1}</p>
@@ -264,10 +301,11 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "space-between", textAlign: "left", order: 2, width: "100%"}}>
                   <h3 style={{margin: 0, letterSpacing: 2, width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "white", fontSize: 24}}>{course.name}</h3>
                   <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-end", margin: "10px 0 0 0"}}>
-                    <motion.p variants={authorColor} style={{margin: 0, color: "#404040", color: "#404040", fontSize: 20}}>{course.author.name}</motion.p>
-                    <button style={{backgroundColor: "transparent", border: "none", padding: 0, width: 25, height: 25}}>
-                      <FontAwesomeIcon style={{color: "#404040", width: "100%", height: "100%" }} icon={faLock} />
-                    </button>
+                    <motion.p style={{margin: 0, color: "rgb(249, 249, 249)", fontSize: 20}}>{course.author.name}</motion.p>
+                    {/* <button style={{backgroundColor: "transparent", border: "none", padding: 0, width: 25, height: 25}}>
+                      
+                    </button> */}
+                    {!course.available && <FontAwesomeIcon style={{color: "#C7C7C9", width: "100%", height: "100%", maxWidth: 20 }} icon={faLock} />}
                   </div>
 
                 </motion.div>
@@ -284,8 +322,20 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
              
             
             </motion.li>
-          })}
+          })
+          // :
+          // <li key="empty-courses" className="main__courses-list-element" style={{overflow:"hidden", width: "100%", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
+
+          // </li>
+        }
         </ul>
+        :
+        <div className="main__no-courses">
+          <img src={NoCourses} alt="нет курсов"/>
+          <p>Курсов нет</p>
+        </div>
+        
+        }
       </section>
 
       {modulesPopupOpened && <CourseModulesPopup modulesPopupOpened={modulesPopupOpened}>
@@ -319,17 +369,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                     <img className="popup__modules-ul-li-lesson-img" alt="обложка урока" src={lesson.cover}></img>
                     <p className="popup__modules-ul-li-lesson-p">{lesson.title}</p>
                   </li>
-                })}   {foundModule.lessons.map((lesson) => {
-                  return <li key={lesson._id} className="popup__modules-ul-li">
-                    <img className="popup__modules-ul-li-lesson-img" alt="обложка урока" src={lesson.cover}></img>
-                    <p className="popup__modules-ul-li-lesson-p">{lesson.title}</p>
-                  </li>
-                })}   {foundModule.lessons.map((lesson) => {
-                  return <li key={lesson._id} className="popup__modules-ul-li">
-                    <img className="popup__modules-ul-li-lesson-img" alt="обложка урока" src={lesson.cover}></img>
-                    <p className="popup__modules-ul-li-lesson-p">{lesson.title}</p>
-                  </li>
-                })}  
+                })}
             </ul> : <ul className="popup__modules-ul">
               {foundCourse.modules.map((module, index) => {
                 return <li key={module._id} onClick={() => {
@@ -442,18 +482,45 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                   return <motion.li whileHover={{border: "2px solid #5DB0C7"}} className="course-edit__students-wrapper-ul-li" key={courseStudent._id}>
                     <button onClick={() => {
                       studentsToAddToCourse.find((studentToAdd) => {
-                        return studentToAdd._id === courseStudent._id;
+                        return studentToAdd.studentId === courseStudent._id;
                       }) ? setStudentsToAddToCourse((prevValue) => {
                         return prevValue.filter((prevStudentToAdd) => {
-                          return prevStudentToAdd._id !== courseStudent._id;
+                          return prevStudentToAdd.studentId !== courseStudent._id;
                         })
                       }) :
                       setStudentsToAddToCourse((prevValue) => {
-                        return [...prevValue, courseStudent];
+                        return [...prevValue, {studentId: courseStudent._id, grade: "Rising Star"}];
                       })
-                    }} className="course-edit__students-wrapper-ul-li-btn">{courseStudent.email}</button>
+                    }} className="course-edit__students-wrapper-ul-li-btn">
+                      <p style={{margin: "0 0 20px 0"}}>{courseStudent.email}</p>
+                      <div className="add-user__form-select-wrapper">
+                      <label>Тариф</label>  
+                      <select className="add-user__form-select" defaultValue="Rising Star" onClick={(evt) => {
+                        evt.stopPropagation();
+                        // return;
+                        //                         setStudentData((prevValue) => {
+                        //   return {...prevValue, courses: prevValue.courses.map((courseToUpdate) => {
+                        //     return courseToUpdate._id === course._id ? {...courseToUpdate, grade: evt.target.value} : courseToUpdate;
+                        //   })}
+                        
+                        // })
+                        return;
+                      }} onChange={(evt) => {
+                        // console.log(evt.target.value);
+                        setStudentsToAddToCourse((prevValue) => {
+                          return prevValue.map((prevStudent) => {
+                            return prevStudent.studentId === courseStudent._id ? {...prevStudent, grade: evt.target.value} : prevStudent;
+                          })
+                        })
+                      }}>
+                        <option className="add-user__form-select-option" value="Rising Star">Rising Star</option>
+                        <option className="add-user__form-select-option" value="Headliner">Headliner</option>
+                        <option className="add-user__form-select-option" value="Legend">Legend</option>
+                      </select>
+                      </div>
+                    </button>
                     {studentsToAddToCourse.find((studentToAdd) => {
-                        return studentToAdd._id === courseStudent._id;
+                        return studentToAdd.studentId === courseStudent._id;
                       }) && <div className="course-edit__students-wrapper-ul-li-selection-div">
                       <FontAwesomeIcon icon={faCheck} />
                     </div>}
@@ -465,12 +532,12 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 // console.log(studentsToAddToCourse);
                 apiAddStudentsToCourse(foundCourse._id, token, studentsToAddToCourse)
                 .then((data) => {
-                  setCoursesData((prevData) => {
-                    const updatedCourses = prevData.courses.map((course) => {
-                      return course._id === foundCourse._id ? {...course, students: data.students} : course;
-                    });
-                    return {...prevData, courses: updatedCourses};
-                  })
+                  // setCoursesData((prevData) => {
+                  //   const updatedCourses = prevData.courses.map((course) => {
+                  //     return course._id === foundCourse._id ? {...course, students: data.students} : course;
+                  //   });
+                  //   return {...prevData, courses: updatedCourses};
+                  // })
                 });
               }} className="course-edit__students-wrapper-btn" type="button">Добавить учеников</button>
 
@@ -590,14 +657,14 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
               })
 
           }} className="course__edit-addLesson-wrapper-form">
-            <div>
-              <div>
-                <input onChange={(evt) => {
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+              <div style={{display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", gap: 15, width: "100%", maxWidth: 320}}>
+                <input className="course__edit-addLesson-wrapper-form-input" onChange={(evt) => {
                   setLessonContent((prevValue) => {
                     return {...prevValue, title: evt.target.value};
                   })
                 }} type="text" placeholder="Название урока"></input>
-                <input type="text" placeholder="Ссылка на картинку"></input>
+                <input className="course__edit-addLesson-wrapper-form-input" type="text" placeholder="Ссылка на картинку"></input>
               </div>
               <div style={{position: "relative", display: "flex", alignItems: "flex-end"}}>
                 <img ref={addLessonImgRef} alt="обложка урока" style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
@@ -633,7 +700,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 </div>
               </div> */}
 
-            <button type="submit" className="module-edit__addLesson-wrapper-form-btn">Добавить урок</button>
+            <button type="submit" className="course__edit-addLesson-wrapper-form-btn">Добавить урок</button>
           </form>
           <TipTapEditor lessonContent={lessonContent} setLessonContent={setLessonContent} setSelectedFiles={setSelectedFiles}>
           </TipTapEditor>
@@ -816,48 +883,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
         </div>  
       </EditLesson>}
 
-      {addUserOpened && <AddUser>
-        <div className="add-user__wrapper">
-          <button type="button" onClick={() => {
-            setAddUserOpened(false);
-            setSuccessfullyAddedUser(false);
-          }} className="add-user__close-btn">
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
-          <h3 className="add-user__headline">Добавить ученика к платформе</h3>
-          {!successfullyAddedUser ? <form className="add-user__form" onSubmit={(evt) => {
-            evt.preventDefault();
-            const studentData={
-              email: studentEmailRef.current.value,
-              fullname: studentNameRef.current.value,
-              password: studentPasswordRef.current.value,
-            };
-
-            apiRegister(studentData)
-            .then((data) => {
-              if(data.token) {
-                setSuccessfullyAddedUser(true);
-              }
-            })
-            // console.log(studentData);
-            // registerFormSubmit(studentData)
-          }}>
-            <input className="add-user__form-input" placeholder="Email пользователя" ref={studentEmailRef} type="email"></input>
-            <input className="add-user__form-input" placeholder="Имя пользователя" ref={studentNameRef} type="text"></input>
-            <input className="add-user__form-input" placeholder="Пароль пользователя" ref={studentPasswordRef} type="password"></input>
-            <button className="add-user__form-btn" type="submit">Добавить пользователя</button>
-          </form>
-          :
-          <div className="add-user__success">
-            <p className="add-user__success-p">Пользователь успешно добавлен к платформе!</p>
-            <button onClick={() => {
-              setAddUserOpened(false);
-              setSuccessfullyAddedUser(false);
-            }} className="add-user__success-btn">Вернуться к курсам</button>
-          </div>
-          }
-        </div>
-      </AddUser>}
+      {addUserOpened && <AddUser coursesData={coursesData} setCoursesData={setCoursesData} setAddUserOpened={setAddUserOpened} setSuccessfullyAddedUser={setSuccessfullyAddedUser} successfullyAddedUser={successfullyAddedUser}></AddUser>}
     </>
 
   )

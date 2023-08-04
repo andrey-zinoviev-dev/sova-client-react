@@ -11,7 +11,7 @@ export default function Contact({contact, filterChatToUser}) {
                     <img style={{width: 35, aspectRatio: "1/1", borderRadius: "51%", objectFit: "cover"}} src={Avatar} alt="аватар"></img>
                     {contact.online && <div style={{position: "absolute", bottom: 0, right: 5, width: 7, height: 7, borderRadius: "51%", backgroundColor: "#38e725"}}></div>}
                 </div>
-                <p style={{margin: 0}}>{contact.email}</p>
+                <p style={{margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{contact.email}</p>
             </button>
         </li>
     )

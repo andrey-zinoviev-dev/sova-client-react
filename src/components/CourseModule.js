@@ -26,7 +26,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 // import Messages from './Messages';
 
-export default function CourseModule({ onlineUsers, socket }) {
+export default function CourseModule({ onlineUsers, socket, logout }) {
   // console.log(socket);
   //variables
   // let lessons;
@@ -214,7 +214,7 @@ export default function CourseModule({ onlineUsers, socket }) {
     }, 
     opened: {
       opacity: 1,
-      display: "block",
+      display: "flex",
       transition: {duration: 0.25, ease: "easeInOut", delay: 0.5},
       // transitionEnd: {
       //   display: "block"
@@ -483,6 +483,10 @@ export default function CourseModule({ onlineUsers, socket }) {
   // }, [editor, courseModule.layout])
 
   React.useEffect(() => {
+    console.log(loggedInUser);
+  }, []);
+
+  React.useEffect(() => {
     //show online users
     if(loggedInUser.admin) {
       const onlineStudents = onlineUsers.filter((onlineUser) => {
@@ -567,7 +571,7 @@ export default function CourseModule({ onlineUsers, socket }) {
   }, [loggedInUser]);
 
   React.useEffect(() => {
-
+    
     userId._id ? apiGetConversation(userToken, userId._id)
     .then((data) => {
       if(data.message) {
@@ -582,15 +586,13 @@ export default function CourseModule({ onlineUsers, socket }) {
 
   }, [userId]);
 
-  React.useEffect(() => {
-    console.log(userId);
-  }, [userId]);
+
 
   return (
     <motion.section className='module'>
       
       <ModuleSide menuOpened={menuOpened}>
-        <div  style={{position: "relative", padding: "15px", textAlign: "left", boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "flex-end", width: "100%", height: 90}}>
+        <div style={{position: "relative", padding: "15px", textAlign: "left", boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "flex-end", width: "100%", height: 90}}>
           {/* <div style={{padding: "0 0 0 15px"}}>
             
 
@@ -705,7 +707,7 @@ export default function CourseModule({ onlineUsers, socket }) {
           </motion.div> */}
         </div>
         
-        <motion.div variants={sideNavigationVariants} initial="closed" animate={menuOpened ? "opened" : "closed"} style={{width: "100%", textAlign: "left", boxSizing: "border-box", margin: "15px 0 0 0", color: "white"}}>
+        <motion.div className='module__side-wrapper' variants={sideNavigationVariants} initial="closed" animate={menuOpened ? "opened" : "closed"}>
               {/* <h3></h3> */}
           {/* <span style={{margin: "0 0 10px 0"}}>Модуль</span> */}
           <h3 style={{boxSizing: "border-box", padding: "0 20px"}}>{module.title}</h3>
@@ -714,6 +716,15 @@ export default function CourseModule({ onlineUsers, socket }) {
               return <li key={moduleLesson._id} style={{boxSizing: "border-box", padding: "0 20px", borderLeft: lessonID === moduleLesson._id && "2px solid rgb(93, 176, 199)" }}>{moduleLesson.title}</li>
             })}
           </ul>
+          <div className='module__side-wrapper-buttons'>
+            <button className='module__side-wrapper-buttons-btn' onClick={() => {
+              navigate('../');
+            }}>Назад к курсам</button>
+            <button className='module__side-wrapper-buttons-btn' onClick={() => {
+              logout();
+            }}>Выйти из профиля</button>
+          </div>
+
         </motion.div> 
         
         <motion.p variants={sideSpanVariants} initial="closed" animate={menuOpened ? "opened" : "closed"} style={{color: "white", fontWeight: 700, textTransform: "uppercase", rotate: "-90deg", letterSpacing: 5, margin: "auto 0"}}>меню</motion.p>
@@ -721,7 +732,9 @@ export default function CourseModule({ onlineUsers, socket }) {
 
       <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "flex-start"}} initial={"closed"} className='module__content'>
         <div>
-          <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
+          {loggedInUser.courses.find((course) => {
+            return course._id === courseID && course.grade !== 'Rising Star';
+          }) && <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
             {window.innerWidth < 768 && <li>
               <button onClick={showSideMenu} style={{backgroundColor: "rgba(0, 0, 0, 0)", border: "none", minWidth: 24, minHeight: 24, color: "rgba(93, 176, 199, 1)"}}>
                 <FontAwesomeIcon icon={faBars} />
@@ -729,7 +742,7 @@ export default function CourseModule({ onlineUsers, socket }) {
             </li>}
             <li><motion.button whileHover={{color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 1)", border: "2px solid transparent", borderBottom: chatIsOpened ? "none" : "2px solid white" }} onClick={closeChat}>Урок</motion.button></li>
             <li><motion.button whileHover={{color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.5)", border: "2px solid transparent", borderBottom: chatIsOpened ? "2px solid white" : "none" }} onClick={openChat}>Чат</motion.button></li>
-          </ul>
+          </ul>}
         </div>
         {!chatIsOpened ?
           <div style={{maxWidth: 768, width: '100%', color: "white"}}>

@@ -107,6 +107,38 @@
   color: white;
 }
 
+.module__side-wrapper {
+  width: 100%;
+  text-align: left;
+  box-sizing: border-box;
+  margin: 15px 0px 0px;
+  color: white;
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.module__side-wrapper-buttons {
+  margin: auto 0 50px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 25px;
+}
+
+.module__side-wrapper-buttons-btn {
+  width: 140px;
+  height: 40px;
+  background-color: transparent;
+  border: 2px solid #5DB0C7;
+  color: #5DB0C7;
+  border-radius: 9px;
+}
+
 @media screen and (max-width: 1439px) {
   .module__content {
     padding: 2% 15%;

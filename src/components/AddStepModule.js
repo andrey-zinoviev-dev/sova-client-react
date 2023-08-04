@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faAngleRight, faArrowLeft, faPlus, faCamera, faPen} from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
@@ -8,8 +9,12 @@ import { motion } from "framer-motion";
 import EmptyLogo from '../images/Group_20.png';
 import LessonImg from '../images/5af7b516f65dd48bf1c3daae143f8fd7.jpg';
 import TipTapEditor from "./TipTapEditor";
+import SuccessAddCourse from './SuccessAddCourse';
 
-export default function AddStepModule({formData, setFormData, setFormStep, setSelectedFiles}) {
+
+export default function AddStepModule({successfullCourseAddOpened, formData, setFormData, setFormStep, setSelectedFiles, isLoading}) {
+    //navigate
+    const navigate = useNavigate();
 
     //refs
     const moduleNameRef = React.useRef();
@@ -41,6 +46,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
     ]}});
     const [lessonCoverEditOpened, setLessonCoverEditOpened] = React.useState(false);
     const [lessonContentEditOpened, setLessonContentEditOpened] = React.useState(false);
+
 
     //derived states
     const {course} = formData;
@@ -332,7 +338,7 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
 
                                 
                             </form>
-                            <TipTapEditor setLessonContent={setLessonContent} lessonContent={lessonContent}></TipTapEditor>
+                            <TipTapEditor setLessonContent={setLessonContent} lessonContent={lessonContent} setSelectedFiles={setSelectedFiles}></TipTapEditor>
                             <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
                                 // console.log(modules);
                                 // const lessonObj = {title: lessonTitleRef.current.value, content: lessonContent};
@@ -414,12 +420,20 @@ export default function AddStepModule({formData, setFormData, setFormStep, setSe
                             <FontAwesomeIcon icon={faXmark} />
                     </button>
                     <h3 style={{margin: "0 0 50px 0"}}>Редактировать контент урока</h3>
-                    <TipTapEditor foundLesson={foundLesson} foundModule={foundModule} setFormData={setFormData} />
+                    <TipTapEditor foundLesson={foundLesson} foundModule={foundModule} setFormData={setFormData} setSelectedFiles={setSelectedFiles}/>
                     <button type="button" onClick={() => {
                         setLessonContentEditOpened(false);
                     }} style={{width: 160, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}}>Обновить контент</button>
                 </div>
             </section>}
+            {successfullCourseAddOpened && <SuccessAddCourse>
+                <div className="addCourse__success-wrapper">
+                    <p>{isLoading ? "Идет загрузка" : "Курс успешно добавлен!" }</p>
+                    <button type="button" onClick={() => {
+                        navigate('../');
+                    }} className="addCourse__success-wrapper-finish">Вернуться к курсам</button>
+                </div>
+            </SuccessAddCourse>}
         </div>
     )
 };

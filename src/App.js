@@ -76,6 +76,7 @@ function App() {
     }
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
+    console.log(userToken);
     const localsessionID = localStorage.getItem('sessionID');
     // console.log(userToken);
     if(userToken) {
@@ -119,7 +120,7 @@ function App() {
 
       // });
       
-    };
+    } 
     return () => {
       // socket.disconnect();
       socket.close();
@@ -129,6 +130,10 @@ function App() {
     };
 
   }, []);
+
+  React.useEffect(() => {
+    console.log(loggedIn);
+  }, [loggedIn])
 
 
   //functions
@@ -167,15 +172,15 @@ function App() {
       if(!token) {
         return;
       }
-      console.log(token);
-      // return apiGetCurrentUser(token)
-      // .then((userDoc) => {
-      //   localStorage.setItem('token', token);
-      //   // console.log(userDoc);
-      //   setuser(userDoc);
-      //   setLoggedIn(true);
-      //   // navigate('/courses')
-      // })
+      // console.log(token);
+      return apiGetCurrentUser(token)
+      .then((userDoc) => {
+        localStorage.setItem('token', token);
+        // console.log(userDoc);
+        setuser(userDoc);
+        setLoggedIn(true);
+        // navigate('/courses')
+      })
 
     })
 
@@ -221,7 +226,7 @@ function App() {
         {/* <Dashboard></Dashboard> */}
         <Routes>
           <Route path='addCourse' element={<AddCourse />}></Route>
-          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<CourseModule socket={socket} onlineUsers={onlineUsers} />}></Route>
+          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={loggedIn ? <CourseModule socket={socket} onlineUsers={onlineUsers} logout={logout} /> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
           <Route path='/' element={loggedIn ? <Main socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 // import Main from './Main';
 // import Login from './Login';
-// import Register from './Register';
+import Register from './Register';
 import Dashboard from './Dashboard';
 import PopupWithForm from './PopupWithForm';
 
@@ -12,6 +12,7 @@ import './Welcome.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faVk, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { apiRegister } from '../api';
 
 //framer-motion variants
 const animationVariants = {
@@ -35,8 +36,10 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
   const loginPasswordRef = React.useRef();
   const registerEmailRef = React.useRef();
   const registerPasswordRef = React.useRef();
+  const registerNameRef = React.useRef();
 
   const [popupOpened, setPopupOpened] = React.useState(false);
+  const [registerPopupOpened, setRegisterPopupOpened] = React.useState(false);
   const [loginButtonPressed, setLoginButtonPressed] = React.useState(true);
   // const [initiateAnimation, setInitiateAnimation] = React.useState(0);
 
@@ -58,6 +61,10 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
     // setInitiateAnimation(0);
   };
 
+  function closeRegisterPopup() {
+    setRegisterPopupOpened(false);
+  };
+
   function submitloginForm(evt) {
     evt.preventDefault();
     // console.log(loginEmailRef.current, loginPasswordRef.current);
@@ -67,7 +74,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
 
   function submitregisterForm(evt) {
     evt.preventDefault();
-    const objToPost = {email: registerEmailRef.current.value, password: registerPasswordRef.current.value};
+    const objToPost = {email: registerEmailRef.current.value, password: registerPasswordRef.current.value, fullname: registerNameRef.current.value};
     registerFormSubmit(objToPost);
   };
 
@@ -81,26 +88,17 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
         <div className='welcome__content'>
           <div className='welcome__content-wrapper'>
             <h1 className='welcome__content-headline'>sasha sova</h1>
-            <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
-              setPopupOpened(true);
-            }}>войти</motion.button>
+            <div className='welcome__content-wrapper-buttons'>
+              <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
+                setPopupOpened(true);
+              }}>войти</motion.button>
+              {/* <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
+                setRegisterPopupOpened(true);
+              }}>зарегистрироваться</motion.button> */}
+            </div>
           </div>
-          {/* <div className='welcome__content-left'>
-            <h1 className='welcome__content-headline'>SOVA<span style={{color: "rgba(252,101,48,75%)"}}>.</span></h1>
-            <span className='welcome__content-left-span'>BE STELLAR, SING STELLAR</span>
-          </div> */}
-        
-          {/* <div className='welcome__content-right'> */}
-            {/* <span></span> */}
-            {/* <img className='welcome__content-right-img' src='https://soyuzmicrophones.com/wp-content/uploads/2019/03/front-page-hero.jpg'></img> */}
-            
-            {/* <div> */}
-              
-              {/* <button className="welcome__button header__button_login" onClick={openWelcomePopupLogin} >Войти</button>
-              <button className="welcome__button header__button_register" onClick={openWelcomePopupRegister} >Зарегистрироваться</button> */}
-            {/* </div> */}
 
-          </div>
+        </div>
 
           {/* <div className='welcome__content-proceed'>
               <button className='welcome__content-button' onClick={openWelcomePopupLogin}>Войти</button>
@@ -168,12 +166,12 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
         </div>
       </motion.div> */}
       <div className="popup__left-wrapper">
-        <img className="popup__left-logo" src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
+        <img className="popup__left-logo" alt='лого сова' src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
         <h3 className='popup__left-wrapper-headline'>Войти</h3>
       </div>
 
       <div className='popup__right-wrapper'>
-        <h3 className='popup__left-wrapper-headline'>Войти</h3>
+        <h3 className='popup__right-wrapper-headline'>Войти</h3>
         <form className="popup__form" onSubmit={(evt) => {submitloginForm(evt)}}>
           <button className="popup__close" onClick={closePopups}>
             <FontAwesomeIcon icon={faXmark} />
@@ -188,7 +186,31 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
       </div>
     </PopupWithForm>
     {/* <Login loginPopupOpened={loginPopupOpened} closePopups={closePopups}></Login> */}
-    {/* <Register registerPopupOpened={registerPopupOpened} closePopups={closePopups}></Register> */}
+    {/* <PopupWithForm popupOpened={registerPopupOpened}>
+      <div className="popup__left-wrapper">
+        <img className="popup__left-logo" alt='лого сова' src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
+        <h3 className='popup__left-wrapper-headline'>Зарегистрироваться</h3>
+      </div>
+      <div className="popup__right-wrapper">
+          <div className="popup__form-wrapper">
+            <button onClick={closeRegisterPopup} className="popup__close">
+              <FontAwesomeIcon icon={faXmark} />
+            </button>
+            <h3 className="popup__right-wrapper-headline">Регистрация</h3>
+            <form className="popup__form" onSubmit={(evt) => {
+              submitregisterForm(evt);
+            }}>
+              <input ref={registerEmailRef} type="text" className="popup__form-input" name="email" placeholder="Почта" />
+              <input ref={registerNameRef} type='text' className='popup__form-input' placeholder="Имя"></input>
+              <input ref={registerPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="Пароль" />
+              <button className="popup__form-button" type="submit" data-type="login">Войти</button>
+            </form>
+          </div>
+        </div>
+        <div className="popup__overlay">
+
+        </div>
+    </PopupWithForm> */}
     </>
   )
 }
