@@ -532,12 +532,13 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 // console.log(studentsToAddToCourse);
                 apiAddStudentsToCourse(foundCourse._id, token, studentsToAddToCourse)
                 .then((data) => {
-                  // setCoursesData((prevData) => {
-                  //   const updatedCourses = prevData.courses.map((course) => {
-                  //     return course._id === foundCourse._id ? {...course, students: data.students} : course;
-                  //   });
-                  //   return {...prevData, courses: updatedCourses};
-                  // })
+                  console.log(data);
+                  setCoursesData((prevData) => {
+                    const updatedCourses = prevData.courses.map((course) => {
+                      return course._id === data.course._id ? {...course, students: data.course.students} : course;
+                    });
+                    return {...prevData, courses: updatedCourses, allStudents: data.users};
+                  })
                 });
               }} className="course-edit__students-wrapper-btn" type="button">Добавить учеников</button>
 

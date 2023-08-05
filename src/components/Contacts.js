@@ -28,7 +28,7 @@ export default function Contacts ({messages, contacts, admin, filterChatToUser, 
         <h3 style={{color: "white", margin: 0}}>Контакты</h3>
       </div>
       <ContactSearch messages={messages} />
-      <ul style={{listStyle: "none", margin: "25px 0 0 0", padding: 0, boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", gap: 20}}>
+      <ul className="lesson__div-chat-contacts-ul" style={{listStyle: "none", margin: "25px 0 0 0", padding: "0 10px 0 5px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", gap: 20, overflow: "auto"}}>
         {loggedInUser.admin ?
           // contacts.length > 0 ? contacts.map((contact) => {
           //   return <motion.li initial={{backgroundColor: "rgba(255, 255, 255, 0)"}} whileHover={{backgroundColor: "rgba(224, 224, 224, 1)"}} key={contact._id} onClick={() => {

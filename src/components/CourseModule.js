@@ -732,17 +732,19 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
 
       <motion.div style={{display: "flex", flexDirection: "column", alignItems: 'center', justifyContent: "flex-start"}} initial={"closed"} className='module__content'>
         <div>
-          {loggedInUser.courses.find((course) => {
-            return course._id === courseID && course.grade !== 'Rising Star';
-          }) && <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
+          <ul style={{display: "flex", justifyContent: "space-between", alignItems: "center", minWidth: 260, margin: 0, padding: 0, listStyle: "none"}}>
             {window.innerWidth < 768 && <li>
               <button onClick={showSideMenu} style={{backgroundColor: "rgba(0, 0, 0, 0)", border: "none", minWidth: 24, minHeight: 24, color: "rgba(93, 176, 199, 1)"}}>
                 <FontAwesomeIcon icon={faBars} />
               </button>  
             </li>}
-            <li><motion.button whileHover={{color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 1)", border: "2px solid transparent", borderBottom: chatIsOpened ? "none" : "2px solid white" }} onClick={closeChat}>Урок</motion.button></li>
-            <li><motion.button whileHover={{color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.5)", border: "2px solid transparent", borderBottom: chatIsOpened ? "2px solid white" : "none" }} onClick={openChat}>Чат</motion.button></li>
-          </ul>}
+            {loggedInUser.courses.find((course) => {
+            return course._id === courseID && course.grade !== 'Rising Star';
+          })} && <li><motion.button whileHover={{color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 1)", border: "2px solid transparent", borderBottom: chatIsOpened ? "none" : "2px solid white" }} onClick={closeChat}>Урок</motion.button></li>
+            {loggedInUser.courses.find((course) => {
+            return course._id === courseID && course.grade !== 'Rising Star';
+          })} && <li><motion.button whileHover={{color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 90, minHeight: 40, backgroundColor: "transparent", color: chatIsOpened ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0.5)", border: "2px solid transparent", borderBottom: chatIsOpened ? "2px solid white" : "none" }} onClick={openChat}>Чат</motion.button></li>
+          </ul>
         </div>
         {!chatIsOpened ?
           <div style={{maxWidth: 768, width: '100%', color: "white"}}>

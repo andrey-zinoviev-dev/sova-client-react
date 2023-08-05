@@ -44,6 +44,17 @@
   border: none;
   cursor: pointer;
 }
+.lesson__div-chat-contacts-ul::-webkit-scrollbar {
+  width: 5px;
+  background-color: #EBEBEB;
+  border-radius: 9px;
+}
+.lesson__div-chat-contacts-ul::-webkit-scrollbar-thumb {
+  width: 5px;
+  /* height: 20px; */
+  background-color: #5DB0C7;
+  border-radius: 9px;
+}
 .lesson__div-chat-user-avatar {
   max-width: 55px;
   border-radius: 50px;
