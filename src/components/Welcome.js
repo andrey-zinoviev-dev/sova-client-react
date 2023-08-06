@@ -89,6 +89,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
           <div className='welcome__content-wrapper'>
             <h1 className='welcome__content-headline'>sasha sova</h1>
             <div className='welcome__content-wrapper-buttons'>
+              {/* <button></button> */}
               <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
                 setPopupOpened(true);
               }}>войти</motion.button>
@@ -177,7 +178,10 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit }) {
             <FontAwesomeIcon icon={faXmark} />
           </button>
           <input ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-          <input ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+          <div style={{position: "relative"}}>
+            <input ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+            <motion.button whileHover={{border: "2px solid #5DB0C7", color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 30, minHeight: 30, position: "absolute", top: 0, right: 0, margin: 0, border: "2px solid #5db0c79c", color: "rgba(255, 255, 255, 0.7)"}} className="popup__form-button" type='button'>?</motion.button>
+          </div>
           <button className="popup__form-button" type="submit" data-type="login">Войти</button>
         </form>
       </div>

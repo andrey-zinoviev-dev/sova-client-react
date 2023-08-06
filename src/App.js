@@ -186,12 +186,9 @@ function App() {
 
   }
 
-  function submitChatForm(evt) {
+  function submitForgetPasswordForm(evt) {
     evt.preventDefault();
-    // console.log(evt.target);
-    // console.log(name, value);
-    //send message to APi
-    // socket
+    console.log('forget password form submitted');
   };
 
   function handlePrntScrnButton(evt) {
