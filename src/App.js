@@ -12,7 +12,7 @@ import AddCourse from './components/AddCourse';
 // import Chat from './components/Chat';
 // import Course from './components/Course';
 import Dashboard from './components/Dashboard';
-import { apiLogin, apiRegister, apiGetCurrentUser, apiGetCourses } from './api';
+import { apiLogin, apiRegister, apiGetCurrentUser, apiNewPassword } from './api';
 
 import { UserContext } from './context/userContext';
 
@@ -76,7 +76,7 @@ function App() {
     }
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
-    console.log(userToken);
+    // console.log(userToken);
     const localsessionID = localStorage.getItem('sessionID');
     // console.log(userToken);
     if(userToken) {
@@ -186,9 +186,8 @@ function App() {
 
   }
 
-  function submitForgetPasswordForm(evt) {
-    evt.preventDefault();
-    console.log('forget password form submitted');
+  function submitForgetPasswordForm(formData) {
+    console.log(formData);
   };
 
   function handlePrntScrnButton(evt) {
@@ -223,8 +222,8 @@ function App() {
         {/* <Dashboard></Dashboard> */}
         <Routes>
           <Route path='addCourse' element={<AddCourse />}></Route>
-          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={loggedIn ? <CourseModule socket={socket} onlineUsers={onlineUsers} logout={logout} /> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
-          <Route path='/' element={loggedIn ? <Main socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit}></Welcome>}></Route>
+          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={loggedIn ? <CourseModule socket={socket} onlineUsers={onlineUsers} logout={logout} /> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
+          <Route path='/' element={loggedIn ? <Main socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
         </Routes>
       </UserContext.Provider>
     </div>

@@ -30,6 +30,19 @@ function apiRegister(formData) {
   })
 }
 
+function apiNewPassword(formData, token) {
+  return fetch(`${apiAdress}/user/newPassword`, {
+    method: "PUT",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
 function apiGetCurrentUser(token) {
   return fetch(`${apiAdress}/currentUser`, {
     method: 'GET',
@@ -264,6 +277,7 @@ function apiAddStudentsToCourse(courseID, token, students) {
 export {
   apiLogin,
   apiRegister,
+  apiNewPassword,
   apiGetCurrentUser,
   apiGetCourses,
   apiGetCourse,
