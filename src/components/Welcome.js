@@ -13,7 +13,7 @@ import './Welcome.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faVk, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { apiRegister } from '../api';
+import { apiCheckUserEmail, apiNewPassword } from '../api';
 
 //framer-motion variants
 const animationVariants = {
@@ -38,6 +38,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
   const registerEmailRef = React.useRef();
   const registerPasswordRef = React.useRef();
   const registerNameRef = React.useRef();
+  const findByEmailRef = React.useRef();
   const newPasswordRef = React.useRef();
   const newPasswordRepeatRef = React.useRef();
 
@@ -82,41 +83,58 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
     // console.log('forget password form submitted');
 
     const objToPost = {password: newPasswordRef.current.value};
+    apiNewPassword(objToPost)
+    .then((data) => {
+      console.log(data);
+    })
     // registerFormSubmit(objToPost);
-    submitForgetPasswordForm(objToPost);
+    // submitForgetPasswordForm(objToPost);
   };
 
   function renderNewPassword () {
     switch(passwordRestorerStep) {
       case 0: 
         return <div>
-          <input type="email" className="popup__form-input" name="email" placeholder="Email" />
+          <input ref={findByEmailRef} type="email" style={{margin: "0 0 50px 0"}} className="popup__form-input" name="email" placeholder="Email" />
           {/* <input ref={newPasswordRepeatRef} type="password" className="popup__form-input" name="password" id="" placeholder="повтор пароля" /> */}
           <div style={{display :"flex", justifyContent: "space-between", alignItems: "center"}}>
           {/* <button onClick={() => {
             setPasswordRestorePressed(false);
           }} style={{margin: 0}} className="popup__form-button" type="button" data-type="login">Назад</button> */}
             <button onClick={() => {
-              setPasswordRestoreStep((prevValue) => {
-                return prevValue + 1;
+              apiCheckUserEmail({email: findByEmailRef.current.value})
+              .then((data) => {
+                if(data.message) {
+                  console.log(data.message);
+                }
+                if(data._id) {
+                  setPasswordRestoreStep((prevValue) => {
+                    return prevValue + 1;
+                  })
+                }
               })
-            }} style={{margin: 0}} className="popup__form-button" type="submit" data-type="login">Найти по почте</button>
+
+              // console.log(findByEmailRef.current.value);
+              // setPasswordRestoreStep((prevValue) => {
+              //   return prevValue + 1;
+              // })
+            }} style={{margin: 0}} className="popup__form-button" type="button" data-type="login">Найти по почте</button>
           </div>
         </div>
         
       case 1: 
         return <div>
-          <div>
+          <div style={{display: "flex", flexDirection: "column", gap: 10, margin: "0 0 30px 0"}}>
             <input ref={newPasswordRef} type="password" className="popup__form-input" name="password" placeholder="Новый пароль" />
-            <input ref={newPasswordRef} type="email" className="popup__form-input" name="email" placeholder="Email" />
+            <input ref={newPasswordRef} type="password" className="popup__form-input" name="password" placeholder="Повтор нового пароля" />
           </div>
-          <div style={{display :"flex", justifyContent: "space-between", alignItems: "center"}}>
+          <div style={{display :"flex", flexDirection: window.innerWidth <= 767 && "column", justifyContent: "space-between", alignItems: window.innerWidth <= 767 ? "stretch" : "center", maxWidth: window.innerWidth <= 767 && 180, margin: "0 auto"}}>
             <button onClick={() => {
               setPasswordRestoreStep((prevValue) => {
                 return prevValue - 1;
               })
             }} style={{margin: 0}} className="popup__form-button" type="button" data-type="login">Назад</button>
-            <button style={{margin: 0}} className="popup__form-button" type="submit" data-type="login">Найти по почте</button>
+            <button style={{margin: 0}} className="popup__form-button" type="submit" data-type="login">Обновить пароль</button>
           </div>
         </div>
       default: break;
@@ -234,7 +252,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
         </form>
         :
         <RefreshPass>
-          <form className="popup__form" onSubmit={(evt) => {submitNewPasswordForm(evt)}}>
+          <form style={{minHeight: 120}} className="popup__form" onSubmit={(evt) => {submitNewPasswordForm(evt)}}>
           <button className="popup__close" onClick={closePopups}>
             <FontAwesomeIcon icon={faXmark} />
           </button>

@@ -126,7 +126,7 @@
     border-radius: 50%;
     cursor: pointer;
     font-weight: 700;
-    margin: 0 0 25px 0;
+    /* margin: 0 0 25px 0; */
   }
   
   .popup__headline {
@@ -139,6 +139,7 @@
     align-items: stretch;
     min-width: 320px;
     min-height: 240px;
+    /* height: 240px; */
     justify-content: space-between;
   }
   
@@ -244,5 +245,8 @@
     }
     .popup__form {
       min-width: 270px;
+      max-width: 300px;
+      box-sizing: border-box;
+      padding: 0 10px;
     }
   }

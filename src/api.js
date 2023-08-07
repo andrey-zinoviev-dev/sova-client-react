@@ -30,13 +30,14 @@ function apiRegister(formData) {
   })
 }
 
-function apiNewPassword(formData, token) {
-  return fetch(`${apiAdress}/user/newPassword`, {
+function apiNewPassword(formData) {
+  return fetch(`${apiAdress}/newPassword`, {
     method: "PUT",
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': token,
+      // 'Authorization': token,
     },
+    body: JSON.stringify(formData),
   })
   .then((res) => {
     return res.json();
@@ -60,6 +61,19 @@ function apiGetCurrentUser(token) {
   // })
 
 }
+
+function apiCheckUserEmail(email) {
+  return fetch(`${apiAdress}/email`, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(email),
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
 
 function apiGetCourses(token) {
   return fetch(`${apiAdress}/coursesList`, {
@@ -279,6 +293,7 @@ export {
   apiRegister,
   apiNewPassword,
   apiGetCurrentUser,
+  apiCheckUserEmail,
   apiGetCourses,
   apiGetCourse,
   apiCreateCourse,
