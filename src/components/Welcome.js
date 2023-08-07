@@ -47,6 +47,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
   const [loginButtonPressed, setLoginButtonPressed] = React.useState(true);
   const [passwordRestorePressed, setPasswordRestorePressed] = React.useState(false);
   const [passwordRestorerStep, setPasswordRestoreStep] = React.useState(0);
+  const [userToUpdateData, setUserToUpdateData] = React.useState({email: "", password: ""});
   // const [initiateAnimation, setInitiateAnimation] = React.useState(0);
 
   function openWelcomePopupLogin() {
@@ -80,12 +81,17 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
 
   function submitNewPasswordForm(evt) {
     evt.preventDefault();
+    // console.log(userToUpdateData);
     // console.log('forget password form submitted');
 
-    const objToPost = {password: newPasswordRef.current.value};
-    apiNewPassword(objToPost)
+    // const objToPost = {password: newPasswordRef.current.value};
+    apiNewPassword(userToUpdateData)
     .then((data) => {
-      console.log(data);
+      if(data.success) {
+        setPasswordRestoreStep((prevValue) => {
+          return prevValue + 1;
+        })
+      }
     })
     // registerFormSubmit(objToPost);
     // submitForgetPasswordForm(objToPost);
@@ -108,6 +114,9 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
                   console.log(data.message);
                 }
                 if(data._id) {
+                  setUserToUpdateData((prevValue) => {
+                    return {...prevValue, email: data._id};
+                  })
                   setPasswordRestoreStep((prevValue) => {
                     return prevValue + 1;
                   })
@@ -125,7 +134,11 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
       case 1: 
         return <div>
           <div style={{display: "flex", flexDirection: "column", gap: 10, margin: "0 0 30px 0"}}>
-            <input ref={newPasswordRef} type="password" className="popup__form-input" name="password" placeholder="Новый пароль" />
+            <input onChange={(evt) => {
+              setUserToUpdateData((prevValue) => {
+                return {...prevValue, password: evt.target.value};
+              })
+            }} ref={newPasswordRef} type="password" className="popup__form-input" name="password" placeholder="Новый пароль" />
             <input ref={newPasswordRef} type="password" className="popup__form-input" name="password" placeholder="Повтор нового пароля" />
           </div>
           <div style={{display :"flex", flexDirection: window.innerWidth <= 767 && "column", justifyContent: "space-between", alignItems: window.innerWidth <= 767 ? "stretch" : "center", maxWidth: window.innerWidth <= 767 && 180, margin: "0 auto"}}>
@@ -137,11 +150,22 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
             <button style={{margin: 0}} className="popup__form-button" type="submit" data-type="login">Обновить пароль</button>
           </div>
         </div>
+      
+      case 2: 
+        return <div>
+          <p style={{color: "white"}}>Пароль успешно обновлен!</p>
+          <button onClick={() => {
+            setPasswordRestorePressed(false);
+            setPasswordRestoreStep(0);
+          }} className="popup__form-button" type="button">
+            Войти
+          </button>
+          {/* <h3></h3> */}
+        </div>
       default: break;
         
     }
   }
-
 
   
   return (
