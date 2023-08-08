@@ -12,7 +12,7 @@ import SovaLogo from '../images/Rectangle_12.png';
 import './Welcome.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faVk, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { apiCheckUserEmail, apiNewPassword } from '../api';
 
 //framer-motion variants
@@ -156,6 +156,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
           <p style={{color: "white"}}>Пароль успешно обновлен!</p>
           <button onClick={() => {
             setPasswordRestorePressed(false);
+            setUserToUpdateData({email: "", password: ""});
             setPasswordRestoreStep(0);
           }} className="popup__form-button" type="button">
             Войти
@@ -265,6 +266,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
           <button className="popup__close" onClick={closePopups}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
+
           <input ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
           <div style={{position: "relative"}}>
             <input ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
@@ -277,9 +279,17 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
         :
         <RefreshPass>
           <form style={{minHeight: 120}} className="popup__form" onSubmit={(evt) => {submitNewPasswordForm(evt)}}>
-          <button className="popup__close" onClick={closePopups}>
-            <FontAwesomeIcon icon={faXmark} />
-          </button>
+            <div style={{display: "flex", justifyContent: "space-between", margin: "0 0 20px 0"}}>
+              <button type='button' className="popup__close" style={{border: "2px solid #5DB0C7", color: "white"}} onClick={() => {
+                setPasswordRestorePressed(false);
+              }}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+              </button>  
+              <button type='button' className="popup__close" onClick={closePopups}>
+                <FontAwesomeIcon icon={faXmark} />
+              </button>
+            </div>
+
           
           {renderNewPassword()}
 
