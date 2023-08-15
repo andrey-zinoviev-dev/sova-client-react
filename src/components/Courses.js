@@ -439,14 +439,10 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
             <div className="popup__modules-navigation">
               <button className="popup__modules-navigation-btn" onClick={() => {
                 setSelectedModuleId("");
-                  // setSelectedModule(() => {
-                  //   return {};
-                  // });
               }} style={{lineHeight: 1.5, backgroundColor: "transparent", border: "none", color: "rgb(255, 255, 255)", fontWeight: 700, padding: 0}}>Модули курса</button>
               {foundModule._id && <FontAwesomeIcon className="popup__modules-arrow-svg" icon={faArrowRight}/>}
               {foundModule._id && <span className="popup__modules-arrow-span">{foundModule.title}</span>}
-              {/* {foundModule._id && <FontAwesomeIcon className="popup__modules-arrow-svg" icon={faArrowRight}/>} */}
-              {/* <div className="popup__modules-resize-bar" style={{width: "50%", height: 2, backgroundColor: "rgb(93, 176, 199)"}}></div> */}
+
             </div>
             
             {foundModule.lessons.length > 0 ? <ul className="popup__modules-ul">
@@ -480,7 +476,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
         <div style={{position: "relative", width: "100%", maxWidth: 920}}>
           <button onClick={() => {
             setIsEditCourse(false);
-            // setSelectedCourse({});
+            
             }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
@@ -534,8 +530,6 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                         return {...prevValue, courses: updatedCourses};
                       });
 
-                      // setSelectedFiles([]);
-
                     });
                   }} style={{position: "absolute", border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
                     <FontAwesomeIcon icon={faTrashCan} />
@@ -587,16 +581,10 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                       <label>Тариф</label>  
                       <select className="add-user__form-select" defaultValue="Rising Star" onClick={(evt) => {
                         evt.stopPropagation();
-                        // return;
-                        //                         setStudentData((prevValue) => {
-                        //   return {...prevValue, courses: prevValue.courses.map((courseToUpdate) => {
-                        //     return courseToUpdate._id === course._id ? {...courseToUpdate, grade: evt.target.value} : courseToUpdate;
-                        //   })}
-                        
-                        // })
+
                         return;
                       }} onChange={(evt) => {
-                        // console.log(evt.target.value);
+                       
                         setStudentsToAddToCourse((prevValue) => {
                           return prevValue.map((prevStudent) => {
                             return prevStudent.studentId === courseStudent._id ? {...prevStudent, grade: evt.target.value} : prevStudent;
@@ -619,7 +607,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
               </ul>
 
               <button onClick={() => {
-                // console.log(studentsToAddToCourse);
+                
                 apiAddStudentsToCourse(foundCourse._id, token, studentsToAddToCourse)
                 .then((data) => {
                   console.log(data);
@@ -723,7 +711,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
         <div className="module-edit__addLesson-wrapper" style={{position: "relative"}}>
           <button onClick={() => {
               setAddLessonPopupOpened(false);
-              // setSelectedCourse({});
+              
               }} style={{position: "absolute", top: "3%", right: "-5%", padding: 0, width: 40, height: 40, border: "2px solid #f91262", color: "#f91262", backgroundColor: "transparent", borderRadius: "51%"}}>
               <FontAwesomeIcon icon={faXmark} />
           </button>
@@ -731,15 +719,11 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
           {!uploadFormSubmitted ? <form onSubmit={(evt) => {
             evt.preventDefault();
             setUploadFormSubmitted(true);
-            // console.log(lessonContent);
-              // console.log(formData);
+
               const form = new FormData();
-              // const foundImg = selectedFiles.find((file) => {
-              //   return file.title === lessonContent.cover.title;
-              // });
               
               form.append("moduleData", JSON.stringify(lessonContent));
-              // form.append('moduleCover', foundImg);
+             
               selectedFiles.forEach((file) => {
                 form.append("files", file);
               });
@@ -753,7 +737,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 }
               })
               .then((data) => {
-                // console.log(data);
+                
                 setUploadSuccessful(true);
                 setLessonContent({title: "", cover: "", content: {"type": "doc", "content": [
                   // …
@@ -765,7 +749,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                     return course._id === data.data._id ? {...course, modules: data.data.modules} : course;
                   })};
                 });
-                // setUploadFormSubmitted(false);
+                
               })
 
               // console.log(lessonContent);
@@ -810,26 +794,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 </button>
               </div>
             </div>
-              {/* <div className="course__edit-addModule-wrapper-form-data">
-                <div className="course__edit-addModule-wrapper-form-data-inputs">
-                  <input ref={addModuleNameRef} className="course__edit-addModule-wrapper-form-input" type="text" placeholder="Название модуля"></input>
-                  <input onChange={(evt) => {
-                    addMoudleImg.current.src = evt.target.value;
-                  }} className="course__edit-addModule-wrapper-form-input" type="text" placeholder="Ссылка на картинку"></input>
-                </div>
-                <div style={{position: "relative", display: "flex", alignItems: "flex-end"}}>
-                  <img alt="обложка модуля" ref={addMoudleImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
-                  <input ref={addModuleImgInput} onChange={(evt) => {
-                    handleModuleCoverUpload(evt);
 
-                  }}  style={{display: "none"}} type="file"></input>
-                  <button type="button" onClick={(() => {
-                    addModuleImgInput.current.click();
-                  })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
-                    <FontAwesomeIcon icon={faCamera} />
-                  </button>
-                </div>
-              </div> */}
             <TipTapEditor selectedFiles={selectedFiles} lessonContent={lessonContent} setLessonContent={setLessonContent} setSelectedFiles={setSelectedFiles}>
             </TipTapEditor>
             <button type="submit" className="course__edit-addLesson-wrapper-form-btn">Добавить урок</button>
@@ -850,9 +815,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
               margin: "20px 0 0 0",
             }} type="button" onClick={() => {
                 setUploadFormSubmitted(false);
-                // setLessonContent({title: "", cover: "", content: {"type": "doc", "content": [
-                //       // …
-                //     ]}});
+
                 setAddLessonPopupOpened(false);
                 setLessonUploadProgress(0);
             }}>Вернуться к урокам модуля</button>}
@@ -875,9 +838,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
               <div className="module-edit__form-inputs-wrapper-title">
                 <p className="module-edit__form-inputs-wrapper-title-p">Название</p>
                 <input ref={editModuleNameRef} className="module-edit__form-inputs-wrapper-title-input" type="text" placeholder="Название модуля" value={foundModule.title}></input>
-                {/* <input onChange={(evt) => {
-                  addMoudleImg.current.src = evt.target.value;
-                }} className="course__edit-addModule-wrapper-form-input" type="text" placeholder="Ссылка на картинку"></input> */}
+
               </div>
               <div className="module-edit__form-inputs-wrapper-cover">
                 <div className="module-edit__form-inputs-wrapper-cover-link">
@@ -1014,7 +975,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 <img alt="обложка урока" ref={editLessonImgRef} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={foundLesson.cover ? foundLesson.cover : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
                 <input ref={editLessonImgInput} onChange={(evt) => {
                   const coverToSend = handleLessonEditCoverUpload(evt);
-                  // console.log(coverToSend);
+                 
                   const form = new FormData();
                   form.append("coverFile", JSON.stringify({title: coverToSend.title, clientPath: coverToSend.clientPath}));
                   form.append('file', coverToSend);
@@ -1034,12 +995,12 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 </button>
               </div>
             </div>
-            <EditLessonContent foundCourse={foundCourse} foundModule={foundModule} foundLesson={foundLesson} setCoursesData={setCoursesData}/>
+            
           </form>
         </div>  
       </EditLesson>}
 
-      {addUserOpened && <AddUser coursesData={coursesData} setCoursesData={setCoursesData} setAddUserOpened={setAddUserOpened} setSuccessfullyAddedUser={setSuccessfullyAddedUser} successfullyAddedUser={successfullyAddedUser}></AddUser>}
+      {/* {addUserOpened && <AddUser coursesData={coursesData} setCoursesData={setCoursesData} setAddUserOpened={setAddUserOpened} setSuccessfullyAddedUser={setSuccessfullyAddedUser} successfullyAddedUser={successfullyAddedUser}></AddUser>} */}
     </>
 
   )

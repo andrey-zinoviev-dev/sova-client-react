@@ -12,8 +12,8 @@ import AddCourse from './components/AddCourse';
 // import Chat from './components/Chat';
 // import Course from './components/Course';
 import Dashboard from './components/Dashboard';
+import AddUser from './components/AddUser';
 import { apiLogin, apiRegister, apiGetCurrentUser, apiNewPassword } from './api';
-
 import { UserContext } from './context/userContext';
 
 
@@ -216,6 +216,8 @@ function App() {
       <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register> */}
         {/* <Dashboard></Dashboard> */}
         <Routes>
+          {/* <Route path='editCourse/:courseID' element={}></Route> */}
+          <Route path='addUser' element={<AddUser />}></Route>
           <Route path='addCourse' element={<AddCourse />}></Route>
           <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={loggedIn ? <CourseModule socket={socket} onlineUsers={onlineUsers} logout={logout} /> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
           <Route path='/' element={loggedIn ? <Main socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
