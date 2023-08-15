@@ -6,7 +6,7 @@ import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 
-export default function TipTapEditor({lessonContent, setLessonContent, foundLesson, foundModule, formData, setFormData, setSelectedFiles}) {
+export default function TipTapEditor({lessonContent, setLessonContent, foundLesson, foundModule, formData, selectedFiles, setFormData, setSelectedFiles}) {
     //crete Video extension
   const Video = Node.create({
     name: "video",
@@ -106,8 +106,8 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
     // }, [lessonContent, editor])
 
     return (
-        <div style={{height: "100%", width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0", overflow: "auto"}}>
-            <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
+        <div style={{height: "100%", width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0", overflow: "auto", boxSizing: "border-box"}}>
+            <TipTapButtons editor={editor} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             <EditorContent style={{height: "calc(100% - 40px)"}} editor={editor} />
         </div>
         

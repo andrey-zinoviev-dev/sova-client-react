@@ -77,7 +77,7 @@ export default function EditLessonContent({lessonContent, setLessonContent, foun
   React.useEffect(() => {
     if(editor) {
             // lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
-      foundLesson.content && foundLesson.content.content.length === 0 && editor.commands.setContent({});
+      // foundLesson.content && foundLesson.content.content.length === 0 && editor.commands.setContent({});
     }
          
   }, [foundLesson, editor])

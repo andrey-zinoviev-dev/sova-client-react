@@ -6,6 +6,7 @@ import AddStep2 from "./AddStep2";
 import AddStep3 from "./AddStep3";
 import AddModule from "./AddModule";
 import AddStepModule from "./AddStepModule";
+import AddCourseSuccess from "./AddCourseSuccess";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignature, faKeyboard, faListCheck, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChartBar } from "@fortawesome/free-regular-svg-icons";
@@ -14,10 +15,11 @@ import { UserContext } from '../context/userContext';
 import { apiCreateCourse } from '../api';
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import Dashboard from './Dashboard';
+import axiosClient from '../axios';
 
 export default function AddCourse() {
   //token
-  const userToken = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   //user context
   const loggedInUser = React.useContext(UserContext);
   //states
@@ -41,6 +43,8 @@ export default function AddCourse() {
   });
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [uploadProgress, setUploadProgress] = React.useState(0);
+  const [uploadFormSubmitted, setUploadFormSubmitted] = React.useState(false);
   const [successfullCourseAddOpened, setSuccessfullCourseAddOpened] = React.useState(false);
 
   //functions
@@ -49,9 +53,9 @@ export default function AddCourse() {
       case 0:
         return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 1: 
-        return <AddStepModule formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened}/>
+        return <AddStepModule formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened} uploadProgress={uploadProgress}/>
       // case 2:
-      //   return <AddStep2 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
+      //   return <AddCourseSuccess />
       // case 3:
       //   return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
       default:
@@ -196,6 +200,10 @@ export default function AddCourse() {
   //   }
   // }, [formData.module.text.content]);
 
+  React.useEffect(() => {
+    console.log(uploadProgress);
+  }, [uploadProgress])
+
   return (
     <section className="addCourse">
       
@@ -237,17 +245,28 @@ export default function AddCourse() {
                 form.append("files", file);
               });
 
-            
               setSuccessfullCourseAddOpened(true);
-              setIsLoading(true);
-              apiCreateCourse(userToken, form)
-              .then((data) => {
-                
-                
-                if(data) {
-                  setIsLoading(false);
+
+              axiosClient.post(`/courses/add`, form, {
+                headers: {
+                  'Authorization': token,
+                },
+                onUploadProgress: (evt) => {
+                  setUploadProgress(Math.floor(evt.progress * 100));
                 }
-              });
+              })
+              // .then
+            
+              // setSuccessfullCourseAddOpened(true);
+              // setIsLoading(true);
+              // apiCreateCourse(userToken, form)
+              // .then((data) => {
+                
+                
+              //   if(data) {
+              //     setIsLoading(false);
+              //   }
+              // });
 
             }} style={{width: "100%", height: "100%", boxSizing: "border-box",}}>
               {renderStep()}

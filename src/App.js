@@ -131,11 +131,6 @@ function App() {
 
   }, []);
 
-  React.useEffect(() => {
-    console.log(loggedIn);
-  }, [loggedIn])
-
-
   //functions
 
   // function closePopups() {

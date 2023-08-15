@@ -4,7 +4,7 @@ import { faImage, faFilm } from "@fortawesome/free-solid-svg-icons";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 
-export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
+export default function TipTapButtons ({ formData, editor, selectedFiles, setSelectedFiles }) {
   //states
   const [image, setImage] = React.useState({});
   const [video, setVideo] = React.useState({});
@@ -23,10 +23,8 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     const relPath = window.URL.createObjectURL(image);
     console.log(/[А-Я]/.test(image.name));
     image.clientPath = relPath;
-
-    setImage((prevValue) => {
-      return {...prevValue, image}
-    });
+    image.title = image.name;
+    setImage(image);
 
     setSelectedFiles((prevValue) => {
       return [...prevValue, image]
@@ -56,9 +54,7 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     const relPath = window.URL.createObjectURL(video);
     video.clientPath = relPath;
     video.title = video.name;
-    setVideo((prevValue) => {
-      return {...prevValue, video};
-    });
+    setVideo(video);
 
     setSelectedFiles((prevValue) => {
       return [...prevValue, video]
@@ -70,8 +66,8 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
 
 
   React.useEffect(() => {
-    if(image.image) {
-      editor && editor.chain().focus().setImage({ src: image.image.clientPath, title: image.image.name}).run();
+    if(image.clientPath) {
+      editor && editor.chain().focus().setImage({ src: image.clientPath, title: image.name}).run();
     };
     // console.log(Object.keys(image));
     // if(imageSrc.length > 0) {
@@ -79,28 +75,27 @@ export default function TipTapButtons ({ formData, editor, setSelectedFiles }) {
     // }
     
     // window.URL.revokeObjectURL(imageSrc);
-  }, [image.image, editor]);
+  }, [image.clientPath, editor]);
 
   React.useEffect(() => {
     // console.log(video);
-    if(video.video) {
+    if(video.clientPath) {
       // console.log(video);
-      editor && editor.chain().focus().insertContent(`<video src="${video.video.clientPath}" title=${/[А-Я]/.test(video.video.name) ? cyrillicToTranslit.transform(video.video.name, "_") : video.video.name.replace(" ", "")}></video>`).run();
+      editor && editor.chain().focus().insertContent(`<video src="${video.clientPath}" title=${/[А-Я]/.test(video.name) ? cyrillicToTranslit.transform(video.name, "_") : video.name.replace(" ", "")}></video>`).run();
       // console.log(Object.keys(video.video));
     };
     // if(videoSrc.length > 0) {
     //   editor.chain().focus().insertContent(`<video src="${videoSrc}"></video>`).run();
     // }
     
-  }, [video.video, editor]);
+  }, [video.clientPath, editor]);
 
   // React.useEffect(() => {
-  //   console.log(formData);
-  // }, [formData])
-
-  // React.useEffect(() => {
-  //   console.log(editor);
-  // }, [editor])
+  //   if(selectedFiles.length === 0) {
+  //     setImage({});
+  //     setVideo({});
+  //   }
+  // }, [selectedFiles]);
 
   return (
     editor && <ul className="addCourse__form-stepwrapper-menu-list">

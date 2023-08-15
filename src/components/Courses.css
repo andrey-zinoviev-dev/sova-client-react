@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@400;500;700&display=swap');
 
+@keyframes loader {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 .main__courses {
   display: flex;
     flex-direction: column;
@@ -19,6 +31,21 @@
   padding: 40px 25px; 
   font-family: 'Montserrat', sans-serif;
   /* font-family: 'Ysabeau SC', sans-serif; */
+}
+
+.main__courses-loader {
+  align-self: center;
+  margin: 50px 0 0 0;
+}
+
+.main__courses-loader-svg {
+  width: 75px;
+  height: 125px;
+  animation: loader 1s ease-in-out 0s infinite alternate;
+}
+
+.main__courses-loader-p {
+  color: white;
 }
 
 .main__courses-list {
@@ -300,7 +327,9 @@
 }
 
 .course-edit {
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
+  overflow: auto;
   top: 0px;
   left: 0px;
   width: 100%;
@@ -553,7 +582,9 @@
 }
 
 .course__edit-addModule {
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
+  overflow: auto;
   top: 0px;
   left: 0px;
   width: 100%;
@@ -625,7 +656,9 @@
 }
 
 .module-edit {
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
+  overflow: auto;
   z-index: 75;
   top: 0;
   left: 0;
@@ -770,6 +803,7 @@
     /* left: 0; */
     /* position: absolute; */
     position: fixed;
+    overflow: auto;
     z-index: 95;
     top: 0;
     left: 0;
@@ -791,10 +825,15 @@
   max-width: 720px;
   color: white;
   height: 100%;
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 .course__edit-addLesson-wrapper-form {
   margin: 0 0 50px 0;
+  height: 100%;
 }
 
 .course__edit-addLesson-wrapper-form-input {
@@ -803,6 +842,7 @@
   border-bottom: 2px solid white;
   box-sizing: border-box;
   background-color: transparent;
+  color: white;
 }
 
 .course__edit-addLesson-wrapper-form-input:focus {
@@ -817,11 +857,13 @@
   border: 2px solid #5DB0C7;
   color: #5DB0C7;
   background-color: transparent;
-  margin: 25px 0 0px 0;
+  margin: 0 0 25px 0;
 }
 
 .lesson-edit {
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
+  overflow: auto;
   z-index: 85;
   top: 0;
   left: 0;

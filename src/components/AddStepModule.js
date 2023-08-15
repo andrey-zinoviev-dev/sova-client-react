@@ -12,7 +12,7 @@ import TipTapEditor from "./TipTapEditor";
 import SuccessAddCourse from './SuccessAddCourse';
 
 
-export default function AddStepModule({successfullCourseAddOpened, formData, setFormData, setFormStep, setSelectedFiles, isLoading}) {
+export default function AddStepModule({successfullCourseAddOpened, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading, uploadProgress}) {
     //navigate
     const navigate = useNavigate();
 
@@ -338,7 +338,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
                                 
                             </form>
-                            <TipTapEditor setLessonContent={setLessonContent} lessonContent={lessonContent} setSelectedFiles={setSelectedFiles}></TipTapEditor>
+                            <TipTapEditor setLessonContent={setLessonContent} lessonContent={lessonContent} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
                             <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
                                 // console.log(modules);
                                 // const lessonObj = {title: lessonTitleRef.current.value, content: lessonContent};
@@ -428,10 +428,20 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
             </section>}
             {successfullCourseAddOpened && <SuccessAddCourse>
                 <div className="addCourse__success-wrapper">
-                    <p>{isLoading ? "Идет загрузка" : "Курс успешно добавлен!" }</p>
+                    <p>{uploadProgress < 100 ? "Идет добавление курса" : "Курс успешно добавлен!" }</p>
+                    <div style={{width: "50%"}}>
+                        <p>Прогресс загрузки курса</p>
+                        <div style={{backgroundColor: "white", display: "flex", height: 4, borderRadius:9, alignItems: "stretch", justifyContent: "flex-start"}}>
+                            <div style={{backgroundColor: "rgb(93, 176, 199)", borderRadius: 9, width: `${uploadProgress}%`}}>
+                            </div>
+                        </div>  
+                    </div>
+
                     <button type="button" onClick={() => {
                         navigate('../');
-                    }} className="addCourse__success-wrapper-finish">Вернуться к курсам</button>
+                    }} className="addCourse__success-wrapper-finish">
+                        <p style={{margin: 0, position: "relative", color: "white", zIndex: 5}}>Вернуться к курсам</p>
+                    </button>
                 </div>
             </SuccessAddCourse>}
         </div>
