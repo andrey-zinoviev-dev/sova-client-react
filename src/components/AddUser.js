@@ -148,6 +148,12 @@ export default function AddUser() {
                 console.log(evt);
               }
             })
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((err) => {
+              console.log(err);
+            })
           }}>
             <input type="file" onChange={(evt) => {
               const uploadedCsv = evt.target.files[0];
