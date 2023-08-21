@@ -2,15 +2,20 @@ import React from "react";
 import './EditCourse.css';
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { apiDeleteModule } from "../api";
 // import './EditCourse.css';
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function EditCourse() {
+  //token
+  const token = localStorage.getItem('token');
   //location
   const location = useLocation();
   const { state } = location;
-
+  console.log(state);
   //refs
   const courseNameRef = React.useRef();
   const courseDescRef = React.useRef();
@@ -37,9 +42,9 @@ export default function EditCourse() {
     setCourseData(state);
   }, [])
 
-  React.useEffect(() => {
-    console.log(courseData);
-  }, [courseData])
+  // React.useEffect(() => {
+  //   console.log(courseData);
+  // }, [courseData])
 
   // React.useEffect(() => {
   //   console.log(state)
@@ -47,7 +52,7 @@ export default function EditCourse() {
 
   return (
     <section className="course-edit">
-      <div>
+      <div className="course-edit__wrapper">
         <h3>Редактировать курс</h3>
         <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
             <label style={{display: "block", margin: "0 0 10px 0"}} htmlFor="course-name">Название</label>
@@ -69,7 +74,7 @@ export default function EditCourse() {
             <div style={{textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
               <span style={{display: "block", margin: "0 0 20px 0"}}>Текущая обложка курса</span>
               <div style={{position: "relative", display: "flex"}}>
-                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} src="" alt="Обложка курса"></img>
+                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} src={courseData.cover} alt="Обложка курса"></img>
                 <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
                   courseCoverRef.current.click();
                 })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>
@@ -81,6 +86,49 @@ export default function EditCourse() {
 
             </div>
           </form>
+          <div className="course-edit__modules-wrapper">
+            <p style={{margin: "0 0 25px 0"}}>Модули</p>
+            <ul className="course-edit__modules-ul">
+              {courseData._id && courseData.modules.map((module) => {
+                return <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key={module._id}>
+                  <button className="course-edit__modules-ul-li-edit" onClick={() => {
+                    // setIsEditModule(true);
+                    // setSelectedModuleId(module._id);
+                  }} type="button">
+                    <FontAwesomeIcon icon={faPen} />
+                  </button>
+                  <button type="button" className="course-edit__modules-ul-li-delete" onClick={(evt) => {
+                    evt.stopPropagation();
+                    // console.log(module);
+                    apiDeleteModule(state._id, module._id, token)
+                    .then((data) => {
+                      
+                      setCourseData((prevValue) => {
+
+                        return {...prevValue, modules: data.modules};
+                      });
+
+                    });
+                  }} style={{position: "absolute", border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  <h3 className="course-edit__modules-ul-li-headline">{module.title}</h3>
+                  
+                  <img className="course-edit__modules-ul-li-img" src={module.cover} alt="обложка модуля"></img>
+                  
+                  <p className="course-edit__modules-ul-li-p">{module.lessons.length > 0 ? `Уроки ${module.lessons.length}` : `Уроков пока нет`}</p>
+                </motion.li>
+              })}
+              <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key="new-module">
+                <h3 className="course-edit__modules-ul-li-headline">Добавить модуль</h3>
+                <button onClick={() => {
+                  // setAddModulePopupOpened(true);
+                }} type="button" className="course-edit__modules-ul-li-addButton">
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </motion.li>
+            </ul>
+          </div>
       </div>
     </section>
   )

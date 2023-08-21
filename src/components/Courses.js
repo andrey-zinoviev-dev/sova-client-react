@@ -263,7 +263,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
       Promise.all([coursesFromApi, allStudentsFromApi])
       .then(([coursesReceived, studentsReceived]) => {
         const coursesToRender =  loggedInUser.admin ? coursesReceived.filter((courseReceived) => {
-          return courseReceived.author._id === loggedInUser._id;
+          return courseReceived.author && courseReceived.author._id === loggedInUser._id;
         }) : coursesReceived.filter((courseReceived) => {
           return loggedInUser.courses.find((courseToFind) => {
             return courseToFind._id === courseReceived._id;

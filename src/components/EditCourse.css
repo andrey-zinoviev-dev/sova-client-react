@@ -46,6 +46,10 @@
     border-radius: 9px;
     background-color: #5DB0C7;
   }
+
+  .course-edit__wrapper {
+    max-width: 920px;
+  }
   
   .course-edit__form {
     max-width: 360px;
