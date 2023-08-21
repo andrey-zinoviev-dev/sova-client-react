@@ -408,7 +408,10 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
               {loggedInUser._id && loggedInUser.admin &&
                 <motion.button variants={liContent} onClick={() => {
                   setSelectedCourseId(course._id);
-                  setIsEditCourse(true);
+                  // setIsEditCourse(true);
+                  navigate(`/editCourse/${course._id}`, {
+                    state: course,
+                  })
                 }} style={{position: "absolute", top: "6.5%", right: 35, zIndex:25, display: window.innerWidth <= 767 ? "none" : 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10}}>
                   <FontAwesomeIcon icon={faPen}/>
                 </motion.button>
@@ -472,7 +475,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
         <div className="popup__overlay"></div>
       </CourseModulesPopup>}
 
-      {isEditCourse && <EditCourse>
+      {/* {isEditCourse && <EditCourse>
         <div style={{position: "relative", width: "100%", maxWidth: 920}}>
           <button onClick={() => {
             setIsEditCourse(false);
@@ -634,7 +637,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
           </div>
         </div>
 
-      </EditCourse>}
+      </EditCourse>} */}
 
       {addModulePopupOpened && <AddModulePopup>
         <div className="course__edit-addModule-wrapper" style={{position: "relative"}}>

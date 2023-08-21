@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faCheck } from "@fortawesome/free-solid-svg-icons";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 import axiosClient from '../axios';
+import './AddUser.css';
 
 import {
   apiRegister
@@ -171,7 +172,7 @@ export default function AddUser() {
 
 
             }} style={{display: "none"}} ref={importRef}></input>
-            <button type={!selectedCsv.title ? "button" : "submit"} onClick={() => {
+            <button className="add-user-form-button" type={!selectedCsv.title ? "button" : "submit"} onClick={() => {
               !selectedCsv.title && importRef.current.click()
             }}>
               {!selectedCsv.title ? 
