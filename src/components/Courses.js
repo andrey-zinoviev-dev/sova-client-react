@@ -849,16 +849,16 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                   <input className="module-edit__form-inputs-wrapper-title-input" onChange={(evt) => {
                       const form = new FormData();
                       form.append("coverFile", JSON.stringify({link: evt.target.value}));
-                      apiEditModuleCover(foundCourse._id, foundModule._id, token, form)
-                      .then((data) => {
-                        setCoursesData((prevValue) => {
-                          const updatedCourses = prevValue.courses.map((course) => {
-                            return course._id === data._id ? {...course, modules: data.modules} : course;
-                          });
+                      // apiEditModuleCover(foundCourse._id, foundModule._id, token, form)
+                      // .then((data) => {
+                      //   setCoursesData((prevValue) => {
+                      //     const updatedCourses = prevValue.courses.map((course) => {
+                      //       return course._id === data._id ? {...course, modules: data.modules} : course;
+                      //     });
   
-                          return {...prevValue, courses: updatedCourses};
-                        })
-                      })
+                      //     return {...prevValue, courses: updatedCourses};
+                      //   })
+                      // })
                   }} style={{maxWidth: 360}} type="text" placeholder="Ссылка на картинку">
                   </input>
                 </div>
@@ -869,18 +869,18 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                     const form = new FormData();
                     form.append("coverFile", JSON.stringify({title: coverToSend.title, clientPath: coverToSend.clientPath}));
                     form.append('file', coverToSend);
-                    apiEditModuleCover(foundCourse._id, foundModule._id, token, form)
-                    .then((data) => {
+                    // apiEditModuleCover(foundCourse._id, foundModule._id, token, form)
+                    // .then((data) => {
                       
-                      setCoursesData((prevValue) => {
-                        const updatedCourses = prevValue.courses.map((course) => {
-                          return course._id === data._id ? {...course, modules: data.modules} : course;
-                        });
+                    //   setCoursesData((prevValue) => {
+                    //     const updatedCourses = prevValue.courses.map((course) => {
+                    //       return course._id === data._id ? {...course, modules: data.modules} : course;
+                    //     });
 
-                        return {...prevValue, courses: updatedCourses};
-                      });
-                      setSelectedFiles([]);
-                    })
+                    //     return {...prevValue, courses: updatedCourses};
+                    //   });
+                    //   setSelectedFiles([]);
+                    // })
 
                   }} style={{display: "none"}} type="file"></input>
                   <button type="button" onClick={(() => {

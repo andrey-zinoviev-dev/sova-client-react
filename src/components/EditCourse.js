@@ -1,28 +1,51 @@
 import React from "react";
 import './EditCourse.css';
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { apiDeleteModule } from "../api";
+import { apiGetCourse, apiDeleteModule } from "../api";
 // import './EditCourse.css';
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function EditCourse() {
+  //useParams
+  const { courseID } = useParams();
   //token
   const token = localStorage.getItem('token');
   //location
-  const location = useLocation();
-  const { state } = location;
-  console.log(state);
+  const navigate = useNavigate();
+  // const { state } = location;
+  // console.log(state);
   //refs
   const courseNameRef = React.useRef();
   const courseDescRef = React.useRef();
   const courseCoverRef = React.useRef();
 
   //states
-  const [courseData, setCourseData] = React.useState({});
+  const [courseData, setCourseData] = React.useState({
+    name: "",
+    description: "",
+    students: [],
+    modules: [],
+    cover: "",
+    author: "",
+    available: false,
+  });
+
+    //variants
+    const backBtnVariant = {
+      hover: {
+        border: "2px solid rgb(255, 255, 255)",
+        fill: 'rgb(255, 255, 255)',
+      },
+      rest: {
+        border: "2px solid rgb(93, 176, 199)",
+        fill: 'rgb(93, 176, 199)',
+      }
+    }
+
   // const [courseCover, setCourseCover] = React.useState("");
 
   // //refs
@@ -39,21 +62,33 @@ export default function EditCourse() {
   };
 
   React.useState(() => {
-    setCourseData(state);
+    // console.log(courseID);
+    apiGetCourse(courseID, token)
+    .then((courseData) => {
+      setCourseData(courseData);
+    })
+    // setCourseData(state);
   }, [])
 
   // React.useEffect(() => {
   //   console.log(courseData);
   // }, [courseData])
 
-  // React.useEffect(() => {
-  //   console.log(state)
-  // }, []);
+  React.useEffect(() => {
+    console.log(courseData)
+  }, [courseData]);
 
   return (
     <section className="course-edit">
       <div className="course-edit__wrapper">
-        <h3>Редактировать курс</h3>
+        <div className="course-edit__wrapper-back-div">
+          <motion.button onClick={() => {
+            navigate(-1);
+          }} whileHover="hover" variants={backBtnVariant} initial="rest" className="course-edit__wrapper-back">
+            <motion.svg variants={backBtnVariant} fill="rgb(93, 176, 199)" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></motion.svg>
+          </motion.button>
+          <h3 className="course-edit__headline">Редактировать курс</h3>
+        </div>
         <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
             <label style={{display: "block", margin: "0 0 10px 0"}} htmlFor="course-name">Название</label>
             <input className="course-edit__form-input" ref={courseNameRef} id="course-name" value={courseData.name} onChange={(evt) => {
@@ -92,6 +127,7 @@ export default function EditCourse() {
               {courseData._id && courseData.modules.map((module) => {
                 return <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key={module._id}>
                   <button className="course-edit__modules-ul-li-edit" onClick={() => {
+                    navigate(`../editModule/courses/${courseID}/modules/${module._id}`)
                     // setIsEditModule(true);
                     // setSelectedModuleId(module._id);
                   }} type="button">
@@ -100,15 +136,15 @@ export default function EditCourse() {
                   <button type="button" className="course-edit__modules-ul-li-delete" onClick={(evt) => {
                     evt.stopPropagation();
                     // console.log(module);
-                    apiDeleteModule(state._id, module._id, token)
-                    .then((data) => {
+                    // apiDeleteModule(state._id, module._id, token)
+                    // .then((data) => {
                       
-                      setCourseData((prevValue) => {
+                    //   setCourseData((prevValue) => {
 
-                        return {...prevValue, modules: data.modules};
-                      });
+                    //     return {...prevValue, modules: data.modules};
+                    //   });
 
-                    });
+                    // });
                   }} style={{position: "absolute", border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>
@@ -122,12 +158,20 @@ export default function EditCourse() {
               <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key="new-module">
                 <h3 className="course-edit__modules-ul-li-headline">Добавить модуль</h3>
                 <button onClick={() => {
+                  navigate(`/addModule/courses/${courseID}`)
                   // setAddModulePopupOpened(true);
                 }} type="button" className="course-edit__modules-ul-li-addButton">
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
               </motion.li>
             </ul>
+          </div>
+          <div className="course-edit__students-wrapper">
+            <p>Ученики</p>
+            <div>
+              <p>Сейчас на курсе {courseData._id && courseData.students.length} студентов</p>
+              <button>Добавить учеников к курсу</button>
+            </div>
           </div>
       </div>
     </section>

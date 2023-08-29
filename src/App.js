@@ -16,7 +16,8 @@ import AddUser from './components/AddUser';
 import { apiLogin, apiRegister, apiGetCurrentUser, apiNewPassword } from './api';
 import { UserContext } from './context/userContext';
 import EditCourse from './components/EditCourse';
-
+import EditModule from './components/EditModule';
+import AddModule from './components/AddModule';
 
 
 
@@ -218,6 +219,8 @@ function App() {
         {/* <Dashboard></Dashboard> */}
         <Routes>
           {/* <Route path='editCourse/:courseID' element={}></Route> */}
+          <Route path='/addModule/courses/:courseID' element={<AddModule></AddModule>} />
+          <Route path='/editModule/courses/:courseID/modules/:moduleID' element={<EditModule></EditModule>} />
           <Route path='/editCourse/:courseID' element={loggedIn ? <EditCourse></EditCourse> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
           <Route path='addUser' element={<AddUser />}></Route>
           <Route path='addCourse' element={<AddCourse />}></Route>

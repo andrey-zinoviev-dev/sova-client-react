@@ -140,7 +140,7 @@ function apiDeleteLesson(courseID, moduleID, lessonID, token) {
   })
 }
 
-function apiEditModuleCover(courseID, moduleID, token, cover) {
+function apiEditModule(courseID, moduleID, token, cover) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/cover`, {
     method: "PUT",
     headers: {
@@ -300,7 +300,7 @@ export {
   apiEditCourse,
   apiDeleteModule,
   apiDeleteLesson,
-  apiEditModuleCover,
+  apiEditModule,
   apiEditLessonCover,
   apiEditLessonContent,
   apiAddLessonToCourse,

@@ -19,6 +19,7 @@
     backdrop-filter: blur(3px); */
     width: 100%;
     height: 100vh;
+    overflow: auto;
     background-color: rgba(0, 0, 0, 1);
     color: white;
     z-index: 10;
@@ -48,7 +49,33 @@
   }
 
   .course-edit__wrapper {
-    max-width: 920px;
+    /* max-width: 920px; */
+    max-width: 720px;
+  }
+
+  .course-edit__wrapper-back-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 25px 0;
+  }
+
+  .course-edit__wrapper-back {
+    padding: 0;
+    width: 35px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 2px solid rgb(255, 255 ,255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .course-edit__headline {
+    margin-top: 0;
+    margin: 0 auto;
   }
   
   .course-edit__form {
@@ -106,8 +133,9 @@
     overflow: hidden auto;
     gap: 40px;
     margin: 0 auto;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 280px;
+    /* grid-template-columns: repeat(3, 1fr); */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 180px));
+    /* grid-auto-rows: 280px; */
     width: 100%;
   }
   
@@ -123,6 +151,8 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
+    aspect-ratio: 1/1;
+
   }
   
   .course-edit__modules-ul-li-edit {
@@ -171,7 +201,8 @@
   
   .course-edit__modules-ul-li-img {
     width: 100%;
-    max-width: 140px;
+    max-width: 50%;
+    /* max-width: 140px; */
     aspect-ratio: 1/1;
     border-radius: 5px;
     object-fit: cover;
@@ -270,4 +301,18 @@
     border-radius: 5px;
     margin: 25px 0 0 0;
     font-size: 16px;
+  }
+
+  @media screen and (max-width: 1439px) {
+    .course-edit__modules-ul-li {
+      padding: 10px 5px;
+    }
+
+    .course-edit__modules-ul-li-img {
+      max-width: 50%;
+    }
+
+    .course-edit__modules-ul-li-p {
+      font-size: 16px;
+    }
   }

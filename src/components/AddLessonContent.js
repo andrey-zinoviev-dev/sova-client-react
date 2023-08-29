@@ -60,7 +60,7 @@ export default function AddLessonContent({lessonContent, setLessonContent, found
 
     React.useEffect(() => {
         if(editor) {
-            lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
+            // lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
 
         }
          

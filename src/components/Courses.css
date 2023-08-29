@@ -400,8 +400,8 @@
   font-size: 16px;
 }
 
-.module-edit {
-  /* position: absolute; */
+/* .module-edit {
+ 
   position: fixed;
   overflow: auto;
   z-index: 75;
@@ -441,7 +441,7 @@
   color: rgb(249, 18, 98);
   background-color: transparent;
   border-radius: 51%;
-}
+} */
 
 .module-edit__form-inputs-wrapper-title {
   max-width: 360px;
@@ -490,7 +490,7 @@
   justify-content: space-between;
 }
 
-.module-edit__lessons-ul {
+/* .module-edit__lessons-ul {
   width: 100%;
     padding: 0;
     list-style: none;
@@ -519,7 +519,7 @@
   aspect-ratio: 1/1;
   border-radius: 50%;
   object-fit: cover;
-}
+} */
 
 .module-edit__lessons-ul-li-headline {
   margin: 0;

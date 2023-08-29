@@ -1,0 +1,139 @@
+.module-add {
+    width: 100%;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 1);
+    color: white;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding: 2% 0px;
+    font-size: 20px;
+}
+
+.module-add__wrapper {
+    position: relative;
+    color: white;
+    width: 100%;
+    max-width: 540px;
+    /* max-width: 720px; */
+    /* max-width: 768px; */
+}
+
+.module-add__headline {
+    margin: 0 auto;
+}
+
+.module-add__form-div {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 25px 0;
+}
+
+.module-add__form-div-label {
+    align-self: flex-start;
+}
+
+.module-add__form-input {
+    height: 30px;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid white;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: white;
+    outline: none;
+    transition: all 0.25s ease-in-out;
+}
+
+.module-add__form-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.module-add__form-input:focus {
+    border-bottom: 2px solid rgb(93, 176, 199);
+}
+
+.module-add__form-div-cover-div {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 0 0 0;
+}
+
+.module-add__form-div-cover-div-img {
+    /* width: 50%; */
+    width: 100%;
+    border-radius: 9px;
+    box-sizing: border-box;
+}
+
+.module-add__form-div-cover-div-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 35px;
+    aspect-ratio: 1/1;
+    font-size: 16px;
+    border: 2px solid rgb(93, 176, 199);
+    border-radius: 50%;
+    color: rgb(93, 176, 199);
+}
+
+.module-add__lessons-ul {
+    width: 100%;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 0;
+    gap: 15px;
+    max-width: 540px;
+    margin: 5px auto 0;
+}
+
+.module-add__lessons-ul-li {
+    /* cursor: pointer; */
+    width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   border: 2px solid white;
+   border-radius: 9px;
+   box-sizing: border-box;
+   padding: 7px 10px;
+   /* padding: 7px 40px; */
+}
+
+.module-add_lessons-ul-li-special {
+    justify-content: center;
+}
+
+.module-add__ul-li-btn-add {
+    padding: 0;
+    width: 25px;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+.module-add__update-btn {
+    margin: 0 auto;
+    height: 45px;
+    width: 180px;
+    border-radius: 7px;
+    box-sizing: border-box;
+    background-color: transparent;
+    color: #5DB0C7;
+    border: 2px solid #5DB0C7;
+    font-size: 16px;
+}
