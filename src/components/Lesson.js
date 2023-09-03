@@ -11,9 +11,9 @@ import { Node, mergeAttributes } from "@tiptap/react";
 
 export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditLessonPressed, setModuleData, lessonToUpdate }) {
     //states
-    const [lessonData, setLessonData] = React.useState(!lessonToUpdate ? {title: "", cover: {}, content: {"type": "doc", "content": [
+    const [lessonData, setLessonData] = React.useState(!lessonToUpdate ? {title: "", cover: {}, content: {content: {"type": "doc", "content": [
       // …
-    ]}}
+    ]}}}
     :
     lessonToUpdate
     );
@@ -66,7 +66,7 @@ export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditL
           }),
           Video
         ],
-        content: lessonToUpdate && lessonToUpdate.content, 
+        content: lessonToUpdate && lessonData.content, 
         onUpdate: ({editor}) => {
           setLessonData((prevValue) => {
             return {...prevValue, content: editor.getJSON()}
@@ -88,6 +88,10 @@ export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditL
     //   console.log(lessonToUpdate);
     // }, [lessonToUpdate])
 
+    // React.useEffect(() => {
+    //   console.log(lessonToUpdate)
+    // }, [])
+
     React.useEffect(() => {
       console.log(lessonData);
     }, [lessonData]);
@@ -98,7 +102,7 @@ export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditL
             <button onClick={() => {
                 // navigate(-1);
                 setAddLessonPressed(false);
-                setEditLessonPressed(false);
+                lessonToUpdate && setEditLessonPressed(false);
             }} className="course-edit__wrapper-back">
                 <svg fill="rgb(93, 176, 199)" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
             </button>
@@ -116,7 +120,7 @@ export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditL
               <div className="module-edit__form-div">
                     <label className="module-edit__form-label">Обложка урока</label>
                     <div className="module-edit__cover-div">
-                        <img ref={coverImgRef} className="module-edit__cover-img" alt="Обложка урока" src={lessonToUpdate ? lessonToUpdate.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}></img>
+                        <img ref={coverImgRef} className="module-edit__cover-img" alt="Обложка урока" src={lessonData.cover.clientPath ? lessonData.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}></img>
                         <motion.button className="module-edit__cover-btn" whileHover={{opacity: 1}} type="button" onClick={(() => {
                             coverInputRef.current.click();
                         })}>
@@ -139,7 +143,7 @@ export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditL
                 </div>
             </form> 
             <div>
-              <TipTapButtons editor={editor} />
+              <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
               <EditorContent editor={editor} />
             </div>
           <button onClick={() => {

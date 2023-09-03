@@ -114,6 +114,19 @@ function apiEditCourse(courseID, token, content) {
   })
 };
 
+function apiAddModule(courseID, token, content) {
+  return fetch(`${apiAdress}/courses/${courseID}/addModule`, {
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+    },
+    body: content,
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
 function apiDeleteModule(courseID, moduleID, token) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}`, {
     method: "DELETE",
@@ -141,7 +154,7 @@ function apiDeleteLesson(courseID, moduleID, lessonID, token) {
 }
 
 function apiEditModule(courseID, moduleID, token, cover) {
-  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/cover`, {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/editModule`, {
     method: "PUT",
     headers: {
       'Authorization': token,
@@ -300,6 +313,7 @@ export {
   apiEditCourse,
   apiDeleteModule,
   apiDeleteLesson,
+  apiAddModule,
   apiEditModule,
   apiEditLessonCover,
   apiEditLessonContent,

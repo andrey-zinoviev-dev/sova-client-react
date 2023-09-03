@@ -1,5 +1,6 @@
 import React from "react";
 import './EditModule.css';
+import Lesson from "./Lesson";
 import { useParams, useNavigate,} from "react-router-dom";
 import { apiEditModule, apiGetCourse } from '../api';
 import { motion } from "framer-motion";
@@ -18,9 +19,18 @@ export default function EditModule() {
 
   //states
   const [moduleData, setModuleData] = React.useState({});
-  const [selectedImageFile, setSelectedImageFile] = React.useState({});
-
+  // const [selectedImageFile, setSelectedImageFile] = React.useState({});
+  const [addLessonPressed, setAddLessonPressed] = React.useState(false);
+  const [editLessonPressed, setEditLessonPressed] = React.useState(false);
+  const [lessonIdSelected, setLessonIdSelected] = React.useState(null);
+  const [coverSelected, setCoverSelected] = React.useState(null);
+  const [selectedFiles, setSelectedFiles] = React.useState([]);
+  //derived state
+  const lessonToUpdate = moduleData.lessons && moduleData.lessons.find((lesson) => {
+    return lesson._id === lessonIdSelected;
+  })
   //refs
+  const addModuleSectionRef = React.useRef();
   const titleInputRef = React.useRef();
   const coverInputRef = React.useRef();
   const coverImgRef = React.useRef();
@@ -35,7 +45,7 @@ export default function EditModule() {
       border: "2px solid rgb(93, 176, 199)",
       fill: 'rgb(93, 176, 199)',
     }
-  }
+  };
 
   React.useEffect(() => {
     apiGetCourse(courseID, token)
@@ -44,17 +54,21 @@ export default function EditModule() {
         return module._id === moduleID;
       });
       setModuleData(moduleToUpdate);
-      titleInputRef.current.value = moduleToUpdate.title;
+      // titleInputRef.current.value = moduleToUpdate.title;
     })
   }, []);
 
   React.useEffect(() => {
-    console.log(moduleData);
-  }, [moduleData]);
+    addModuleSectionRef.current.scrollTo(0, 0);
+  }, [addLessonPressed, editLessonPressed])
+
+  React.useEffect(() => {
+    console.log(lessonToUpdate);
+  }, [lessonIdSelected]);
 
   return (
-    <section className="module-edit">
-      <div className="module-edit__wrapper">
+    <section ref={addModuleSectionRef} className="module-edit">
+      {(!addLessonPressed && !editLessonPressed) && <div className="module-edit__wrapper">
         <div className="module-edit__wrapper-back-div">
           <motion.button onClick={() => {
             navigate(-1);
@@ -66,16 +80,16 @@ export default function EditModule() {
         <form className="module-edit__form">
           <div className="module-edit__form-div">
             <label className="module-edit__form-label">Название</label>
-            <input className="module-edit__form-input" onChange={(evt) => {
+            <input value={moduleData.title} className="module-edit__form-input" onChange={(evt) => {
               setModuleData((prevValue) => {
                 return {...prevValue, title: evt.target.value};
               })
             }} ref={titleInputRef}></input>
           </div>
           <div className="module-edit__form-div">
-              <label className="module-edit__form-label">{selectedImageFile.name ? "Новая обложка" : "Текущая обложка курса"}</label>
+              <label className="module-edit__form-label">{ moduleData._id && moduleData.cover.title? "Новая обложка" : "Текущая обложка курса"}</label>
               <div className="module-edit__cover-div">
-                <img ref={coverImgRef} className="module-edit__cover-img" src={selectedImageFile.clientPath ? selectedImageFile.clientPath : moduleData.cover} alt="Обложка курса"></img>
+                <img ref={coverImgRef} className="module-edit__cover-img" src={moduleData._id && moduleData.cover.title ?  moduleData.cover.clientPath : moduleData.cover} alt="Обложка курса"></img>
                 <motion.button className="module-edit__cover-btn" whileHover={{opacity: 1}} type="button" onClick={(() => {
                   coverInputRef.current.click();
                 })}>
@@ -87,8 +101,17 @@ export default function EditModule() {
                   uploadedFile.clientPath = window.URL.createObjectURL(uploadedFile);
                   uploadedFile.title = uploadedFile.name;
                   coverImgRef.current.src = uploadedFile.clientPath;
+                  setSelectedFiles((prevValue) => {
+                    return [...prevValue, uploadedFile];
+                  });
+                  // setCoverSelected(uploadedFile);
+                  setModuleData((prevValue) => {
+                    return {...prevValue, cover: uploadedFile};
+                  })
+                  // setModuleData((prevValue) => {
 
-                  setSelectedImageFile(evt.target.files[0]);
+                  // })
+                  // setSelectedImageFile(evt.target.files[0]);
 
                 }} style={{display: "none"}} id="course-cover" type="file"></input> 
               </div>
@@ -99,8 +122,8 @@ export default function EditModule() {
           <p>Уроки модуля</p>
           <ul className="module-edit__lessons-ul">
             {moduleData._id && moduleData.lessons.map((lesson, index, array) => {
-              return <li className="module-edit__lessons-ul-li" key={lesson._id}>
-                <img className="module-edit__lessons-ul-li-img" src={lesson.cover}></img>
+              return <li className="module-edit__lessons-ul-li" key={lesson._id ? lesson._id : index}>
+                <img className="module-edit__lessons-ul-li-img" src={lesson.cover.clientPath ? lesson.cover.clientPath : lesson.cover}></img>
                 <h3 className="module-edit__lessons-ul-li-h">{lesson.title}</h3>
                 <div className="module-edit__lessons-ul-li-buttons">
                     <button onClick={() => {
@@ -134,7 +157,9 @@ export default function EditModule() {
                       }
                     </button>
                     <button onClick={() => {
-                      console.log('edit lesson');
+                      // console.log('edit lesson');
+                      setEditLessonPressed(true);
+                      setLessonIdSelected(lesson._id);
                       // setSelectedLessonId(lesson._id);
                       // setIsEditLesson(true);
                     }} className="module-edit__lessons-ul-li-buttons-btn">
@@ -144,7 +169,9 @@ export default function EditModule() {
               </li>
             })}
             <li className="module-edit__lessons-ul-li" key="add-lesson-edit-module">
-              <button style={{borderRadius: "50%", border: "2px solid #5DB0C7", display: "flex", alignItems: "center", justifyContent: "space-between", aspectRatio: "1/1", margin: "0 auto"}} className="module-edit__lessons-ul-li-buttons-btn">
+              <button onClick={(() => {
+                setAddLessonPressed(true);
+              })} style={{borderRadius: "50%", border: "2px solid #5DB0C7", display: "flex", alignItems: "center", justifyContent: "space-between", aspectRatio: "1/1", margin: "0 auto"}} className="module-edit__lessons-ul-li-buttons-btn">
                 <motion.svg whileHover={{fill: "#ffffff"}}  fill="#5DB0C7" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></motion.svg>
               </button>
             </li>
@@ -154,16 +181,22 @@ export default function EditModule() {
           const form = new FormData();
           // form.append("data", JSON.stringify({title: "edited module"}))
           form.append("moduleData", JSON.stringify(moduleData));
-          form.append("coverFile", selectedImageFile);
-          console.log(moduleData);
-          // apiEditModule(courseID, moduleID, token, form)
-          // .then((data) => {
-          //   console.log(data);
-          // })
+          selectedFiles.forEach((file) => {
+            form.append('coverFile', file);
+          });
+          // console.log(moduleData);
+          // form.append("coverFile", selectedImageFile);
+          // console.log(moduleData);
+          apiEditModule(courseID, moduleID, token, form)
+          .then((data) => {
+            navigate(-1);
+          })
         }}>
           Обновить модуль
         </button>
-      </div>
+      </div>}
+      {addLessonPressed && <Lesson setAddLessonPressed={setAddLessonPressed} setModuleData={setModuleData} setSelectedFiles={setSelectedFiles}/>}
+      {editLessonPressed && <Lesson setAddLessonPressed={setAddLessonPressed} setSelectedFiles={setSelectedFiles} setEditLessonPressed={setEditLessonPressed} setModuleData={setModuleData} lessonToUpdate={lessonToUpdate}/>}
     </section>
   )
 }

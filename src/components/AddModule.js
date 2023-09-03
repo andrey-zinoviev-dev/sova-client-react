@@ -1,7 +1,7 @@
 import React from "react";
 import './AddModule.css';
 import { useParams, useNavigate } from "react-router-dom";
-import { apiEditCourse } from "../api";
+import { apiAddModule } from "../api";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
@@ -184,8 +184,9 @@ export default function AddModule() {
               form.append("moduleCover", file);
             });
             
-            apiEditCourse(courseID, token, form)
+            apiAddModule(courseID, token, form)
             .then((data) => {
+              setSelectedFiles([]);
               console.log(data);
             })
           }} className="module-add__update-btn">Добавить модуль</button>
