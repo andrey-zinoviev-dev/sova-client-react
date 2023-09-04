@@ -155,7 +155,7 @@ export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditL
             :
             setModuleData((prevValue) => {
               return {...prevValue, lessons: prevValue.lessons.map((lesson) => {
-                return lesson.title === lessonData.title ? {...lesson, title: lesson.title, cover: lesson.cover, content: {...lesson.content, content: lessonData.content}}
+                return lesson.title === lessonData.title ? {...lesson, title: lesson.title, cover: lesson.cover, content: lessonData.content}
                 : lesson;
               })};
             });

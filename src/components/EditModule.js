@@ -63,8 +63,8 @@ export default function EditModule() {
   }, [addLessonPressed, editLessonPressed])
 
   React.useEffect(() => {
-    console.log(lessonToUpdate);
-  }, [lessonIdSelected]);
+    console.log(moduleData.lessons);
+  }, [moduleData]);
 
   return (
     <section ref={addModuleSectionRef} className="module-edit">
@@ -160,6 +160,12 @@ export default function EditModule() {
                       // console.log('edit lesson');
                       setEditLessonPressed(true);
                       setLessonIdSelected(lesson._id);
+                      const upadtedLessonsArray = array.map((lessonToEdit) => {
+                        return lessonToEdit._id === lesson._id ? {...lessonToEdit, edit: true} : lessonToEdit;
+                      });
+                      setModuleData((prevValue) => {
+                        return {...prevValue, lessons: upadtedLessonsArray};
+                      });
                       // setSelectedLessonId(lesson._id);
                       // setIsEditLesson(true);
                     }} className="module-edit__lessons-ul-li-buttons-btn">
