@@ -16,13 +16,14 @@ export default function AddModule() {
   //token
   const token = localStorage.getItem('token');
   //states
-  const [moduleFormOpened, setModuleFormOpened] = React.useState(false);
-  const [modulesAdded, setModulesAdded] = React.useState([]);
+  // const [moduleFormOpened, setModuleFormOpened] = React.useState(false);
+  // const [modulesAdded, setModulesAdded] = React.useState([]);
+  const [newModuleMode, setNewModuleMode] = React.useState(true);
   const [selectedLessonTitle, setSelectedLessonTitle] = React.useState("");
   const [addLessonPressed, setAddLessonPressed] = React.useState(false);
   const [editLessonPressed, setEditLessonPressed] = React.useState(false);
   const [moduleData, setModuleData] = React.useState({title: "", cover: {}, author: {}, lessons: []})
-  const [selectedFiles, setSelectedFiles] = React.useState([]);
+  const [selectedAddFiles, setSelectedAddFiles] = React.useState([]);
   //derived state
   const lessonToUpdate = moduleData.lessons.find((lesson) => {
     return lesson.title === selectedLessonTitle;
@@ -60,6 +61,10 @@ export default function AddModule() {
   React.useEffect(() => {
     addModuleSectionRef.current.scrollTo(0, 0);
   } ,[addLessonPressed, editLessonPressed]);
+
+  React.useEffect(() => {
+    console.log(moduleData);
+  }, [moduleData]);
 
   // React.useEffect(() => {
   //   setModuleData((prevValue) => {
@@ -101,7 +106,7 @@ export default function AddModule() {
                   setModuleData((prevValue) => {
                     return {...prevValue, cover: uploadedFile};
                   });
-                  setSelectedFiles((prevValue) => {
+                  setSelectedAddFiles((prevValue) => {
                     return [...prevValue, uploadedFile];
                   });
                 }} style={{display: "none"}} ref={fileInputRef} type="file"></input>
@@ -180,21 +185,23 @@ export default function AddModule() {
             // console.log(moduleData);
             const form = new FormData();
             form.append("moduleData", JSON.stringify({...moduleData, author: loggedInUser}));
-            selectedFiles.forEach((file) => {
+            selectedAddFiles.forEach((file) => {
               form.append("moduleCover", file);
             });
+            // console.log(moduleData);
+            console.log(selectedAddFiles);
             
             apiAddModule(courseID, token, form)
             .then((data) => {
-              setSelectedFiles([]);
+              setSelectedAddFiles([]);
               console.log(data);
             })
           }} className="module-add__update-btn">Добавить модуль</button>
         </div> 
       </div>}
       
-      {addLessonPressed && <Lesson token={token} setAddLessonPressed={setAddLessonPressed} setModuleData={setModuleData}/>}
-      {editLessonPressed && <Lesson token={token} setAddLessonPressed={setAddLessonPressed} setEditLessonPressed={setEditLessonPressed} setModuleData={setModuleData} lessonToUpdate={lessonToUpdate}/>}
+      {addLessonPressed && <Lesson token={token} newModuleMode={newModuleMode} setAddLessonPressed={setAddLessonPressed} setModuleData={setModuleData} setSelectedAddFiles={setSelectedAddFiles}/>}
+      {editLessonPressed && <Lesson token={token} newModuleMode={newModuleMode} setAddLessonPressed={setAddLessonPressed} setEditLessonPressed={setEditLessonPressed} setModuleData={setModuleData} lessonToUpdate={lessonToUpdate}/>}
     </section>
   )
 }

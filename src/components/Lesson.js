@@ -9,7 +9,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { apiAddLessonToCourse, apiEditLessonContent} from '../api';
 import { Node, mergeAttributes } from "@tiptap/react";
 
-export default function Lesson({ token, setAddLessonPressed, /*setSelectedFiles,*/ setEditLessonPressed, setModuleData, lessonToUpdate }) {
+export default function Lesson({ token, newModuleMode, setAddLessonPressed, setSelectedAddFiles, /*setSelectedFiles,*/ setEditLessonPressed, setModuleData, lessonToUpdate }) {
   //params
   const { courseID, moduleID } = useParams();
 
@@ -96,9 +96,13 @@ export default function Lesson({ token, setAddLessonPressed, /*setSelectedFiles,
     //   console.log(lessonToUpdate)
     // }, [])
 
-    React.useEffect(() => {
-      console.log(lessonData);
-    }, [lessonData]);
+  React.useEffect(() => {
+    console.log(lessonToUpdate);
+  }, []);
+
+    // React.useEffect(() => {
+    //   console.log(lessonData);
+    // }, [lessonData]);
 
     return (
         <div className="module-edit__wrapper">
@@ -138,49 +142,74 @@ export default function Lesson({ token, setAddLessonPressed, /*setSelectedFiles,
                             setLessonData((prevValue) => {
                               return {...prevValue, cover: uploadedFile};
                             });
-                            setSelectedFiles((prevValue) => {
+                            lessonToUpdate ? setSelectedFiles((prevValue) => {
                               return [...prevValue, uploadedFile];
-                            })
+                            }) :
+                            setSelectedAddFiles((prevValue) => {
+                              return [...prevValue, uploadedFile];
+                            });
                             // setSelectedImageFile(evt.target.files[0]);
                         }} style={{display: "none"}} id="course-cover" type="file"></input> 
                     </div>
                 </div>
             </form> 
             <div>
-              <TipTapButtons editor={editor} setSelectedFiles={setSelectedFiles}/>
+              <TipTapButtons editor={editor} setSelectedAddFiles={setSelectedAddFiles} setSelectedFiles={lessonToUpdate ? setSelectedFiles : setSelectedAddFiles}/>
               <EditorContent editor={editor} />
             </div>
           <button onClick={() => {
-            const form = new FormData();
-            form.append('lessonData', JSON.stringify(lessonData));
-            selectedFiles.forEach((file) => {
-              form.append('file', file);
-            });
-
-            !lessonToUpdate ? 
-            // console.log(lessonData)
-            apiAddLessonToCourse(courseID, moduleID, token, form)
-            .then((data) => {
-              console.log(data);
-              setAddLessonPressed(false);
-              setModuleData((prevValue) => {
-                return {...prevValue, lessons: data.lessons};
-              });
-              setSelectedFiles([]);
-            })
-            : 
-            // console.log(lessonData);
-            apiEditLessonContent(courseID, moduleID, lessonData._id, token, form)
-            .then((data) => {
-              // console.log(data);
-              if(data._id) {
-                setEditLessonPressed(false);
+            if(newModuleMode) {
+              if(!lessonToUpdate) {
                 setModuleData((prevValue) => {
-                  return {...prevValue, lessons: data.lessons};
+                  return {...prevValue, lessons: [...prevValue.lessons, lessonData]};
                 });
-                setSelectedFiles([]);
+                setAddLessonPressed(false);
+              } else {
+                setModuleData((prevValue) => {
+                  return {...prevValue, lessons: prevValue.lessons.map((lesson) => {
+                    return lesson.title === lessonData.title ? lessonData : lesson;
+                  })}
+                });
+                setEditLessonPressed(false);
               }
-            })
+
+              
+              // console.log('add or edit lesson to addModule component');
+            } else {
+              console.log('add or edit lessons to existing module');
+              // const form = new FormData();
+              // form.append('lessonData', JSON.stringify(lessonData));
+              // selectedFiles.forEach((file) => {
+              //   form.append('file', file);
+              // });
+  
+              // !lessonToUpdate ? 
+              // // console.log(lessonData)
+              // apiAddLessonToCourse(courseID, moduleID, token, form)
+              // .then((data) => {
+              //   console.log(data);
+              //   setAddLessonPressed(false);
+              //   setModuleData((prevValue) => {
+              //     return {...prevValue, lessons: data.lessons};
+              //   });
+              //   setSelectedFiles([]);
+              // })
+              // : 
+              // // console.log(lessonData);
+              // apiEditLessonContent(courseID, moduleID, lessonData._id, token, form)
+              // .then((data) => {
+              //   // console.log(data);
+              //   if(data._id) {
+              //     setEditLessonPressed(false);
+              //     setModuleData((prevValue) => {
+              //       return {...prevValue, lessons: data.lessons};
+              //     });
+              //     setSelectedFiles([]);
+              //   }
+              // })
+            }
+            // console.log('edit')
+
             // console.log(!lessonToUpdate ? "Добавить урок" : "Обновить урок");
             // setAddLessonPressed(false);
             // lessonToUpdate && setEditLessonPressed(false);
