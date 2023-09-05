@@ -142,7 +142,7 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
                             setLessonData((prevValue) => {
                               return {...prevValue, cover: uploadedFile};
                             });
-                            lessonToUpdate ? setSelectedFiles((prevValue) => {
+                            !newModuleMode ? setSelectedFiles((prevValue) => {
                               return [...prevValue, uploadedFile];
                             }) :
                             setSelectedAddFiles((prevValue) => {
@@ -154,7 +154,7 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
                 </div>
             </form> 
             <div>
-              <TipTapButtons editor={editor} setSelectedAddFiles={setSelectedAddFiles} setSelectedFiles={lessonToUpdate ? setSelectedFiles : setSelectedAddFiles}/>
+              <TipTapButtons editor={editor} setSelectedAddFiles={setSelectedAddFiles} setSelectedFiles={!newModuleMode ? setSelectedFiles : setSelectedAddFiles}/>
               <EditorContent editor={editor} />
             </div>
           <button onClick={() => {
@@ -176,37 +176,37 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
               
               // console.log('add or edit lesson to addModule component');
             } else {
-              console.log('add or edit lessons to existing module');
-              // const form = new FormData();
-              // form.append('lessonData', JSON.stringify(lessonData));
-              // selectedFiles.forEach((file) => {
-              //   form.append('file', file);
-              // });
+              // console.log('add or edit lessons to existing module');
+              const form = new FormData();
+              form.append('lessonData', JSON.stringify(lessonData));
+              selectedFiles.forEach((file) => {
+                form.append('file', file);
+              });
   
-              // !lessonToUpdate ? 
-              // // console.log(lessonData)
-              // apiAddLessonToCourse(courseID, moduleID, token, form)
-              // .then((data) => {
-              //   console.log(data);
-              //   setAddLessonPressed(false);
-              //   setModuleData((prevValue) => {
-              //     return {...prevValue, lessons: data.lessons};
-              //   });
-              //   setSelectedFiles([]);
-              // })
-              // : 
-              // // console.log(lessonData);
-              // apiEditLessonContent(courseID, moduleID, lessonData._id, token, form)
-              // .then((data) => {
-              //   // console.log(data);
-              //   if(data._id) {
-              //     setEditLessonPressed(false);
-              //     setModuleData((prevValue) => {
-              //       return {...prevValue, lessons: data.lessons};
-              //     });
-              //     setSelectedFiles([]);
-              //   }
-              // })
+              !lessonToUpdate ? 
+              // console.log(lessonData)
+              apiAddLessonToCourse(courseID, moduleID, token, form)
+              .then((data) => {
+                console.log(data);
+                setAddLessonPressed(false);
+                setModuleData((prevValue) => {
+                  return {...prevValue, lessons: data.lessons};
+                });
+                setSelectedFiles([]);
+              })
+              : 
+              // console.log(lessonData);
+              apiEditLessonContent(courseID, moduleID, lessonData._id, token, form)
+              .then((data) => {
+                // console.log(data);
+                if(data._id) {
+                  setEditLessonPressed(false);
+                  setModuleData((prevValue) => {
+                    return {...prevValue, lessons: data.lessons};
+                  });
+                  setSelectedFiles([]);
+                }
+              })
             }
             // console.log('edit')
 

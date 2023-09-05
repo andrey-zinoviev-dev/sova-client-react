@@ -193,8 +193,11 @@ export default function AddModule() {
             
             apiAddModule(courseID, token, form)
             .then((data) => {
+              if(!data) {
+                return;
+              }
               setSelectedAddFiles([]);
-              console.log(data);
+              navigate(-1);
             })
           }} className="module-add__update-btn">Добавить модуль</button>
         </div> 
