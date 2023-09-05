@@ -1,15 +1,18 @@
 import React from "react";
 import { motion } from "framer-motion";
-
+import { useParams } from "react-router-dom";
 import TipTapButtons from "./TipTapButtons";
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
-import {apiEditLessonContent} from '../api';
+import { apiAddLessonToCourse, apiEditLessonContent} from '../api';
 import { Node, mergeAttributes } from "@tiptap/react";
 
-export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditLessonPressed, setModuleData, lessonToUpdate }) {
+export default function Lesson({ token, setAddLessonPressed, /*setSelectedFiles,*/ setEditLessonPressed, setModuleData, lessonToUpdate }) {
+  //params
+  const { courseID, moduleID } = useParams();
+
     //states
     const [lessonData, setLessonData] = React.useState(!lessonToUpdate ? {title: "", cover: {}, content: {content: {"type": "doc", "content": [
       // …
@@ -17,6 +20,7 @@ export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditL
     :
     lessonToUpdate
     );
+    const [selectedFiles, setSelectedFiles] = React.useState([]);
     //refs
     const coverInputRef = React.useRef();
     const coverImgRef = React.useRef();
@@ -147,18 +151,49 @@ export default function Lesson({ setAddLessonPressed, setSelectedFiles, setEditL
               <EditorContent editor={editor} />
             </div>
           <button onClick={() => {
-            setAddLessonPressed(false);
-            lessonToUpdate && setEditLessonPressed(false);
-            !lessonToUpdate ? setModuleData((prevValue) => {
-              return {...prevValue, lessons: [...prevValue.lessons, lessonData]};
-            })
-            :
-            setModuleData((prevValue) => {
-              return {...prevValue, lessons: prevValue.lessons.map((lesson) => {
-                return lesson.title === lessonData.title ? {...lesson, title: lesson.title, cover: lesson.cover, content: lessonData.content}
-                : lesson;
-              })};
+            const form = new FormData();
+            form.append('lessonData', JSON.stringify(lessonData));
+            selectedFiles.forEach((file) => {
+              form.append('file', file);
             });
+
+            !lessonToUpdate ? 
+            // console.log(lessonData)
+            apiAddLessonToCourse(courseID, moduleID, token, form)
+            .then((data) => {
+              console.log(data);
+              setAddLessonPressed(false);
+              setModuleData((prevValue) => {
+                return {...prevValue, lessons: data.lessons};
+              });
+              setSelectedFiles([]);
+            })
+            : 
+            // console.log(lessonData);
+            apiEditLessonContent(courseID, moduleID, lessonData._id, token, form)
+            .then((data) => {
+              // console.log(data);
+              if(data._id) {
+                setEditLessonPressed(false);
+                setModuleData((prevValue) => {
+                  return {...prevValue, lessons: data.lessons};
+                });
+                setSelectedFiles([]);
+              }
+            })
+            // console.log(!lessonToUpdate ? "Добавить урок" : "Обновить урок");
+            // setAddLessonPressed(false);
+            // lessonToUpdate && setEditLessonPressed(false);
+            // !lessonToUpdate ? setModuleData((prevValue) => {
+            //   return {...prevValue, lessons: [...prevValue.lessons, lessonData]};
+            // })
+            // :
+            // setModuleData((prevValue) => {
+            //   return {...prevValue, lessons: prevValue.lessons.map((lesson) => {
+            //     return lesson.title === lessonData.title ? {...lesson, title: lesson.title, cover: lesson.cover, content: lessonData.content}
+            //     : lesson;
+            //   })};
+            // });
           }} className="module-edit__update-btn">{!lessonToUpdate ? "Добавить урок" : "Обновить урок"}</button>
         </div>
     )

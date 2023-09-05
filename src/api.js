@@ -183,10 +183,10 @@ function apiEditLessonContent(courseID, moduleID, lessonID, token, content) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}/content`, {
     method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       'Authorization': token,
     },
-    body: JSON.stringify(content),
+    body: content,
   })
   .then((res) => {
     return res.json();

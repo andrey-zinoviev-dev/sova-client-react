@@ -201,8 +201,8 @@ export default function EditModule() {
           Обновить модуль
         </button>
       </div>}
-      {addLessonPressed && <Lesson setAddLessonPressed={setAddLessonPressed} setModuleData={setModuleData} setSelectedFiles={setSelectedFiles}/>}
-      {editLessonPressed && <Lesson setAddLessonPressed={setAddLessonPressed} setSelectedFiles={setSelectedFiles} setEditLessonPressed={setEditLessonPressed} setModuleData={setModuleData} lessonToUpdate={lessonToUpdate}/>}
+      {addLessonPressed && <Lesson token={token} setAddLessonPressed={setAddLessonPressed} setModuleData={setModuleData}/>}
+      {editLessonPressed && <Lesson token={token} setAddLessonPressed={setAddLessonPressed} setEditLessonPressed={setEditLessonPressed} setModuleData={setModuleData} lessonToUpdate={lessonToUpdate}/>}
     </section>
   )
 }
