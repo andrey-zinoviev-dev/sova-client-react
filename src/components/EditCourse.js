@@ -4,7 +4,7 @@ import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { apiGetCourse, apiDeleteModule } from "../api";
+import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse } from "../api";
 // import './EditCourse.css';
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -19,6 +19,7 @@ export default function EditCourse() {
   // const { state } = location;
   // console.log(state);
   //refs
+  const studentsInputRef = React.useRef();
   const courseNameRef = React.useRef();
   const courseDescRef = React.useRef();
   const courseCoverRef = React.useRef();
@@ -33,6 +34,8 @@ export default function EditCourse() {
     author: "",
     available: false,
   });
+
+  const [usersFile, setUsersFile] = React.useState({});
 
     //variants
     const backBtnVariant = {
@@ -59,6 +62,16 @@ export default function EditCourse() {
   //   const relativePath = window.URL.createObjectURL(courseCoverRef.current.files[0]);
   //   setCourseCover(relativePath);
   //   // setCourseCover(courseCoverRef.current.files[0]);
+  };
+
+  function uploadStudentsFile() {
+    const form = new FormData();
+    form.append('usersFile', usersFile);
+
+    apiAddStudentsToCourse(courseID, token, form)
+    .then((data) => {
+      console.log(data);
+    })
   };
 
   React.useState(() => {
@@ -170,7 +183,12 @@ export default function EditCourse() {
             <p>Ученики</p>
             <div>
               <p>Сейчас на курсе {courseData._id && courseData.students.length} студентов</p>
-              <button>Добавить учеников к курсу</button>
+              <button onClick={() => {
+                !usersFile.name ?  studentsInputRef.current.click() : uploadStudentsFile()
+              }}>{!usersFile.name ? 'Добавить учеников к курсу через CSV' : 'Отправить CSV файл'}</button>
+              <input ref={studentsInputRef} onChange={(evt => {
+                setUsersFile(evt.target.files[0]);
+              })} type="file" style={{display: "none"}} accept=".csv"></input>
             </div>
           </div>
       </div>

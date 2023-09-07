@@ -166,6 +166,8 @@ function apiEditModule(courseID, moduleID, token, cover) {
   })
 };
 
+// function apiAddStu
+
 function apiEditLessonCover(courseID, moduleID, lessonID, token, cover) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}/cover`, {
     method: "PUT",
@@ -291,10 +293,10 @@ function apiAddStudentsToCourse(courseID, token, students) {
   return fetch(`${apiAdress}/courses/${courseID}/students`, {
     method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json',
       'Authorization': token,
     },
-    body: JSON.stringify({students: students }),
+    body: students,
   })
   .then((res) => {
     return res.json();
