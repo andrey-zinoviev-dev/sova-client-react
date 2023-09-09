@@ -1,5 +1,6 @@
 import React from "react";
 import './EditCourse.css';
+import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +11,7 @@ import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse } from "../api";
 // import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 export default function EditCourse() {
+  const cyrillicToTranslit = new CyrillicToTranslit();
   //useParams
   const { courseID } = useParams();
   //token
@@ -88,8 +90,8 @@ export default function EditCourse() {
   // }, [courseData])
 
   React.useEffect(() => {
-    console.log(courseData)
-  }, [courseData]);
+    console.log(usersFile)
+  }, [usersFile]);
 
   return (
     <section className="course-edit">
@@ -187,7 +189,18 @@ export default function EditCourse() {
                 !usersFile.name ?  studentsInputRef.current.click() : uploadStudentsFile()
               }}>{!usersFile.name ? 'Добавить учеников к курсу через CSV' : 'Отправить CSV файл'}</button>
               <input ref={studentsInputRef} onChange={(evt => {
-                setUsersFile(evt.target.files[0]);
+                const uploadedCsv = evt.target.files[0];
+                // console.log(uploadedCsv);
+                if(/[А-Я]/.test(uploadedCsv.name)) {
+                  const updatedName = cyrillicToTranslit.transform(uploadedCsv.name, "_");
+                  
+                  Object.defineProperty(uploadedCsv, 'name', {
+                    writable: true,
+                    value: updatedName
+                  });
+                }
+                // console.log(uploadedCsv);
+                setUsersFile(uploadedCsv);
               })} type="file" style={{display: "none"}} accept=".csv"></input>
             </div>
           </div>
