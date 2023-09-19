@@ -483,10 +483,6 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
   // }, [editor, courseModule.layout])
 
   React.useEffect(() => {
-    console.log(loggedInUser);
-  }, []);
-
-  React.useEffect(() => {
     //show online users
     if(loggedInUser.admin) {
       const onlineStudents = onlineUsers.filter((onlineUser) => {
@@ -518,12 +514,14 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
   React.useEffect(() => {
     //functions in effect
     function showMessage(data) {
+      console.log(data);
       setMessages((prevValue) => {
         return [...prevValue, data];
       })
     };
 
     function showConnectedUser(data) {
+      console.log(data);
       if(loggedInUser.admin) {
         setStudents((prevValue) => {
           return prevValue.map((prevStudent) => {
@@ -713,7 +711,15 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
           <h3 style={{boxSizing: "border-box", padding: "0 20px"}}>{module.title}</h3>
           <ul style={{ lineHeight: 2, padding: 0, listStyle: "none", color: "rgb(255 255 255/75%)", margin: 0, width: "100%" }}>
             {module.lessons.map((moduleLesson) => {
-              return <li key={moduleLesson._id} style={{boxSizing: "border-box", padding: "0 20px", borderLeft: lessonID === moduleLesson._id && "2px solid rgb(93, 176, 199)" }}>{moduleLesson.title}</li>
+              return <li key={moduleLesson._id} style={{boxSizing: "border-box", padding: "0 20px", borderLeft: lessonID === moduleLesson._id && "2px solid rgb(93, 176, 199)" }}>
+                <button onClick={(evt) => {
+                  console.log(foundCourse);
+                  navigate(`../courses/${courseID}/modules/${moduleID}/lessons/${moduleLesson._id}`, {
+                    state: {foundCourse}
+                  });
+                  window.location.reload(true);
+                }}>{moduleLesson.title}</button>  
+              </li>
             })}
           </ul>
           <div className='module__side-wrapper-buttons'>
@@ -761,7 +767,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
               <Contacts messages={messages} courseAuthor={courseAuthor} students={students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
               <div className='lesson__div-chat-conversation' style={{width: messages.length > 0 && window.innerWidth <= 767 && "100%"}}>
                 <Messages filterChatToUser={filterChatToUser} selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
-                <MessageForm selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} moduleID={moduleID} userId={userId} userToken={userToken}></MessageForm>
+                <MessageForm selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} courseID={courseID} moduleID={moduleID} lessonID={lessonID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               <SelectedFiles selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             </Chat>

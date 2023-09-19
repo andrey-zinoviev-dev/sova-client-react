@@ -42,7 +42,7 @@ function App() {
   useEffect(() => {
     //effect functions
     function showAllOnlineUsers(data) {
-      
+      console.log(data);
       setOnlineUsers(data.filter((socketUser) => {
         return socketUser.online === true;
       }));
@@ -92,7 +92,7 @@ function App() {
         // console.log(userFetched);
         setuser(userFetched);
         setLoggedIn(true);
-   
+        // console.log(userFetched, "yes");
         socket.connect();
         socket.emit('user connected', userFetched);
         socket.on('show all connected users', showAllOnlineUsers);

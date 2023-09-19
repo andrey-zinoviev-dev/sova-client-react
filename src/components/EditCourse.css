@@ -228,8 +228,73 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    position: relative;
   }
+
+  .course-edit__students-wrapper-btn-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .course-edit__students-wrapper-btn-wrapper-p {
+    margin: 0 0 15px 0;
+  }
+
+  .course-edit__students-wrapper-btn-wrapper-span {
+    color: #5DB0C7;
+  }
+
+  .course-edit__students-wrapper-btn-wrapper-btn {
+    width: 180px;
+    height: 40px;
+    background-color: transparent;
+    border: 2px solid #5DB0C7;
+    color: #5DB0C7;
+    border-radius: 7px;
+  }
+
+  .course-edit__students-wrapper-success {
+    display: flex;
+    align-items: center;
+    background-color: #5DB0C7;
+    color: white;
+    height: 40px;
+    width: 425px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    border-radius: 7px;
+    position: absolute;
+    top: 50%;
+    right: -10%;
+  }
+
+  .course-edit__students-wrapper-success-div {
+    margin: 0 15px 0 0;
+    width: 25px;
+    height: 25px;
+    border: 2px solid black;
+    color: black;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .course-edit__students-wrapper-success-div-tick {
+    font-size: 12px;
+    color: black;
+  }
+
+  /* .course-edit__students-wrapper-success-div svg {
+    scale: 0.8;
+  } */
   
+  .course-edit__students-wrapper-success-p {
+    margin: 0;
+  }
+
   .course-edit__students-wrapper-group {
     width: 100%;
     margin: 0 0 25px 0;

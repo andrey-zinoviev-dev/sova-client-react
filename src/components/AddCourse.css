@@ -340,6 +340,8 @@
     /* max-width: 420px; */
     width: 100%;
     border-radius: 9px;
+    aspect-ratio: 16/10;
+    object-fit: contain;
 }
 
 .ProseMirror p.is-editor-empty::before {

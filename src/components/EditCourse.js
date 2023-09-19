@@ -4,8 +4,10 @@ import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrashCan, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrashCan, faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse } from "../api";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faCheck } from "@fortawesome/free-solid-svg-icons";
 // import './EditCourse.css';
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -39,7 +41,7 @@ export default function EditCourse() {
 
   const [usersFile, setUsersFile] = React.useState({});
 
-    //variants
+  //variants
     const backBtnVariant = {
       hover: {
         border: "2px solid rgb(255, 255, 255)",
@@ -50,6 +52,17 @@ export default function EditCourse() {
         fill: 'rgb(93, 176, 199)',
       }
     }
+
+  const studentsSuccess = {
+    rest: {
+      opacity: 0,
+      visibility: "hidden",
+    },
+    success: {
+      opacity: 1,
+      visibility: "visible",
+    }
+  };
 
   // const [courseCover, setCourseCover] = React.useState("");
 
@@ -181,11 +194,11 @@ export default function EditCourse() {
               </motion.li>
             </ul>
           </div>
-          <div className="course-edit__students-wrapper">
+          <motion.div className="course-edit__students-wrapper">
             <p>Ученики</p>
-            <div>
-              <p>Сейчас на курсе {courseData._id && courseData.students.length} студентов</p>
-              <button onClick={() => {
+            <div className="course-edit__students-wrapper-btn-wrapper">
+              <p className="course-edit__students-wrapper-btn-wrapper-p">Сейчас на курсе <span className="course-edit__students-wrapper-btn-wrapper-span">{courseData._id && courseData.students.length}</span> студентов</p>
+              <button className="course-edit__students-wrapper-btn-wrapper-btn" onClick={() => {
                 !usersFile.name ?  studentsInputRef.current.click() : uploadStudentsFile()
               }}>{!usersFile.name ? 'Добавить учеников к курсу через CSV' : 'Отправить CSV файл'}</button>
               <input ref={studentsInputRef} onChange={(evt => {
@@ -203,7 +216,15 @@ export default function EditCourse() {
                 setUsersFile(uploadedCsv);
               })} type="file" style={{display: "none"}} accept=".csv"></input>
             </div>
-          </div>
+            <div className="course-edit__students-wrapper-success">
+              {/* <button></button> */}
+              <div className="course-edit__students-wrapper-success-div">
+                <FontAwesomeIcon className="course-edit__students-wrapper-success-div-tick" icon={faCheck} />
+              </div>
+              <p className="course-edit__students-wrapper-success-p">Успешно добавлены ученики к курсу!</p>
+            </div>
+            
+          </motion.div>
       </div>
     </section>
   )

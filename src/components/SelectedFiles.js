@@ -37,9 +37,9 @@ export default function SelectedFiles({selectedFiles, setSelectedFiles}) {
         })
     };
 
-    React.useEffect(() => {
-        console.log(selectedFiles);
-    }, [selectedFiles]);
+    // React.useEffect(() => {
+    //     console.log(selectedFiles);
+    // }, [selectedFiles]);
     //states
 
     return (

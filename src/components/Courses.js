@@ -262,12 +262,16 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
 
       Promise.all([coursesFromApi, allStudentsFromApi])
       .then(([coursesReceived, studentsReceived]) => {
+        // console.log(coursesReceived);
+        const coursesIds = coursesReceived.map((course) => {
+          return course._id;
+        });
+        // console.log(coursesIds);
         const coursesToRender =  loggedInUser.admin ? coursesReceived.filter((courseReceived) => {
           return courseReceived.author && courseReceived.author._id === loggedInUser._id;
-        }) : coursesReceived.filter((courseReceived) => {
-          return loggedInUser.courses.find((courseToFind) => {
-            return courseToFind._id === courseReceived._id;
-          })
+        }) : coursesReceived.map((courseReceived) => {
+          console.log(courseReceived._id, coursesIds);
+          return loggedInUser.courses.includes(courseReceived._id) ? courseReceived : {...courseReceived, available: false};
         });
 
         // console.log(coursesToRender);
@@ -277,6 +281,10 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
       })
     }
   }, []);
+
+  React.useEffect(() => {
+    console.log(loggedInUser);
+  }, [loggedInUser]);
 
   // React.useEffect(() => {
   //   console.log(selectedFiles);
