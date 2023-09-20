@@ -248,8 +248,8 @@ function apiUploadFilesToCourse(token, files) {
   })
 }
 
-function apiGetConversation(token, userId) {
-  return fetch(`${apiAdress}/contact/${userId}/messages`, {
+function apiGetConversation(token, userId, location) {
+  return fetch(`${apiAdress}/contact/${userId}/courses/${location.course}/modules/${location.module}/lessons/${location.lesson}/messages`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

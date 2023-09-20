@@ -570,7 +570,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
 
   React.useEffect(() => {
     
-    userId._id ? apiGetConversation(userToken, userId._id)
+    userId._id ? apiGetConversation(userToken, userId._id, {course: courseID, module: moduleID, lesson: lessonID})
     .then((data) => {
       if(data.message) {
         return setMessages([]);
