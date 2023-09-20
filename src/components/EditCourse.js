@@ -38,7 +38,7 @@ export default function EditCourse() {
     author: "",
     available: false,
   });
-
+  const [successfulMessage, setSuccessfullMessage] = React.useState(null);
   const [usersFile, setUsersFile] = React.useState({});
 
   //variants
@@ -56,11 +56,13 @@ export default function EditCourse() {
   const studentsSuccess = {
     rest: {
       opacity: 0,
-      visibility: "hidden",
+      // visibility: "hidden",
+      // transition: {duration: 0.25, ease: "easeInOut", delay: 0},
     },
     success: {
       opacity: 1,
-      visibility: "visible",
+      // visibility: "visible",
+      // transition: {duration: 0.25, ease: "easeInOut", delay: 0},
     }
   };
 
@@ -85,7 +87,13 @@ export default function EditCourse() {
 
     apiAddStudentsToCourse(courseID, token, form)
     .then((data) => {
-      console.log(data);
+      if(!data) {
+        return;
+      }
+      setCourseData((prevValue) => {
+        return {...prevValue, students: data.students};
+      })
+      setSuccessfullMessage('Ученики успешно добавлены!')
     })
   };
 
@@ -103,8 +111,12 @@ export default function EditCourse() {
   // }, [courseData])
 
   React.useEffect(() => {
-    console.log(usersFile)
-  }, [usersFile]);
+    console.log(successfulMessage);
+    setTimeout(() => {
+      setSuccessfullMessage(null);
+    }, 3000);
+    console.log(successfulMessage);
+  }, [successfulMessage])
 
   return (
     <section className="course-edit">
@@ -216,14 +228,13 @@ export default function EditCourse() {
                 setUsersFile(uploadedCsv);
               })} type="file" style={{display: "none"}} accept=".csv"></input>
             </div>
-            <div className="course-edit__students-wrapper-success">
+          </motion.div>
+          <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
               {/* <button></button> */}
               <div className="course-edit__students-wrapper-success-div">
                 <FontAwesomeIcon className="course-edit__students-wrapper-success-div-tick" icon={faCheck} />
               </div>
-              <p className="course-edit__students-wrapper-success-p">Успешно добавлены ученики к курсу!</p>
-            </div>
-            
+              <p className="course-edit__students-wrapper-success-p">{successfulMessage}</p>
           </motion.div>
       </div>
     </section>

@@ -51,6 +51,7 @@
   .course-edit__wrapper {
     /* max-width: 920px; */
     max-width: 720px;
+    position: relative;
   }
 
   .course-edit__wrapper-back-div {
@@ -264,9 +265,9 @@
     box-sizing: border-box;
     padding: 0 10px;
     border-radius: 7px;
-    position: absolute;
-    top: 50%;
-    right: -10%;
+    position: fixed;
+    top: 90%;
+    right: 5%;
   }
 
   .course-edit__students-wrapper-success-div {
