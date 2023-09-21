@@ -111,11 +111,11 @@ export default function EditCourse() {
   // }, [courseData])
 
   React.useEffect(() => {
-    console.log(successfulMessage);
+    // console.log(successfulMessage);
     setTimeout(() => {
       setSuccessfullMessage(null);
     }, 3000);
-    console.log(successfulMessage);
+    // console.log(successfulMessage);
   }, [successfulMessage])
 
   return (
