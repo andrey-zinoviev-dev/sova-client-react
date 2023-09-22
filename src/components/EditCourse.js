@@ -206,7 +206,7 @@ export default function EditCourse() {
               </motion.li>
             </ul>
           </div>
-          <motion.div className="course-edit__students-wrapper">
+          <div className="course-edit__students-wrapper">
             <p>Ученики</p>
             <div className="course-edit__students-wrapper-btn-wrapper">
               <p className="course-edit__students-wrapper-btn-wrapper-p">Сейчас на курсе <span className="course-edit__students-wrapper-btn-wrapper-span">{courseData._id && courseData.students.length}</span> студентов</p>
@@ -228,7 +228,10 @@ export default function EditCourse() {
                 setUsersFile(uploadedCsv);
               })} type="file" style={{display: "none"}} accept=".csv"></input>
             </div>
-          </motion.div>
+          </div>
+          <div>
+            
+          </div>
           <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
               {/* <button></button> */}
               <div className="course-edit__students-wrapper-success-div">
