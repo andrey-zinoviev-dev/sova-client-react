@@ -112,7 +112,7 @@
   }
   
   .module-edit__lessons-ul-li {
-    cursor: pointer;
+    /* cursor: pointer; */
      width: 100%;
     display: flex;
     align-items: center;
@@ -121,6 +121,7 @@
     border-radius: 9px;
     box-sizing: border-box;
     padding: 7px 40px;
+    position: relative;
   }
 
   .module-edit__lessons-ul-li-h {
@@ -133,6 +134,38 @@
     aspect-ratio: 1/1;
     border-radius: 50%;
     object-fit: cover;
+  }
+
+  .module-edit__lessons-ul-li-notification {
+    position: absolute;
+    right: -60%;
+    top: -100%;
+    border: 2px solid white;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 15px;
+    /* width: 250px; */
+    /* max-width: 285px; */
+  }
+
+  .module-edit__lessons-ul-li-notification-ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .module-edit__lessons-ul-li-notification-ul-li-btn {
+    width: 85px;
+    height: 30px;
+    border-radius: 5px;
+    box-sizing: border-box;
+    /* border: 2px solid white; */
+    background-color: rgb(93, 176, 199);
+    color: white;
+    border: none;
   }
 
   .module-edit__update-btn {

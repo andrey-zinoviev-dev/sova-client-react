@@ -263,18 +263,20 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
       Promise.all([coursesFromApi, allStudentsFromApi])
       .then(([coursesReceived, studentsReceived]) => {
         // console.log(coursesReceived);
-        const coursesIds = coursesReceived.map((course) => {
-          return course._id;
-        });
         // console.log(coursesIds);
         const coursesToRender =  loggedInUser.admin ? coursesReceived.filter((courseReceived) => {
           return courseReceived.author && courseReceived.author._id === loggedInUser._id;
-        }) : coursesReceived.map((courseReceived) => {
-          console.log(courseReceived._id, coursesIds);
-          return loggedInUser.courses.includes(courseReceived._id) ? courseReceived : {...courseReceived, available: false};
+        }) 
+        : 
+        // coursesReceived
+        coursesReceived.map((courseReceived) => {
+          
+          return loggedInUser.courses.find((userCourse) => {
+            return userCourse.id === courseReceived._id;
+          }) ? courseReceived : {...courseReceived, available: false};
         });
 
-        // console.log(coursesToRender);
+        console.log(coursesToRender);
 
         setCoursesData({courses: coursesToRender, allStudents: studentsReceived});
         setCoursesLoading(false);

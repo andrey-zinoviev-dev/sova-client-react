@@ -303,14 +303,14 @@ function apiAddStudentsToCourse(courseID, token, students) {
   })
 };
 
-function apiNewLessonEmail(token, location) {
+function apiNewLessonEmail(token, location, students) {
   return fetch(`${apiAdress}/courses/${location.course}/modules/${location.module}/lessons/${location.lesson}/notification`, {
-    method: "GET",
+    method: "POST",
     headers: {
       'Content-Type': 'application/json',
       'Authorization': token,
     },
-    // body: 
+    body: JSON.stringify(students),
   })
   .then((res) => {
     return res.json();
