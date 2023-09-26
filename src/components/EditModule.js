@@ -201,7 +201,7 @@ export default function EditModule() {
                               return course.id === courseID;
                             })
                           });
-                          console.log(lesson._id);
+                          // console.log(lesson._id);
                           apiNewLessonEmail(token, {course: courseID, module: moduleID, lesson: lesson._id}, studentsToNotify)
                         }} className="module-edit__lessons-ul-li-notification-ul-li-btn">Всем</button>
                       </li>  

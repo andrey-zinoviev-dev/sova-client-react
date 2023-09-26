@@ -461,9 +461,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
             {foundModule.lessons.length > 0 ? <ul className="popup__modules-ul">
                 {foundModule.lessons.map((lesson) => {
                   return <li key={lesson._id} onClick={() => {
-                    navigate(`../courses/${foundCourse._id}/modules/${foundModule._id}/lessons/${lesson._id}`, {
-                      state: {foundCourse}
-                  })
+                    navigate(`../courses/${foundCourse._id}/modules/${foundModule._id}/lessons/${lesson._id}`)
                   }} className="popup__modules-ul-li">
                     <img className="popup__modules-ul-li-lesson-img" alt="обложка урока" src={lesson.cover}></img>
                     <p className="popup__modules-ul-li-lesson-p">{lesson.title}</p>

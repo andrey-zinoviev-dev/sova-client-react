@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import MenuButton from '../images/square-caret-down-regular.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquareCaretDown, faBars } from '@fortawesome/free-solid-svg-icons';
-import { apiGetLesson, apiGetConversation, apiSendMessage } from "../api";
+import { apiGetLesson, apiGetConversation, apiSendMessage, apiGetCourse } from "../api";
 import { UserContext } from '../context/userContext';
 import Chat from './Chat';
 // import { SocketContext } from "../socketio/socketIO";
@@ -37,8 +37,9 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
   const {courseID, moduleID, lessonID} = useParams();
   
   // const [courseAuthor, setCourseAuthor] = React.useState({});
-  const [courseModule, setCourseModule] = React.useState({});
-  const [moduleLesson, setModuleLesson] = React.useState({});
+  // const [courseModule, setCourseModule] = React.useState({});
+  // const [moduleLesson, setModuleLesson] = React.useState({});
+  const [lessonData, setLessonData] = React.useState({});
   const [messages, setMessages] = React.useState([]);
   // const [currentLesson, setCurrentLesson] = React.useState({});
   // const [students, setStudents] = React.useState([]);
@@ -55,22 +56,24 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
   const [courseAuthor, setCourseAuthor] = React.useState({});
 
   //location
-  const location = useLocation();
-  const { state } = location;
-  const { foundCourse } = state;
+  // const location = useLocation();
+  // const { state } = location;
+  // const { foundCourse } = state;
   // console.log(foundCourse);
   // console.log(selectedCourse);
  
   //variables derived from courseModule state variable
-  const admin = courseModule._id ? {...courseModule.course.author, online: adminIsOnline} : {};
-  const module = foundCourse.modules.find((module) => {
-    return module._id === moduleID;
-  });
-  // const courseAuthor = selectedCourse.author;
-  const lessons = module.lessons;
-  const currentLesson = lessons.find((lesson) => {
-    return lesson._id === lessonID;
-  })
+  //uncoment admin further!!!!
+  const admin = lessonData.lesson ? {...lessonData.course.author, online: adminIsOnline} : {};
+  
+  // const module = foundCourse.modules.find((module) => {
+  //   return module._id === moduleID;
+  // });
+  // // const courseAuthor = selectedCourse.author;
+  // const lessons = module.lessons;
+  // const currentLesson = lessons.find((lesson) => {
+  //   return lesson._id === lessonID;
+  // })
 
   // console.log(module);
   let conversation = undefined;
@@ -134,7 +137,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
       //   placeholder: "Здесь можно написать контент для курса",
       // })
     ],
-    content: currentLesson.content,
+    // content: currentLesson.content,
     // onUpdate: ({ editor }) => {
     //   setFormData({...formData, module: {
     //     ...formData.module,  text: editor.getJSON()
@@ -349,10 +352,25 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
   // console.log(lessonID);
 
   React.useEffect(() => {
-
-    setCourseAuthor(foundCourse.author);
-    setStudents(foundCourse.students);
+    apiGetCourse(courseID, userToken)
+    .then((data) => {
+      const module = data.modules.find((moduleFromApi) => {
+        return moduleFromApi._id === moduleID;
+      });
+      // console.log(module);
+      const lesson = module.lessons.find((lessonFromApi) => {
+        return lessonFromApi._id === lessonID;
+      });
+      // console.log(lesson);
+      setLessonData({course: data, module: module, lesson: lesson, students: data.students})
+    })
+    // setCourseAuthor(foundCourse.author);
+    // setStudents(foundCourse.students);
   }, []);
+
+  React.useEffect(() => {
+    console.log(lessonData)
+  }, [lessonData]);
 
   React.useEffect(() => {
     // if(editor && currentLesson.content) {
@@ -680,29 +698,27 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
           
             {/* <motion.img initial="closed" animate={menuOpened ? "opened" : "closed"} variants={imgVariants} style={{maxWidth: '25px'}} src={SovaLogo} alt="Логотип"></motion.img> */}
           {/* </div> */}
-          {/* <motion.div variants={textVariants}>
-            <div style={{padding: "0 0 0 15px"}}>
+          {/* <motion.div variants={textVariants}> */}
+            {/* <div style={{padding: "0 0 0 15px"}}>
              
-              <h3>{selectedCourse.title}</h3>
+              <h3>{lessonData.course && lessonData.course.title}</h3>
               <p>Модули</p>
             </div>
 
             <ul style={{padding: 0, listStyle: "none", lineHeight: 2}}>
 
-              {lessons.length > 0  && lessons.map((lesson) => {
+              {lessonData.module && lessonData.module.lessons.map((lesson) => {
                 return <li key={module._id}>
                   <button onClick={() => {
-                    navigate(`../courses/${selectedCourse._id}/modules/${module._id}/lessons/${lesson._id}`, {
-                      state: {selectedCourse}
-                    });
+                    navigate(`../courses/${courseID}/modules/${moduleID}/lessons/${lesson._id}`);
                     window.location.reload(true);
                   }}>
                     {lesson.title}
                   </button>
                 </li>
               })}
-            </ul>
-          </motion.div> */}
+            </ul> */}
+          {/* </motion.div> */}
         </div>
         
         <motion.div className='module__side-wrapper' variants={sideNavigationVariants} initial="closed" animate={menuOpened ? "opened" : "closed"}>
@@ -710,13 +726,11 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
           {/* <span style={{margin: "0 0 10px 0"}}>Модуль</span> */}
           <h3 style={{boxSizing: "border-box", padding: "0 20px"}}>{module.title}</h3>
           <ul style={{ lineHeight: 2, padding: 0, listStyle: "none", color: "rgb(255 255 255/75%)", margin: 0, width: "100%" }}>
-            {module.lessons.map((moduleLesson) => {
+            {lessonData.module && lessonData.module.lessons.map((moduleLesson) => {
               return <li key={moduleLesson._id} style={{boxSizing: "border-box", padding: "0 20px", borderLeft: lessonID === moduleLesson._id && "2px solid rgb(93, 176, 199)" }}>
                 <button onClick={(evt) => {
-                  console.log(foundCourse);
-                  navigate(`../courses/${courseID}/modules/${moduleID}/lessons/${moduleLesson._id}`, {
-                    state: {foundCourse}
-                  });
+                  
+                  navigate(`../courses/${courseID}/modules/${moduleID}/lessons/${moduleLesson._id}`);
                   window.location.reload(true);
                 }}>{moduleLesson.title}</button>  
               </li>
@@ -754,12 +768,9 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
         </div>
         {!chatIsOpened ?
           <div style={{maxWidth: 768, width: '100%', color: "white"}}>
-            <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>{moduleLesson._id && moduleLesson.title}</h3>
+            <h3 className='module__content-headline' style={{fontSize: 36, letterSpacing: 1.5, margin: "0 0 20px 0"}}>{lessonData.lesson && lessonData.lesson.title}</h3>
             <EditorContent editor={editor} style={{backgroundColor: "transparent", border: "none", boxShadow: "none"}}/>
-            {/* <p>{courseModule._id && courseModule.name}</p>
-            <p>{courseModule.description}</p>
-            <p>Вот на этой картинке можно изучить строение гортани</p>
-            <img style={{maxWidth: 768}} className='module__content-img' src={courseModule._id && courseModule.images[0]} alt="Гортань спереди"></img> */}
+            
           </div>
           :
           <div style={{maxWidth: 1024, width: '100%', margin: "auto 0"}}>
