@@ -32,6 +32,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [user, setuser] = useState({});
   const [onlineUsers, setOnlineUsers] = useState([]);
+
   // const [messages, setMessages] = useState([]);
   // const [courses, setCourses] = useState([]);
 
@@ -76,9 +77,14 @@ function App() {
       //     }
       //   })
       // }
+    };
+
+    function showConnectedUser(data) {
+      console.log(data);
     }
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
+    // console.log(userToken);
     // console.log(userToken);
     const localsessionID = localStorage.getItem('sessionID');
     // console.log(userToken);
@@ -96,6 +102,7 @@ function App() {
         socket.connect();
         socket.emit('user connected', userFetched);
         socket.on('show all connected users', showAllOnlineUsers);
+        // socket.on('show connected user', showConnectedUser);
       });
 
       // socket.on('private message', (data) => {
@@ -128,6 +135,7 @@ function App() {
       // socket.disconnect();
       socket.close();
       socket.off('show all connected users', showAllOnlineUsers);
+      // socket.off('show connected user', showConnectedUser);
       // socket.off('user connected', userFetched);
       // socket.off('private message', onMessage);
     };

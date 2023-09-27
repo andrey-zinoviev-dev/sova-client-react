@@ -284,9 +284,9 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
     }
   }, []);
 
-  React.useEffect(() => {
-    console.log(loggedInUser);
-  }, [loggedInUser]);
+  // React.useEffect(() => {
+  //   console.log(loggedInUser);
+  // }, [loggedInUser]);
 
   // React.useEffect(() => {
   //   console.log(selectedFiles);
@@ -296,9 +296,9 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
   //   console.log(coursesLoading);
   // }, [coursesLoading])
 
-  React.useEffect(() => {
-    console.log(coursesData);
-  }, [coursesData])
+  // React.useEffect(() => {
+  //   console.log(coursesData);
+  // }, [coursesData])
 
   return (
     <>
