@@ -137,7 +137,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
       //   placeholder: "Здесь можно написать контент для курса",
       // })
     ],
-    // content: currentLesson.content,
+    content: lessonData.lesson && lessonData.lesson.content,
     // onUpdate: ({ editor }) => {
     //   setFormData({...formData, module: {
     //     ...formData.module,  text: editor.getJSON()
