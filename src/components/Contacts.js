@@ -14,7 +14,9 @@ export default function Contacts ({messages, contacts, admin, filterChatToUser, 
   //   // filterChatToUser(id);
   // };
 
-  React.useEffect(() => {}, [])
+  React.useEffect(() => {
+    console.log(students);
+  }, [students])
   //variables
   let contact = {};
   // React.useEffect(() => {

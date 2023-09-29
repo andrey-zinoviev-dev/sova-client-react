@@ -39,7 +39,8 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
   // const [courseAuthor, setCourseAuthor] = React.useState({});
   // const [courseModule, setCourseModule] = React.useState({});
   // const [moduleLesson, setModuleLesson] = React.useState({});
-  const [lessonData, setLessonData] = React.useState({course: {}});
+  const [lessonData, setLessonData] = React.useState({course: {}, module: {}, lesson: {}, users: []});
+  const [users, setUsers] = React.useState([]);
   const [messages, setMessages] = React.useState([]);
   // const [currentLesson, setCurrentLesson] = React.useState({});
   // const [students, setStudents] = React.useState([]);
@@ -64,8 +65,8 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
  
   //variables derived from courseModule state variable
   //uncoment admin further!!!!
-  const admin = lessonData.lesson ? {...lessonData.course.author, online: adminIsOnline} : {};
-  const students = lessonData.courses ? [...lessonData.course.students] : [];
+  // const admin = lessonData.lesson ? {...lessonData.course.author, online: adminIsOnline} : {};
+  // const users = lessonData.users.length > 0 ? [...lessonData.users] : [];
   // const module = foundCourse.modules.find((module) => {
   //   return module._id === moduleID;
   // });
@@ -137,7 +138,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
       //   placeholder: "Здесь можно написать контент для курса",
       // })
     ],
-    content: lessonData.lesson && lessonData.lesson.content,
+    // content: lessonData.lesson && lessonData.lesson.content,
     // onUpdate: ({ editor }) => {
     //   setFormData({...formData, module: {
     //     ...formData.module,  text: editor.getJSON()
@@ -361,6 +362,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
       const lesson = module.lessons.find((lessonFromApi) => {
         return lessonFromApi._id === lessonID;
       });
+      // console.log(editor);
       // console.log(lesson);
       setLessonData({course: data, module: module, lesson: lesson})
     })
@@ -369,56 +371,169 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
   }, []);
 
   // React.useEffect(() => {
-  //   console.log(lessonData)
+  //   console.log(editor);
+  // }, [editor, lessonData])
+
+  React.useEffect(() => {
+    if(editor && lessonData.lesson) {
+      editor.commands.setContent(lessonData.lesson.content);
+    }
+  }, [lessonData]);
+
+  // React.useEffect(() => {
+  //   console.log(onlineUsers);
+  //   console.log(users);
+  //   console.log(lessonData);
+  //   if(users) {
+      
+    
+  //     // console.log(loggedInUser);
+
+  //     // setLessonData((prevValue) => {
+  //     //   return {...prevValue, users: prevValue.users.map((user) => {
+  //     //     return onlineUsers.find((onlineUser) => {
+  //     //       return onlineUser.userId === user._id ? {...user, online: true} : user;
+  //     //     })
+  //     //   })}
+  //     // })
+  //   }
+
+  //   //show online users
+  //   // if(loggedInUser.admin && lessonData.users) {
+  //   //   console.log(lessonData.users);
+  //   //   const onlineCourseUsers = onlineUsers.filter((onlineUser) => {
+  //   //     return onlineUser.admin !== true;
+  //   //   });
+  //   //   // console.log(onlineUsers);
+  //   //   const onlineStudents = lessonData.users && lessonData.users.map((user) => {
+  //   //     const matchedOnlineUser = onlineCourseUsers.find((onlineCourseUser) => {
+  //   //       return onlineCourseUser.userId === user._id;
+  //   //     });
+  //   //     // console.log(matchedOnlineUser);
+  //   //     return matchedOnlineUser ? {...user, online: true} : user;
+  //   //   });
+  //   //   console.log(onlineStudents);
+  //   //   lessonData.users && setLessonData((prevValue) => {
+  //   //     return {...prevValue, users: onlineStudents}
+  //   //   })
+  //   //   // console.log(lessonData);
+  //   //   // lessonData.course._id && setLessonData((prevValue) => {
+  //   //   //   // return {...prevValue, }
+  //   //   //   const updatedStudents = prevValue.course.students.map((student) => {
+  //   //   //     return onlineStudents.find((onlineStudent) => {
+  //   //   //       return onlineStudent.userId === student._id;
+  //   //   //     }) ? {...student, online: true} : student;
+  //   //   //   });
+  //   //   //   // console.log(updatedStudents);
+  //   //   //   return {...prevValue, course: {...prevValue.course, students: updatedStudents}};
+  //   //   // })
+  //   //   // lessonData.course._id && setLessonData((prevValue) => {
+  //   //   //   return {...prevValue, course: {...prevValue.course, students: prevValue.course.students.map((student) => {
+  //   //   //     console.log(student);
+  //   //   //     const foundOnlineStudent = onlineStudents.find((onlineStudent) => {
+  //   //   //       return onlineStudent.userId === student._id;
+  //   //   //     });
+  //   //   //     console.log(foundOnlineStudent);
+  //   //   //     return foundOnlineStudent ? {...student, online: true} : student;
+  //   //   //   })}};
+  //   //   // })
+  //   //   // setStudents((prevValue) => {
+  //   //   //   return prevValue.map((updateStudent) => {
+  //   //   //     const foundOnlineStudent = onlineStudents.find((onlineStudent) => {
+  //   //   //       return onlineStudent.userId === updateStudent._id;
+  //   //   //     })
+  //   //   //     return foundOnlineStudent ? {...updateStudent, online: true} : updateStudent;
+  //   //   //     // return onlineStudents.includes(updateStudent) ? {...updateStudent, online: true} : updateStudent;
+  //   //   //   })
+  //   //   // });
+
+  //   // } else {
+  //   //   const onlineAdmins = onlineUsers.filter((user) => {
+  //   //     return user.admin === true;
+  //   //   });
+  //   //   console.log(onlineAdmins);
+  //   //   // lessonData.users && console.log(lessonData.users);
+  //   //   // console.log(lessonData.users && lessonData.users);
+  //   //   lessonData.users && setLessonData((prevValue) => {
+  //   //     // console.log('yes');
+  //   //     const usersToUpdate = lessonData.users.map((user) => {
+  //   //       return onlineAdmins.find((onlineAdmin) => {
+  //   //         return onlineAdmin.userId === user._id;
+  //   //       }) ? {...user, online: true} : user;
+  //   //     });
+  //   //   //   console.log(usersToUpdate);
+  //   //     return {...prevValue, users: usersToUpdate};
+  //   //   //   // return {...prevValue, users: prevValue.users.map((user) => {
+  //   //   //   //   return onlineAdmins.find((onlineAdmin) => {
+  //   //   //   //     return onlineAdmin.userId === user._id;
+  //   //   //   //   }) ? {...user, online: true} : user;
+  //   //   //   // })}
+  //   //   })
+  //   //   // const courseAuthor = lessonData.users && lessonData.users.find((user) => {
+  //   //   //   return user.admin === true;
+  //   //   // });
+
+  //   //   // console.log(courseAuthor);
+  //   //   // const onlineAuthor = onlineUsers.find((user) => {
+  //   //   //   return user.userId === lessonData.course && lessonData.course.author._id;
+  //   //   // });
+  //   //   // const onlineAuthor = lessonData.users && onlineUsers.find((user) => {
+  //   //   //   return user.userId === lessonData.users.find((lessonUser) => {
+  //   //   //     return lessonUser.admin === true;
+  //   //   //   })._id;
+  //   //   // });
+  //   //   // console.log(onlineAuthor);
+  //   //   // console.log(lessonData);
+  //   //   // lessonData.course._id && setLessonData((prevValue) => {
+  //   //   //   const onlineAdmins = onlineUsers.filter((onlineUser) => {
+  //   //   //     return onlineUser.admin === true;
+  //   //   //   });
+  //   //   //   const updatedAuthor = onlineAdmins.find((admin) => {
+  //   //   //     return admin.userId === lessonData.course.author._id;
+  //   //   //   });
+        
+  //   //   //   return {...prevValue, course: {...prevValue.course, author: {...prevValue.course.author, online: updatedAuthor ? true : false}}};
+  //   //   // })
+  //   //   // const onlineAdmins = onlineUsers.filter((onlineUser) => {
+  //   //   //   return onlineUser.admin !== false;
+  //   //   // });
+  //   //   // lessonData.course && setLessonData((prevValue) => {
+  //   //   //   return {...prevValue, course: {...prevValue.course, author: {...prevValue.course.author, online: true}}}
+  //   //   // })
+  //   //   // setCourseAuthor((prevValue) => {
+  //   //   //   const foundOnlineAdmin = onlineAdmins.find((onlineAdmin) => {
+  //   //   //     return onlineAdmin.userId === prevValue._id;
+  //   //   //   });
+  //   //   //   return foundOnlineAdmin ? {...prevValue, online: true} : prevValue;
+  //   //   // })
+  //   // }
+  // }, [onlineUsers]);
+
+  React.useEffect(() => {
+    // console.log(onlineUsers);
+    // console.log(lessonData.users);
+    if(onlineUsers.length > 0 && lessonData.course.students) {
+      // console.log(onlineUsers);
+      // console.log(users);
+      // console.log(lessonData);
+      const updatedUsers = [...lessonData.course.students, lessonData.course.author].map((user) => {
+        return onlineUsers.find((onlineUser) => {
+          return onlineUser.userId === user._id;
+        }) ? {...user, online: true} : user;
+      });
+      // console.log(updatedUsers);
+
+      setUsers(updatedUsers)
+    }
+  }, [onlineUsers, lessonData.course.students]);
+
+  // React.useEffect(() => {
+  //   console.log(lessonData);
   // }, [lessonData]);
 
   React.useEffect(() => {
-    // console.log(loggedInUser);
-    // console.log(lessonData.course);
-    //show online users
-    if(loggedInUser.admin) {
-      const onlineStudents = onlineUsers.filter((onlineUser) => {
-        return onlineUser.admin !== true;
-      });
-      // console.log(onlineStudents);
-      // console.log(lessonData);
-      lessonData.course._id && setLessonData((prevValue) => {
-        return {...prevValue, course: {...prevValue.course, students: prevValue.course.students.map((student) => {
-          const foundOnlineStudent = onlineStudents.find((onlineStudent) => {
-            return onlineStudent.userId === student._id;
-          });
-          return foundOnlineStudent ? {...student, online: true} : student;
-        })}};
-      })
-      // setStudents((prevValue) => {
-      //   return prevValue.map((updateStudent) => {
-      //     const foundOnlineStudent = onlineStudents.find((onlineStudent) => {
-      //       return onlineStudent.userId === updateStudent._id;
-      //     })
-      //     return foundOnlineStudent ? {...updateStudent, online: true} : updateStudent;
-      //     // return onlineStudents.includes(updateStudent) ? {...updateStudent, online: true} : updateStudent;
-      //   })
-      // });
-
-    } else {
-      // const onlineAdmins = onlineUsers.filter((onlineUser) => {
-      //   return onlineUser.admin !== false;
-      // });
-      // lessonData.course && setLessonData((prevValue) => {
-      //   return {...prevValue, course: {...prevValue.course, author: {...prevValue.course.author, online: true}}}
-      // })
-      // setCourseAuthor((prevValue) => {
-      //   const foundOnlineAdmin = onlineAdmins.find((onlineAdmin) => {
-      //     return onlineAdmin.userId === prevValue._id;
-      //   });
-      //   return foundOnlineAdmin ? {...prevValue, online: true} : prevValue;
-      // })
-    }
-  }, [onlineUsers, lessonData.course._id]);
-
-  React.useEffect(() => {
-    console.log(lessonData);
-  }, [lessonData])
+    console.log(users);
+  }, [users])
 
   React.useEffect(() => {
     //functions in effect
@@ -445,7 +560,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
     };
 
     function showDisconnectEvent(data) {
-      console.log(data);
+      // console.log(data);
       if(data && data.admin) {
         // setCourseAuthor((prevValue) => {
         //   return {...prevValue, online: false};
@@ -464,13 +579,13 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
 
     if(loggedInUser._id) {
       socket.on('private message', showMessage);
-      socket.on('show connected user', showConnectedUser);
+      // socket.on('show connected user', showConnectedUser);
       socket.on('user to disconnect', showDisconnectEvent)
     }
 
     return () => {
       socket.off('private message', showMessage);
-      socket.off('show connected user', showConnectedUser);
+      // socket.off('show connected user', showConnectedUser);
       socket.off('user to disconnect', showDisconnectEvent)
 
     };
@@ -619,7 +734,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
           {/* <span style={{margin: "0 0 10px 0"}}>Модуль</span> */}
           <h3 style={{boxSizing: "border-box", padding: "0 20px"}}>{module.title}</h3>
           <ul style={{ lineHeight: 2, padding: 0, listStyle: "none", color: "rgb(255 255 255/75%)", margin: 0, width: "100%" }}>
-            {lessonData.module && lessonData.module.lessons.map((moduleLesson) => {
+            {/* {lessonData.module && lessonData.module.lessons.map((moduleLesson) => {
               return <li key={moduleLesson._id} style={{boxSizing: "border-box", padding: "0 20px", borderLeft: lessonID === moduleLesson._id && "2px solid rgb(93, 176, 199)" }}>
                 <button onClick={(evt) => {
                   
@@ -627,7 +742,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
                   window.location.reload(true);
                 }}>{moduleLesson.title}</button>  
               </li>
-            })}
+            })} */}
           </ul>
           <div className='module__side-wrapper-buttons'>
             <button className='module__side-wrapper-buttons-btn' onClick={() => {
@@ -668,9 +783,15 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
           :
           <div style={{maxWidth: 1024, width: '100%', margin: "auto 0"}}>
             <Chat>
-              <Contacts messages={messages} courseAuthor={lessonData.course.author} students={lessonData.course.students} admin={admin} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
+              <Contacts messages={messages} courseAuthor={users.length > 0 && users.filter((user) => {
+                return user.admin === true;
+              }).pop()} students={users.length > 0 && users.filter((user) => {
+                return user.admin === false;
+              })} userId={userId} filterChatToUser={filterChatToUser}></Contacts>
               <div className='lesson__div-chat-conversation' style={{width: messages.length > 0 && window.innerWidth <= 767 && "100%"}}>
-                <Messages filterChatToUser={filterChatToUser} selectedFiles={selectedFiles} messages={messages} admin={admin} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
+                <Messages filterChatToUser={filterChatToUser} selectedFiles={selectedFiles} messages={messages} admin={users.length > 0 && users.filter((user) => {
+                return user.admin === true;
+              }).pop()} userId={userId} user={loggedInUser} moduleID={moduleID} resetContact={resetContact}></Messages>
                 <MessageForm selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} sendMessage={sendMessage} user={loggedInUser} courseID={courseID} moduleID={moduleID} lessonID={lessonID} userId={userId} userToken={userToken}></MessageForm>
               </div>
               <SelectedFiles selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>

@@ -276,7 +276,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
           }) ? courseReceived : {...courseReceived, available: false};
         });
 
-        console.log(coursesToRender);
+        // console.log(coursesToRender);
 
         setCoursesData({courses: coursesToRender, allStudents: studentsReceived});
         setCoursesLoading(false);

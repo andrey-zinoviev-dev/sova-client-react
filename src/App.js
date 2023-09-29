@@ -43,7 +43,7 @@ function App() {
   useEffect(() => {
     //effect functions
     function showAllOnlineUsers(data) {
-      console.log(data);
+      // console.log(data);
       setOnlineUsers(data.filter((socketUser) => {
         return socketUser.online === true;
       }));
@@ -80,7 +80,19 @@ function App() {
     };
 
     function showConnectedUser(data) {
-      console.log(data);
+      // console.log(data);
+      setOnlineUsers((prevValue) => {
+        // if(prevValue.find((prevOnlineUser) => {
+        //   return prevOnlineUser.userId.includes(data.userId);
+        // })) {
+        //   return prevValue;
+          
+        // } else {
+        //   return [...prevValue, data];
+        // }
+        
+        return [...prevValue, data];
+      })
     }
     //localstorage manipulations
     const userToken = localStorage.getItem('token');
@@ -89,7 +101,7 @@ function App() {
     const localsessionID = localStorage.getItem('sessionID');
     // console.log(userToken);
     if(userToken) {
-      
+      // socket.on('show all connected users', showAllOnlineUsers);
       apiGetCurrentUser(userToken)
       .then((userFetched) => {
         if(!userFetched) {
@@ -102,7 +114,7 @@ function App() {
         socket.connect();
         socket.emit('user connected', userFetched);
         socket.on('show all connected users', showAllOnlineUsers);
-        // socket.on('show connected user', showConnectedUser);
+        socket.on('show connected user', showConnectedUser);
       });
 
       // socket.on('private message', (data) => {
@@ -135,12 +147,16 @@ function App() {
       // socket.disconnect();
       socket.close();
       socket.off('show all connected users', showAllOnlineUsers);
-      // socket.off('show connected user', showConnectedUser);
+      socket.off('show connected user', showConnectedUser);
       // socket.off('user connected', userFetched);
       // socket.off('private message', onMessage);
     };
 
   }, []);
+
+  // React.useEffect(() => {
+  //   console.log(onlineUsers);
+  // }, [onlineUsers])
 
   //functions
 
