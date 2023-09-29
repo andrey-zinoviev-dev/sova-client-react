@@ -380,165 +380,21 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
     }
   }, [lessonData]);
 
-  // React.useEffect(() => {
-  //   console.log(onlineUsers);
-  //   console.log(users);
-  //   console.log(lessonData);
-  //   if(users) {
-      
-    
-  //     // console.log(loggedInUser);
-
-  //     // setLessonData((prevValue) => {
-  //     //   return {...prevValue, users: prevValue.users.map((user) => {
-  //     //     return onlineUsers.find((onlineUser) => {
-  //     //       return onlineUser.userId === user._id ? {...user, online: true} : user;
-  //     //     })
-  //     //   })}
-  //     // })
-  //   }
-
-  //   //show online users
-  //   // if(loggedInUser.admin && lessonData.users) {
-  //   //   console.log(lessonData.users);
-  //   //   const onlineCourseUsers = onlineUsers.filter((onlineUser) => {
-  //   //     return onlineUser.admin !== true;
-  //   //   });
-  //   //   // console.log(onlineUsers);
-  //   //   const onlineStudents = lessonData.users && lessonData.users.map((user) => {
-  //   //     const matchedOnlineUser = onlineCourseUsers.find((onlineCourseUser) => {
-  //   //       return onlineCourseUser.userId === user._id;
-  //   //     });
-  //   //     // console.log(matchedOnlineUser);
-  //   //     return matchedOnlineUser ? {...user, online: true} : user;
-  //   //   });
-  //   //   console.log(onlineStudents);
-  //   //   lessonData.users && setLessonData((prevValue) => {
-  //   //     return {...prevValue, users: onlineStudents}
-  //   //   })
-  //   //   // console.log(lessonData);
-  //   //   // lessonData.course._id && setLessonData((prevValue) => {
-  //   //   //   // return {...prevValue, }
-  //   //   //   const updatedStudents = prevValue.course.students.map((student) => {
-  //   //   //     return onlineStudents.find((onlineStudent) => {
-  //   //   //       return onlineStudent.userId === student._id;
-  //   //   //     }) ? {...student, online: true} : student;
-  //   //   //   });
-  //   //   //   // console.log(updatedStudents);
-  //   //   //   return {...prevValue, course: {...prevValue.course, students: updatedStudents}};
-  //   //   // })
-  //   //   // lessonData.course._id && setLessonData((prevValue) => {
-  //   //   //   return {...prevValue, course: {...prevValue.course, students: prevValue.course.students.map((student) => {
-  //   //   //     console.log(student);
-  //   //   //     const foundOnlineStudent = onlineStudents.find((onlineStudent) => {
-  //   //   //       return onlineStudent.userId === student._id;
-  //   //   //     });
-  //   //   //     console.log(foundOnlineStudent);
-  //   //   //     return foundOnlineStudent ? {...student, online: true} : student;
-  //   //   //   })}};
-  //   //   // })
-  //   //   // setStudents((prevValue) => {
-  //   //   //   return prevValue.map((updateStudent) => {
-  //   //   //     const foundOnlineStudent = onlineStudents.find((onlineStudent) => {
-  //   //   //       return onlineStudent.userId === updateStudent._id;
-  //   //   //     })
-  //   //   //     return foundOnlineStudent ? {...updateStudent, online: true} : updateStudent;
-  //   //   //     // return onlineStudents.includes(updateStudent) ? {...updateStudent, online: true} : updateStudent;
-  //   //   //   })
-  //   //   // });
-
-  //   // } else {
-  //   //   const onlineAdmins = onlineUsers.filter((user) => {
-  //   //     return user.admin === true;
-  //   //   });
-  //   //   console.log(onlineAdmins);
-  //   //   // lessonData.users && console.log(lessonData.users);
-  //   //   // console.log(lessonData.users && lessonData.users);
-  //   //   lessonData.users && setLessonData((prevValue) => {
-  //   //     // console.log('yes');
-  //   //     const usersToUpdate = lessonData.users.map((user) => {
-  //   //       return onlineAdmins.find((onlineAdmin) => {
-  //   //         return onlineAdmin.userId === user._id;
-  //   //       }) ? {...user, online: true} : user;
-  //   //     });
-  //   //   //   console.log(usersToUpdate);
-  //   //     return {...prevValue, users: usersToUpdate};
-  //   //   //   // return {...prevValue, users: prevValue.users.map((user) => {
-  //   //   //   //   return onlineAdmins.find((onlineAdmin) => {
-  //   //   //   //     return onlineAdmin.userId === user._id;
-  //   //   //   //   }) ? {...user, online: true} : user;
-  //   //   //   // })}
-  //   //   })
-  //   //   // const courseAuthor = lessonData.users && lessonData.users.find((user) => {
-  //   //   //   return user.admin === true;
-  //   //   // });
-
-  //   //   // console.log(courseAuthor);
-  //   //   // const onlineAuthor = onlineUsers.find((user) => {
-  //   //   //   return user.userId === lessonData.course && lessonData.course.author._id;
-  //   //   // });
-  //   //   // const onlineAuthor = lessonData.users && onlineUsers.find((user) => {
-  //   //   //   return user.userId === lessonData.users.find((lessonUser) => {
-  //   //   //     return lessonUser.admin === true;
-  //   //   //   })._id;
-  //   //   // });
-  //   //   // console.log(onlineAuthor);
-  //   //   // console.log(lessonData);
-  //   //   // lessonData.course._id && setLessonData((prevValue) => {
-  //   //   //   const onlineAdmins = onlineUsers.filter((onlineUser) => {
-  //   //   //     return onlineUser.admin === true;
-  //   //   //   });
-  //   //   //   const updatedAuthor = onlineAdmins.find((admin) => {
-  //   //   //     return admin.userId === lessonData.course.author._id;
-  //   //   //   });
-        
-  //   //   //   return {...prevValue, course: {...prevValue.course, author: {...prevValue.course.author, online: updatedAuthor ? true : false}}};
-  //   //   // })
-  //   //   // const onlineAdmins = onlineUsers.filter((onlineUser) => {
-  //   //   //   return onlineUser.admin !== false;
-  //   //   // });
-  //   //   // lessonData.course && setLessonData((prevValue) => {
-  //   //   //   return {...prevValue, course: {...prevValue.course, author: {...prevValue.course.author, online: true}}}
-  //   //   // })
-  //   //   // setCourseAuthor((prevValue) => {
-  //   //   //   const foundOnlineAdmin = onlineAdmins.find((onlineAdmin) => {
-  //   //   //     return onlineAdmin.userId === prevValue._id;
-  //   //   //   });
-  //   //   //   return foundOnlineAdmin ? {...prevValue, online: true} : prevValue;
-  //   //   // })
-  //   // }
-  // }, [onlineUsers]);
-
   React.useEffect(() => {
-    // console.log(onlineUsers);
-    // console.log(lessonData.users);
     if(onlineUsers.length > 0 && lessonData.course.students) {
-      // console.log(onlineUsers);
-      // console.log(users);
-      // console.log(lessonData);
       const updatedUsers = [...lessonData.course.students, lessonData.course.author].map((user) => {
         return onlineUsers.find((onlineUser) => {
           return onlineUser.userId === user._id;
         }) ? {...user, online: true} : user;
       });
-      // console.log(updatedUsers);
-
       setUsers(updatedUsers)
     }
   }, [onlineUsers, lessonData.course.students]);
 
-  // React.useEffect(() => {
-  //   console.log(lessonData);
-  // }, [lessonData]);
-
-  React.useEffect(() => {
-    console.log(users);
-  }, [users])
-
   React.useEffect(() => {
     //functions in effect
     function showMessage(data) {
-      console.log(data);
+      // console.log(data);
       setMessages((prevValue) => {
         return [...prevValue, data];
       })
@@ -560,21 +416,12 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
     };
 
     function showDisconnectEvent(data) {
-      // console.log(data);
-      if(data && data.admin) {
-        // setCourseAuthor((prevValue) => {
-        //   return {...prevValue, online: false};
-        // })
-      } else if(data && !data.admin){
-        // setStudents((prevStudents) => {
-        //   const updatedStudents = prevStudents.map((prevStudent) => {
-        //     return prevStudent._id === data.userId ? {...prevStudent, online: false} : prevStudent;
-        //   });
-
-        //   return updatedStudents;
-
-        // });
-      }
+      setUsers((prevValue) => {
+        const updatedUsers = prevValue.map((prevUser) => {
+          return prevUser._id === data.userId ? {...prevUser, online: false} : prevUser;
+        });
+        return updatedUsers;
+      });
     };
 
     if(loggedInUser._id) {
@@ -702,31 +549,6 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
           <button className='module__side-button' onClick={showSideMenu} style={{ width: 30, height: 30, border: "none", padding: 0}}>
             <svg className='module__side-button-svg' width={30} height={30} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path className='module__side-button-svg-path' fill='#5DB0C7' d="M384 432c8.8 0 16-7.2 16-16l0-320c0-8.8-7.2-16-16-16L64 80c-8.8 0-16 7.2-16 16l0 320c0 8.8 7.2 16 16 16l320 0zm64-16c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l320 0c35.3 0 64 28.7 64 64l0 320zM224 352c-6.7 0-13-2.8-17.6-7.7l-104-112c-6.5-7-8.2-17.2-4.4-25.9s12.5-14.4 22-14.4l208 0c9.5 0 18.2 5.7 22 14.4s2.1 18.9-4.4 25.9l-104 112c-4.5 4.9-10.9 7.7-17.6 7.7z"/></svg>
           </button>
-          
-          
-            {/* <motion.img initial="closed" animate={menuOpened ? "opened" : "closed"} variants={imgVariants} style={{maxWidth: '25px'}} src={SovaLogo} alt="Логотип"></motion.img> */}
-          {/* </div> */}
-          {/* <motion.div variants={textVariants}> */}
-            {/* <div style={{padding: "0 0 0 15px"}}>
-             
-              <h3>{lessonData.course && lessonData.course.title}</h3>
-              <p>Модули</p>
-            </div>
-
-            <ul style={{padding: 0, listStyle: "none", lineHeight: 2}}>
-
-              {lessonData.module && lessonData.module.lessons.map((lesson) => {
-                return <li key={module._id}>
-                  <button onClick={() => {
-                    navigate(`../courses/${courseID}/modules/${moduleID}/lessons/${lesson._id}`);
-                    window.location.reload(true);
-                  }}>
-                    {lesson.title}
-                  </button>
-                </li>
-              })}
-            </ul> */}
-          {/* </motion.div> */}
         </div>
         
         <motion.div className='module__side-wrapper' variants={sideNavigationVariants} initial="closed" animate={menuOpened ? "opened" : "closed"}>
