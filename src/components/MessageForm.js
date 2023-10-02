@@ -2,9 +2,11 @@ import React from "react";
 // import Messages from "./Messages";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faPaperclip, faXmark } from "@fortawesome/free-solid-svg-icons";
+import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { motion } from "framer-motion";
 
 export default function MessageForm({ selectedFiles, setSelectedFiles, sendMessage, userId, userToken, courseID, moduleID, lessonID, user }) {
+  const cyrillicToTranslit = new CyrillicToTranslit();
   //states
   // const [selectedFiles, setSelectedFiles] = React.useState([]);
   // const [emptyMessageInput, setEmptyMessageInput] = React.useState("");
@@ -55,8 +57,17 @@ export default function MessageForm({ selectedFiles, setSelectedFiles, sendMessa
   function handleFileChange(evt) {
     const objectToProcess = evt.target.files[0];
     const relPath = window.URL.createObjectURL(objectToProcess);
-    console.log(relPath);
+    // console.log(relPath);
     objectToProcess.relPath = relPath;
+    if(/[А-Я]/.test(objectToProcess.name)) {
+      // console.log(objectToProcess.name);
+      const updatedName = cyrillicToTranslit.transform(objectToProcess.name, "_");
+      Object.defineProperty(objectToProcess, 'name', {
+        writable: true,
+        value: updatedName
+      });
+    }
+    // console.log(objectToProcess);
     return setSelectedFiles((prevValue) => {
       return [...prevValue, objectToProcess];
     });

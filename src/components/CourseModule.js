@@ -455,10 +455,6 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
 
   }, [userId]);
 
-  // React.useEffect(() => {
-  //   console.log(lessonData);
-  // }, [lessonData])
-
   return (
     <motion.section className='module'>
       

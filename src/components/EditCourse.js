@@ -5,7 +5,7 @@ import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan, faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse } from "../api";
+import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover } from "../api";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCheck } from "@fortawesome/free-solid-svg-icons";
 // import './EditCourse.css';
@@ -27,6 +27,7 @@ export default function EditCourse() {
   const courseNameRef = React.useRef();
   const courseDescRef = React.useRef();
   const courseCoverRef = React.useRef();
+  const courseCoverImgRef = React.useRef();
 
   //states
   const [courseData, setCourseData] = React.useState({
@@ -40,6 +41,7 @@ export default function EditCourse() {
   });
   const [successfulMessage, setSuccessfullMessage] = React.useState(null);
   const [usersFile, setUsersFile] = React.useState({});
+  const [selectedCover, setSelectedCover] = React.useState({});
 
   //variants
     const backBtnVariant = {
@@ -75,10 +77,28 @@ export default function EditCourse() {
 
   // //functions
   function handleCoverEdit() {
-    console.log('yes');
-  //   const relativePath = window.URL.createObjectURL(courseCoverRef.current.files[0]);
-  //   setCourseCover(relativePath);
-  //   // setCourseCover(courseCoverRef.current.files[0]);
+    // console.log('yes');
+    const uploadedCoverFile = courseCoverRef.current.files[0];
+    uploadedCoverFile.clientPath = window.URL.createObjectURL(uploadedCoverFile);
+
+    if(/[А-Я ]/.test(uploadedCoverFile.name)) {
+      // console.log('space in name');
+      const updatedName = cyrillicToTranslit.transform(uploadedCoverFile.name, "_");
+                  
+      Object.defineProperty(uploadedCoverFile, 'name', {
+        writable: true,
+        value: updatedName
+      });
+    }
+
+    const form = new FormData();
+    form.append("courseCover", uploadedCoverFile);
+
+    apiUpdateCourseCover(token, courseID, form)
+    .then((data) => {
+      console.log(data);
+    })
+
   };
 
   function uploadStudentsFile() {
@@ -149,7 +169,7 @@ export default function EditCourse() {
             <div style={{textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
               <span style={{display: "block", margin: "0 0 20px 0"}}>Текущая обложка курса</span>
               <div style={{position: "relative", display: "flex"}}>
-                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} src={courseData.cover} alt="Обложка курса"></img>
+                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} ref={courseCoverImgRef} src={courseData.cover} alt="Обложка курса"></img>
                 <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
                   courseCoverRef.current.click();
                 })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>

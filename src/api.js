@@ -1,6 +1,6 @@
 //api variable
-const apiAdress = 'https://api.sova-courses.site';
-// const apiAdress = 'http://localhost:3000';
+// const apiAdress = 'https://api.sova-courses.site';
+const apiAdress = 'http://localhost:3000';
 // 
 //api calls
 function apiLogin(formData) {
@@ -235,6 +235,19 @@ function apiCreateCourse(token, content) {
   })
 };
 
+function apiUpdateCourseCover(token, courseId, file) {
+  return fetch(`${apiAdress}/courses/${courseId}/cover`, {
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+    },
+    body: file,
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
 function apiUploadFilesToCourse(token, files) {
   return fetch(`${apiAdress}/courses/add/files`, {
     method: "POST",
@@ -326,6 +339,7 @@ export {
   apiGetCourses,
   apiGetCourse,
   apiCreateCourse,
+  apiUpdateCourseCover,
   apiEditCourse,
   apiDeleteModule,
   apiDeleteLesson,
