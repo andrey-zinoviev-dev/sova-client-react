@@ -5,7 +5,7 @@ import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan, faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
-import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover } from "../api";
+import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription } from "../api";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCheck } from "@fortawesome/free-solid-svg-icons";
 // import './EditCourse.css';
@@ -41,7 +41,7 @@ export default function EditCourse() {
   });
   const [successfulMessage, setSuccessfullMessage] = React.useState(null);
   const [usersFile, setUsersFile] = React.useState({});
-  const [selectedCover, setSelectedCover] = React.useState({});
+  const [inputTimeout, setInputTimeout] = React.useState(null);
 
   //variants
     const backBtnVariant = {
@@ -75,7 +75,37 @@ export default function EditCourse() {
   // const courseDescRef = React.useRef();
   // const courseCoverRef = React.useRef();
 
-  // //functions
+  //functions
+  function updateCourseTitle (evt) {
+    // console.log(evt.target.value);
+    clearTimeout(inputTimeout);
+
+    setInputTimeout(setTimeout(() => {
+      apiUpdateCourseTitle(token, courseID, {name: evt.target.value})
+      .then((data) => {
+        setCourseData((prevValue) => {
+          return {...prevValue, name: data.name};
+        });
+        setSuccessfullMessage(data.message);
+      })    
+    }, 1500))
+    
+  };
+
+  function updateCourseDescription(evt) {
+    clearTimeout(inputTimeout);
+
+    setInputTimeout(setTimeout(() => {
+      apiUpdateCourseDescription(token, courseID, {desc: evt.target.value})
+      .then((data) => {
+        setCourseData((prevValue) => {
+          return {...prevValue, description: data.description};
+        });
+        setSuccessfullMessage(data.message);
+      })
+    }, 1500))
+  };
+
   function handleCoverEdit() {
     // console.log('yes');
     const uploadedCoverFile = courseCoverRef.current.files[0];
@@ -90,15 +120,20 @@ export default function EditCourse() {
         value: updatedName
       });
     }
-
+    // console.log(uploadedCoverFile);
     const form = new FormData();
     form.append("courseCover", uploadedCoverFile);
 
     apiUpdateCourseCover(token, courseID, form)
     .then((data) => {
-      console.log(data);
+      if(!data.coverPath) {
+        return;
+      }
+      setCourseData((prevValue) => {
+        return {...prevValue, cover: data.coverPath};
+      });
+      setSuccessfullMessage(data.message);
     })
-
   };
 
   function uploadStudentsFile() {
@@ -122,6 +157,8 @@ export default function EditCourse() {
     apiGetCourse(courseID, token)
     .then((courseData) => {
       setCourseData(courseData);
+      courseNameRef.current.value = courseData.name;
+      courseDescRef.current.value = courseData.description;
     })
     // setCourseData(state);
   }, [])
@@ -151,19 +188,21 @@ export default function EditCourse() {
         </div>
         <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
             <label style={{display: "block", margin: "0 0 10px 0"}} htmlFor="course-name">Название</label>
-            <input className="course-edit__form-input" ref={courseNameRef} id="course-name" value={courseData.name} onChange={(evt) => {
-              setCourseData((prevValue) => {
-                return {...prevValue, name: evt.target.value};
-              });
+            <input className="course-edit__form-input" ref={courseNameRef} id="course-name" onKeyUp={(evt) => {
+              updateCourseTitle(evt);
+              // setCourseData((prevValue) => {
+              //   return {...prevValue, name: evt.target.value};
+              // });
             }}></input>
         </form>
         <form className="course-edit__form" style={{display: "flex", maxWidth: "100%", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
             <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
               <label style={{display: "block", margin: "0 0 20px 0"}} htmlFor="course-desc">Описание</label> 
-              <textarea className="course-edit__form-textarea" ref={courseDescRef} value={courseData.description} onChange={(evt) => {
-                setCourseData((prevValue) => {
-                  return {...prevValue, description: evt.target.value};
-                });
+              <textarea className="course-edit__form-textarea" ref={courseDescRef} onKeyUp={(evt) => {
+                // setCourseData((prevValue) => {
+                //   return {...prevValue, description: evt.target.value};
+                // });
+                updateCourseDescription(evt);
               }}></textarea>
             </div>
             <div style={{textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
