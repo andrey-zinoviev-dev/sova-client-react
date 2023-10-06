@@ -276,6 +276,33 @@ function apiUpdateCourseCover(token, courseId, file) {
   })
 };
 
+function apiUpdateModuleTitle(token, courseId, moduleId, title) {
+  return fetch(`${apiAdress}/courses/${courseId}/modules/${moduleId}/title`, {
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(title),
+  })
+  .then((res) => {
+    return res.json();
+  })
+};  
+
+function apiUpdateModuleCover(token, courseId, moduleId, file) {
+  return fetch(`${apiAdress}/courses/${courseId}/modules/${moduleId}/cover`,{
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+    },
+    body: file,
+  })
+  .then((res) => {
+    return res.json();
+  }) 
+};
+
 function apiUploadFilesToCourse(token, files) {
   return fetch(`${apiAdress}/courses/add/files`, {
     method: "POST",
@@ -370,6 +397,8 @@ export {
   apiUpdateCourseTitle,
   apiUpdateCourseDescription,
   apiUpdateCourseCover,
+  apiUpdateModuleTitle,
+  apiUpdateModuleCover,
   apiEditCourse,
   apiDeleteModule,
   apiDeleteLesson,

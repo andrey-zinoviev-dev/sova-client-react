@@ -10,11 +10,13 @@ import EmptyLogo from '../images/Group_20.png';
 import LessonImg from '../images/5af7b516f65dd48bf1c3daae143f8fd7.jpg';
 import TipTapEditor from "./TipTapEditor";
 import SuccessAddCourse from './SuccessAddCourse';
-
+import CyrillicToTranslit from 'cyrillic-to-translit-js';
 
 export default function AddStepModule({successfullCourseAddOpened, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading, uploadProgress}) {
     //navigate
     const navigate = useNavigate();
+    //name transformer
+    const cyrillicToTranslit = new CyrillicToTranslit();
 
     //refs
     const moduleNameRef = React.useRef();
@@ -71,9 +73,16 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
         const coverFile = evt.target.files[0];
         const clientPath = window.URL.createObjectURL(coverFile);
         coverFile.clientPath = clientPath;
-        coverFile.title = coverFile.name;
-        // moduleCoverImg.current.src = clientPath;
         
+        // moduleCoverImg.current.src = clientPath;
+        // if(/[А-Яа-я ]/.test(coverFile.name)) {
+        //     const updatedName = cyrillicToTranslit.transform(coverFile.name, "_");
+        //     Object.defineProperty(coverFile, 'name', {
+        //         writable: true,
+        //         value: updatedName
+        //     });
+        // };
+        coverFile.title = coverFile.name;
         setSelectedFiles((prevValue) => {
             return [...prevValue, coverFile];
         });
@@ -94,7 +103,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
     function handleLessonCoverUpload(evt) {
         const picFile = handleCoverUpload(evt);
-        lessonCoverImg.current.src = picFile.clientPath;
+        // lessonCoverImg.current.src = picFile.clientPath;
         setLessonContent((prevValue) => {
             return {...prevValue, cover:picFile};
         });
@@ -289,7 +298,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                                 </motion.button>
                                                 <button type="button" onClick={() => {
                                                     setSelectedLessonTitle(lesson.title);
-                                                    setLessonContentEditOpened(true);
+                                                    // setLessonContentEditOpened(true);
                                                 }} style={{backgroundColor: "transparent", color: "white", fontSize: 18, border: "none"}}>
                                                     <motion.svg whileHover={{fill: "#ffffff"}} fill="#5DB0C7" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><path d="M441 58.9L453.1 71c9.4 9.4 9.4 24.6 0 33.9L424 134.1 377.9 88 407 58.9c9.4-9.4 24.6-9.4 33.9 0zM209.8 256.2L344 121.9 390.1 168 255.8 302.2c-2.9 2.9-6.5 5-10.4 6.1l-58.5 16.7 16.7-58.5c1.1-3.9 3.2-7.5 6.1-10.4zM373.1 25L175.8 222.2c-8.7 8.7-15 19.4-18.3 31.1l-28.6 100c-2.4 8.4-.1 17.4 6.1 23.6s15.2 8.5 23.6 6.1l100-28.6c11.8-3.4 22.5-9.7 31.1-18.3L487 138.9c28.1-28.1 28.1-73.7 0-101.8L474.9 25C446.8-3.1 401.2-3.1 373.1 25zM88 64C39.4 64 0 103.4 0 152V424c0 48.6 39.4 88 88 88H360c48.6 0 88-39.4 88-88V312c0-13.3-10.7-24-24-24s-24 10.7-24 24V424c0 22.1-17.9 40-40 40H88c-22.1 0-40-17.9-40-40V152c0-22.1 17.9-40 40-40H200c13.3 0 24-10.7 24-24s-10.7-24-24-24H88z"/></motion.svg>
                                                 </button>
@@ -326,7 +335,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                         <input ref={lessonCoverLinkRef} className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
                                     </div>
                                     <div style={{display: "flex", alignItems: "flex-end"}}>
-                                        <img alt="обложка урока" ref={lessonCoverImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={"https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                                        <img alt="обложка урока" ref={lessonCoverImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={lessonContent.cover.clientPath ? lessonContent.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
                                         <input onChange={(evt) => {handleLessonCoverUpload(evt)}} ref={lessonCoverInputRef} style={{display: "none"}} type="file"></input>
                                         <button type="button" onClick={(() => {
                                             lessonCoverInputRef.current.click();
@@ -338,7 +347,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
                                 
                             </form>
-                            <TipTapEditor setLessonContent={setLessonContent} lessonContent={lessonContent} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
+                            <TipTapEditor setLessonContent={setLessonContent} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
                             <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
                                 // console.log(modules);
                                 // const lessonObj = {title: lessonTitleRef.current.value, content: lessonContent};
@@ -412,17 +421,19 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 
 
             </section>}
-            {lessonContentEditOpened && <section style={{display: "flex", alignItems: "center", justifyContent: "center", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 45, backgroundColor: "rgba(0, 0, 0, 0.75)"}}>
+            {selectedLessonTitle.length > 0 && <section style={{display: "flex", alignItems: "center", justifyContent: "center", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 45, backgroundColor: "rgba(0, 0, 0, 0.75)"}}>
                 <div style={{position:"relative", width: "100%", maxWidth: 920, height: "100%", maxHeight: 768, padding: "20px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center"}}>
                     <button type="button" onClick={() => {
-                        setLessonContentEditOpened(false);
+                        // setLessonContentEditOpened(false);
+                        setSelectedLessonTitle("");
                     }} style={{position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: "50%", border: "2px solid #EB4037", color: "#EB4037", fontSize: 18, backgroundColor: "transparent"}}>
                             <FontAwesomeIcon icon={faXmark} />
                     </button>
                     <h3 style={{margin: "0 0 50px 0"}}>Редактировать контент урока</h3>
                     <TipTapEditor foundLesson={foundLesson} foundModule={foundModule} setFormData={setFormData} setSelectedFiles={setSelectedFiles}/>
                     <button type="button" onClick={() => {
-                        setLessonContentEditOpened(false);
+                        setSelectedLessonTitle("");
+                        
                     }} style={{width: 160, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}}>Обновить контент</button>
                 </div>
             </section>}

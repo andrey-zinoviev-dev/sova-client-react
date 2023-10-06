@@ -2,7 +2,7 @@ import React from "react";
 import './EditModule.css';
 import Lesson from "./Lesson";
 import { useParams, useNavigate,} from "react-router-dom";
-import { apiEditModule, apiGetCourse, apiNewLessonEmail } from '../api';
+import { apiEditModule, apiGetCourse, apiNewLessonEmail, apiUpdateModuleTitle, apiUpdateModuleCover } from '../api';
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -26,6 +26,8 @@ export default function EditModule() {
   const [coverSelected, setCoverSelected] = React.useState(null);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [emailSend, setEmailSend] = React.useState({});
+  const [inputTimeout, setInputTimeout] = React.useState(null);
+
   //derived state
   const lessonToUpdate = moduleData.lessons && moduleData.lessons.find((lesson) => {
     return lesson._id === lessonIdSelected;
@@ -48,6 +50,24 @@ export default function EditModule() {
     }
   };
 
+  //functions
+  function updateModuleTite(evt) {
+    clearTimeout(inputTimeout);
+    titleInputRef.current.value = evt.target.value;
+    setInputTimeout(setTimeout(() => {
+      apiUpdateModuleTitle(token, courseID, moduleID, {title: evt.target.value})
+      .then((data) => {
+        if(!data.title) {
+          return ;
+        }
+        setModuleData((prevValue) => {
+          return {...prevValue, title: data.title};
+        })
+      })
+
+    }, 1500))
+  }
+
   React.useEffect(() => {
     apiGetCourse(courseID, token)
     .then((data) => {
@@ -58,7 +78,7 @@ export default function EditModule() {
         return {...lesson, notificate: false};
       });
       setModuleData({...moduleToUpdate, lessons: lessons, students: data.students});
-      // titleInputRef.current.value = moduleToUpdate.title;
+      titleInputRef.current.value = moduleToUpdate.title;
     })
   }, []);
 
@@ -66,9 +86,9 @@ export default function EditModule() {
     addModuleSectionRef.current.scrollTo(0, 0);
   }, [addLessonPressed, editLessonPressed])
 
-  // React.useEffect(() => {
-  //   console.log(moduleData.lessons);
-  // }, [moduleData]);
+  React.useEffect(() => {
+    console.log(moduleData);
+  }, [moduleData]);
 
   return (
     <section ref={addModuleSectionRef} className="module-edit">
@@ -84,16 +104,22 @@ export default function EditModule() {
         <form className="module-edit__form">
           <div className="module-edit__form-div">
             <label className="module-edit__form-label">Название</label>
-            <input value={moduleData.title} className="module-edit__form-input" onChange={(evt) => {
-              setModuleData((prevValue) => {
-                return {...prevValue, title: evt.target.value};
-              })
+            <input className="module-edit__form-input" onKeyUp={(evt) => {
+              updateModuleTite(evt);
+              
+              // apiUpdateModuleTitle(token, courseID, moduleID, {title: evt.target.value})
+              // .then((data) => {
+              //   console.log(data);
+              // })
+              // setModuleData((prevValue) => {
+              //   return {...prevValue, title: evt.target.value};
+              // })
             }} ref={titleInputRef}></input>
           </div>
           <div className="module-edit__form-div">
               <label className="module-edit__form-label">{ moduleData._id && moduleData.cover.title? "Новая обложка" : "Текущая обложка курса"}</label>
               <div className="module-edit__cover-div">
-                <img ref={coverImgRef} className="module-edit__cover-img" src={moduleData._id && moduleData.cover.title ?  moduleData.cover.clientPath : moduleData.cover} alt="Обложка курса"></img>
+                <img ref={coverImgRef} className="module-edit__cover-img" src={moduleData._id && moduleData.cover} alt="Обложка курса"></img>
                 <motion.button className="module-edit__cover-btn" whileHover={{opacity: 1}} type="button" onClick={(() => {
                   coverInputRef.current.click();
                 })}>
@@ -104,14 +130,26 @@ export default function EditModule() {
                   const uploadedFile = evt.target.files[0];
                   uploadedFile.clientPath = window.URL.createObjectURL(uploadedFile);
                   uploadedFile.title = uploadedFile.name;
-                  coverImgRef.current.src = uploadedFile.clientPath;
-                  setSelectedFiles((prevValue) => {
-                    return [...prevValue, uploadedFile];
-                  });
-                  // setCoverSelected(uploadedFile);
-                  setModuleData((prevValue) => {
-                    return {...prevValue, cover: uploadedFile};
+                  // coverImgRef.current.src = uploadedFile.clientPath;
+                  // setSelectedFiles((prevValue) => {
+                  //   return [...prevValue, uploadedFile];
+                  // });
+                  const formData = new FormData();
+                  formData.append('moduleCover', uploadedFile);
+                  apiUpdateModuleCover(token, courseID, moduleID, formData)
+                  .then((data) => {
+                    console.log(data);
+                    if(!data.cover) {
+                      return ;
+                    }
+                    setModuleData((prevValue) => {
+                      return {...prevValue, cover: data.cover};
+                    })
                   })
+                  // setCoverSelected(uploadedFile);
+                  // setModuleData((prevValue) => {
+                  //   return {...prevValue, cover: uploadedFile};
+                  // })
                   // setModuleData((prevValue) => {
 
                   // })
@@ -242,7 +280,7 @@ export default function EditModule() {
             </li>
           </ul>
         </div>
-        <button className="module-edit__update-btn" onClick={() => {
+        {/* <button className="module-edit__update-btn" onClick={() => {
           const form = new FormData();
           // form.append("data", JSON.stringify({title: "edited module"}))
           form.append("moduleData", JSON.stringify(moduleData));
@@ -258,7 +296,7 @@ export default function EditModule() {
           })
         }}>
           Обновить модуль
-        </button>
+        </button> */}
       </div>}
       {addLessonPressed && <Lesson token={token} setAddLessonPressed={setAddLessonPressed} setModuleData={setModuleData}/>}
       {editLessonPressed && <Lesson token={token} setAddLessonPressed={setAddLessonPressed} setEditLessonPressed={setEditLessonPressed} setModuleData={setModuleData} lessonToUpdate={lessonToUpdate}/>}

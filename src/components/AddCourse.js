@@ -92,10 +92,6 @@ export default function AddCourse() {
       icon: faListCheck,
     }
   ];
-
-  
-  const cyrillicToTranslit = new CyrillicToTranslit();
-
   // React.useEffect(() => {
   //   console.log(formData);
   // }, [formData]);
@@ -200,9 +196,13 @@ export default function AddCourse() {
   //   }
   // }, [formData.module.text.content]);
 
+  // React.useEffect(() => {
+  //   console.log(uploadProgress);
+  // }, [uploadProgress])
+
   React.useEffect(() => {
-    console.log(uploadProgress);
-  }, [uploadProgress])
+    console.log(formData);
+  }, [formData]);
 
   return (
     <section className="addCourse">
@@ -245,7 +245,7 @@ export default function AddCourse() {
                 form.append("files", file);
               });
 
-              setSuccessfullCourseAddOpened(true);
+              // 
 
               axiosClient.post(`/courses/add`, form, {
                 headers: {
@@ -254,6 +254,12 @@ export default function AddCourse() {
                 onUploadProgress: (evt) => {
                   setUploadProgress(Math.floor(evt.progress * 100));
                 }
+              })
+              .then((data) => {
+                if(!data) {
+                  return;
+                }
+                setSuccessfullCourseAddOpened(true);
               })
               // .then
             

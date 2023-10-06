@@ -53,7 +53,7 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
             }),
             Video
         ],
-        content: foundLesson ? foundLesson.content : lessonContent.content,
+        // content: foundLesson && foundLesson.content ,
         
         onUpdate: ({editor}) => {
             foundLesson ? setFormData((prevValue) => {
@@ -97,14 +97,14 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
     //     console.log(foundLesson);
     // }, [foundLesson])
 
-    // React.useEffect(() => {
-    //     if(editor) {
-    //         // lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
-
-    //     }
+    React.useEffect(() => {
+        if(editor) {
+          // lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
+          // foundLesson && editor.commands.setContent(foundLesson.content)
+        }
          
-    // }, [lessonContent, editor])
-
+    }, [foundLesson, editor])
+    // console.log(foundLesson);
     return (
         <div style={{height: "100%", width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0", overflow: "auto", boxSizing: "border-box"}}>
             <TipTapButtons editor={editor} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>

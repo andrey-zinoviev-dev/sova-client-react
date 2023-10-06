@@ -3,8 +3,12 @@ import "./AddCourse.css";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
+import CyrillicToTranslit from 'cyrillic-to-translit-js';
+
 export default function AddStep1({formData, setFormData, formStep, setFormStep, setSelectedFiles}) {
     const { course } = formData;
+  
+    const cyrillicToTranslit = new CyrillicToTranslit();
 
     //states
     const [disableButton, setDisableButton] = React.useState(true);
@@ -28,12 +32,24 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     function processFile(evt) {
         // console.log(evt.target.files);
         const imageToUpload = evt.target.files[0];
+        // if(/[А-Я ]/.test(imageToUpload.name)) {
+        //     const updatedName = cyrillicToTranslit.transform(imageToUpload.name, "_");
+        //     Object.defineProperty(imageToUpload, 'name', {
+        //         writable: true,
+        //         value: updatedName
+        //     });
+        // }
+        console.log(imageToUpload);
         setSelectedFiles((prevValue) => {
             return[...prevValue, imageToUpload]
         });
         imageToUpload.clientPath = window.URL.createObjectURL(imageToUpload);
         imageToUpload.title = imageToUpload.name;
-        setSelectedImage(imageToUpload)
+        // imgRef.current.src = imageToUpload.clientPath;
+        setFormData((prevValue) => {
+            return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
+        });
+        // setSelectedImage(imageToUpload)
     }
 
     //effects
@@ -45,13 +61,13 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
         }
     }, [course.name.length, course.description.length]);
 
-    React.useEffect(() => {
-        imgRef.current.src = Object.keys(selectedImage).length > 0 ? selectedImage.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="
-        setFormData((prevValue) => {
-            return {...prevValue, course: {...prevValue.course, cover: selectedImage}}
-        });
+    // React.useEffect(() => {
+    //     imgRef.current.src = Object.keys(selectedImage).length > 0 ? selectedImage.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="
+    //     setFormData((prevValue) => {
+    //         return {...prevValue, course: {...prevValue.course, cover: selectedImage}}
+    //     });
         
-    }, [selectedImage])
+    // }, [selectedImage])
 
     return (
         <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box", padding: "0 40px" }}>
@@ -94,7 +110,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                             </div>
                         </div>
                 <div style={{position: "relative", boxSizing: "border-box", display: "flex"}}>
-                    <img ref={imgRef} style={{width: 230, borderRadius: 12, aspectRatio: "1/1", objectFit: "cover", objectPosition: "top"}} src="https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4=" alt="обложка курса"/>
+                    <img ref={imgRef} style={{width: 230, borderRadius: 12, aspectRatio: "1/1", objectFit: "cover", objectPosition: "top"}} src={formData.course.cover.clientPath ? formData.course.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="} alt="обложка курса"/>
                     <button onClick={openFileInput} type="button" style={{position: "absolute", bottom: -10, right: -10, width: 45, height: 45, border: "none", borderRadius: "51%", fontSize: 20, display: "flex", justifyContent: "center", alignItems: "center"}}>
                         <FontAwesomeIcon icon={faCamera} />
                     </button>
