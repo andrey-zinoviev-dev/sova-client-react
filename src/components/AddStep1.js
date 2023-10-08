@@ -31,20 +31,24 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
 
     function processFile(evt) {
         // console.log(evt.target.files);
-        const imageToUpload = evt.target.files[0];
-        // if(/[А-Я ]/.test(imageToUpload.name)) {
+        let imageToUpload = evt.target.files[0];
+        if(/[А-Я ]/.test(imageToUpload.name)) {
+            imageToUpload = new File([imageToUpload], cyrillicToTranslit.transform(imageToUpload.name, "_"), {
+                type: imageToUpload.type
+            })
         //     const updatedName = cyrillicToTranslit.transform(imageToUpload.name, "_");
         //     Object.defineProperty(imageToUpload, 'name', {
         //         writable: true,
         //         value: updatedName
         //     });
-        // }
-        console.log(imageToUpload);
+        }
+        imageToUpload.clientPath = window.URL.createObjectURL(imageToUpload);
+        imageToUpload.title = imageToUpload.name;
+        
         setSelectedFiles((prevValue) => {
             return[...prevValue, imageToUpload]
         });
-        imageToUpload.clientPath = window.URL.createObjectURL(imageToUpload);
-        imageToUpload.title = imageToUpload.name;
+
         // imgRef.current.src = imageToUpload.clientPath;
         setFormData((prevValue) => {
             return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}

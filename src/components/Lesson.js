@@ -8,11 +8,13 @@ import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { apiAddLessonToCourse, apiEditLessonContent} from '../api';
 import { Node, mergeAttributes } from "@tiptap/react";
+import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 export default function Lesson({ token, newModuleMode, setAddLessonPressed, setSelectedAddFiles, /*setSelectedFiles,*/ setEditLessonPressed, setModuleData, lessonToUpdate }) {
   //params
   const { courseID, moduleID } = useParams();
-
+  //translit
+  const cyrillicToTranslit = new CyrillicToTranslit();
     //states
     const [lessonData, setLessonData] = React.useState(!lessonToUpdate ? {title: "", cover: {}, content: {content: {"type": "doc", "content": [
       // …
@@ -135,10 +137,18 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
                             <p>Изменить обложку</p>
                         </motion.button>
                         <input ref={coverInputRef} onChange={(evt) => {
-                            const uploadedFile = evt.target.files[0];
-                            uploadedFile.clientPath = window.URL.createObjectURL(uploadedFile);
+                            let uploadedFile = evt.target.files[0];
+                            // uploadedFile.clientPath = window.URL.createObjectURL(uploadedFile);
+                            // uploadedFile.title = uploadedFile.name;
+                            // coverImgRef.current.src = uploadedFile.clientPath;
+                            if(/[А-Яа-я ]/.test(uploadedFile.name)) {
+                              uploadedFile = new File([uploadedFile], cyrillicToTranslit.transform(uploadedFile.name, "_"), {
+                                type: uploadedFile.type,
+                              });
+                              // uploadedFile = new File([uploadedFile], )
+                            }
                             uploadedFile.title = uploadedFile.name;
-                            coverImgRef.current.src = uploadedFile.clientPath;
+                            uploadedFile.clientPath = window.URL.createObjectURL(uploadedFile);
                             setLessonData((prevValue) => {
                               return {...prevValue, cover: uploadedFile};
                             });
@@ -148,7 +158,6 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
                             setSelectedAddFiles((prevValue) => {
                               return [...prevValue, uploadedFile];
                             });
-                            // setSelectedImageFile(evt.target.files[0]);
                         }} style={{display: "none"}} id="course-cover" type="file"></input> 
                     </div>
                 </div>

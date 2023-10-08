@@ -86,9 +86,9 @@ export default function EditModule() {
     addModuleSectionRef.current.scrollTo(0, 0);
   }, [addLessonPressed, editLessonPressed])
 
-  React.useEffect(() => {
-    console.log(moduleData);
-  }, [moduleData]);
+  // React.useEffect(() => {
+  //   console.log(moduleData);
+  // }, [moduleData]);
 
   return (
     <section ref={addModuleSectionRef} className="module-edit">

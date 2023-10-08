@@ -245,7 +245,7 @@ export default function AddCourse() {
                 form.append("files", file);
               });
 
-              // 
+              setSuccessfullCourseAddOpened(true); 
 
               axiosClient.post(`/courses/add`, form, {
                 headers: {
@@ -259,7 +259,7 @@ export default function AddCourse() {
                 if(!data) {
                   return;
                 }
-                setSuccessfullCourseAddOpened(true);
+                
               })
               // .then
             

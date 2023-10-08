@@ -18,16 +18,20 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
 
   //functions
   function handleFileChange(evt) {
-    const image = evt.target.files[0];
+    let uploadedImage = evt.target.files[0];
     // console.log(image);
-    const relPath = window.URL.createObjectURL(image);
-    console.log(/[А-Я]/.test(image.name));
-    image.clientPath = relPath;
-    image.title = image.name;
-    setImage(image);
+    // const relPath = window.URL.createObjectURL(image);
+    if(/[А-Яа-я ]/.test(uploadedImage.name)) {
+      uploadedImage = new File([uploadedImage], cyrillicToTranslit.transform(uploadedImage.name, "_"), {
+        type: uploadedImage.type,
+      })
+    };
+    uploadedImage.clientPath = window.URL.createObjectURL(uploadedImage);;
+    uploadedImage.title = uploadedImage.name;
+    setImage(uploadedImage);
 
     setSelectedFiles((prevValue) => {
-      return [...prevValue, image]
+      return [...prevValue, uploadedImage]
     });
 
     // console.log(evt.target.files[0]);
@@ -41,8 +45,14 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
   }
 
   function handleVideoUpload(evt) {
-    const video = evt.target.files[0];
-    
+    let uploadedVideo = evt.target.files[0];
+    if(/[А-Яа-я ]/.test(uploadedVideo.name)) {
+      uploadedVideo = new File([uploadedVideo], cyrillicToTranslit.transform(uploadedVideo.name, "_"), {
+        type: uploadedVideo.type,
+      })
+    };
+    uploadedVideo.clientPath = window.URL.createObjectURL(uploadedVideo);
+    uploadedVideo.title = uploadedVideo.name;
     // if(/[А-Я]/.test(video.name)) {
     //   let videoLatinName = cyrillicToTranslit.transform(video.name, "_");
     //   // Object.defineProperties(video, 'name', {
@@ -51,13 +61,13 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
     //   // })
     //   // video.name = videoLatinName;
     // } 
-    const relPath = window.URL.createObjectURL(video);
-    video.clientPath = relPath;
-    video.title = video.name;
-    setVideo(video);
+    // const relPath = window.URL.createObjectURL(video);
+    // video.clientPath = relPath;
+    // video.title = video.name;
+    setVideo(uploadedVideo);
 
     setSelectedFiles((prevValue) => {
-      return [...prevValue, video]
+      return [...prevValue, uploadedVideo]
     });
 
     

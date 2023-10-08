@@ -70,19 +70,19 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
     //functions
     function handleCoverUpload(evt) {
-        const coverFile = evt.target.files[0];
-        const clientPath = window.URL.createObjectURL(coverFile);
-        coverFile.clientPath = clientPath;
+        let coverFile = evt.target.files[0];
+        // const clientPath = window.URL.createObjectURL(coverFile);
+        // coverFile.clientPath = clientPath;
         
         // moduleCoverImg.current.src = clientPath;
-        // if(/[А-Яа-я ]/.test(coverFile.name)) {
-        //     const updatedName = cyrillicToTranslit.transform(coverFile.name, "_");
-        //     Object.defineProperty(coverFile, 'name', {
-        //         writable: true,
-        //         value: updatedName
-        //     });
-        // };
+        if(/[А-Яа-я ]/.test(coverFile.name)) {
+            coverFile = new File([coverFile], cyrillicToTranslit.transform(coverFile.name, "_"), {
+                type: coverFile.type,
+            }) 
+        };
         coverFile.title = coverFile.name;
+        coverFile.clientPath = window.URL.createObjectURL(coverFile);
+        
         setSelectedFiles((prevValue) => {
             return [...prevValue, coverFile];
         });
