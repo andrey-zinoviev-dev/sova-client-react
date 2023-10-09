@@ -53,7 +53,7 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
             }),
             Video
         ],
-        // content: foundLesson && foundLesson.content ,
+        content: foundLesson && foundLesson.content ,
         
         onUpdate: ({editor}) => {
             foundLesson ? setFormData((prevValue) => {

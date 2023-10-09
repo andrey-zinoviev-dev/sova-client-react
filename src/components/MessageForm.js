@@ -55,18 +55,23 @@ export default function MessageForm({ selectedFiles, setSelectedFiles, sendMessa
   }
 
   function handleFileChange(evt) {
-    const objectToProcess = evt.target.files[0];
-    const relPath = window.URL.createObjectURL(objectToProcess);
+    let objectToProcess = evt.target.files[0];
+    // const relPath = window.URL.createObjectURL(objectToProcess);
     // console.log(relPath);
-    objectToProcess.relPath = relPath;
-    if(/[А-Я]/.test(objectToProcess.name)) {
-      // console.log(objectToProcess.name);
-      const updatedName = cyrillicToTranslit.transform(objectToProcess.name, "_");
-      Object.defineProperty(objectToProcess, 'name', {
-        writable: true,
-        value: updatedName
+    // objectToProcess.relPath = relPath;
+    if(/[А-Яа-я ]/.test(objectToProcess.name)) {
+      objectToProcess = new File([objectToProcess], cyrillicToTranslit.transform(objectToProcess.name, "_"), {
+        type: objectToProcess.type,
       });
+      // console.log(objectToProcess.name);
+      // const updatedName = cyrillicToTranslit.transform(objectToProcess.name, "_");
+      // Object.defineProperty(objectToProcess, 'name', {
+      //   writable: true,
+      //   value: updatedName
+      // });
     }
+    objectToProcess.relPath = window.URL.createObjectURL(objectToProcess);
+    objectToProcess.title = objectToProcess.name;
     // console.log(objectToProcess);
     return setSelectedFiles((prevValue) => {
       return [...prevValue, objectToProcess];
