@@ -2,11 +2,13 @@ import React from "react";
 import './AddModule.css';
 import { useParams, useNavigate } from "react-router-dom";
 import { apiAddModule } from "../api";
+import axiosClient from "../axios";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../context/userContext";
 import Lesson from "./Lesson";
+import SuccessAddCourse from "./SuccessAddCourse";
 
 export default function AddModule() {
   //navigate
@@ -24,6 +26,7 @@ export default function AddModule() {
   const [editLessonPressed, setEditLessonPressed] = React.useState(false);
   const [moduleData, setModuleData] = React.useState({title: "", cover: {}, author: {}, lessons: []})
   const [selectedAddFiles, setSelectedAddFiles] = React.useState([]);
+  const [uploadProgress, setUploadProgress] = React.useState(0);
   //derived state
   const lessonToUpdate = moduleData.lessons.find((lesson) => {
     return lesson.title === selectedLessonTitle;
@@ -189,18 +192,53 @@ export default function AddModule() {
               form.append("moduleCover", file);
             });
             // console.log(moduleData);
-            console.log(selectedAddFiles);
+            // console.log(selectedAddFiles);
             
-            apiAddModule(courseID, token, form)
+            // apiAddModule(courseID, token, form)
+            // .then((data) => {
+            //   if(!data) {
+            //     return;
+            //   }
+            //   setSelectedAddFiles([]);
+            //   navigate(-1);
+            // })
+            axiosClient.put(`/courses/${courseID}/addModule`, form, {
+              headers: {
+                'Authorization': token,
+              },
+              onUploadProgress: (evt) => {
+                setUploadProgress(Math.floor(evt.progress * 100));
+              }
+            })
             .then((data) => {
               if(!data) {
                 return;
               }
-              setSelectedAddFiles([]);
-              navigate(-1);
+              // navigate(-1);
             })
           }} className="module-add__update-btn">Добавить модуль</button>
         </div> 
+        {uploadProgress > 0 && <SuccessAddCourse>
+          <div className="addCourse__success-wrapper">
+            <p>{uploadProgress < 100 ? "Идет добавление модуля" : "Модуль успешно добавлен!" }</p>
+            {uploadProgress < 100 && <div style={{width: "50%"}}>
+              <p>Прогресс загрузки курса</p>
+              <div style={{backgroundColor: "white", display: "flex", height: 4, borderRadius:9, alignItems: "stretch", justifyContent: "flex-start"}}>
+                <div style={{backgroundColor: "rgb(93, 176, 199)", borderRadius: 9, width: `${uploadProgress}%`}}>
+                </div>
+              </div>  
+            </div>}
+
+            {uploadProgress === 100 && <button type="button" onClick={() => {
+              // navigate('../');
+              setModuleData({title: "", cover: {}, author: {}, lessons: []});
+              setSelectedAddFiles([]);
+              navigate(-1);
+            }} className="addCourse__success-wrapper-finish">
+              <p style={{margin: 0, position: "relative", color: "white", zIndex: 5}}>Вернуться к редактуре модуля</p>
+            </button>}
+          </div>
+        </SuccessAddCourse>}
       </div>}
       
       {addLessonPressed && <Lesson token={token} newModuleMode={newModuleMode} setAddLessonPressed={setAddLessonPressed} setModuleData={setModuleData} setSelectedAddFiles={setSelectedAddFiles}/>}
