@@ -108,7 +108,11 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                             <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
                                 <div style={{width: "100%"}}>
                                     {/* <label>Обложка курса</label> */}
-                                    <input className="addCourse__form-input" placeholder="Ссылка на картинку"></input>
+                                    <input className="addCourse__form-input" onInput={(evt) => {
+                                        setFormData((prevValue) => {
+                                            return {...prevValue, course: {...prevValue.course, tarifs: evt.target.value.split(",")}}
+                                        })
+                                    }} value={course.tarifs} placeholder="Тарифы курса через запятую"></input>
                                     <input ref={inputFileRef} type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
                                 </div>                            
                             </div>

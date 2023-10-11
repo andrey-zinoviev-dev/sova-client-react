@@ -9,6 +9,8 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { apiAddLessonToCourse, apiEditLessonContent} from '../api';
 import { Node, mergeAttributes } from "@tiptap/react";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
+import axiosClient from "../axios";
+import SuccessAddCourse from "./SuccessAddCourse";
 
 export default function Lesson({ token, newModuleMode, setAddLessonPressed, setSelectedAddFiles, /*setSelectedFiles,*/ setEditLessonPressed, setModuleData, lessonToUpdate }) {
   //params
@@ -23,6 +25,9 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
     lessonToUpdate
     );
     const [selectedFiles, setSelectedFiles] = React.useState([]);
+    const [uploadProgress, setUploadProgress] = React.useState(0);
+    const [result, setResult] = React.useState({});
+
     //refs
     const coverInputRef = React.useRef();
     const coverImgRef = React.useRef();
@@ -91,16 +96,8 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
     });
 
     // React.useEffect(() => {
-    //   console.log(lessonToUpdate);
-    // }, [lessonToUpdate])
-
-    // React.useEffect(() => {
     //   console.log(lessonToUpdate)
     // }, [])
-
-  React.useEffect(() => {
-    console.log(lessonToUpdate);
-  }, []);
 
     // React.useEffect(() => {
     //   console.log(lessonData);
@@ -171,18 +168,53 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
             </div>
           <button onClick={() => {
             const form = new FormData();
+
             form.append('lessonData', JSON.stringify(lessonData));
+
             selectedFiles.forEach((file) => {
               form.append('file', file);
             });
 
             !lessonToUpdate ? 
-            apiAddLessonToCourse(courseID, moduleID, token, form)
+            // apiAddLessonToCourse(courseID, moduleID, token, form)
+            axiosClient.put(`/courses/${courseID}/modules/${moduleID}`, form, {
+              headers: {
+                'Authorization': token,
+              },
+              onUploadProgress: (evt) => {
+                setUploadProgress(Math.floor(evt.progress * 100));
+              }
+            })
             .then((data) => {
-              console.log(data);
+              // console.log('yes');
+              setResult(data);
+              // setAddLessonPressed(false);
+              // setModuleData((prevValue) => {
+              //   return {...prevValue, lessons: data.lessons};
+              // });
+              setLessonData({title: "", cover: {}, author: {}, lessons: []});
+              setSelectedFiles([]);
             })
             :
-            apiEditLessonContent
+            // apiEditLessonContent(courseID, moduleID, lessonData._id, token, form)
+            axiosClient.put(`/courses/${courseID}/modules/${moduleID}/lessons/${lessonData._id}/content`, form, {
+              headers: {
+                'Authorization': token,
+              },
+              onUploadProgress: (evt) => {
+                setUploadProgress(Math.floor(evt.progress * 100));
+              }
+            })
+            .then((data) => {
+              // console.log('yes 2');
+              setResult(data);
+                // setEditLessonPressed(false);
+                // setModuleData((prevValue) => {
+                //     return {...prevValue, lessons: data.lessons};
+                // });
+                setLessonData({title: "", cover: {}, author: {}, lessons: []});
+                setSelectedFiles([]);
+            });
 
             
             
@@ -254,6 +286,32 @@ export default function Lesson({ token, newModuleMode, setAddLessonPressed, setS
             //   })};
             // });
           }} className="module-edit__update-btn">{!lessonToUpdate ? "Добавить урок" : "Обновить урок"}</button>
+          {uploadProgress > 0 && <SuccessAddCourse>
+            <div className="addCourse__success-wrapper">
+            <p>{!lessonToUpdate ? uploadProgress < 100 ? "Идет добавление урока" : "Урок успешно добавлен!" : uploadProgress < 100 ? "Идет обновление урока" : "Урок успешно обновлен!"}</p>
+            {uploadProgress < 100 && <div style={{width: "50%"}}>
+              <p>Прогресс загрузки курса</p>
+              <div style={{backgroundColor: "white", display: "flex", height: 4, borderRadius:9, alignItems: "stretch", justifyContent: "flex-start"}}>
+                <div style={{backgroundColor: "rgb(93, 176, 199)", borderRadius: 9, width: `${uploadProgress}%`}}>
+                </div>
+              </div>  
+            </div>}
+
+            {uploadProgress === 100 && <button type="button" onClick={() => {
+              // navigate('../');
+              // console.log(lessonToUpdate);
+              result.status === 201 && setModuleData((prevValue) => {
+                return {...prevValue, lessons: result.data.lessons};
+              });
+              !lessonToUpdate ? setAddLessonPressed(false) : setEditLessonPressed(false);
+              // setLessonData()
+              // setSelectedAddFiles([]);
+              // navigate(-1);
+            }} className="addCourse__success-wrapper-finish">
+              <p style={{margin: 0, position: "relative", color: "white", zIndex: 5}}>Вернуться к редактуре модуля</p>
+            </button>}
+          </div>
+          </SuccessAddCourse>}
         </div>
     )
 }

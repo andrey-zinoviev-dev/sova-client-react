@@ -30,6 +30,7 @@ export default function AddCourse() {
       name: "",
       description: "",
       cover: {},
+      tarifs: [],
     },
     modules: [
 
@@ -92,6 +93,10 @@ export default function AddCourse() {
       icon: faListCheck,
     }
   ];
+
+  React.useEffect(() => {
+    console.log(formData);
+  } ,[formData])
 
   return (
     <section className="addCourse">

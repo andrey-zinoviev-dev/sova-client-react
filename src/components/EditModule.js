@@ -2,10 +2,11 @@ import React from "react";
 import './EditModule.css';
 import Lesson from "./Lesson";
 import { useParams, useNavigate,} from "react-router-dom";
-import { apiEditModule, apiGetCourse, apiNewLessonEmail, apiUpdateModuleTitle, apiUpdateModuleCover } from '../api';
+import { apiEditModule, apiGetCourse, apiNewLessonEmail, apiUpdateModuleTitle, apiUpdateModuleCover, apiDeleteLesson } from '../api';
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import SuccessAddCourse from "./SuccessAddCourse";
 
 export default function EditModule() {
   //params
@@ -27,6 +28,7 @@ export default function EditModule() {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [emailSend, setEmailSend] = React.useState({});
   const [inputTimeout, setInputTimeout] = React.useState(null);
+  const [successfulNotification, setSuccessfullNotification] = React.useState(false);
 
   //derived state
   const lessonToUpdate = moduleData.lessons && moduleData.lessons.find((lesson) => {
@@ -71,13 +73,14 @@ export default function EditModule() {
   React.useEffect(() => {
     apiGetCourse(courseID, token)
     .then((data) => {
+      console.log(data);
       const moduleToUpdate = data.modules.find((module) => {
         return module._id === moduleID;
       });
       const lessons = moduleToUpdate.lessons.map((lesson) => {
         return {...lesson, notificate: false};
       });
-      setModuleData({...moduleToUpdate, lessons: lessons, students: data.students});
+      setModuleData({...moduleToUpdate, lessons: lessons, students: data.students, tarifs: data.tarifs});
       titleInputRef.current.value = moduleToUpdate.title;
     })
   }, []);
@@ -169,24 +172,29 @@ export default function EditModule() {
                 <h3 className="module-edit__lessons-ul-li-h">{lesson.title}</h3>
                 <div className="module-edit__lessons-ul-li-buttons">
                     <button onClick={() => {
-                      const upadtedLessonsArray = lesson.delete ? array.map((lessonToUpdate) => {
-                        return lessonToUpdate._id === lesson._id ? {...lessonToUpdate, delete: false} : lessonToUpdate
-                      }) :
-                      array.map((lessonToUpdate) => {
-                        return lessonToUpdate._id === lesson._id ? {...lessonToUpdate, delete: true} : lessonToUpdate
-                      });
-                      // console.log(upadtedLessonsArray);
-                      setModuleData((prevValue) => {
-                        return {...prevValue, lessons: upadtedLessonsArray};
-                      })
-                      // apiDeleteLesson(foundCourse._id, foundModule._id, lesson._id, token)
-                      // .then((data) => {
-                      //   setCoursesData((prevValue) => {
-                      //     return {...prevValue, courses: prevValue.courses.map((course) => {
-                      //       return course._id === data._id ? {...course, modules: data.modules} : course;
-                      //     })};
-                      //   });
+                      // console.log('delete lesson');
+                      // const upadtedLessonsArray = lesson.delete ? array.map((lessonToUpdate) => {
+                      //   return lessonToUpdate._id === lesson._id ? {...lessonToUpdate, delete: false} : lessonToUpdate
+                      // }) :
+                      // array.map((lessonToUpdate) => {
+                      //   return lessonToUpdate._id === lesson._id ? {...lessonToUpdate, delete: true} : lessonToUpdate
+                      // });
+                      // // console.log(upadtedLessonsArray);
+                      // setModuleData((prevValue) => {
+                      //   return {...prevValue, lessons: upadtedLessonsArray};
                       // })
+                      apiDeleteLesson(courseID, moduleID, lesson._id, token)
+                      .then((data) => {
+                        // console.log(data);
+                        setModuleData((prevValue) => {
+                          return {...prevValue, lessons: data.lessons};
+                        })
+                        // setCoursesData((prevValue) => {
+                        //   return {...prevValue, courses: prevValue.courses.map((course) => {
+                        //     return course._id === data._id ? {...course, modules: data.modules} : course;
+                        //   })};
+                        // });
+                      })
                       // setCoursesData((prevValue) => {
                       //   return {...prevValue, courses: prevValue.courses.}
                       // })
@@ -232,7 +240,28 @@ export default function EditModule() {
                     <h3>Рассылка нового урока</h3>
                     <p>Кому отправить письмо?</p>
                     <ul className="module-edit__lessons-ul-li-notification-ul">
-                      <li key="Rising star" className="module-edit__lessons-ul-li-notification-ul-li">
+                      {moduleData.tarifs.map((tarif) => {
+                        return <li key={tarif} className="module-edit__lessons-ul-li-notification-ul-li">
+                           <button onClick={() => {
+                            // console.log(tarif);
+                          const studentsToNotify = moduleData.students.filter((student) => {
+                            return student.courses.find((course) => {
+                              return course.id === courseID && course.tarif === tarif;
+                            })
+                          });
+                          // console.log(studentsToNotify);
+                          // // console.log(lesson._id);
+                          apiNewLessonEmail(token, {course: courseID, module: moduleID, lesson: lesson._id}, studentsToNotify)
+                          .then((data) => {
+                            if(!data) {
+                              return;
+                            }
+                            setSuccessfullNotification(true);
+                          })
+                        }} className="module-edit__lessons-ul-li-notification-ul-li-btn">{tarif}</button>
+                        </li>
+                      })}
+                      {/* <li key="Rising star" className="module-edit__lessons-ul-li-notification-ul-li">
                         <button onClick={() => {
                           const studentsToNotify = moduleData.students.filter((student) => {
                             return student.courses.find((course) => {
@@ -266,7 +295,7 @@ export default function EditModule() {
                           //   return student.tarif === evt.target.textContent;
                           // }));
                         }} className="module-edit__lessons-ul-li-notification-ul-li-btn">Legend</button>
-                      </li>
+                      </li> */}
                     </ul>  
                   </div>}
               </li>
@@ -300,6 +329,14 @@ export default function EditModule() {
       </div>}
       {addLessonPressed && <Lesson token={token} setAddLessonPressed={setAddLessonPressed} setModuleData={setModuleData}/>}
       {editLessonPressed && <Lesson token={token} setAddLessonPressed={setAddLessonPressed} setEditLessonPressed={setEditLessonPressed} setModuleData={setModuleData} lessonToUpdate={lessonToUpdate}/>}
+      {successfulNotification && <SuccessAddCourse>
+        <div className="addCourse__success-wrapper">
+            <p style={{color: "white"}}>Уведомления успешно отправлены!</p>
+            <button onClick={() => {
+              setSuccessfullNotification(false);
+            }} type="button" className="addCourse__success-wrapper-finish">Закрыть</button>
+          </div>
+      </SuccessAddCourse>}
     </section>
   )
 }

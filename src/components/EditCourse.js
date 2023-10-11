@@ -235,15 +235,15 @@ export default function EditCourse() {
                   <button type="button" className="course-edit__modules-ul-li-delete" onClick={(evt) => {
                     evt.stopPropagation();
                     // console.log(module);
-                    // apiDeleteModule(state._id, module._id, token)
-                    // .then((data) => {
+                    apiDeleteModule(courseID, module._id, token)
+                    .then((data) => {
                       
-                    //   setCourseData((prevValue) => {
+                      setCourseData((prevValue) => {
 
-                    //     return {...prevValue, modules: data.modules};
-                    //   });
+                        return {...prevValue, modules: data.modules};
+                      });
 
-                    // });
+                    });
                   }} style={{position: "absolute", border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>
