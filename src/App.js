@@ -38,59 +38,20 @@ function App() {
 
   //useNavigate
   // const navigate = useNavigate();
-  
+  // 
   //useEffect
   useEffect(() => {
     //effect functions
     function showAllOnlineUsers(data) {
-      // console.log(data);
+      console.log(data);
       setOnlineUsers(data.filter((socketUser) => {
         return socketUser.online === true;
       }));
-      // console.log(data);
-      // if(loggedInUser.admin) {
-      //   const studentsOnline = data.filter((user) => {
-      //     return user.admin === false && user.online === true;
-      //   });
-      //   // console.log(studentsOnline);
-      //   setStudents((prevValue) => {
-      //     return prevValue.map((prevStudent) => {
-      //       const foundStudent = studentsOnline.find((student) => {
-      //         return student.userId === prevStudent._id;
-      //       });
-      //       return foundStudent ? {...prevStudent, online: true} : prevStudent;
-      //       // return studentsOnline.includes(prevStudent) ? {...prevStudent, online: true} : prevStudent;
-      //     })
-      //   })
-
-      // } else {
-      //   const adminsOnline = data.filter((user) => {
-      //     return user.admin === true && user.online === true;
-      //   });
-      //   // console.log(adminsOnline);
-      //   setCourseAuthor((prevValue) => {
-      //     const foundAdmin = adminsOnline.find((admin) => {
-      //       return admin.userId === prevValue._id;
-      //     });
-      //     if(foundAdmin) {
-      //       return {...prevValue, online: true};
-      //     }
-      //   })
-      // }
     };
 
     function showConnectedUser(data) {
       // console.log(data);
       setOnlineUsers((prevValue) => {
-        // if(prevValue.find((prevOnlineUser) => {
-        //   return prevOnlineUser.userId.includes(data.userId);
-        // })) {
-        //   return prevValue;
-          
-        // } else {
-        //   return [...prevValue, data];
-        // }
-        
         return [...prevValue, data];
       })
     }
@@ -111,10 +72,11 @@ function App() {
         setuser(userFetched);
         setLoggedIn(true);
         // console.log(userFetched, "yes");
-        socket.connect();
-        socket.emit('user connected', userFetched);
-        socket.on('show all connected users', showAllOnlineUsers);
-        socket.on('show connected user', showConnectedUser);
+
+        // socket.connect();
+        // socket.emit('user connected', userFetched);
+        // socket.on('show all connected users', showAllOnlineUsers);
+        // socket.on('show connected user', showConnectedUser);
       });
 
       // socket.on('private message', (data) => {
@@ -145,9 +107,10 @@ function App() {
     } 
     return () => {
       // socket.disconnect();
-      socket.close();
-      socket.off('show all connected users', showAllOnlineUsers);
-      socket.off('show connected user', showConnectedUser);
+      // socket.close();
+      // socket.off('show all connected users', showAllOnlineUsers);
+      // socket.off('show connected user', showConnectedUser);
+
       // socket.off('user connected', userFetched);
       // socket.off('private message', onMessage);
     };
@@ -182,6 +145,10 @@ function App() {
       .then((userDoc) => {
         setuser(userDoc);
         setLoggedIn(true);
+        // socket.connect();
+        // socket.emit('user connected', userDoc);
+        // socket.on('show all connected users', showAllOnlineUsers);
+        // socket.on('show connected user', showConnectedUser);
         // navigate('/courses')
       })
     })
@@ -222,7 +189,46 @@ function App() {
   function logout() {
     setLoggedIn(false);
     localStorage.removeItem('token');
-  }
+  };
+
+  React.useEffect(() => {
+    // console.log(loggedIn);
+    // console.log(user);
+    function showAllOnlineUsers(data) {
+      console.log(data);
+      setOnlineUsers(data.filter((socketUser) => {
+        return socketUser.online === true;
+      }));
+    };
+
+    function showConnectedUser(data) {
+      // console.log(data);
+      setOnlineUsers((prevValue) => {
+        return [...prevValue, data];
+      })
+    }
+
+    if(loggedIn) {
+      
+      // console.log(user);
+      socket.connect();
+      socket.emit('user connected', user);
+      socket.on('show all connected users', showAllOnlineUsers);
+      socket.on('show connected user', showConnectedUser);
+      // console.log(socket);
+    }
+
+    return () => {
+      // socket.disconnect();
+      socket.close();
+      socket.off('show all connected users', showAllOnlineUsers);
+      socket.off('show connected user', showConnectedUser);
+
+      // socket.off('user connected', userFetched);
+      // socket.off('private message', onMessage);
+    };
+
+  }, [loggedIn]);
 
   // //test
   // function switchToLoggedInComponent() {

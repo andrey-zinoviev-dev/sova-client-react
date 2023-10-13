@@ -387,6 +387,7 @@ export default function CourseModule({ onlineUsers, socket, logout }) {
           return onlineUser.userId === user._id;
         }) ? {...user, online: true} : user;
       });
+      // console.log(updatedUsers);
       setUsers(updatedUsers)
     }
   }, [onlineUsers, lessonData.course.students]);

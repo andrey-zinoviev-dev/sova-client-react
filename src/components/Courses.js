@@ -270,7 +270,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
         : 
         // coursesReceived
         coursesReceived.map((courseReceived) => {
-          console.log(courseReceived);
+         
           return courseReceived.students.find((student) => {
             return student._id === loggedInUser._id;
           }) ? courseReceived : {...courseReceived, available: false};
@@ -278,8 +278,6 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
           //   return userCourse.id === courseReceived._id;
           // }) ? {...courseReceived, available: true} : {...courseReceived, available: false};
         });
-
-        console.log(coursesToRender);
 
         setCoursesData({courses: coursesToRender, allStudents: studentsReceived});
         setCoursesLoading(false);
