@@ -132,27 +132,37 @@ function App() {
     
     // console.log(formData);
     apiLogin(formData)
-    .then(({token}) => {
-      // console.log(token);
-      if(!token) {
-        return //process error
+    .then((data) => {
+      // console.log(data);
+      if(data.message) {
+        console.log(data.message);
+      } else if(data.token) {
+        console.log(data.token);
       }
-      
-      // console.log(token);
-      localStorage.setItem('token', token);
-      // //get current user
-      return apiGetCurrentUser(token)
-      .then((userDoc) => {
-        setuser(userDoc);
-        setLoggedIn(true);
-        // socket.connect();
-        // socket.emit('user connected', userDoc);
-        // socket.on('show all connected users', showAllOnlineUsers);
-        // socket.on('show connected user', showConnectedUser);
-        // navigate('/courses')
-      })
     })
-   
+    // .then(({token}) => {
+    //   // console.log(token);
+    //   if(!token) {
+    //     return //process error
+    //   }
+      
+    //   // console.log(token);
+    //   localStorage.setItem('token', token);
+    //   // //get current user
+    //   return apiGetCurrentUser(token)
+    //   .then((userDoc) => {
+    //     setuser(userDoc);
+    //     setLoggedIn(true);
+    //     // socket.connect();
+    //     // socket.emit('user connected', userDoc);
+    //     // socket.on('show all connected users', showAllOnlineUsers);
+    //     // socket.on('show connected user', showConnectedUser);
+    //     // navigate('/courses')
+    //   })
+    // })
+    .catch((err) => {
+      console.log(err);
+    })
   };
 
   function registerFormSubmit(formData) {

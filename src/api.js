@@ -1,6 +1,6 @@
 //api variable
-const apiAdress = 'https://api.sova-courses.site';
-// const apiAdress = 'http://localhost:3000';
+// const apiAdress = 'https://api.sova-courses.site';
+const apiAdress = 'http://localhost:3000';
 // 
 //api calls
 function apiLogin(formData) {
@@ -13,8 +13,16 @@ function apiLogin(formData) {
     }
   )
   .then((res) => {
+    // console.log(res);
+    // console.log(res.body)
+    // if(!res.ok) {
+    //   // throw new Error("")
+    // }
     return res.json();
   })
+  // .catch((err) => {
+  //   console.log(err);
+  // })
 }
 
 function apiRegister(formData) {

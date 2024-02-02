@@ -255,10 +255,10 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
           </form>
         </div>
       </motion.div> */}
-      <div className="popup__left-wrapper">
+      {/* <div className="popup__left-wrapper">
         <img className="popup__left-logo" alt='лого сова' src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
         <h3 className='popup__left-wrapper-headline'>{passwordRestorePressed ? "Восстановить пароль" : "Войти"}</h3>
-      </div>
+      </div> */}
 
       <div className='popup__right-wrapper'>
         <h3 className='popup__right-wrapper-headline'>{passwordRestorePressed ? "Восстановить пароль" : "Войти"}</h3>
