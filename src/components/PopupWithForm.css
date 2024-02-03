@@ -201,6 +201,11 @@
     font-weight: 700;
   
   }
+
+  .popup__form-error {
+    color: tomato;
+    font-size: 18px;
+  }
   
   /* .popup__form-button::after {
     position: absolute;

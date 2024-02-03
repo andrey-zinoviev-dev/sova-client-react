@@ -31,7 +31,7 @@ const textAnimationVariants = {
   loginForm: {opacity:[0, 0, 1], transition: {duration: 0.75, ease: "easeInOut", opacity: {duration: 0.5, ease: "easeInOut"}}},
 }
 
-export default function Welcome({ loginFormSubmit, registerFormSubmit, submitForgetPasswordForm }) {
+export default function Welcome({ errorMessage, loginFormSubmit, registerFormSubmit, submitForgetPasswordForm }) {
   
   const loginEmailRef = React.useRef();
   const loginPasswordRef = React.useRef();
@@ -262,6 +262,7 @@ export default function Welcome({ loginFormSubmit, registerFormSubmit, submitFor
 
       <div className='popup__right-wrapper'>
         <h3 className='popup__right-wrapper-headline'>{passwordRestorePressed ? "Восстановить пароль" : "Войти"}</h3>
+        <p className='popup__form-error'>{errorMessage}</p>
         {!passwordRestorePressed ? <form className="popup__form" onSubmit={(evt) => {submitloginForm(evt)}}>
           <button className="popup__close" onClick={closePopups}>
             <FontAwesomeIcon icon={faXmark} />
