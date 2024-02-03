@@ -233,44 +233,18 @@ export default function Welcome({ errorMessage, loginFormSubmit, registerFormSub
         {/* <div className='filter'></div> */}
     </section>
     <PopupWithForm popupOpened={popupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
-      {/* <motion.div className="popup__left-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm" } variants={animationVariants}>
-        <img className="popup__left-logo" src={SovaLogo}></img>
-        <div style={{overflow: "hidden", padding: "5% 10%", boxSizing: "border-box"}}>
-          <motion.div animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={textAnimationVariants}>
-            <span className="popup__left-span">SOVA STUDIO</span>
-            <h3>{loginButtonPressed ? "Добро пожаловать! Присоединяйся к семье, стань профессионалом, начни петь аки мастер" : "С возвращением! Входи, чтобы поскорее вернуться к занятиям"}</h3>
-
-          </motion.div>
-          <motion.button whileHover={{scale: 1.1, backgroundColor:"rgba(0, 0, 0)", color:"#f8f205", transition: {duration: 0.25}}} whileTap={{scale: 0.85, transition: {duration: 0.15}}} className='popup__left-button' onClick={() => { setLoginButtonPressed(!loginButtonPressed)}}>{loginButtonPressed ? "Нет учетной записи? Регистрируйся!" : "Уже присоединялся? Тогда входи!"}</motion.button>
-        </div>
-      </motion.div>
-      <motion.div className="popup__right-wrapper" animate={loginButtonPressed ? "registerForm" : "loginForm"} variants={rightWrapperVariants}>
-        <div className="popup__form-wrapper">
-          <button className="popup__close" onClick={closePopups}>Закрыть</button>
-          <h3 className="popup__headline">{loginButtonPressed ? 'Вход' : 'Регистрация'}</h3>
-          <form className="popup__form" onSubmit={loginButtonPressed ? submitloginForm : submitregisterForm}>
-            <motion.input whileTap={{scale: 0.95}} ref={loginRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-            <motion.input whileTap={{scale: 0.95}} ref={passwordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
-            <button className="popup__form-button" type="submit" data-type="login">Войти</button>
-          </form>
-        </div>
-      </motion.div> */}
-      {/* <div className="popup__left-wrapper">
-        <img className="popup__left-logo" alt='лого сова' src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
-        <h3 className='popup__left-wrapper-headline'>{passwordRestorePressed ? "Восстановить пароль" : "Войти"}</h3>
-      </div> */}
-
       <div className='popup__right-wrapper'>
         <h3 className='popup__right-wrapper-headline'>{passwordRestorePressed ? "Восстановить пароль" : "Войти"}</h3>
-        <p className='popup__form-error'>{errorMessage}</p>
         {!passwordRestorePressed ? <form className="popup__form" onSubmit={(evt) => {submitloginForm(evt)}}>
+        <p className='popup__form-error'>{errorMessage}</p>
           <button className="popup__close" onClick={closePopups}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
-
-          <input ref={loginEmailRef} type="text" className="popup__form-input" name="email" placeholder="почта" />
-          <div style={{position: "relative"}}>
-            <input ref={loginPasswordRef} type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+          <div className='popup__right-wrapper-div'>
+            <input ref={loginEmailRef} autoComplete='off' type="text" className="popup__form-input" name="email" placeholder="почта" />
+          </div>
+          <div className='popup__right-wrapper-div' style={{position: "relative"}}>
+            <input ref={loginPasswordRef} autoComplete='off' type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
             <motion.button onClick={() => {
               setPasswordRestorePressed(true);
             }} whileHover={{border: "2px solid #5DB0C7", color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 30, minHeight: 30, position: "absolute", top: 0, right: 0, margin: 0, border: "2px solid #5db0c79c", color: "rgba(255, 255, 255, 0.7)"}} className="popup__form-button" type='button'>?</motion.button>

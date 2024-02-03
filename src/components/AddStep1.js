@@ -58,6 +58,24 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
 
     //effects
     React.useEffect(() => {
+        // console.log(localStorage);
+        const courseTitle = localStorage.getItem("courseName");
+        console.log(courseTitle);
+        const courseDescription = localStorage.getItem("courseDescription");
+        console.log(courseDescription);
+        setFormData({...formData, course: {
+            ...formData.course, name: courseTitle ? courseTitle: "", description: courseDescription ? courseDescription : "" 
+        }})
+        // courseTitle && setFormData({...formData, course: {
+        //     ...formData.course, name: courseTitle,
+        // }});
+        // courseDescription && setFormData({...formData, course: {
+        //     ...formData.course, description: courseDescription,
+        // }});
+    }, []);
+
+    React.useEffect(() => {
+        
         if(course.name.length > 0 && course.description.length > 0) {
             setDisableButton(false);
         } else {
@@ -91,7 +109,8 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                 <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", height: 230}}>
                             <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Название курса</label> */}
-                                <input className="addCourse__form-input" placeholder="Введите название курса" value={course.name} onChange={(evt) => {
+                                <input className="addCourse__form-input" placeholder="Введите название курса" name="courseName" value={course.name} onChange={(evt) => {
+                                    localStorage.setItem(evt.target.name, evt.target.value);
                                     setFormData({...formData, course: {
                                         ...formData.course, name: evt.target.value,
                                     }})
@@ -99,7 +118,8 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                             </div>
                             <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Описание курса</label> */}
-                                <input className="addCourse__form-input" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
+                                <input className="addCourse__form-input" name="courseDescription" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
+                                    localStorage.setItem(evt.target.name, evt.target.value);
                                     setFormData({...formData, course: {
                                         ...formData.course, description: evt.target.value,
                                     }})
