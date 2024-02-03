@@ -64,9 +64,9 @@ export default function AddCourse() {
     }
   };
 
-  // function submitForm() {
-  //   console.log(formData);
-  // }
+  function submitForm() {
+    console.log(formData);
+  }
 
   //refs
   const stepsRef = React.useRef();
@@ -94,9 +94,9 @@ export default function AddCourse() {
     }
   ];
 
-  React.useEffect(() => {
-    console.log(formData);
-  } ,[formData])
+  // React.useEffect(() => {
+  //   console.log(formData);
+  // } ,[formData])
 
   return (
     <section className="addCourse">

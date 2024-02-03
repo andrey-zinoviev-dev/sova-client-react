@@ -50,22 +50,41 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
         });
 
         // imgRef.current.src = imageToUpload.clientPath;
-        setFormData((prevValue) => {
-            return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
-        });
+
+        // setFormData((prevValue) => {
+        //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
+        // });
+        saveInputChanges(evt.target.name, imageToUpload)
         // setSelectedImage(imageToUpload)
     }
+
+    function saveInputChanges(name, value) {
+        // console.log(name, value);
+        localStorage.setItem("courseData", JSON.stringify({...formData, course: {
+            ...formData.course, [name]: value
+        }}))
+        setFormData({...formData, course: {
+            ...formData.course, [name]: value,
+        }})
+    };
 
     //effects
     React.useEffect(() => {
         // console.log(localStorage);
-        const courseTitle = localStorage.getItem("courseName");
-        console.log(courseTitle);
-        const courseDescription = localStorage.getItem("courseDescription");
-        console.log(courseDescription);
-        setFormData({...formData, course: {
-            ...formData.course, name: courseTitle ? courseTitle: "", description: courseDescription ? courseDescription : "" 
-        }})
+        const { courseData } = localStorage;
+        if(courseData) {
+            const parsedCourseData = JSON.parse(courseData);
+            // console.log(parsedCourseData);
+            setFormData({...formData, course: parsedCourseData.course})
+        }
+
+        // const courseTitle = localStorage.getItem("courseName");
+        // console.log(courseTitle);
+        // const courseDescription = localStorage.getItem("courseDescription");
+        // console.log(courseDescription);
+        // setFormData({...formData, course: {
+        //     ...formData.course, name: courseTitle ? courseTitle: "", description: courseDescription ? courseDescription : "" 
+        // }})
         // courseTitle && setFormData({...formData, course: {
         //     ...formData.course, name: courseTitle,
         // }});
@@ -109,31 +128,34 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                 <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", height: 230}}>
                             <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Название курса</label> */}
-                                <input className="addCourse__form-input" placeholder="Введите название курса" name="courseName" value={course.name} onChange={(evt) => {
-                                    localStorage.setItem(evt.target.name, evt.target.value);
-                                    setFormData({...formData, course: {
-                                        ...formData.course, name: evt.target.value,
-                                    }})
+                                <input className="addCourse__form-input" placeholder="Введите название курса" name="name" value={course.name} onChange={(evt) => {
+                                    // localStorage.setItem(evt.target.name, evt.target.value);
+                                    // setFormData({...formData, course: {
+                                    //     ...formData.course, name: evt.target.value,
+                                    // }})
+                                    saveInputChanges(evt.target.name, evt.target.value)
                                 }}></input>
                             </div>
                             <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Описание курса</label> */}
-                                <input className="addCourse__form-input" name="courseDescription" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
-                                    localStorage.setItem(evt.target.name, evt.target.value);
-                                    setFormData({...formData, course: {
-                                        ...formData.course, description: evt.target.value,
-                                    }})
+                                <input className="addCourse__form-input" name="description" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
+                                    // localStorage.setItem(evt.target.name, evt.target.value);
+                                    // setFormData({...formData, course: {
+                                    //     ...formData.course, description: evt.target.value,
+                                    // }})
+                                    saveInputChanges(evt.target.name, evt.target.value)
                                 }}></input>
                             </div>
                             <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
                                 <div style={{width: "100%"}}>
                                     {/* <label>Обложка курса</label> */}
                                     <input className="addCourse__form-input" onInput={(evt) => {
-                                        setFormData((prevValue) => {
-                                            return {...prevValue, course: {...prevValue.course, tarifs: evt.target.value.split(",")}}
-                                        })
-                                    }} value={course.tarifs} placeholder="Тарифы курса через запятую"></input>
-                                    <input ref={inputFileRef} type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
+                                        // setFormData((prevValue) => {
+                                        //     return {...prevValue, course: {...prevValue.course, tarifs: evt.target.value.split(",")}}
+                                        // })
+                                        saveInputChanges(evt.target.name, evt.target.value)
+                                    }} value={course.tarifs} name="tarifs" placeholder="Тарифы курса через запятую"></input>
+                                    <input ref={inputFileRef} name="cover" type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
                                 </div>                            
                             </div>
                         </div>
