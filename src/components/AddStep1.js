@@ -29,6 +29,10 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
         inputFileRef.current.click();
     };
 
+    function converImgToBase64(file) {
+
+    };
+
     function processFile(evt) {
         // console.log(evt.target.files);
         let imageToUpload = evt.target.files[0];
@@ -42,19 +46,37 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
         //         value: updatedName
         //     });
         }
-        imageToUpload.clientPath = window.URL.createObjectURL(imageToUpload);
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(imageToUpload);
+        fileReader.onloadend = () => {
+            console.log(fileReader.result)
+            imageToUpload.clientPath = fileReader.result;
+            setSelectedFiles((prevValue) => {
+                return[...prevValue, imageToUpload]
+            });
+    
+            // imgRef.current.src = imageToUpload.clientPath;
+    
+            // setFormData((prevValue) => {
+            //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
+            // });
+            saveInputChanges(evt.target.name, imageToUpload)
+        }
+        //!!!
+        // imageToUpload.clientPath = window.URL.createObjectURL(imageToUpload);
+        //!!!
         imageToUpload.title = imageToUpload.name;
         
-        setSelectedFiles((prevValue) => {
-            return[...prevValue, imageToUpload]
-        });
+        // setSelectedFiles((prevValue) => {
+        //     return[...prevValue, imageToUpload]
+        // });
 
         // imgRef.current.src = imageToUpload.clientPath;
 
         // setFormData((prevValue) => {
         //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
         // });
-        saveInputChanges(evt.target.name, imageToUpload)
+        // saveInputChanges(evt.target.name, imageToUpload)
         // setSelectedImage(imageToUpload)
     }
 
