@@ -73,71 +73,115 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     const loggedInUser = React.useContext(UserContext);
 
     //functions
-    function handleCoverUpload(evt) {
-        let coverFile = evt.target.files[0];
-        // const clientPath = window.URL.createObjectURL(coverFile);
-        // coverFile.clientPath = clientPath;
-        
-        // moduleCoverImg.current.src = clientPath;
-        if(/[А-Яа-я ]/.test(coverFile.name)) {
-            coverFile = new File([coverFile], cyrillicToTranslit.transform(coverFile.name, "_"), {
-                type: coverFile.type,
-            }) 
-        };
-        coverFile.title = coverFile.name;
-        // coverFile.clientPath = window.URL.createObjectURL(coverFile);
-        
-        setSelectedFiles((prevValue) => {
-            return [...prevValue, coverFile];
-        });
+    // function converFileToBase64() {
+    //     return new Promise((resolve, reject) => {
+    //         if(!moduleDivOpened) {
+    //             reject("rejected promise");
+    //         }
+    //         resolve("resolved promise");
+    //     })
+    // };
 
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(coverFile);
-        fileReader.onloadend = () => {
-            // console.log(fileReader.result)
-            coverFile.clientPath = fileReader.result;
+    function handleCoverUpload(evt) {
+        return new Promise((resolve, reject) => {
+            let coverFile = evt.target.files[0];
+            if(!coverFile) {
+                reject("Выберите файл");
+            }
             setSelectedFiles((prevValue) => {
-                return[...prevValue, coverFile]
+                return [...prevValue, coverFile];
             });
-    
+            coverFile.title = coverFile.name;
+
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(coverFile);
+            fileReader.onloadend = () => {
+            // console.log(fileReader.result)
+                coverFile.clientPath = fileReader.result;
+                setSelectedFiles((prevValue) => {
+                    return[...prevValue, coverFile]
+                });
+                resolve(fileReader.result);
             // imgRef.current.src = imageToUpload.clientPath;
     
             // setFormData((prevValue) => {
             //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
             // });
             // saveInputChanges(evt.target.name, coverFile)
-        }
+            }            
+        })
+        // let coverFile = evt.target.files[0];
+        // // const clientPath = window.URL.createObjectURL(coverFile);
+        // // coverFile.clientPath = clientPath;
+        
+        // // moduleCoverImg.current.src = clientPath;
+        // if(/[А-Яа-я ]/.test(coverFile.name)) {
+        //     coverFile = new File([coverFile], cyrillicToTranslit.transform(coverFile.name, "_"), {
+        //         type: coverFile.type,
+        //     }) 
+        // };
+        // coverFile.title = coverFile.name;
+        // // coverFile.clientPath = window.URL.createObjectURL(coverFile);
+        
+        // setSelectedFiles((prevValue) => {
+        //     return [...prevValue, coverFile];
+        // });
 
-        return coverFile;
+        // const fileReader = new FileReader();
+        // fileReader.readAsDataURL(coverFile);
+        // fileReader.onloadend = () => {
+        //     // console.log(fileReader.result)
+        //     coverFile.clientPath = fileReader.result;
+        //     setSelectedFiles((prevValue) => {
+        //         return[...prevValue, coverFile]
+        //     });
+    
+        //     // imgRef.current.src = imageToUpload.clientPath;
+    
+        //     // setFormData((prevValue) => {
+        //     //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
+        //     // });
+        //     // saveInputChanges(evt.target.name, coverFile)
+        // }
+
+        // return coverFile;
     };
 
     function handleModuleCoverUpload(evt) {
-        const picFile = handleCoverUpload(evt);
-        moduleCoverImg.current.src = picFile.clientPath;
-        setModuleContent((prevValue) => {
-            return {...prevValue, cover: picFile};
-        });
+        handleCoverUpload(evt)
+        .then((data) => {
+            moduleCoverImg.current.src = data;
+
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+        // const picFile = handleCoverUpload(evt);
+        // moduleCoverImg.current.src = picFile.clientPath;
+        // setModuleContent((prevValue) => {
+        //     return {...prevValue, cover: picFile};
+        // });
         // setFormData((prevValue) => {
 
         // });
     };
 
     function handleLessonCoverUpload(evt) {
-        const picFile = handleCoverUpload(evt);
-        console.log(picFile);
-        // lessonCoverImg.current.src = picFile.clientPath;
-        setLessonContent((prevValue) => {
-            return {...prevValue, cover:picFile};
-        });
+        // const picFile = handleCoverUpload(evt);
+        // console.log(picFile);
+        // // lessonCoverImg.current.src = picFile.clientPath;
+        // setLessonContent((prevValue) => {
+        //     return {...prevValue, cover:picFile};
+        // });
     };
 
     function handleEditLessonCoverUpload(evt) {
-        const picFile = handleCoverUpload(evt);
-        console.log(picFile);
-        editLessonCoverImg.current.src = picFile.clientPath;
-        setLessonContent((prevValue) => {
-            return {...prevValue, cover:picFile};
-        });
+        // const picFile = handleCoverUpload(evt);
+        // console.log(picFile);
+        // editLessonCoverImg.current.src = picFile.clientPath;
+        // setLessonContent((prevValue) => {
+        //     return {...prevValue, cover:picFile};
+        // });
     }
 
     // function handleCoverLink(evt) {
@@ -159,6 +203,14 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     //     // console.log(selectedLessonTitle);
     //     console.log(formData);
     // }, [selectedModuleTitle, selectedLessonTitle, formData]);
+
+    React.useEffect(() => {
+        const data = localStorage.getItem("moduleData");
+        const parsedData = JSON.parse(data);
+        parsedData && setFormData((prevValue) => {
+            return {...prevValue, modules: parsedData.modules}
+        })
+    }, [])
 
     return (
         <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
@@ -185,9 +237,9 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                         }} style={{position: "absolute", border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
                             <FontAwesomeIcon icon={faTrashCan} />
                         </button> */}
-                            {/* <h3 style={{margin: 0, width: "100%", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis"}}>{moduleOfCourse.title}</h3> */}
-                            {/* <img style={{borderRadius: 9, aspectRatio: "1 / 1", objectFit: "cover"}} src={moduleOfCourse.cover.clientPath} alt={moduleOfCourse.title}></img> */}
-                            {/* <p style={{margin: 0, width: "100%"}}>{moduleOfCourse.lessons.length > 0 ? `Уроки ${moduleOfCourse.lessons.length}` : "Уроков в модуле нет"}</p> */}
+                            <h3 style={{margin: 0, width: "100%", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis"}}>{moduleOfCourse.name}</h3>
+                            <img style={{borderRadius: 9, aspectRatio: "1 / 1", objectFit: "cover"}} src={moduleOfCourse.cover} alt={moduleOfCourse.name}></img>
+                            <p style={{margin: 0, width: "100%"}}>{moduleOfCourse.lessons.length > 0 ? `Уроки ${moduleOfCourse.lessons.length}` : "Уроков в модуле нет"}</p>
                     </motion.li>
                 })}     
             </ul>}
@@ -225,17 +277,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
                             <div style={{display: "flex", alignItems: "stretch", justifyContent:  "space-between", margin: '20px 0 0 0'}}>
                                 <div style={{maxWidth: 280, width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", gap: 15}}>
-                                    <input ref={moduleNameRef} onChange={(evt) => {
-                                        console.log(evt.target.value);
-                                        setFormData((prevValue) => {
-                                            console.log(prevValue);
-                                            // return prevValue;
-                                            return {...prevValue, modules: [...prevValue.modules, {name: evt.target.value}]}
-                                        })
-                                        // setModuleContent((prevValue) => {
-                                        //     return {...prevValue, title: evt.target.value};
-                                        // });
-                                    }} placeholder="Название модуля" className="addCourse__form-input" style={{width: "100%"}}></input>
+                                    <input ref={moduleNameRef} placeholder="Название модуля" className="addCourse__form-input" style={{width: "100%"}}></input>
                                     <input ref={moduleCoverRef} onChange={(evt) => {
                                         console.log('upload module cover as link to ext image')
                                     }} placeholder="обложка модуля" className="addCourse__form-input" style={{ width: "100%"}}></input>
@@ -252,7 +294,12 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                             </div>
 
                             <button type="button" onClick={() => {
-                                console.log('yes');
+                                // console.log(moduleNameRef.current.value);
+
+                                setFormData((prevValue) => {
+                                    return {...prevValue, modules: [...prevValue.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]}
+                                })
+                                localStorage.setItem("moduleData", JSON.stringify({...formData, modules: [...formData.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]}))
                                 // setFormData((prevValue) => {
                                 //     return {...prevValue, modules: [...prevValue.modules, moduleContent]};
                                 // });
@@ -262,7 +309,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                 // //     return [...prevValue, objWithModule];
                                 // // });
                                 
-                                // setModuleDivOpened(false);
+                                setModuleDivOpened(false);
 
                             }} style={{alignSelf: "center", minWidth: 140, minHeight: 45, padding: 0, margin: "30px 0 0 0", borderRadius: 9, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)"}}>Добавить модуль</button>
                         </div>
