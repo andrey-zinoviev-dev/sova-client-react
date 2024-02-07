@@ -2,9 +2,9 @@ import React from "react";
 import "./AddCourse.css";
 // import { Stepper, Step, Box, StepLabel } from "@mui/material";
 import AddStep1 from "./AddStep1";
-import AddStep2 from "./AddStep2";
-import AddStep3 from "./AddStep3";
-import AddModule from "./AddModule";
+// import AddStep2 from "./AddStep2";
+// import AddStep3 from "./AddStep3";
+// import AddModule from "./AddModule";
 import AddStepModule from "./AddStepModule";
 import AddCourseSuccess from "./AddCourseSuccess";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -68,6 +68,16 @@ export default function AddCourse() {
     console.log(formData);
   }
 
+//   function saveInputChanges(name, value) {
+//     // console.log(name, value);
+//     localStorage.setItem("courseData", JSON.stringify({...formData, course: {
+//         ...formData.course, [name]: value
+//     }}))
+//     setFormData({...formData, course: {
+//         ...formData.course, [name]: value,
+//     }})
+// };
+
   //refs
   const stepsRef = React.useRef();
   const prevStepRef = React.useRef();
@@ -75,28 +85,28 @@ export default function AddCourse() {
   // const buttonStepRef = React.useRef();
 
   //variables
-  const stepsArray = [
-    {
-      description: "Название и описание курса",
-      icon: faSignature,
-    }, 
-    {
-      description: "Добавление модулей и уроков",
-      icon: faChartBar,
-    },
-    {
-      description: "Содержание уроков",
-      icon: faKeyboard
-    }, 
-    {
-      description: "Проверка курса",
-      icon: faListCheck,
-    }
-  ];
+  // const stepsArray = [
+  //   {
+  //     description: "Название и описание курса",
+  //     icon: faSignature,
+  //   }, 
+  //   {
+  //     description: "Добавление модулей и уроков",
+  //     icon: faChartBar,
+  //   },
+  //   {
+  //     description: "Содержание уроков",
+  //     icon: faKeyboard
+  //   }, 
+  //   {
+  //     description: "Проверка курса",
+  //     icon: faListCheck,
+  //   }
+  // ];
 
-  // React.useEffect(() => {
-  //   console.log(formData);
-  // } ,[formData])
+  React.useEffect(() => {
+    console.log(formData);
+  } ,[formData])
 
   return (
     <section className="addCourse">
