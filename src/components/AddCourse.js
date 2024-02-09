@@ -105,7 +105,17 @@ export default function AddCourse() {
   // ];
 
   React.useEffect(() => {
-    console.log(formData);
+    const courseData = localStorage.getItem("courseData");
+    const parsedCourseData = JSON.parse(courseData);
+    if(parsedCourseData) {
+      setFormData(parsedCourseData)
+    }
+  }, []);
+
+  React.useEffect(() => {
+    // console.log(formData);
+    localStorage.setItem("courseData", JSON.stringify(formData));
+    // console.log(JSON.parse(localStorage.getItem("courseData")));
   } ,[formData])
 
   return (

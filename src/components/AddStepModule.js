@@ -51,7 +51,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
 
     //derived states
-    const {course} = formData;
+    // const {course} = formData;
     const {modules} = formData;
     // const foundModule = modules.find((courseModule) => {
     //     return courseModule.title === selectedModuleTitle;
@@ -204,13 +204,16 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     //     console.log(formData);
     // }, [selectedModuleTitle, selectedLessonTitle, formData]);
 
-    React.useEffect(() => {
-        const data = localStorage.getItem("moduleData");
-        const parsedData = JSON.parse(data);
-        parsedData && setFormData((prevValue) => {
-            return {...prevValue, modules: parsedData.modules}
-        })
-    }, [])
+    // React.useEffect(() => {
+    //     const courseData = localStorage.getItem("courseData");
+    //     const parsedCourseData = JSON.parse(courseData);
+    //     if(parsedCourseData) {
+    //         console.log(parsedCourseData);
+    //         // setFormData((prevValue) => {
+    //         //     return {...prevValue, modules: parsedCourseData.modules}
+    //         // })
+    //     }
+    // }, [])
 
     return (
         <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
@@ -299,7 +302,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                 setFormData((prevValue) => {
                                     return {...prevValue, modules: [...prevValue.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]}
                                 })
-                                localStorage.setItem("moduleData", JSON.stringify({...formData, modules: [...formData.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]}))
+                                // localStorage.setItem("moduleData", JSON.stringify([...formData.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]))
                                 // setFormData((prevValue) => {
                                 //     return {...prevValue, modules: [...prevValue.modules, moduleContent]};
                                 // });

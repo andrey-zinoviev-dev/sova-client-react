@@ -82,38 +82,43 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
 
     function saveInputChanges(name, value) {
         // console.log(name, value);
-        localStorage.setItem("courseData", JSON.stringify({...formData, course: {
-            ...formData.course, [name]: value
-        }}))
+        // localStorage.setItem("courseData", JSON.stringify({...formData, course: {
+        //     ...formData.course, [name]: value
+        // }}))
         setFormData({...formData, course: {
             ...formData.course, [name]: value,
         }})
     };
 
     //effects
-    React.useEffect(() => {
-        // console.log(localStorage);
-        const { courseData } = localStorage;
-        if(courseData) {
-            const parsedCourseData = JSON.parse(courseData);
-            // console.log(parsedCourseData);
-            setFormData({...formData, course: parsedCourseData.course})
-        }
+    // React.useEffect(() => {
+    //     // console.log(localStorage);
+    //     const courseData = localStorage.getItem("courseData");
+    //     const parsedCourse = JSON.parse(courseData);
+    //     if(parsedCourse) {
+    //         // console.log(parsedCourse);
+    //         // setFormData({...formData, course: parsedCourse.course})
+    //     }
+    //     // if(courseData) {
+    //     //     const parsedCourseData = JSON.parse(courseData);
+    //     //     // console.log(parsedCourseData);
+    //     //     setFormData({...formData, course: parsedCourseData.course})
+    //     // }
 
-        // const courseTitle = localStorage.getItem("courseName");
-        // console.log(courseTitle);
-        // const courseDescription = localStorage.getItem("courseDescription");
-        // console.log(courseDescription);
-        // setFormData({...formData, course: {
-        //     ...formData.course, name: courseTitle ? courseTitle: "", description: courseDescription ? courseDescription : "" 
-        // }})
-        // courseTitle && setFormData({...formData, course: {
-        //     ...formData.course, name: courseTitle,
-        // }});
-        // courseDescription && setFormData({...formData, course: {
-        //     ...formData.course, description: courseDescription,
-        // }});
-    }, []);
+    //     // const courseTitle = localStorage.getItem("courseName");
+    //     // console.log(courseTitle);
+    //     // const courseDescription = localStorage.getItem("courseDescription");
+    //     // console.log(courseDescription);
+    //     // setFormData({...formData, course: {
+    //     //     ...formData.course, name: courseTitle ? courseTitle: "", description: courseDescription ? courseDescription : "" 
+    //     // }})
+    //     // courseTitle && setFormData({...formData, course: {
+    //     //     ...formData.course, name: courseTitle,
+    //     // }});
+    //     // courseDescription && setFormData({...formData, course: {
+    //     //     ...formData.course, description: courseDescription,
+    //     // }});
+    // }, []);
 
     React.useEffect(() => {
         
@@ -175,7 +180,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                                         // setFormData((prevValue) => {
                                         //     return {...prevValue, course: {...prevValue.course, tarifs: evt.target.value.split(",")}}
                                         // })
-                                        saveInputChanges(evt.target.name, evt.target.value)
+                                        // saveInputChanges(evt.target.name, evt.target.value)
                                     }} value={course.tarifs} name="tarifs" placeholder="Тарифы курса через запятую"></input>
                                     <input ref={inputFileRef} name="cover" type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
                                 </div>                            
