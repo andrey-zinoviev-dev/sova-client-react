@@ -108,7 +108,8 @@ export default function AddCourse() {
     const courseData = localStorage.getItem("courseData");
     const parsedCourseData = JSON.parse(courseData);
     if(parsedCourseData) {
-      setFormData(parsedCourseData)
+      setFormData(parsedCourseData);
+      console.log(parsedCourseData);
     }
   }, []);
 
