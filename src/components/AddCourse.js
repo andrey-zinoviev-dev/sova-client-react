@@ -16,12 +16,17 @@ import { apiCreateCourse } from '../api';
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import Dashboard from './Dashboard';
 import axiosClient from '../axios';
+import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 
 export default function AddCourse() {
   //token
   const token = localStorage.getItem('token');
   //user context
   const loggedInUser = React.useContext(UserContext);
+
+  //navigate
+  const navigate = useNavigate();
+
   //states
   const [formStep, setFormStep] = React.useState(0);
   const [formData, setFormData] = React.useState({
@@ -47,14 +52,26 @@ export default function AddCourse() {
   const [uploadProgress, setUploadProgress] = React.useState(0);
   const [uploadFormSubmitted, setUploadFormSubmitted] = React.useState(false);
   const [successfullCourseAddOpened, setSuccessfullCourseAddOpened] = React.useState(false);
-
+  const [searchParams] = useSearchParams();
   //functions
+  // function showSearchQueries() {
+  //   const query = searchParams.get("step");
+  //   console.log(query);
+  // }
+
+  const query = +searchParams.get("step");
+  // console.log(query);
+
+  function updateQueryString(order) {
+    navigate({pathname: '/addCourse', search: `?${createSearchParams({step: order})}`});
+  };
+
   function renderStep() {
     switch (formStep) {
       case 0:
-        return <AddStep1 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
+        return <AddStep1 updateQueryString={updateQueryString} formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 1: 
-        return <AddStepModule formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened} uploadProgress={uploadProgress}/>
+        return <AddStepModule updateQueryString={updateQueryString} formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened} uploadProgress={uploadProgress}/>
       // case 2:
       //   return <AddCourseSuccess />
       // case 3:
@@ -109,15 +126,21 @@ export default function AddCourse() {
     const parsedCourseData = JSON.parse(courseData);
     if(parsedCourseData) {
       setFormData(parsedCourseData);
-      console.log(parsedCourseData);
+      setFormStep(query - 1);
+      // console.log(parsedCourseData);
     }
-  }, []);
+
+  }, [query]);
 
   React.useEffect(() => {
     // console.log(formData);
     localStorage.setItem("courseData", JSON.stringify(formData));
     // console.log(JSON.parse(localStorage.getItem("courseData")));
-  } ,[formData])
+  } ,[formData]);
+
+  // React.useEffect(() =>{
+  //   console.log(searchParams)
+  // }, [searchParams])
 
   return (
     <section className="addCourse">
@@ -148,7 +171,7 @@ export default function AddCourse() {
 
 
       </div> */}
-      <form className="addCourse__form" onSubmit={(evt) => {
+      {/* <form className="addCourse__form" onSubmit={(evt) => {
               evt.preventDefault();
               // console.log(formData);
               const form = new FormData();
@@ -191,8 +214,11 @@ export default function AddCourse() {
 
             }} style={{width: "100%", height: "100%", boxSizing: "border-box",}}>
               {renderStep()}
-              {/* <motion.button type="button" whileHover={{backgroundColor: "rgb(226 100 59 / 100%)"}}  style={{fontWeight: 700, minWidth: 120, minHeight: 50, borderRadius: 15, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(255 255 255 / 100%)", border: "2px solid rgb(226, 100, 59)"}}>Далее</motion.button> */}
-      </form>
+      </form> */}
+
+      <>
+        {renderStep()}
+      </>
 
       {/* <div style={{width: "100%", display: "flex", flexDirection: "column", maxWidth: 1280, margin: "0 auto"}}>
        

@@ -13,7 +13,7 @@ import SuccessAddCourse from './SuccessAddCourse';
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import NewModule from "./NewModule";
 
-export default function AddStepModule({successfullCourseAddOpened, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading, uploadProgress}) {
+export default function AddStepModule({successfullCourseAddOpened, updateQueryString, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading, uploadProgress}) {
     //navigate
     const navigate = useNavigate();
     //name transformer
@@ -49,20 +49,22 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     ]}});
     const [lessonCoverEditOpened, setLessonCoverEditOpened] = React.useState(false);
     const [lessonContentEditOpened, setLessonContentEditOpened] = React.useState(false);
-
+    const [moduleToUpdate, setModuleToUpdate] = React.useState({name: "", cover: "", lessons: []});
 
     //derived states
     // const {course} = formData;
     const {modules} = formData;
     // let selectedModule;
     // const selectedModule;
-    let selectedModule = {title: "", cover: "", lessons: [{name: "yes"}]};
+    // let selectedModule = {name: "", cover: "", lessons: []};
+
     // modules.find((courseModule) => {
-    //     return courseModule.title === selectedModuleTitle;
+    //     return courseModule.name === selectedModuleTitle;
     // }) ? modules.find((courseModule) => {
-    //     return courseModule.title === selectedModuleTitle;
+    //     return courseModule.name === selectedModuleTitle;
     // }) : 
-    
+
+    // console.log(selectedModule);
 
     // const foundLesson = foundModule.lessons.find((moduleLesson) => {
     //     return moduleLesson.title === selectedLessonTitle;
@@ -154,8 +156,10 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
         // });
     }
 
-    function openModule(moduleTitle) {
-        setSelectedModuleTitle(moduleTitle);
+    function openModule(module) {
+        // console.log(module);
+        // setSelectedModuleTitle(moduleTitle);
+        setModuleToUpdate(module)
         setLessonPopupOpened(true);
         // selectedModule = formData.modules.find((module) => {
         //     return module.title === moduleData.title;
@@ -193,11 +197,12 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     //     }
     // }, [])
 
-    React.useEffect(() => {
-        // selectedModule = modules.find((courseModule) => {
-        //     return courseModule.name === selectedModuleTitle;
-        // })
-    }, [selectedModuleTitle])
+    // React.useEffect(() => {
+    //     console.log(selectedModuleTitle)
+    //     selectedModule = modules.find((courseModule) => {
+    //         return courseModule.name === selectedModuleTitle;
+    //     })
+    // }, [selectedModuleTitle])
 
     return (
         <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
@@ -237,9 +242,10 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
             <div style={{boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
                 <button type="button" onClick={() => {
-                    setFormStep((prevValue) => {
-                        return prevValue -= 1;
-                    });
+                    updateQueryString(1)
+                    // setFormStep((prevValue) => {
+                    //     return prevValue -= 1;
+                    // });
                 }} style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Назад к курсу</button>
                 <button type="button" style={{width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
                     setModuleDivOpened(true);
@@ -316,12 +322,16 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                     }} style={{position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: "50%", border: "2px solid #EB4037", color: "#EB4037", fontSize: 18, backgroundColor: "transparent"}}>
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
-                    <h3 style={{margin: 0}}>Уроки</h3> 
+                    <h3 style={{margin: 0}}>Уроки в модуле {moduleToUpdate.name}</h3> 
                     <ul>
-                        {selectedModule.lessons.map((lesson) => {
+                        {moduleToUpdate.lessons.map((lesson) => {
                             return <li>{lesson.name}</li>
                         })}
+                        {!moduleToUpdate.lessons.length > 0 && <li>
+                            <p>Уроков нет</p>
+                        </li>}
                     </ul>
+
                     {/* <motion.div ref={moduleLessonsRef} style={{display: "flex", width: "100%", height: "100%", overflow: "hidden", margin: "25px 0"}}>
                         <div style={{flex: "100% 1 0", width:"100%", display: "flex", justifyContent: "flex-start", alignItems: "center", flexDirection: "column"}}> */}
                             

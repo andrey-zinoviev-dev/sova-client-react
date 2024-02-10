@@ -4,8 +4,13 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
+import { createSearchParams, useNavigate } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 
-export default function AddStep1({formData, setFormData, formStep, setFormStep, setSelectedFiles}) {
+export default function AddStep1({updateQueryString, formData, setFormData, formStep, setFormStep, setSelectedFiles}) {
+    //navigate
+    const navigate = useNavigate();
+
     const { course } = formData;
   
     const cyrillicToTranslit = new CyrillicToTranslit();
@@ -13,17 +18,16 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     //states
     const [disableButton, setDisableButton] = React.useState(true);
     const [selectedImage, setSelectedImage] = React.useState({});
+    // let [searchParams, setSearchParams] = useSearchParams();
 
     //refs
     const inputFileRef = React.useRef();
     const imgRef = React.useRef();
     
     //functions
-    function handleNextClick() {
-        setFormStep((prevValue) => {
-            return prevValue + 1;
-        });
-    };
+    function proceedForm() {
+        updateQueryString(2)
+    }
 
     function openFileInput() {
         inputFileRef.current.click();
@@ -138,7 +142,10 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     // }, [selectedImage])
 
     return (
-        <div style={{width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box", padding: "0 40px" }}>
+        <form onSubmit={(evt) => {
+            evt.preventDefault();
+            proceedForm();
+        }} style={{margin: "0 auto", width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box", padding: "0 40px" }}>
             {/* <div style={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch"}}> */}
                 {/* <div className="addForm__first-step-title" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid rgb(226, 100, 59)", boxSizing: "border-box"}}>
                     <span>Шаг {formStep + 1}/3</span>
@@ -180,7 +187,7 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
                                         // setFormData((prevValue) => {
                                         //     return {...prevValue, course: {...prevValue.course, tarifs: evt.target.value.split(",")}}
                                         // })
-                                        // saveInputChanges(evt.target.name, evt.target.value)
+                                        saveInputChanges(evt.target.name, evt.target.value)
                                     }} value={course.tarifs} name="tarifs" placeholder="Тарифы курса через запятую"></input>
                                     <input ref={inputFileRef} name="cover" type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
                                 </div>                            
@@ -196,8 +203,8 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
 
             {/* </div> */}
 
-            <motion.button type="button" onClick={handleNextClick} whileHover={{backgroundColor: "rgb(93, 176, 199)", color: "rgb(255, 255, 255)"}} style={{alignSelf: "flex-end",  fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Продолжить</motion.button>
+            <motion.button type="submit" whileHover={{backgroundColor: "rgb(93, 176, 199)", color: "rgb(255, 255, 255)"}} style={{alignSelf: "flex-end",  fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Продолжить</motion.button>
 
-        </div>
+        </form>
     )
 }

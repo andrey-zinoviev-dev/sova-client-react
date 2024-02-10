@@ -2,7 +2,7 @@ import React from "react";
 // import { motion } from "framer-motion";
 import {UserContext} from '../context/userContext';
 import './Dashboard.css';
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
 import MenuButton from '../images/Group 3.png';
@@ -124,7 +124,7 @@ export default function Dashboard({ setAddUserOpened, logout, loggedIn }) {
           {/* <div style={{width: 7, height: 7, borderRadius: "51%", backgroundColor: "#5DB0C7", margin: "0 0 5px 0"}}></div> */}
         <div className="header__buttons">
           {loggedUser._id && loggedUser.admin && <button className="header__buttons-btn" style={{display: window.innerWidth <= 767 && "none"}} onClick={() => {
-            navigate('/addCourse');
+            navigate({pathname: '/addCourse', search: `?${createSearchParams({step: 1})}`});
           }}>
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512" fill="rgb(93, 176, 199)"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
           </button>}

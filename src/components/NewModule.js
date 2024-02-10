@@ -7,8 +7,8 @@ export default function NewModule({module, lessonsLength, openModule}) {
   //   console.log(moduleOpened);
   // }, [moduleOpened]);
 
-  function openLessonModal() {
-    openModule(module.name);
+  function openLessonModal(module) {
+    openModule(module);
   }
 
   return (
