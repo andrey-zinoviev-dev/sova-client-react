@@ -13,7 +13,7 @@ import SuccessAddCourse from './SuccessAddCourse';
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import NewModule from "./NewModule";
 
-export default function AddStepModule({successfullCourseAddOpened, updateQueryString, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading, uploadProgress}) {
+export default function AddStepModule({successfullCourseAddOpened, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading, uploadProgress}) {
     //navigate
     const navigate = useNavigate();
     //name transformer
@@ -242,7 +242,7 @@ export default function AddStepModule({successfullCourseAddOpened, updateQuerySt
 
             <div style={{boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
                 <button type="button" onClick={() => {
-                    updateQueryString(1)
+                    // updateQueryString(1)
                     // setFormStep((prevValue) => {
                     //     return prevValue -= 1;
                     // });

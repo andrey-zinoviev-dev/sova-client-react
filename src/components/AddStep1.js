@@ -7,7 +7,7 @@ import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import { createSearchParams, useNavigate } from "react-router-dom";
 // import { useSearchParams } from "react-router-dom";
 
-export default function AddStep1({updateQueryString, formData, setFormData, formStep, setFormStep, setSelectedFiles}) {
+export default function AddStep1({formData, setFormData, formStep, setFormStep, setSelectedFiles}) {
     //navigate
     const navigate = useNavigate();
 
@@ -25,9 +25,9 @@ export default function AddStep1({updateQueryString, formData, setFormData, form
     const imgRef = React.useRef();
     
     //functions
-    function proceedForm() {
-        updateQueryString(2)
-    }
+    // function proceedForm() {
+    //     updateQueryString(2)
+    // }
 
     function openFileInput() {
         inputFileRef.current.click();
@@ -86,9 +86,9 @@ export default function AddStep1({updateQueryString, formData, setFormData, form
 
     function saveInputChanges(name, value) {
         // console.log(name, value);
-        // localStorage.setItem("courseData", JSON.stringify({...formData, course: {
-        //     ...formData.course, [name]: value
-        // }}))
+        localStorage.setItem("courseData", JSON.stringify({...formData, course: {
+            ...formData.course, [name]: value
+        }}))
         setFormData({...formData, course: {
             ...formData.course, [name]: value,
         }})
@@ -144,7 +144,7 @@ export default function AddStep1({updateQueryString, formData, setFormData, form
     return (
         <form onSubmit={(evt) => {
             evt.preventDefault();
-            proceedForm();
+            // proceedForm();
         }} style={{margin: "0 auto", width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box", padding: "0 40px" }}>
             {/* <div style={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch"}}> */}
                 {/* <div className="addForm__first-step-title" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "2px solid rgb(226, 100, 59)", boxSizing: "border-box"}}>

@@ -52,26 +52,33 @@ export default function AddCourse() {
   const [uploadProgress, setUploadProgress] = React.useState(0);
   const [uploadFormSubmitted, setUploadFormSubmitted] = React.useState(false);
   const [successfullCourseAddOpened, setSuccessfullCourseAddOpened] = React.useState(false);
-  const [searchParams] = useSearchParams();
+  const [foundSketch, setFoundSketch] = React.useState({
+    found: false,
+    editFoundSketch: false,
+    skip: false,
+  })
+  // const [foundSketch, setFoundSketch] = React.useState(false);
+  // const [editFoundSketch, setEditFoundSketch] = React.useState(false);
+  // const [searchParams] = useSearchParams();
   //functions
   // function showSearchQueries() {
   //   const query = searchParams.get("step");
   //   console.log(query);
   // }
 
-  const query = +searchParams.get("step");
+  // const query = +searchParams.get("step");
   // console.log(query);
 
-  function updateQueryString(order) {
-    navigate({pathname: '/addCourse', search: `?${createSearchParams({step: order})}`});
-  };
+  // function updateQueryString(order) {
+  //   navigate({pathname: '/addCourse', search: `?${createSearchParams({step: order})}`});
+  // };
 
   function renderStep() {
     switch (formStep) {
       case 0:
-        return <AddStep1 updateQueryString={updateQueryString} formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
+        return <AddStep1 saveInputChanges={saveInputChanges} formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 1: 
-        return <AddStepModule updateQueryString={updateQueryString} formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened} uploadProgress={uploadProgress}/>
+        return <AddStepModule saveInputChanges={saveInputChanges} formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened} uploadProgress={uploadProgress}/>
       // case 2:
       //   return <AddCourseSuccess />
       // case 3:
@@ -84,6 +91,25 @@ export default function AddCourse() {
   function submitForm() {
     console.log(formData);
   }
+
+  function openFoundSketch() {
+    // setEditFoundSketch(true);
+    // setFoundSketch(false);
+    setFoundSketch((prevValue) => {
+      localStorage.setItem("skipFoundSketch", JSON.stringify(true))
+      return {...prevValue, found: false, editFoundSketch: true, skip: true}
+    })
+  }
+
+  function saveInputChanges(name, value) {
+    // console.log(name, value);
+    localStorage.setItem("courseData", JSON.stringify({...formData, course: {
+        ...formData.course, [name]: value
+    }}))
+    setFormData({...formData, course: {
+        ...formData.course, [name]: value,
+    }})
+};
 
 //   function saveInputChanges(name, value) {
 //     // console.log(name, value);
@@ -123,20 +149,49 @@ export default function AddCourse() {
 
   React.useEffect(() => {
     const courseData = localStorage.getItem("courseData");
+    const skipFoundSkecth = localStorage.getItem("skipFoundSketch");
+    const parsedSkipSketch = JSON.parse(skipFoundSkecth);
     const parsedCourseData = JSON.parse(courseData);
-    if(parsedCourseData) {
-      setFormData(parsedCourseData);
-      setFormStep(query - 1);
-      // console.log(parsedCourseData);
+    
+    if(!parsedSkipSketch) {
+      // console.log('yes')
+      const timeout = setTimeout(() => {
+        if(parsedCourseData) {
+          setFoundSketch((prevValue) => {
+            return {...prevValue, found: true}
+          })
+          // setFoundSketch(true);
+          // setFormData(parsedCourseData);
+          // setFormStep(query - 1);
+          // console.log(parsedCourseData);
+        }
+      }, 500)
+      
+      return () => {
+        clearTimeout(timeout);
+      }
+    } else {
+      // console.log('no');
+      parsedCourseData && setFormData(parsedCourseData)
     }
-
-  }, [query]);
+  }, []);
 
   React.useEffect(() => {
-    // console.log(formData);
-    localStorage.setItem("courseData", JSON.stringify(formData));
-    // console.log(JSON.parse(localStorage.getItem("courseData")));
-  } ,[formData]);
+    // console.log(editFoundSketch);
+    // localStorage.setItem()
+    const parsedCourseData = JSON.parse(localStorage.getItem("courseData"));
+    // console.log(parsedCourseData);
+    foundSketch.editFoundSketch && setFormData(parsedCourseData);
+    // editFoundSketch && setFoundSketch(false);
+  }, [foundSketch.editFoundSketch])
+
+  // React.useEffect(() => {
+  //   // console.log(formData);
+
+  //   // localStorage.setItem("courseData", JSON.stringify(formData));
+
+  //   // console.log(JSON.parse(localStorage.getItem("courseData")));
+  // } ,[formData]);
 
   // React.useEffect(() =>{
   //   console.log(searchParams)
@@ -144,7 +199,6 @@ export default function AddCourse() {
 
   return (
     <section className="addCourse">
-      
       <div className="addCourse__progress-wrapper">
         <div style={{display: "flex"}}>
           {/* <button onClick={() => {}} style={{width: 40, height: 30, backgroundColor: "transparent", border: "none", padding: 0, margin: "5px 0 0 0"}}>
@@ -165,6 +219,12 @@ export default function AddCourse() {
           </p>
         </div>
         {/* <button style={{width: 50, height: 50, padding: 0, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", borderRadius: 5, color: "rgb(93, 176, 199)", fontWeight: 500, fontSize: 20}}>S</button> */}
+        {foundSketch.found && <div>
+          <p>Был найден курс, который вы хотели добавить, вернуться к его редактированию?</p>
+          <button onClick={openFoundSketch}>
+            Вернуться к редкатированию курса
+          </button>
+        </div>}
 
       </div>
       {/* <div style={{width: "100%", boxSizing: "border-box", padding: "0 50px"}}>
