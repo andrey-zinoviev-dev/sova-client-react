@@ -24,6 +24,7 @@ import Lesson from './components/Lesson';
 
 function App() {
   //variables
+  // const location = useLocation();
   // const userRef = useRef({});
 
   //state variables
@@ -215,6 +216,10 @@ function App() {
     localStorage.removeItem('token');
   };
 
+  // function showLocation() {
+  //   console.log(location);
+  // }
+
   React.useEffect(() => {
     // console.log(loggedIn);
     // console.log(user);
@@ -254,10 +259,20 @@ function App() {
 
   }, [loggedIn]);
 
+  // React.useEffect(() => {
+  //   console.log(location)
+  // }, [location])
   // //test
   // function switchToLoggedInComponent() {
   //   // setLoggedIn(true);
   // };
+
+  // React.useEffect(() => {
+  //   window.addEventListener("popstate", showLocation)
+  //   return () => {
+  //     window.removeEventListener("popstate", showLocation);
+  //   }
+  // }, [location])
 
   return (
     <div className="App" onKeyUp={handlePrntScrnButton} tabIndex={0}>

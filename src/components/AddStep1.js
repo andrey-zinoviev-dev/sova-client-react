@@ -144,6 +144,12 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     return (
         <form onSubmit={(evt) => {
             evt.preventDefault();
+            setFormStep((prevValue) => {
+                sessionStorage.setItem("formStep", JSON.stringify((prevValue + 1)))
+                return prevValue + 1;
+            })
+            // console.log(`step is ${formStep}`)
+            // localStorage.setItem("step", )
             // proceedForm();
         }} style={{margin: "0 auto", width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box", padding: "0 40px" }}>
             {/* <div style={{height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "stretch"}}> */}

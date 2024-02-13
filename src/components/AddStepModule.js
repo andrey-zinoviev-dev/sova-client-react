@@ -37,7 +37,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     //states
     // const [modulesOfCourse, setModulesOfCourse] = React.useState([]);
     const [moduleDivOpened, setModuleDivOpened] = React.useState(false);
-    const [selectedModuleTitle, setSelectedModuleTitle] = React.useState("");
+    const [selectedModuleIndex, setSelectedModuleIndex] = React.useState(null);
     const [selectedLessonTitle, setSelectedLessonTitle] = React.useState("");
     const [lessonPopupOpened, setLessonPopupOpened] = React.useState(false);
     const [lessonAddEnabled, setLessonAddEnabled] = React.useState(false);
@@ -56,13 +56,12 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     const {modules} = formData;
     // let selectedModule;
     // const selectedModule;
-    // let selectedModule = {name: "", cover: "", lessons: []};
-
-    // modules.find((courseModule) => {
-    //     return courseModule.name === selectedModuleTitle;
-    // }) ? modules.find((courseModule) => {
+    let selectedModule = modules[selectedModuleIndex];
+    // console.log(selectedModule);
+    // ? modules.find((courseModule) => {
     //     return courseModule.name === selectedModuleTitle;
     // }) : 
+
 
     // console.log(selectedModule);
 
@@ -156,10 +155,11 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
         // });
     }
 
-    function openModule(module) {
+    function openModule(index) {
         // console.log(module);
         // setSelectedModuleTitle(moduleTitle);
-        setModuleToUpdate(module)
+        // setModuleToUpdate(module)
+        setSelectedModuleIndex(index)
         setLessonPopupOpened(true);
         // selectedModule = formData.modules.find((module) => {
         //     return module.title === moduleData.title;
@@ -219,7 +219,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                     //     setSelectedModuleTitle(moduleOfCourse.title);
                        
                     }} key={index} whileHover={{border: "2px solid rgb(255, 255, 255)", cursor: "pointer"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", maxHeight: 605}}>
-                        <NewModule module={moduleOfCourse} openModule={openModule}/>
+                        <NewModule index={index} module={moduleOfCourse} openModule={openModule}/>
                          {/* <button type="button" className="addCourse__form-moduleLesson-list-scroll-element-close" onClick={(evt) => {
                     //         evt.stopPropagation();
                     //         setFormData((prevValue) => {
@@ -243,9 +243,10 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
             <div style={{boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
                 <button type="button" onClick={() => {
                     // updateQueryString(1)
-                    // setFormStep((prevValue) => {
-                    //     return prevValue -= 1;
-                    // });
+                    setFormStep((prevValue) => {
+                        sessionStorage.setItem("formStep", JSON.stringify(prevValue - 1));
+                        return prevValue - 1;
+                    });
                 }} style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Назад к курсу</button>
                 <button type="button" style={{width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
                     setModuleDivOpened(true);
@@ -292,8 +293,9 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
                             <button type="button" onClick={() => {
                                 // console.log(moduleNameRef.current.value);
-
+                                
                                 setFormData((prevValue) => {
+                                    localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: [...prevValue.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]}))
                                     return {...prevValue, modules: [...prevValue.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]}
                                 })
                                 // localStorage.setItem("moduleData", JSON.stringify([...formData.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]))
@@ -322,12 +324,13 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                     }} style={{position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: "50%", border: "2px solid #EB4037", color: "#EB4037", fontSize: 18, backgroundColor: "transparent"}}>
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
-                    <h3 style={{margin: 0}}>Уроки в модуле {moduleToUpdate.name}</h3> 
-                    <ul>
-                        {moduleToUpdate.lessons.map((lesson) => {
+                    <h3 style={{margin: 0}}>Уроки в модуле {selectedModule.name}</h3> 
+                    <ul className="addCourse__addLesson-lessons-list">
+                        {selectedModule.lessons.map((lesson) => {
                             return <li>{lesson.name}</li>
                         })}
-                        {!moduleToUpdate.lessons.length > 0 && <li>
+                        {/* <button>Добавить урок</button> */}
+                        {!selectedModule.lessons.length > 0 && <li>
                             <p>Уроков нет</p>
                         </li>}
                     </ul>

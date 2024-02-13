@@ -27,6 +27,9 @@ export default function AddCourse() {
   //navigate
   const navigate = useNavigate();
 
+  //location
+  // const location = useLocation();
+
   //states
   const [formStep, setFormStep] = React.useState(0);
   const [formData, setFormData] = React.useState({
@@ -88,15 +91,15 @@ export default function AddCourse() {
     }
   };
 
-  function submitForm() {
-    console.log(formData);
-  }
+  // function submitForm() {
+  //   console.log(formData);
+  // }
 
   function openFoundSketch() {
     // setEditFoundSketch(true);
     // setFoundSketch(false);
     setFoundSketch((prevValue) => {
-      localStorage.setItem("skipFoundSketch", JSON.stringify(true))
+      sessionStorage.setItem("skipFoundSketch", JSON.stringify(true))
       return {...prevValue, found: false, editFoundSketch: true, skip: true}
     })
   }
@@ -109,7 +112,12 @@ export default function AddCourse() {
     setFormData({...formData, course: {
         ...formData.course, [name]: value,
     }})
-};
+  };
+
+  // function leaveAddCourse() {
+  //   sessionStorage.removeItem("skipFoundSketch");
+  //   navigate("../");
+  // };
 
 //   function saveInputChanges(name, value) {
 //     // console.log(name, value);
@@ -147,12 +155,17 @@ export default function AddCourse() {
   //   }
   // ];
 
+  // window.addEventListener("popstate", (evt) => {
+  //   // console.log(evt)
+  //   console.log(location);
+  // })
+
   React.useEffect(() => {
     const courseData = localStorage.getItem("courseData");
-    const skipFoundSkecth = localStorage.getItem("skipFoundSketch");
+    const skipFoundSkecth = sessionStorage.getItem("skipFoundSketch");
     const parsedSkipSketch = JSON.parse(skipFoundSkecth);
     const parsedCourseData = JSON.parse(courseData);
-    
+    // console.log(skipFoundSkecth);
     if(!parsedSkipSketch) {
       // console.log('yes')
       const timeout = setTimeout(() => {
@@ -171,19 +184,21 @@ export default function AddCourse() {
         clearTimeout(timeout);
       }
     } else {
-      // console.log('no');
-      parsedCourseData && setFormData(parsedCourseData)
+      parsedSkipSketch && setFoundSketch((prevValue) => {
+        return {...prevValue, skip: true};
+      })
+      // parsedCourseData && setFormData(parsedCourseData)
     }
   }, []);
 
-  React.useEffect(() => {
-    // console.log(editFoundSketch);
-    // localStorage.setItem()
-    const parsedCourseData = JSON.parse(localStorage.getItem("courseData"));
-    // console.log(parsedCourseData);
-    foundSketch.editFoundSketch && setFormData(parsedCourseData);
-    // editFoundSketch && setFoundSketch(false);
-  }, [foundSketch.editFoundSketch])
+  // React.useEffect(() => {
+  //   // console.log(editFoundSketch);
+  //   // localStorage.setItem()
+  //   const parsedCourseData = JSON.parse(localStorage.getItem("courseData"));
+  //   // console.log(parsedCourseData);
+  //   // foundSketch.editFoundSketch && setFormData(parsedCourseData);
+  //   // editFoundSketch && setFoundSketch(false);
+  // }, [foundSketch.editFoundSketch])
 
   // React.useEffect(() => {
   //   // console.log(formData);
@@ -196,6 +211,20 @@ export default function AddCourse() {
   // React.useEffect(() =>{
   //   console.log(searchParams)
   // }, [searchParams])
+
+  React.useEffect(() => {
+    const courseData = localStorage.getItem("courseData");
+    const parsedCourseData = JSON.parse(courseData);
+    const savedFormStep = sessionStorage.getItem("formStep");
+    const parsedSavedFormStep = JSON.parse(savedFormStep);
+    foundSketch.skip && parsedCourseData && setFormData(parsedCourseData);
+    foundSketch.skip && parsedSavedFormStep && setFormStep(parsedSavedFormStep);
+    // console.log(foundSketch.skip)
+  }, [foundSketch.skip]);
+
+  // React.useEffect(() => {
+  //   console.log(location)
+  // }, [location])
 
   return (
     <section className="addCourse">
@@ -219,6 +248,7 @@ export default function AddCourse() {
           </p>
         </div>
         {/* <button style={{width: 50, height: 50, padding: 0, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", borderRadius: 5, color: "rgb(93, 176, 199)", fontWeight: 500, fontSize: 20}}>S</button> */}
+        {/* <button onClick={leaveAddCourse}>Назад</button> */}
         {foundSketch.found && <div>
           <p>Был найден курс, который вы хотели добавить, вернуться к его редактированию?</p>
           <button onClick={openFoundSketch}>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faPen, faXmark, faLock, faAnglesDown, faCamera, faPlus, faCheck, faX } from "@fortawesome/free-solid-svg-icons";
@@ -39,6 +39,8 @@ import EditLessonContent from "./EditLessonContent";
 export default function Courses({ socket, setCourseInEdit, logout, loggedIn, registerFormSubmit }) {
   //naviagte
   const navigate = useNavigate();
+  //location
+  const location = useLocation();
   //contexts
   const loggedInUser = React.useContext(UserContext);
 
