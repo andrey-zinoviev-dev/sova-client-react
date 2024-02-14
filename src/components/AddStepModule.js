@@ -324,16 +324,75 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                     }} style={{position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: "50%", border: "2px solid #EB4037", color: "#EB4037", fontSize: 18, backgroundColor: "transparent"}}>
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
-                    <h3 style={{margin: 0}}>Уроки в модуле {selectedModule.name}</h3> 
-                    <ul className="addCourse__addLesson-lessons-list">
-                        {selectedModule.lessons.map((lesson) => {
-                            return <li>{lesson.name}</li>
-                        })}
-                        {/* <button>Добавить урок</button> */}
-                        {!selectedModule.lessons.length > 0 && <li>
-                            <p>Уроков нет</p>
-                        </li>}
-                    </ul>
+
+                    {!lessonAddEnabled ? 
+                        <>
+                            <div>
+                                <img src={selectedModule.cover} alt={selectedModule.name}></img>
+                                <h3 style={{margin: 0}}>Уроки в модуле {selectedModule.name}</h3> 
+                            </div>
+                            {!selectedModule.lessons.length > 0 && <p>Уроков нет</p>}
+                            <ul style={{width: "100%", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", margin: 0, gap: 15}} className="addCourse__addLesson-lessons-list">
+                                {selectedModule.lessons.map((lesson) => {
+                                    return <li style={{cursor: "pointer", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", border: "2px solid #5DB0C7", borderRadius: 9, boxSizing: "border-box", padding: "7px 40px"}}>{lesson.name}</li>
+                                })}
+                                <li key="no lessons" style={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", border: "2px solid #5DB0C7", borderRadius: 9, boxSizing: "border-box", padding: "7px 40px"}}>
+                                    <motion.button onClick={() => {
+                                                                    // setLessonAddEnabled(true);
+                                        setLessonAddEnabled(true);
+                                     }} type="button" whileHover={{border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)"}} style={{border: "2px solid #5DB0C7", color: "#5DB0C7", backgroundColor: "transparent", aspectRatio: "1/1", borderRadius: 5, width: 35, margin: "0 auto"}}>
+                                        <FontAwesomeIcon icon={faPlus} />
+                                    </motion.button>
+                                </li>
+                            </ul>
+                        </>
+                        :
+                        <>
+                            <h3 style={{margin: 0}}>Добавление урока в модуль {selectedModule.name}</h3> 
+                            <form>
+                                <div style={{display: "flex", alignItems: "flex-start"}}>
+                                    <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
+                                        <input ref={lessonTitleRef} onChange={(evt) => {
+                                            setLessonContent((prevValue) => {
+                                                return {...prevValue, title: evt.target.value};
+                                            });
+                                            }} className="addCourse__form-input" type="text" placeholder="Название урока" />
+                                        <input ref={lessonCoverLinkRef} className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
+                                    </div>
+                                    <div style={{display: "flex", alignItems: "flex-end"}}>
+                                        <img alt="обложка урока" ref={lessonCoverImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={lessonContent.cover.clientPath ? lessonContent.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                                        <input onChange={(evt) => {handleLessonCoverUpload(evt)}} ref={lessonCoverInputRef} style={{display: "none"}} type="file"></input>
+                                        <button type="button" onClick={(() => {
+                                            lessonCoverInputRef.current.click();
+                                        })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
+                                            <FontAwesomeIcon icon={faCamera} />
+                                        </button>
+                                    </div>
+                                </div>
+                                <TipTapEditor setLessonContent={setLessonContent} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
+
+                                <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
+                                    // const updatedModules = modules.map((module) => {
+                                    //     return module.title === foundModule.title ? {...module, lessons:[...module.lessons, lessonContent]} : module;
+                                    // });
+                                    // setFormData((prevValue) => {
+                                    //     return {...prevValue, modules: updatedModules};
+                                    // });
+                                    // setLessonContent({title: "", cover: "", content: {"type": "doc",
+                                    // "content": [
+                                    // // …
+                                    // ]}});
+                                    // lessonAddFormRef.current.reset();
+                                    // setLessonAddEnabled(false);
+                                    console.log('yes');
+                                }}>
+                                    Добавить урок
+                                </button>
+                            </form>
+                        </>
+                    }
+
+
 
                     {/* <motion.div ref={moduleLessonsRef} style={{display: "flex", width: "100%", height: "100%", overflow: "hidden", margin: "25px 0"}}>
                         <div style={{flex: "100% 1 0", width:"100%", display: "flex", justifyContent: "flex-start", alignItems: "center", flexDirection: "column"}}> */}
