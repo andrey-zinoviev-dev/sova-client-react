@@ -14,6 +14,7 @@
     box-sizing: border-box;
     position: relative;
     padding: 45px;
+    overflow: auto;
     /* padding: 20px 45px 45px 45px; */
     /* padding: 30px 45px; */
     /* background-image: url('https://iconcollective.edu/wp-content/uploads/Home-Recording-Studio-by-Will-Francis.jpg'); */
@@ -205,14 +206,14 @@
 } */
 
 .addCourse__form-moduleLesson-list-scroll {
-    grid-template-columns: repeat(5, 280px);
+    /* grid-template-columns: repeat(5, 280px);
     grid-auto-rows: 280px;
-    max-height: 605px;
+    max-height: 605px; */
     
 }
 
 .addCourse__form-moduleLesson-list-scroll li {
-    padding: 15px 40px;
+    padding: 15px 35px;
 }
 
 .addCourse__form-moduleLesson-list-scroll li img {
@@ -220,7 +221,8 @@
 }
 
 .addCourse__form-moduleLesson-list-scroll p {
-    font-size: 18px;
+    font-size: 16px;
+    line-height: 1;
 }
 
 .addCourse__form-moduleLesson-list-scroll-element-close {

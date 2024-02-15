@@ -205,12 +205,13 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     // }, [selectedModuleTitle])
 
     return (
-        <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
+        // <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
+        <>
             {modules.length <= 0 && <div style={{textAlign: "center"}}>
                 <img style={{maxWidth: 90, margin: "0 0 20px 0"}} src={EmptyLogo} alt="" />
                 <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
             </div>}
-            {modules.length > 0 && <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", overflow: "hidden auto", gap: "45px", margin: "0 auto"}}>
+            {modules.length > 0 && <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
                 {modules.map((moduleOfCourse, index) => {
                     
                     // return <newLesson />
@@ -218,7 +219,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                     //     setLessonPopupOpened(true);
                     //     setSelectedModuleTitle(moduleOfCourse.title);
                        
-                    }} key={index} whileHover={{border: "2px solid rgb(255, 255, 255)", cursor: "pointer"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", maxHeight: 605}}>
+                    }} key={index} whileHover={{border: "2px solid rgb(255, 255, 255)", cursor: "pointer"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", gap: 20}}>
                         <NewModule index={index} module={moduleOfCourse} openModule={openModule}/>
                          {/* <button type="button" className="addCourse__form-moduleLesson-list-scroll-element-close" onClick={(evt) => {
                     //         evt.stopPropagation();
@@ -238,6 +239,13 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                     //         <button>Добавить урок</button> */}
                     </motion.li>
                 })}     
+                <motion.li key="empty module" whileHover={{border: "2px solid rgb(255, 255, 255)", cursor: "pointer"}} style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", maxHeight: 605}}>
+                    <button type="button" style={{margin: "auto 0", width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
+                        setModuleDivOpened(true);
+                    }}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                </motion.li>
             </ul>}
 
             <div style={{boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
@@ -248,11 +256,11 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                         return prevValue - 1;
                     });
                 }} style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Назад к курсу</button>
-                <button type="button" style={{width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
+                {/* <button type="button" style={{width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
                     setModuleDivOpened(true);
                 }}>
                     <FontAwesomeIcon icon={faPlus} />
-                </button>
+                </button> */}
                 <button onClick={() => {
                     // setFormStep((prevValue) => {
                     //     return prevValue += 1;
@@ -262,7 +270,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 </button>
             </div>
 
-            {moduleDivOpened && <div style={{position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "90px 0", backdropFilter: "blur(2px)"}}>
+            {moduleDivOpened && <div style={{position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "90px 0", backdropFilter: "blur(2px)"}}>
                 <div style={{position: "relative", display: "flex", alignItems: "center", justifyContent: "flex-start", flexDirection: "column", boxSizing: "border-box", padding: 30, border: "2px solid rgb(93, 176, 199)", borderRadius: 5}}>
                     <button type="button" onClick={() => {
                         setModuleDivOpened(false);
@@ -317,8 +325,8 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 </div>
             </div>}
 
-            {lessonPopupOpened && <section style={{position: "absolute", top: 0, left: 0, padding: 45, boxSizing: "border-box", width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "45px 0", backdropFilter: "blur(2px)"}}>
-                <div style={{position:"relative", width: "100%", maxWidth: 920, height: "100%", maxHeight: 768, padding: "20px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center"}}>
+            {lessonPopupOpened && <section style={{position: "fixed", top: 0, left: 0, padding: 45, boxSizing: "border-box", width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "45px 0", backdropFilter: "blur(2px)"}}>
+                <div style={{position:"relative", overflow: "auto", width: "100%", maxWidth: 1280, height: "100%", maxHeight: 1024, padding: "50px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: 50}}>
                     <button type="button" onClick={() => {
                         setLessonPopupOpened(false);
                     }} style={{position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: "50%", border: "2px solid #EB4037", color: "#EB4037", fontSize: 18, backgroundColor: "transparent"}}>
@@ -327,18 +335,17 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
                     {!lessonAddEnabled ? 
                         <>
-                            <div>
-                                <img src={selectedModule.cover} alt={selectedModule.name}></img>
-                                <h3 style={{margin: 0}}>Уроки в модуле {selectedModule.name}</h3> 
+                            <div style={{display: "flex", alignItems: "center", width: "100%", maxWidth: 720}}>
+                                <img style={{width: 75, aspectRatio: "1/1", borderRadius: "50%", objectFit: "cover"}} src={selectedModule.cover} alt={selectedModule.name}></img>
+                                <h3 style={{margin: "0 auto"}}>Уроки в модуле {selectedModule.name}</h3> 
                             </div>
                             {!selectedModule.lessons.length > 0 && <p>Уроков нет</p>}
-                            <ul style={{width: "100%", padding: 0, listStyle: "none", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", margin: 0, gap: 15}} className="addCourse__addLesson-lessons-list">
+                            <ul style={{width: "100%", maxWidth: 720, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", margin: 0, gap: 15}} className="addCourse__addLesson-lessons-list">
                                 {selectedModule.lessons.map((lesson) => {
                                     return <li style={{cursor: "pointer", width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", border: "2px solid #5DB0C7", borderRadius: 9, boxSizing: "border-box", padding: "7px 40px"}}>{lesson.name}</li>
                                 })}
                                 <li key="no lessons" style={{width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", border: "2px solid #5DB0C7", borderRadius: 9, boxSizing: "border-box", padding: "7px 40px"}}>
                                     <motion.button onClick={() => {
-                                                                    // setLessonAddEnabled(true);
                                         setLessonAddEnabled(true);
                                      }} type="button" whileHover={{border: "2px solid rgb(255, 255, 255)", color: "rgb(255, 255, 255)"}} style={{border: "2px solid #5DB0C7", color: "#5DB0C7", backgroundColor: "transparent", aspectRatio: "1/1", borderRadius: 5, width: 35, margin: "0 auto"}}>
                                         <FontAwesomeIcon icon={faPlus} />
@@ -348,9 +355,17 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                         </>
                         :
                         <>
-                            <h3 style={{margin: 0}}>Добавление урока в модуль {selectedModule.name}</h3> 
-                            <form>
-                                <div style={{display: "flex", alignItems: "flex-start"}}>
+                            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: 720}}>
+                                <button onClick={() => {
+                                    setLessonAddEnabled(false);
+                                }} style={{backgroundColor: "transparent", width: 35, height: 35, borderRadius: "50%", border: "2px solid #5DB0C7", color: "#5DB0C7"}} type="button"><FontAwesomeIcon icon={faArrowLeft} /></button>
+                                <h3 style={{margin: "0 auto"}}>Добавление урока в модуль {selectedModule.name}</h3> 
+                            </div>
+                            <form onSubmit={(evt) => {
+                                evt.preventDefault();
+                                console.log('yes');
+                            }} style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", gap: 25, margin: "0 0 auto 0"}}>
+                                <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
                                     <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
                                         <input ref={lessonTitleRef} onChange={(evt) => {
                                             setLessonContent((prevValue) => {
@@ -359,19 +374,19 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                             }} className="addCourse__form-input" type="text" placeholder="Название урока" />
                                         <input ref={lessonCoverLinkRef} className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
                                     </div>
-                                    <div style={{display: "flex", alignItems: "flex-end"}}>
+                                    <div style={{display: "flex", alignItems: "flex-end", position: "relative"}}>
                                         <img alt="обложка урока" ref={lessonCoverImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={lessonContent.cover.clientPath ? lessonContent.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
                                         <input onChange={(evt) => {handleLessonCoverUpload(evt)}} ref={lessonCoverInputRef} style={{display: "none"}} type="file"></input>
                                         <button type="button" onClick={(() => {
                                             lessonCoverInputRef.current.click();
-                                        })} style={{translate: "-25px 5px", width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
+                                        })} style={{position: "absolute", bottom: 0, right: 0, width: 30, aspectRatio: "1/1", padding: 0, border: "none", borderRadius: "50%"}}>
                                             <FontAwesomeIcon icon={faCamera} />
                                         </button>
                                     </div>
                                 </div>
                                 <TipTapEditor setLessonContent={setLessonContent} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
 
-                                <button type="button" style={{margin: "auto 0 0 0", width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
+                                <button type="submit" style={{width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
                                     // const updatedModules = modules.map((module) => {
                                     //     return module.title === foundModule.title ? {...module, lessons:[...module.lessons, lessonContent]} : module;
                                     // });
@@ -384,7 +399,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                     // ]}});
                                     // lessonAddFormRef.current.reset();
                                     // setLessonAddEnabled(false);
-                                    console.log('yes');
+                                    // console.log('yes');
                                 }}>
                                     Добавить урок
                                 </button>
@@ -652,6 +667,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                     </button>
                 </div>
             </SuccessAddCourse>} */}
-        </div>
+        </>
+        // </div>
     )
 };

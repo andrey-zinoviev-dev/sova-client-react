@@ -106,7 +106,7 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
     }, [foundLesson, editor])
     // console.log(foundLesson);
     return (
-        <div style={{height: "100%", width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", maxHeight: 540, margin: "0 0 25px 0", overflow: "auto", boxSizing: "border-box"}}>
+        <div style={{width: 720, borderRadius: "9px", border: "2px solid #5DB0C7", boxSizing: "border-box"}}>
             <TipTapButtons editor={editor} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             <EditorContent style={{height: "calc(100% - 40px)"}} editor={editor} />
         </div>
