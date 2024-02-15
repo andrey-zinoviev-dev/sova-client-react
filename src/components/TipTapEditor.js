@@ -53,22 +53,23 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
             }),
             Video
         ],
-        content: foundLesson && foundLesson.content ,
+        // content: foundLesson && foundLesson.content ,
         
         onUpdate: ({editor}) => {
-            foundLesson ? setFormData((prevValue) => {
+          console.log(editor.getJSON());
+            // foundLesson ? setFormData((prevValue) => {
                 
-                const modulesToUpdate = prevValue.modules.map((module) => {
-                    return module.title === foundModule.title ? {...module, lessons: module.lessons.map((lesson) => {
-                        return lesson.title === foundLesson.title ? {...lesson, content: editor.getJSON()} : lesson;
-                    })} : module;
-                });
-                return {...prevValue, modules: modulesToUpdate};
-            }) :
-            setLessonContent((prevValue) => {
-                // console.log('yes');
-                return {...prevValue, content: editor.getJSON()}
-            })
+            //     const modulesToUpdate = prevValue.modules.map((module) => {
+            //         return module.title === foundModule.title ? {...module, lessons: module.lessons.map((lesson) => {
+            //             return lesson.title === foundLesson.title ? {...lesson, content: editor.getJSON()} : lesson;
+            //         })} : module;
+            //     });
+            //     return {...prevValue, modules: modulesToUpdate};
+            // }) :
+            // setLessonContent((prevValue) => {
+            //     // console.log('yes');
+            //     return {...prevValue, content: editor.getJSON()}
+            // })
 
         //     setSelectedLesson((prevValue) => {
         //         return {...prevValue, layout: editor.getJSON()}

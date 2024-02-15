@@ -43,10 +43,10 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     const [lessonAddEnabled, setLessonAddEnabled] = React.useState(false);
     const [selectedModuleCover, setSelectedModuleCover] = React.useState('');
     const [moduleContent, setModuleContent] = React.useState({title: "", cover: "", lessons: []});
-    const [lessonContent, setLessonContent] = React.useState({title: "", cover: "", content: {"type": "doc",
-    "content": [
-      // …
-    ]}});
+    // const [lessonContent, setLessonContent] = React.useState({name: "", cover: "", content: {"type": "doc",
+    // "content": [
+    //   // …
+    // ]}});
     const [lessonCoverEditOpened, setLessonCoverEditOpened] = React.useState(false);
     const [lessonContentEditOpened, setLessonContentEditOpened] = React.useState(false);
     const [moduleToUpdate, setModuleToUpdate] = React.useState({name: "", cover: "", lessons: []});
@@ -138,6 +138,15 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     };
 
     function handleLessonCoverUpload(evt) {
+        handleCoverUpload(evt)
+        .then((data) => {
+            // console.log(data);
+            lessonCoverImg.current.src = data;
+
+        })
+        .catch((err) => {
+            console.log(err);
+        })
         // const picFile = handleCoverUpload(evt);
         // console.log(picFile);
         // // lessonCoverImg.current.src = picFile.clientPath;
@@ -211,7 +220,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 <img style={{maxWidth: 90, margin: "0 0 20px 0"}} src={EmptyLogo} alt="" />
                 <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
             </div>}
-            {modules.length > 0 && <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
+            {modules.length > 0 && <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", gridAutoRows: "1fr", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
                 {modules.map((moduleOfCourse, index) => {
                     
                     // return <newLesson />
@@ -363,19 +372,28 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                             </div>
                             <form onSubmit={(evt) => {
                                 evt.preventDefault();
-                                console.log('yes');
+                                // console.log(lessonTitleRef.current.value, lessonCoverImg.current.src);
+                                // selectedModule.lessons = [...selectedModule.lessons, {name: lessonTitleRef.current.value}]
+                                setFormData((prevValue) => {
+                                    // console.log(prevValue.modules[selectedModuleIndex])
+                                    const updatedModules = prevValue.modules.map((module, index) => {
+                                        return index === selectedModuleIndex ? {...module, lessons: [...module.lessons, {name: lessonTitleRef.current.value, cover: lessonCoverImg.current.src}]} : module
+                                    })
+                                    // console.log(updatedModules);
+                                    return {...prevValue, modules: updatedModules};
+                                })
                             }} style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", gap: 25, margin: "0 0 auto 0"}}>
                                 <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
                                     <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
                                         <input ref={lessonTitleRef} onChange={(evt) => {
-                                            setLessonContent((prevValue) => {
-                                                return {...prevValue, title: evt.target.value};
-                                            });
+                                            // setLessonContent((prevValue) => {
+                                            //     return {...prevValue, title: evt.target.value};
+                                            // });
                                             }} className="addCourse__form-input" type="text" placeholder="Название урока" />
                                         <input ref={lessonCoverLinkRef} className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
                                     </div>
                                     <div style={{display: "flex", alignItems: "flex-end", position: "relative"}}>
-                                        <img alt="обложка урока" ref={lessonCoverImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src={lessonContent.cover.clientPath ? lessonContent.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="}/>
+                                        <img alt="обложка урока" ref={lessonCoverImg} style={{maxWidth: 140, aspectRatio: "1/1", borderRadius: 9, objectFit: "cover"}} src="https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="/>
                                         <input onChange={(evt) => {handleLessonCoverUpload(evt)}} ref={lessonCoverInputRef} style={{display: "none"}} type="file"></input>
                                         <button type="button" onClick={(() => {
                                             lessonCoverInputRef.current.click();
@@ -384,23 +402,9 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                         </button>
                                     </div>
                                 </div>
-                                <TipTapEditor setLessonContent={setLessonContent} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
+                                <TipTapEditor selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
 
-                                <button type="submit" style={{width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}} onClick={() => {
-                                    // const updatedModules = modules.map((module) => {
-                                    //     return module.title === foundModule.title ? {...module, lessons:[...module.lessons, lessonContent]} : module;
-                                    // });
-                                    // setFormData((prevValue) => {
-                                    //     return {...prevValue, modules: updatedModules};
-                                    // });
-                                    // setLessonContent({title: "", cover: "", content: {"type": "doc",
-                                    // "content": [
-                                    // // …
-                                    // ]}});
-                                    // lessonAddFormRef.current.reset();
-                                    // setLessonAddEnabled(false);
-                                    // console.log('yes');
-                                }}>
+                                <button type="submit" style={{width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}}>
                                     Добавить урок
                                 </button>
                             </form>
