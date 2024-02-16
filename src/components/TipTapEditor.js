@@ -6,7 +6,7 @@ import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 
-export default function TipTapEditor({lessonContent, setLessonContent, foundLesson, foundModule, formData, selectedFiles, setFormData, setSelectedFiles}) {
+export default function TipTapEditor({addContentToNewLesson, editContentOfLesson, selectedLesson, selectedFiles, setSelectedFiles}) {
     //crete Video extension
   const Video = Node.create({
     name: "video",
@@ -53,10 +53,14 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
             }),
             Video
         ],
-        // content: foundLesson && foundLesson.content ,
+        content: selectedLesson && selectedLesson.content ,
         
         onUpdate: ({editor}) => {
-          console.log(editor.getJSON());
+          selectedLesson ? 
+          editContentOfLesson(editor.getJSON())
+          :
+          addContentToNewLesson(editor.getJSON());
+          
             // foundLesson ? setFormData((prevValue) => {
                 
             //     const modulesToUpdate = prevValue.modules.map((module) => {
@@ -98,13 +102,13 @@ export default function TipTapEditor({lessonContent, setLessonContent, foundLess
     //     console.log(foundLesson);
     // }, [foundLesson])
 
-    React.useEffect(() => {
-        if(editor) {
-          // lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
-          // foundLesson && editor.commands.setContent(foundLesson.content)
-        }
+    // React.useEffect(() => {
+    //     if(editor) {
+    //       // lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
+    //       // foundLesson && editor.commands.setContent(foundLesson.content)
+    //     }
          
-    }, [foundLesson, editor])
+    // }, [foundLesson, editor])
     // console.log(foundLesson);
     return (
         <div style={{width: 720, borderRadius: "9px", border: "2px solid #5DB0C7", boxSizing: "border-box"}}>
