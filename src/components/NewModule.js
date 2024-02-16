@@ -1,6 +1,8 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 // import { useNavigate } from "react-router-dom";
-export default function NewModule({module, index, lessonsLength, openModule}) {
+export default function NewModule({module, index, lessonsLength, openModule, openEditModule}) {
   //navigate
   // const navigate = useNavigate();
   // const [moduleOpened, setModuleOpened] = React.useState(false);
@@ -9,20 +11,33 @@ export default function NewModule({module, index, lessonsLength, openModule}) {
   //   console.log(moduleOpened);
   // }, [moduleOpened]);
 
-  function openLessonModal(index) {
-    // navigate("./addLessons", {
-    //   state: module,
-    // })
-    openModule(index);
-  }
+  // function openLessonModal(index) {
+  //   // navigate("./addLessons", {
+  //   //   state: module,
+  //   // })
+  //   openModule(index);
+  // }
 
   return (
     <>
       <h3 style={{margin: 0, width: "100%", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", lineHeight: 1}}>{module.name}</h3>
+      <div>
+        <button onClick={(() => {
+          openEditModule(index);
+        })}>
+          <FontAwesomeIcon icon={faPen} />
+        </button>
+        <button onClick={(() => {
+          console.log("delete module");
+          // openEditModule(index);
+        })}>
+          <FontAwesomeIcon icon={faTrashCan} />
+        </button>
+      </div>
       <img style={{borderRadius: 9, aspectRatio: "1 / 1", objectFit: "cover"}} src={module.cover} alt={module.name}></img>
-      <p style={{margin: 0, width: "100%"}}>{lessonsLength > 0 ? `Уроки ${lessonsLength}` : "Уроков в модуле нет"}</p>
+      <p style={{margin: 0, width: "100%"}}>{module.lessons.length > 0 ? `Уроки: ${module.lessons.length}` : "Уроков в модуле нет"}</p>
       <button type="button" onClick={() => {
-        openLessonModal(index);
+        openModule(index);
       }}>Добавить урок</button>
     </>
   )
