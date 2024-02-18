@@ -6,8 +6,13 @@ import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 
-export default function TipTapEditor({addContentToNewLesson, editContentOfLesson, selectedLesson, selectedFiles, setSelectedFiles}) {
-    //crete Video extension
+export default function TipTapEditor({setLessonContent, addContentToNewLesson, editContentOfLesson, selectedLesson, selectedFiles, setSelectedFiles}) {
+  //states
+  const [editorContent, setEditorContent] = React.useState({name: "", cover: "", content: {"type": "doc",
+  "content": [
+    // …
+  ]}});
+  //crete Video extension
   const Video = Node.create({
     name: "video",
     group: "block",
@@ -56,11 +61,13 @@ export default function TipTapEditor({addContentToNewLesson, editContentOfLesson
         content: selectedLesson && selectedLesson.content ,
         
         onUpdate: ({editor}) => {
-          selectedLesson ? 
-          editContentOfLesson(editor.getJSON())
-          :
-          addContentToNewLesson(editor.getJSON());
-          
+          setLessonContent(editor.getJSON());
+          // selectedLesson ? 
+          // editContentOfLesson(editor.getJSON())
+          // :
+          // addContentToNewLesson(editor.getJSON());
+
+          // setEditorContent(editor.getJSON());
             // foundLesson ? setFormData((prevValue) => {
                 
             //     const modulesToUpdate = prevValue.modules.map((module) => {
@@ -110,6 +117,7 @@ export default function TipTapEditor({addContentToNewLesson, editContentOfLesson
          
     // }, [foundLesson, editor])
     // console.log(foundLesson);
+
     return (
         <div style={{width: 720, borderRadius: "9px", border: "2px solid #5DB0C7", boxSizing: "border-box"}}>
             <TipTapButtons editor={editor} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>

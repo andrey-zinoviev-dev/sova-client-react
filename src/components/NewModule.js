@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 // import { useNavigate } from "react-router-dom";
-export default function NewModule({module, index, lessonsLength, openModule, openEditModule}) {
+export default function NewModule({module, index, lessonsLength, openModule, openEditModule, deleteModule}) {
   //navigate
   // const navigate = useNavigate();
   // const [moduleOpened, setModuleOpened] = React.useState(false);
@@ -28,7 +28,7 @@ export default function NewModule({module, index, lessonsLength, openModule, ope
           <FontAwesomeIcon icon={faPen} />
         </button>
         <button onClick={(() => {
-          console.log("delete module");
+          deleteModule(index);
           // openEditModule(index);
         })}>
           <FontAwesomeIcon icon={faTrashCan} />

@@ -53,6 +53,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     "content": [
       // …
     ]}});
+    // const [editLessonContent, setEditLessonContent] = React.useState()
     // const [lessonCoverEditOpened, setLessonCoverEditOpened] = React.useState(false);
     // const [lessonContentEditOpened, setLessonContentEditOpened] = React.useState(false);
     // const [moduleToUpdate, setModuleToUpdate] = React.useState({name: "", cover: "", lessons: []});
@@ -191,7 +192,18 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
         setModuleEditOpened(true);
     }
 
-
+    function deleteModule(index) {
+        // console.log(index);
+        // setSelectedModuleIndex(index);
+        setFormData((prevValue) => {
+            const updatedModules = prevValue.modules.filter((module, moduleIndex) => {
+                return moduleIndex !== index; 
+            });
+            // console.log(updatedModules);
+            localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: updatedModules}))
+            return {...prevValue, modules: updatedModules};
+        })
+    }
 
     function deleteLesson(index) {
         setFormData((prevValue) => {
@@ -212,22 +224,25 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
         setLessonEditOpened(true);
     }
 
-    function addContentToNewLesson(content) {
-        setLessonContent(content)
-    };
+    // function addContentToNewLesson(content) {
+    //     // console.log(content);
+    //     setLessonContent(content);
+    // };
 
-    function editContentOfLesson(content) {
-        setFormData((prevValue) => {
-            const updatedLessons = selectedModule.lessons.map((lesson, index) => {
-                return index === selectedLessonIndex ? {...lesson, content: content} : lesson;
-            });
-            const updatedModules = prevValue.modules.map((module, index) => {
-                return index === selectedModuleIndex ? {... module, lessons: updatedLessons} : module;
-            });
-            localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: updatedModules}));
-            return {...prevValue, modules: updatedModules};
-        });
-    }
+    // function editContentOfLesson(content) {
+    //     setLessonContent(content);
+
+    //     // setFormData((prevValue) => {
+    //     //     const updatedLessons = selectedModule.lessons.map((lesson, index) => {
+    //     //         return index === selectedLessonIndex ? {...lesson, content: content} : lesson;
+    //     //     });
+    //     //     const updatedModules = prevValue.modules.map((module, index) => {
+    //     //         return index === selectedModuleIndex ? {... module, lessons: updatedLessons} : module;
+    //     //     });
+    //     //     localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: updatedModules}));
+    //     //     return {...prevValue, modules: updatedModules};
+    //     // });
+    // }
 
     // function handleCoverLink(evt) {
     //     // moduleCoverImg.current.src = evt.target.value;
@@ -261,11 +276,8 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     // }, [])
 
     // React.useEffect(() => {
-    //     console.log(selectedModuleTitle)
-    //     selectedModule = modules.find((courseModule) => {
-    //         return courseModule.name === selectedModuleTitle;
-    //     })
-    // }, [selectedModuleTitle])
+    //     console.log(lessonContent);
+    // }, [lessonContent]);
 
     return (
         // <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
@@ -281,7 +293,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                     return <li onClick={() => {
 
                     }} key={index}  style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", gap: 20}}>
-                        <NewModule index={index} module={moduleOfCourse} openModule={openModule} openEditModule={openEditModule}/>
+                        <NewModule index={index} module={moduleOfCourse} openModule={openModule} openEditModule={openEditModule} deleteModule={deleteModule}/>
 
                     </li>
                 })}     
@@ -428,6 +440,10 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 <div style={{position:"relative", overflow: "auto", width: "100%", maxWidth: 1280, height: "100%", maxHeight: 1024, padding: "50px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: 50}}>
                     <button type="button" onClick={() => {
                         setLessonPopupOpened(false);
+                        setLessonContent({name: "", cover: "", content: {"type": "doc",
+                        "content": [
+                          // …
+                        ]}});
                     }} style={{position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: "50%", border: "2px solid #EB4037", color: "#EB4037", fontSize: 18, backgroundColor: "transparent"}}>
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
@@ -464,6 +480,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                             <form onSubmit={(evt) => {
                                 evt.preventDefault();
                                 // console.log(lessonTitleRef.current.value, lessonCoverImg.current.src, lessonContent)
+
                                 setFormData((prevValue) => {
                                     const updatedModules = prevValue.modules.map((module, index) => {
                                         return index === selectedModuleIndex ? {...module, lessons: [...module.lessons, {name: lessonTitleRef.current.value, cover: lessonCoverImg.current.src, content: lessonContent}]} : module
@@ -477,11 +494,11 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                 "content": [
                                   // …
                                 ]}});
+
                             }} style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", gap: 25, margin: "0 0 auto 0"}}>
                                 <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
                                     <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
-                                        <input ref={lessonTitleRef} onChange={(evt) => {
-                                            }} className="addCourse__form-input" type="text" placeholder="Название урока" />
+                                        <input ref={lessonTitleRef} className="addCourse__form-input" type="text" placeholder="Название урока" />
                                         <input ref={lessonCoverLinkRef} className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
                                     </div>
                                     <div style={{display: "flex", alignItems: "flex-end", position: "relative"}}>
@@ -494,7 +511,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                         </button>
                                     </div>
                                 </div>
-                                <TipTapEditor addContentToNewLesson={addContentToNewLesson} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
+                                <TipTapEditor setLessonContent={setLessonContent} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
 
                                 <button type="submit" style={{width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}}>
                                     Добавить урок
@@ -688,11 +705,35 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 <div style={{position:"relative", overflow: "auto", width: "100%", maxWidth: 1280, height: "100%", maxHeight: 1024, padding: "50px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: 50}}>
                     <button type="button" onClick={() => {
                         setLessonEditOpened(false);
+                        setLessonContent({name: "", cover: "", content: {"type": "doc",
+                        "content": [
+                          // …
+                        ]}});
                     }} style={{position: "absolute", top: 10, right: 10, width: 30, height: 30, borderRadius: "50%", border: "2px solid #EB4037", color: "#EB4037", fontSize: 18, backgroundColor: "transparent"}}>
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
                     <h3>{selectedLesson.name}</h3>
-                    <TipTapEditor editContentOfLesson={editContentOfLesson} selectedLesson={selectedLesson}></TipTapEditor>
+                    <TipTapEditor setLessonContent={setLessonContent} selectedLesson={selectedLesson}></TipTapEditor>
+                    <button onClick={() => {
+                        // console.log(lessonContent);
+                        setFormData((prevValue) => {
+                            // const updatedLessons = 
+                            const updatedLessons = selectedModule.lessons.map((lesson, index) => {
+                                return index === selectedLessonIndex ? {...lesson, content: lessonContent} : lesson;
+                            })
+                            const updatedModules = prevValue.modules.map((module, index) => {
+                                return index === selectedModuleIndex ? {...module, lessons: updatedLessons} : module
+                            });
+                            localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: updatedModules}));
+
+                            return {...prevValue, modules: updatedModules};
+                        });
+                        setLessonEditOpened(false);
+                        setLessonContent({name: "", cover: "", content: {"type": "doc",
+                        "content": [
+                          // …
+                        ]}});
+                    }}>Обновить урок</button>
                 </div>    
             </section>}
             {/* {lessonCoverEditOpened && <section style={{display: "flex", alignItems: "center", justifyContent: "center", position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 30, backgroundColor: "rgba(0, 0, 0, 0.75)"}}>
