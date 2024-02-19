@@ -43,61 +43,30 @@ export default function AddCourse() {
     modules: [
 
     ],
-    // files: [
-
-    // ],
-    // module: {
-    //   text: "",
-    // },
   });
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [uploadProgress, setUploadProgress] = React.useState(0);
+  // const [uploadProgress, setUploadProgress] = React.useState(0);
   const [uploadFormSubmitted, setUploadFormSubmitted] = React.useState(false);
   const [successfullCourseAddOpened, setSuccessfullCourseAddOpened] = React.useState(false);
   const [foundSketch, setFoundSketch] = React.useState({
     found: false,
     editFoundSketch: false,
     skip: false,
-  })
-  // const [foundSketch, setFoundSketch] = React.useState(false);
-  // const [editFoundSketch, setEditFoundSketch] = React.useState(false);
-  // const [searchParams] = useSearchParams();
-  //functions
-  // function showSearchQueries() {
-  //   const query = searchParams.get("step");
-  //   console.log(query);
-  // }
-
-  // const query = +searchParams.get("step");
-  // console.log(query);
-
-  // function updateQueryString(order) {
-  //   navigate({pathname: '/addCourse', search: `?${createSearchParams({step: order})}`});
-  // };
+  });
 
   function renderStep() {
     switch (formStep) {
       case 0:
         return <AddStep1 saveInputChanges={saveInputChanges} formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 1: 
-        return <AddStepModule saveInputChanges={saveInputChanges} formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened} uploadProgress={uploadProgress}/>
-      // case 2:
-      //   return <AddCourseSuccess />
-      // case 3:
-      //   return <AddStep3 formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep}/>
+        return <AddStepModule token={token} saveInputChanges={saveInputChanges} formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened}/>
       default:
         break;
     }
   };
 
-  // function submitForm() {
-  //   console.log(formData);
-  // }
-
   function openFoundSketch() {
-    // setEditFoundSketch(true);
-    // setFoundSketch(false);
     setFoundSketch((prevValue) => {
       sessionStorage.setItem("skipFoundSketch", JSON.stringify(true))
       return {...prevValue, found: false, editFoundSketch: true, skip: true}
@@ -114,51 +83,10 @@ export default function AddCourse() {
     }})
   };
 
-  // function leaveAddCourse() {
-  //   sessionStorage.removeItem("skipFoundSketch");
-  //   navigate("../");
-  // };
-
-//   function saveInputChanges(name, value) {
-//     // console.log(name, value);
-//     localStorage.setItem("courseData", JSON.stringify({...formData, course: {
-//         ...formData.course, [name]: value
-//     }}))
-//     setFormData({...formData, course: {
-//         ...formData.course, [name]: value,
-//     }})
-// };
-
   //refs
   const stepsRef = React.useRef();
   const prevStepRef = React.useRef();
   const nextButtonRef = React.useRef();
-  // const buttonStepRef = React.useRef();
-
-  //variables
-  // const stepsArray = [
-  //   {
-  //     description: "Название и описание курса",
-  //     icon: faSignature,
-  //   }, 
-  //   {
-  //     description: "Добавление модулей и уроков",
-  //     icon: faChartBar,
-  //   },
-  //   {
-  //     description: "Содержание уроков",
-  //     icon: faKeyboard
-  //   }, 
-  //   {
-  //     description: "Проверка курса",
-  //     icon: faListCheck,
-  //   }
-  // ];
-
-  // window.addEventListener("popstate", (evt) => {
-  //   // console.log(evt)
-  //   console.log(location);
-  // })
 
   React.useEffect(() => {
     const courseData = localStorage.getItem("courseData");
@@ -173,10 +101,6 @@ export default function AddCourse() {
           setFoundSketch((prevValue) => {
             return {...prevValue, found: true}
           })
-          // setFoundSketch(true);
-          // setFormData(parsedCourseData);
-          // setFormStep(query - 1);
-          // console.log(parsedCourseData);
         }
       }, 500)
       
@@ -186,38 +110,20 @@ export default function AddCourse() {
     } else {
       parsedSkipSketch && setFoundSketch((prevValue) => {
         return {...prevValue, skip: true};
-      })
-      // parsedCourseData && setFormData(parsedCourseData)
+      });
     }
   }, []);
-
-  // React.useEffect(() => {
-  //   // console.log(editFoundSketch);
-  //   // localStorage.setItem()
-  //   const parsedCourseData = JSON.parse(localStorage.getItem("courseData"));
-  //   // console.log(parsedCourseData);
-  //   // foundSketch.editFoundSketch && setFormData(parsedCourseData);
-  //   // editFoundSketch && setFoundSketch(false);
-  // }, [foundSketch.editFoundSketch])
-
-  // React.useEffect(() => {
-  //   // console.log(formData);
-
-  //   // localStorage.setItem("courseData", JSON.stringify(formData));
-
-  //   // console.log(JSON.parse(localStorage.getItem("courseData")));
-  // } ,[formData]);
-
-  // React.useEffect(() =>{
-  //   console.log(searchParams)
-  // }, [searchParams])
 
   React.useEffect(() => {
     const courseData = localStorage.getItem("courseData");
     const parsedCourseData = JSON.parse(courseData);
     const savedFormStep = sessionStorage.getItem("formStep");
     const parsedSavedFormStep = JSON.parse(savedFormStep);
+    // const courseFiles = localStorage.getItem("courseFiles");
+    // const parsedCourseFiles = JSON.parse(courseFiles);
+    // console.log(parsedCourseFiles);
     foundSketch.skip && parsedCourseData && setFormData(parsedCourseData);
+    // foundSketch.skip && parsedCourseFiles && setSelectedFiles(parsedCourseFiles);
     foundSketch.skip && parsedSavedFormStep && setFormStep(parsedSavedFormStep);
     // console.log(foundSketch.skip)
   }, [foundSketch.skip]);
@@ -230,9 +136,6 @@ export default function AddCourse() {
     <section className="addCourse">
       <div className="addCourse__progress-wrapper">
         <div style={{display: "flex"}}>
-          {/* <button onClick={() => {}} style={{width: 40, height: 30, backgroundColor: "transparent", border: "none", padding: 0, margin: "5px 0 0 0"}}>
-            <FontAwesomeIcon style={{color: "rgb(93, 176, 199)", fontSize: 24}} icon={faArrowLeft} />
-          </button> */}
           <h2 className="addCourse__headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}><span style={{color: "white"}}>Вернуться к курсам</span>, либо добавить новый</h2>
         </div>
         <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 25, maxWidth: 410, margin: "20px 0 0 0", boxSizing: "border-box", padding: "0 0 0 35px"}}>

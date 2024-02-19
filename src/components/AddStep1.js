@@ -53,9 +53,10 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
         const fileReader = new FileReader();
         fileReader.readAsDataURL(imageToUpload);
         fileReader.onloadend = () => {
-            // console.log(fileReader.result)
+            // console.log(imageToUpload)
             imageToUpload.clientPath = fileReader.result;
             setSelectedFiles((prevValue) => {
+                localStorage.setItem("courseFiles", JSON.stringify([...prevValue, imageToUpload]));
                 return[...prevValue, imageToUpload]
             });
     

@@ -6,7 +6,7 @@ import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 
-export default function TipTapEditor({setLessonContent, addContentToNewLesson, editContentOfLesson, selectedLesson, selectedFiles, setSelectedFiles}) {
+export default function TipTapEditor({setNewLesson, addContentToNewLesson, editContentOfLesson, selectedLesson, selectedFiles, setSelectedFiles}) {
   //states
   const [editorContent, setEditorContent] = React.useState({name: "", cover: "", content: {"type": "doc",
   "content": [
@@ -61,7 +61,9 @@ export default function TipTapEditor({setLessonContent, addContentToNewLesson, e
         content: selectedLesson && selectedLesson.content ,
         
         onUpdate: ({editor}) => {
-          setLessonContent(editor.getJSON());
+          setNewLesson((prevValue) => {
+            return {...prevValue, content: editor.getJSON()}
+          });
           // selectedLesson ? 
           // editContentOfLesson(editor.getJSON())
           // :

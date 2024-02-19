@@ -34,7 +34,7 @@ export default function NewModule({module, index, lessonsLength, openModule, ope
           <FontAwesomeIcon icon={faTrashCan} />
         </button>
       </div>
-      <img style={{borderRadius: 9, aspectRatio: "1 / 1", objectFit: "cover"}} src={module.cover} alt={module.name}></img>
+      <img style={{borderRadius: 9, aspectRatio: "1 / 1", objectFit: "cover"}} src={module.cover.clientPath} alt={module.name}></img>
       <p style={{margin: 0, width: "100%"}}>{module.lessons.length > 0 ? `Уроки: ${module.lessons.length}` : "Уроков в модуле нет"}</p>
       <button type="button" onClick={() => {
         openModule(index);

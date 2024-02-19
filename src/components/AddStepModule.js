@@ -14,7 +14,9 @@ import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import NewModule from "./NewModule";
 import NewLesson from "./NewLesson";
 
-export default function AddStepModule({successfullCourseAddOpened, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading, uploadProgress}) {
+import axiosClient from '../axios';
+
+export default function AddStepModule({successfullCourseAddOpened, token, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading}) {
     //navigate
     const navigate = useNavigate();
     //name transformer
@@ -49,10 +51,12 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     // const [lessonAddEnabled, setLessonAddEnabled] = React.useState(false);
     // const [selectedModuleCover, setSelectedModuleCover] = React.useState('');
     // const [moduleContent, setModuleContent] = React.useState({title: "", cover: "", lessons: []});
-    const [lessonContent, setLessonContent] = React.useState({name: "", cover: "", content: {"type": "doc",
+    const [newModule, setNewModule] = React.useState({name: "", cover: {title: "", clientPath: ""}, lessons: []})
+    const [newLesson, setNewLesson] = React.useState({title: "", cover: "", content: {"type": "doc",
     "content": [
       // …
     ]}});
+    const [uploadProgress, setUploadProgress] = React.useState(0);
     // const [editLessonContent, setEditLessonContent] = React.useState()
     // const [lessonCoverEditOpened, setLessonCoverEditOpened] = React.useState(false);
     // const [lessonContentEditOpened, setLessonContentEditOpened] = React.useState(false);
@@ -112,10 +116,11 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
             fileReader.onloadend = () => {
             // console.log(fileReader.result)
                 coverFile.clientPath = fileReader.result;
-                setSelectedFiles((prevValue) => {
-                    return[...prevValue, coverFile]
-                });
-                resolve(fileReader.result);
+                // setSelectedFiles((prevValue) => {
+                //     localStorage.setItem("files", JSON.stringify([...prevValue, coverFile]));
+                //     return[...prevValue, coverFile]
+                // });
+                resolve({title:coverFile.name, clientPath:fileReader.result});
             // imgRef.current.src = imageToUpload.clientPath;
     
             // setFormData((prevValue) => {
@@ -129,8 +134,11 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     function handleModuleCoverUpload(evt) {
         handleCoverUpload(evt)
         .then((data) => {
-            moduleCoverImg.current.src = data;
-
+            const { title, clientPath } = data;
+            moduleCoverImg.current.src = clientPath;
+            setNewModule((prevValue) => {
+                return {...prevValue, cover: {title: title, clientPath: clientPath}};
+            })
         })
         .catch((err) => {
             console.log(err);
@@ -148,9 +156,12 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     function handleLessonCoverUpload(evt) {
         handleCoverUpload(evt)
         .then((data) => {
+            const { title, clientPath } = data;
             // console.log(data);
-            lessonCoverImg.current.src = data;
-
+            lessonCoverImg.current.src = clientPath;
+            setNewLesson((prevValue) => {
+                return {...prevValue, cover: {title: title, clientPath: clientPath}}
+            })
         })
         .catch((err) => {
             console.log(err);
@@ -279,6 +290,10 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
     //     console.log(lessonContent);
     // }, [lessonContent]);
 
+    React.useEffect(() => {
+        console.log(uploadProgress);
+    }, [uploadProgress])
+
     return (
         // <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
         <>
@@ -286,8 +301,8 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 <img style={{maxWidth: 90, margin: "0 0 20px 0"}} src={EmptyLogo} alt="" />
                 <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
             </div>}
-            {modules.length > 0 && <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", gridAutoRows: "1fr", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
-                {modules.map((moduleOfCourse, index) => {
+            {<ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", gridAutoRows: "1fr", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
+                {modules.length > 0 ? modules.map((moduleOfCourse, index) => {
                     
                   
                     return <li onClick={() => {
@@ -296,34 +311,37 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                         <NewModule index={index} module={moduleOfCourse} openModule={openModule} openEditModule={openEditModule} deleteModule={deleteModule}/>
 
                     </li>
-                })}     
+                })
+                :     
                 <li key="empty module" style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", maxHeight: 605}}>
                     <button type="button" style={{margin: "auto 0", width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
                         setModuleDivOpened(true);
                     }}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
-                </li>
+                </li>}
             </ul>}
 
             <div style={{boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
                 <button type="button" onClick={() => {
-                    // updateQueryString(1)
                     setFormStep((prevValue) => {
                         sessionStorage.setItem("formStep", JSON.stringify(prevValue - 1));
                         return prevValue - 1;
                     });
                 }} style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Назад к курсу</button>
-                {/* <button type="button" style={{width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
-                    setModuleDivOpened(true);
-                }}>
-                    <FontAwesomeIcon icon={faPlus} />
-                </button> */}
                 <button onClick={() => {
-                    // setFormStep((prevValue) => {
-                    //     return prevValue += 1;
-                    // });
-                }} type="submit" style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>
+                    console.log(formData);
+                    // console.log(selectedFiles);
+                    axiosClient.post(`/courses/add`, JSON.stringify(formData), {
+                        headers: {
+                          'Authorization': token,
+                          'Content-Type': 'application/json',
+                        },
+                        onUploadProgress: (evt) => {
+                          setUploadProgress(Math.floor(evt.progress * 100));
+                        }
+                    })
+                }} type="button" style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>
                     Далее
                 </button>
             </div>
@@ -341,7 +359,11 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
 
                             <div style={{display: "flex", alignItems: "stretch", justifyContent:  "space-between", margin: '20px 0 0 0'}}>
                                 <div style={{maxWidth: 280, width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", gap: 15}}>
-                                    <input ref={moduleNameRef} placeholder="Название модуля" className="addCourse__form-input" style={{width: "100%"}}></input>
+                                    <input ref={moduleNameRef} onChange={(evt) => {
+                                        setNewModule((prevValue) => {
+                                            return {...prevValue, name: evt.target.value};
+                                        })
+                                    }} placeholder="Название модуля" className="addCourse__form-input" style={{width: "100%"}}></input>
                                     <input ref={moduleCoverRef} onChange={(evt) => {
                                         console.log('upload module cover as link to ext image')
                                     }} placeholder="обложка модуля" className="addCourse__form-input" style={{ width: "100%"}}></input>
@@ -358,12 +380,13 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                             </div>
 
                             <button type="button" onClick={() => {
+                                // console.log(newModule);
                                 // console.log(moduleNameRef.current.value);
                                 
                                 setFormData((prevValue) => {
-                                    localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: [...prevValue.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]}))
-                                    return {...prevValue, modules: [...prevValue.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]}
-                                })
+                                    localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: [...prevValue.modules, newModule]}))
+                                    return {...prevValue, modules: [...prevValue.modules, newModule]}
+                                });
                                 // localStorage.setItem("moduleData", JSON.stringify([...formData.modules, {name: moduleNameRef.current.value, cover: moduleCoverImg.current.src, lessons: []}]))
                                 // setFormData((prevValue) => {
                                 //     return {...prevValue, modules: [...prevValue.modules, moduleContent]};
@@ -375,7 +398,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                 // // });
                                 
                                 setModuleDivOpened(false);
-
+                                setNewModule({name: "", cover: {title: "", clientPath: ""}, lessons: []});
                             }} style={{alignSelf: "center", minWidth: 140, minHeight: 45, padding: 0, margin: "30px 0 0 0", borderRadius: 9, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)"}}>Добавить модуль</button>
                         </div>
                        
@@ -440,7 +463,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 <div style={{position:"relative", overflow: "auto", width: "100%", maxWidth: 1280, height: "100%", maxHeight: 1024, padding: "50px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: 50}}>
                     <button type="button" onClick={() => {
                         setLessonPopupOpened(false);
-                        setLessonContent({name: "", cover: "", content: {"type": "doc",
+                        setNewLesson({title: "", cover: "", content: {"type": "doc",
                         "content": [
                           // …
                         ]}});
@@ -479,18 +502,19 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                             <h3 style={{margin: "0 auto"}}>Добавление урока в модуль {selectedModule.name}</h3>
                             <form onSubmit={(evt) => {
                                 evt.preventDefault();
+                                // console.log(newLesson);
                                 // console.log(lessonTitleRef.current.value, lessonCoverImg.current.src, lessonContent)
 
                                 setFormData((prevValue) => {
                                     const updatedModules = prevValue.modules.map((module, index) => {
-                                        return index === selectedModuleIndex ? {...module, lessons: [...module.lessons, {name: lessonTitleRef.current.value, cover: lessonCoverImg.current.src, content: lessonContent}]} : module
+                                        return index === selectedModuleIndex ? {...module, lessons: [...module.lessons, newLesson]} : module
                                     });
                                     localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: updatedModules}));
 
                                     return {...prevValue, modules: updatedModules};
                                 });
                                 setLessonPopupOpened(false);
-                                setLessonContent({name: "", cover: "", content: {"type": "doc",
+                                setNewLesson({title: "", cover: "", content: {"type": "doc",
                                 "content": [
                                   // …
                                 ]}});
@@ -498,7 +522,11 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                             }} style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", gap: 25, margin: "0 0 auto 0"}}>
                                 <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
                                     <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
-                                        <input ref={lessonTitleRef} className="addCourse__form-input" type="text" placeholder="Название урока" />
+                                        <input ref={lessonTitleRef} onChange={(evt) => {
+                                            setNewLesson((prevValue) => {
+                                                return {...prevValue, title: evt.target.value};
+                                            });
+                                        }} className="addCourse__form-input" type="text" placeholder="Название урока" />
                                         <input ref={lessonCoverLinkRef} className="addCourse__form-input" type="text" placeholder="Ссылка на обложку урока"/>
                                     </div>
                                     <div style={{display: "flex", alignItems: "flex-end", position: "relative"}}>
@@ -511,7 +539,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                                         </button>
                                     </div>
                                 </div>
-                                <TipTapEditor setLessonContent={setLessonContent} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
+                                <TipTapEditor setNewLesson={setNewLesson} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}></TipTapEditor>
 
                                 <button type="submit" style={{width: 140, height: 40, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 16}}>
                                     Добавить урок
@@ -705,7 +733,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                 <div style={{position:"relative", overflow: "auto", width: "100%", maxWidth: 1280, height: "100%", maxHeight: 1024, padding: "50px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: 50}}>
                     <button type="button" onClick={() => {
                         setLessonEditOpened(false);
-                        setLessonContent({name: "", cover: "", content: {"type": "doc",
+                        setNewLesson({name: "", cover: "", content: {"type": "doc",
                         "content": [
                           // …
                         ]}});
@@ -713,13 +741,13 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
                     <h3>{selectedLesson.name}</h3>
-                    <TipTapEditor setLessonContent={setLessonContent} selectedLesson={selectedLesson}></TipTapEditor>
+                    <TipTapEditor setNewLesson={setNewLesson} selectedLesson={selectedLesson}></TipTapEditor>
                     <button onClick={() => {
                         // console.log(lessonContent);
                         setFormData((prevValue) => {
                             // const updatedLessons = 
                             const updatedLessons = selectedModule.lessons.map((lesson, index) => {
-                                return index === selectedLessonIndex ? {...lesson, content: lessonContent} : lesson;
+                                return index === selectedLessonIndex ? {...lesson, content: newLesson.content} : lesson;
                             })
                             const updatedModules = prevValue.modules.map((module, index) => {
                                 return index === selectedModuleIndex ? {...module, lessons: updatedLessons} : module
@@ -729,7 +757,7 @@ export default function AddStepModule({successfullCourseAddOpened, formData, set
                             return {...prevValue, modules: updatedModules};
                         });
                         setLessonEditOpened(false);
-                        setLessonContent({name: "", cover: "", content: {"type": "doc",
+                        setNewLesson({name: "", cover: "", content: {"type": "doc",
                         "content": [
                           // …
                         ]}});

@@ -3,8 +3,8 @@ import { motion } from "framer-motion";
 export default function NewLesson({lesson, index, deleteLesson, editLesson}) {
   return (
     <>
-      <img style={{width: 40, aspectRatio: "1/1", borderRadius: "50%", objectFit: "cover"}} src={lesson.cover} alt={lesson.name}></img>
-      <p>{lesson.name}</p>
+      <img style={{width: 40, aspectRatio: "1/1", borderRadius: "50%", objectFit: "cover"}} src={lesson.cover.clientPath} alt={lesson.title}></img>
+      <p>{lesson.title}</p>
       <div>
         <motion.button type="button" onClick={() => {
           deleteLesson(index);
