@@ -370,6 +370,9 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                           setUploadProgress(Math.floor(evt.progress * 100));
                         }
                     })
+                    .then((data) => {
+                        console.log(data);
+                    })
                 }} type="button" style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>
                     Далее
                 </button>
