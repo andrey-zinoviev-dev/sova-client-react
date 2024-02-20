@@ -129,8 +129,8 @@ export default function AddCourse() {
   }, [foundSketch.skip]);
 
   // React.useEffect(() => {
-  //   console.log(location)
-  // }, [location])
+  //   console.log(formData)
+  // }, [formData]);
 
   return (
     <section className="addCourse">

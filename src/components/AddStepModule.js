@@ -101,71 +101,94 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     // };
 
     function handleCoverUpload(evt) {
-        return new Promise((resolve, reject) => {
-            let coverFile = evt.target.files[0];
-            if(!coverFile) {
-                reject("Выберите файл");
-            }
-            setSelectedFiles((prevValue) => {
-                return [...prevValue, coverFile];
-            });
-            coverFile.title = coverFile.name;
+        const file = evt.target.files[0];
+        file.clientPath = window.URL.createObjectURL(file);
+        file.title = file.name;
+        
+        setSelectedFiles((prevValue) => {
+            // localStorage.setItem("courseFiles", JSON.stringify([...prevValue, imageToUpload]));
+            return[...prevValue, file]
+        });
+        return file;
+        // const clientPath = window.URL.createObjectURL(coverFile);
 
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(coverFile);
-            fileReader.onloadend = () => {
-            // console.log(fileReader.result)
-                coverFile.clientPath = fileReader.result;
-                // setSelectedFiles((prevValue) => {
-                //     localStorage.setItem("files", JSON.stringify([...prevValue, coverFile]));
-                //     return[...prevValue, coverFile]
-                // });
-                resolve({title:coverFile.name, clientPath:fileReader.result});
-            // imgRef.current.src = imageToUpload.clientPath;
+        // return new Promise((resolve, reject) => {
+        //     let coverFile = evt.target.files[0];
+        //     if(!coverFile) {
+        //         reject("Выберите файл");
+        //     }
+        //     setSelectedFiles((prevValue) => {
+        //         return [...prevValue, coverFile];
+        //     });
+        //     coverFile.title = coverFile.name;
+
+        //     const fileReader = new FileReader();
+        //     fileReader.readAsDataURL(coverFile);
+        //     fileReader.onloadend = () => {
+        //     // console.log(fileReader.result)
+        //         coverFile.clientPath = fileReader.result;
+        //         // setSelectedFiles((prevValue) => {
+        //         //     localStorage.setItem("files", JSON.stringify([...prevValue, coverFile]));
+        //         //     return[...prevValue, coverFile]
+        //         // });
+        //         resolve({title:coverFile.name, clientPath:fileReader.result});
+        //     // imgRef.current.src = imageToUpload.clientPath;
     
-            // setFormData((prevValue) => {
-            //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
-            // });
-            // saveInputChanges(evt.target.name, coverFile)
-            }            
-        })
+        //     // setFormData((prevValue) => {
+        //     //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
+        //     // });
+        //     // saveInputChanges(evt.target.name, coverFile)
+        //     }            
+        // })
     };
 
     function handleModuleCoverUpload(evt) {
-        handleCoverUpload(evt)
-        .then((data) => {
-            const { title, clientPath } = data;
-            moduleCoverImg.current.src = clientPath;
-            setNewModule((prevValue) => {
-                return {...prevValue, cover: {title: title, clientPath: clientPath}};
-            })
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+        const moduleCover = handleCoverUpload(evt);
+        moduleCoverImg.current.src = moduleCover.clientPath;
+        setNewModule((prevValue) => {
+            return {...prevValue, cover: moduleCover};
+        });
+        window.URL.revokeObjectURL(moduleCover);
+        // setSelectedFiles(moduleCover);
+        // .then((data) => {
+        //     const { title, clientPath } = data;
+        //     moduleCoverImg.current.src = clientPath;
+        //     setNewModule((prevValue) => {
+        //         return {...prevValue, cover: {title: title, clientPath: clientPath}};
+        //     })
+        // })
+        // .catch((err) => {
+        //     console.log(err);
+        // })
         // const picFile = handleCoverUpload(evt);
         // moduleCoverImg.current.src = picFile.clientPath;
         // setModuleContent((prevValue) => {
         //     return {...prevValue, cover: picFile};
         // });
         // setFormData((prevValue) => {
-
+        //     return {...prevValue, modules: [...prevValue.modules, {}]}
         // });
     };
 
     function handleLessonCoverUpload(evt) {
-        handleCoverUpload(evt)
-        .then((data) => {
-            const { title, clientPath } = data;
-            // console.log(data);
-            lessonCoverImg.current.src = clientPath;
-            setNewLesson((prevValue) => {
-                return {...prevValue, cover: {title: title, clientPath: clientPath}}
-            })
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+        const lessonCover = handleCoverUpload(evt);
+        lessonCoverImg.current.src = lessonCover.clientPath;
+        setNewLesson((prevValue) => {
+            return {...prevValue, cover: lessonCover}
+        });
+        window.URL.revokeObjectURL(lessonCover);
+        // handleCoverUpload(evt)
+        // .then((data) => {
+        //     const { title, clientPath } = data;
+        //     // console.log(data);
+        //     lessonCoverImg.current.src = clientPath;
+        //     setNewLesson((prevValue) => {
+        //         return {...prevValue, cover: {title: title, clientPath: clientPath}}
+        //     })
+        // })
+        // .catch((err) => {
+        //     console.log(err);
+        // })
         // const picFile = handleCoverUpload(evt);
         // console.log(picFile);
         // // lessonCoverImg.current.src = picFile.clientPath;
@@ -290,9 +313,9 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     //     console.log(lessonContent);
     // }, [lessonContent]);
 
-    React.useEffect(() => {
-        console.log(uploadProgress);
-    }, [uploadProgress])
+    // React.useEffect(() => {
+    //     console.log(uploadProgress);
+    // }, [uploadProgress])
 
     return (
         // <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
@@ -302,7 +325,7 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                 <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
             </div>}
             {<ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", gridAutoRows: "1fr", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
-                {modules.length > 0 ? modules.map((moduleOfCourse, index) => {
+                {modules.length > 0 && modules.map((moduleOfCourse, index) => {
                     
                   
                     return <li onClick={() => {
@@ -311,15 +334,15 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                         <NewModule index={index} module={moduleOfCourse} openModule={openModule} openEditModule={openEditModule} deleteModule={deleteModule}/>
 
                     </li>
-                })
-                :     
+                })}
+               
                 <li key="empty module" style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", maxHeight: 605}}>
                     <button type="button" style={{margin: "auto 0", width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
                         setModuleDivOpened(true);
                     }}>
                         <FontAwesomeIcon icon={faPlus} />
                     </button>
-                </li>}
+                </li>
             </ul>}
 
             <div style={{boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
@@ -331,11 +354,17 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                 }} style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Назад к курсу</button>
                 <button onClick={() => {
                     console.log(formData);
-                    // console.log(selectedFiles);
-                    axiosClient.post(`/courses/add`, JSON.stringify(formData), {
+                    console.log(selectedFiles);
+                    const data = new FormData();
+                    data.append("author", JSON.stringify(loggedInUser));
+                    data.append("courseData", JSON.stringify(formData));
+                    selectedFiles.forEach((file) => {
+                        data.append("files", file);
+                    });
+                    axiosClient.post(`/courses/add`, data, {
                         headers: {
                           'Authorization': token,
-                          'Content-Type': 'application/json',
+                        //   'Content-Type': 'application/json',
                         },
                         onUploadProgress: (evt) => {
                           setUploadProgress(Math.floor(evt.progress * 100));
@@ -380,9 +409,6 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                             </div>
 
                             <button type="button" onClick={() => {
-                                // console.log(newModule);
-                                // console.log(moduleNameRef.current.value);
-                                
                                 setFormData((prevValue) => {
                                     localStorage.setItem("courseData", JSON.stringify({...prevValue, modules: [...prevValue.modules, newModule]}))
                                     return {...prevValue, modules: [...prevValue.modules, newModule]}
@@ -741,7 +767,7 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                         <FontAwesomeIcon icon={faXmark} />
                     </button>
                     <h3>{selectedLesson.name}</h3>
-                    <TipTapEditor setNewLesson={setNewLesson} selectedLesson={selectedLesson}></TipTapEditor>
+                    <TipTapEditor setNewLesson={setNewLesson} selectedLesson={selectedLesson} setSelectedFiles={setSelectedFiles}></TipTapEditor>
                     <button onClick={() => {
                         // console.log(lessonContent);
                         setFormData((prevValue) => {

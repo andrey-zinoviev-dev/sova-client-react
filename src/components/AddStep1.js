@@ -38,39 +38,47 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     };
 
     function processFile(evt) {
-        // console.log(evt.target.files);
         let imageToUpload = evt.target.files[0];
-        if(/[А-Я ]/.test(imageToUpload.name)) {
-            imageToUpload = new File([imageToUpload], cyrillicToTranslit.transform(imageToUpload.name, "_"), {
-                type: imageToUpload.type
-            })
-        //     const updatedName = cyrillicToTranslit.transform(imageToUpload.name, "_");
-        //     Object.defineProperty(imageToUpload, 'name', {
-        //         writable: true,
-        //         value: updatedName
+        const filePath = window.URL.createObjectURL(imageToUpload);
+        imageToUpload.title = imageToUpload.name;
+        imageToUpload.clientPath = filePath;
+        setSelectedFiles((prevValue) => {
+            // localStorage.setItem("courseFiles", JSON.stringify([...prevValue, imageToUpload]));
+            return[...prevValue, imageToUpload]
+        });
+        saveInputChanges(evt.target.name, imageToUpload)
+        window.URL.revokeObjectURL(imageToUpload);
+        // if(/[А-Я ]/.test(imageToUpload.name)) {
+        //     imageToUpload = new File([imageToUpload], cyrillicToTranslit.transform(imageToUpload.name, "_"), {
+        //         type: imageToUpload.type
+        //     })
+        // //     const updatedName = cyrillicToTranslit.transform(imageToUpload.name, "_");
+        // //     Object.defineProperty(imageToUpload, 'name', {
+        // //         writable: true,
+        // //         value: updatedName
+        // //     });
+        // }
+        // const fileReader = new FileReader();
+        // fileReader.readAsDataURL(imageToUpload);
+        // fileReader.onloadend = () => {
+        //     // console.log(imageToUpload)
+        //     imageToUpload.clientPath = fileReader.result;
+        //     setSelectedFiles((prevValue) => {
+        //         localStorage.setItem("courseFiles", JSON.stringify([...prevValue, imageToUpload]));
+        //         return[...prevValue, imageToUpload]
         //     });
-        }
-        const fileReader = new FileReader();
-        fileReader.readAsDataURL(imageToUpload);
-        fileReader.onloadend = () => {
-            // console.log(imageToUpload)
-            imageToUpload.clientPath = fileReader.result;
-            setSelectedFiles((prevValue) => {
-                localStorage.setItem("courseFiles", JSON.stringify([...prevValue, imageToUpload]));
-                return[...prevValue, imageToUpload]
-            });
     
-            // imgRef.current.src = imageToUpload.clientPath;
+        //     // imgRef.current.src = imageToUpload.clientPath;
     
-            // setFormData((prevValue) => {
-            //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
-            // });
-            saveInputChanges(evt.target.name, imageToUpload)
-        }
+        //     // setFormData((prevValue) => {
+        //     //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
+        //     // });
+        //     saveInputChanges(evt.target.name, imageToUpload)
+        // }
         //!!!
         // imageToUpload.clientPath = window.URL.createObjectURL(imageToUpload);
         //!!!
-        imageToUpload.title = imageToUpload.name;
+        // imageToUpload.title = imageToUpload.name;
         
         // setSelectedFiles((prevValue) => {
         //     return[...prevValue, imageToUpload]
@@ -81,15 +89,15 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
         // setFormData((prevValue) => {
         //     return {...prevValue, course: {...prevValue.course, cover: imageToUpload}}
         // });
-        // saveInputChanges(evt.target.name, imageToUpload)
+        // saveInputChanges(evt.target.name, {imageToUpload)
         // setSelectedImage(imageToUpload)
     }
 
     function saveInputChanges(name, value) {
         // console.log(name, value);
-        localStorage.setItem("courseData", JSON.stringify({...formData, course: {
-            ...formData.course, [name]: value
-        }}))
+        // localStorage.setItem("courseData", JSON.stringify({...formData, course: {
+        //     ...formData.course, [name]: value
+        // }}))
         setFormData({...formData, course: {
             ...formData.course, [name]: value,
         }})
@@ -145,10 +153,13 @@ export default function AddStep1({formData, setFormData, formStep, setFormStep, 
     return (
         <form onSubmit={(evt) => {
             evt.preventDefault();
+            // console.log(formData);
+            
+            // console.log()
             setFormStep((prevValue) => {
-                sessionStorage.setItem("formStep", JSON.stringify((prevValue + 1)))
+                // sessionStorage.setItem("formStep", JSON.stringify((prevValue + 1)))
                 return prevValue + 1;
-            })
+            });
             // console.log(`step is ${formStep}`)
             // localStorage.setItem("step", )
             // proceedForm();
