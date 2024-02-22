@@ -47,7 +47,6 @@ export default function AddCourse() {
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   // const [uploadProgress, setUploadProgress] = React.useState(0);
-  const [uploadFormSubmitted, setUploadFormSubmitted] = React.useState(false);
   const [successfullCourseAddOpened, setSuccessfullCourseAddOpened] = React.useState(false);
   const [foundSketch, setFoundSketch] = React.useState({
     found: false,
