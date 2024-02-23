@@ -149,6 +149,11 @@
     color: rgb(93, 176, 199);
     border: 2px solid rgb(93, 176, 199);
     pointer-events: all;
+    transition: all 0.25s ease-in-out;
+}
+.addCourse__form-btn:hover {
+    background-color: rgb(93, 176, 199);
+    color: rgb(255, 255, 255);
 }
 .addCourse__form-btn_disabled-btn {
     border: 2px solid rgb(139, 135, 135);

@@ -57,7 +57,7 @@ export default function AddCourse() {
   function renderStep() {
     switch (formStep) {
       case 0:
-        return <AddStep1 saveInputChanges={saveInputChanges} formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
+        return <AddStep1 token={token} saveInputChanges={saveInputChanges} formData={formData} setFormData={setFormData} formStep={formStep} setFormStep={setFormStep} setSelectedFiles={setSelectedFiles}/>
       case 1: 
         return <AddStepModule token={token} saveInputChanges={saveInputChanges} formData={formData} isLoading={isLoading} setFormData={setFormData} setFormStep={setFormStep} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} successfullCourseAddOpened={successfullCourseAddOpened}/>
       default:

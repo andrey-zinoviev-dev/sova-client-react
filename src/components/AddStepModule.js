@@ -61,6 +61,7 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     const [uploadProgress, setUploadProgress] = React.useState(0);
     const [errorMessage, setErrorMessage] = React.useState('');
     const [uploadFormSubmitted, setUploadFormSubmitted] = React.useState(false);
+    const [successfullUpload, setSuccessfullUpload] = React.useState(false);
     // const [editLessonContent, setEditLessonContent] = React.useState()
     // const [lessonCoverEditOpened, setLessonCoverEditOpened] = React.useState(false);
     // const [lessonContentEditOpened, setLessonContentEditOpened] = React.useState(false);
@@ -247,11 +248,41 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     return (
         // <div style={{textAlign: "left",  width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: modules.length > 0 ? "flex-start" : "center", justifyContent: "space-between"}}>
         <>
-            {modules.length <= 0 && <div style={{textAlign: "center"}}>
-                <img style={{maxWidth: 90, margin: "0 0 20px 0"}} src={EmptyLogo} alt="" />
-                <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
+            {!uploadFormSubmitted ? <div style={{textAlign: "center", width: "100%"}}>
+                {modules.length === 0 && <>
+                    <img style={{maxWidth: 90, margin: "0 0 20px 0"}} src={EmptyLogo} alt="" />
+                    <p style={{margin: 0}}>Модулей нет, но их можно добавить</p>
+                </>}
+
+                <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", justifyContent: modules.length === 0 && "center", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", gridAutoRows: "1fr", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
+                    {modules.map((moduleOfCourse, index) => {
+                        
+                    
+                        return <li onClick={() => {
+
+                        }} key={moduleOfCourse.name}  style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", gap: 20}}>
+                            <NewModule index={index} module={moduleOfCourse} openModule={openModule} openEditModule={openEditModule} deleteModule={deleteModule}/>
+
+                        </li>
+                    })}
+                
+                    <li key="empty module" style={{boxSizing: "border-box", boxShadow: "3px 3px 5px rgb(0 0 0/50%)", textAlign: "center", backgroundColor: "transparent", borderRadius: 12, border: "2px solid rgb(93, 176, 199)", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "center", position: "relative", maxHeight: 605}}>
+                        <button type="button" style={{margin: "auto 0", width: 60, height: 60, borderRadius: 5, backgroundColor: "transparent", border: "2px solid rgb(93, 176, 199)", color: "rgb(93, 176, 199)", fontSize: 20}} onClick={() => {
+                            setModuleDivOpened(true);
+                        }}>
+                            <FontAwesomeIcon icon={faPlus} />
+                        </button>
+                    </li>
+                </ul>
+
+            </div>
+            :
+            <div style={{backgroundColor: "#2d2d2d", borderRadius: 12, padding: "25px 50px", margin: "0 auto"}}>
+                <h3>Отправка курса на сервер</h3>
+                <p>Прогресс - {uploadProgress}%</p>
+                <p style={{width: `${uploadProgress}%`, height: 3, borderRadius: 4, backgroundColor: "rgb(93, 176, 199)"}}></p>
             </div>}
-            {!uploadFormSubmitted ? <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", gridAutoRows: "1fr", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
+            {/* {!uploadFormSubmitted ? <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", gridAutoRows: "1fr", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
                 {modules.length > 0 && modules.map((moduleOfCourse, index) => {
                     
                   
@@ -275,9 +306,9 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
             <div style={{backgroundColor: "#2d2d2d", borderRadius: 12, padding: "25px 50px", margin: "0 auto"}}>
                 <h3>Отправка курса на сервер</h3>
                 <p>Прогресс - {uploadProgress}%</p>
-                <p style={{width: `${uploadProgress}%`}}></p>
+                <p style={{width: `${uploadProgress}%`, height: 3, borderRadius: 4, backgroundColor: "rgb(93, 176, 199)"}}></p>
             </div>
-            }
+            } */}
 
             {errorMessage.length > 0 &&<p>{errorMessage}</p>}
 
@@ -289,18 +320,18 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                             sessionStorage.setItem("formStep", JSON.stringify(prevValue - 1));
                             return prevValue - 1;
                         });
-                    }} style={{ fontWeight: 500, minWidth: /*120*/ 180, minHeight: 50, borderRadius: 5, backgroundColor: "rgb(0 0 0 /0%)", color: "rgb(93, 176, 199)", border: "2px solid rgb(93, 176, 199)"}}>Назад к курсу</button>
+                    }} className="addCourse__form-btn">
+                        Назад к курсу
+                    </button>
                     <button className="addCourse__form-btn" ref={postCourseButton} onClick={() => {
                         setUploadFormSubmitted(true);
-                        // console.log(formData);
-                        // console.log(selectedFiles);
-                        const data = new FormData();
-                        data.append("author", JSON.stringify(loggedInUser));
-                        data.append("courseData", JSON.stringify(formData));
+                        const form = new FormData();
+                        form.append("author", JSON.stringify(loggedInUser));
+                        form.append("courseData", JSON.stringify(formData));
                         selectedFiles.forEach((file) => {
-                            data.append("files", file);
+                            form.append("files", file);
                         });
-                        axiosClient.post(`/courses/add`, data, {
+                        axiosClient.post(`/courses/add`, form, {
                             headers: {
                             'Authorization': token,
                             //   'Content-Type': 'application/json',
@@ -309,27 +340,50 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                             setUploadProgress(Math.floor(evt.progress * 100));
                             }
                         })
-                        .then((data) => {
-                            console.log(data);
-                            setFormData({});
+                        .then((createdCourse) => {
+                            setSuccessfullUpload(true);
                             setSelectedFiles([]);
+                            setSuccessfullUpload(true);
+                            sessionStorage.clear();
+                            localStorage.removeItem("courseData");
                         })
                         .catch((err) => {
-                            setErrorMessage(err.response.data.message);
+                            console.log(err);
                         })
                     }} type="button">
                         Далее
                     </button>
                 </>
-                :
-                // uploadProgress !== 100 && errorMessage === '' ? <button onClick={() => {
-                //     console.log('course uploaded, proceed');
-                // }}>
-                //     <p>Отменить загрузку</p>
-                // </button>
                 // :
-                <button onClick={() => {
+                // !successfullUpload ? <button onClick={() => {
+                //     console.log('get back to course editing');
+                //     setUploadFormSubmitted(false);
+                // }}>
+                //     <p>Назад</p>
+                // </button>
+                :
+                !successfullUpload ? <>
+                    <button className="addCourse__form-btn" onClick={() => {
+                        console.log("return to modify modules");
+                    }}>
+                        <p>Редактировать курс</p>
+                    </button>
+                    
+                   
+                    <button className="addCourse__form-btn" onClick={() => {
+                        console.log("cancel file upload");
+                    }}>
+                        <p>Отменить загрузку</p>
+                    </button>
+                </>
+                :
+                <button className="addCourse__form-btn" style={{alignSelf: "flex-end"}} onClick={() => {
                     console.log('course uploaded, proceed');
+                    // navigate(-1);
+                    // setSelectedLessonIndex(null);
+                    // setSelectedModuleIndex(null);
+                    // setFormData({});
+                    
                 }}>
                     <p>Вернуться к курсам</p>
                 </button>}
