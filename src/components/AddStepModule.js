@@ -38,6 +38,9 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     const lessonAddFormRef = React.useRef();
     const editModuleNameRef = React.useRef();
     const postCourseButton = React.useRef();
+    const abortControllerRef = React.useRef();
+
+
     // const 
     //states
     // const [modulesOfCourse, setModulesOfCourse] = React.useState([]);
@@ -74,12 +77,10 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     let selectedModule = modules[selectedModuleIndex];
     let selectedLesson = selectedModule && selectedModule.lessons[selectedLessonIndex];
 
-
-
-
-
     //user
     const loggedInUser = React.useContext(UserContext);
+
+
 
     //functions
     // function converFileToBase64() {
@@ -232,9 +233,47 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     //     console.log(lessonContent);
     // }, [lessonContent]);
 
+    //final course upload here bc abort controller used
     React.useEffect(() => {
-        console.log(formData);
-    }, [formData])
+        //abort controller
+        const abortController = new AbortController();
+        // console.log(abortControllerRef.current);
+        const signal = abortController.signal;
+
+        if(uploadFormSubmitted) {
+            const form = new FormData();
+            form.append("author", JSON.stringify(loggedInUser));
+            form.append("courseData", JSON.stringify(formData));
+            selectedFiles.forEach((file) => {
+                form.append("files", file);
+            });
+            axiosClient.post(`/courses/add`, form, {
+                signal: signal,
+                headers: {
+                'Authorization': token,
+                //   'Content-Type': 'application/json',
+                },
+                // signal: signal,
+                onUploadProgress: (evt) => {
+                setUploadProgress(Math.floor(evt.progress * 100));
+                }
+            })
+            .then((createdCourse) => {
+                setSuccessfullUpload(true);
+                setSelectedFiles([]);
+                sessionStorage.clear();
+                localStorage.removeItem("courseData");
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+        }
+
+        return () => {
+            abortController.abort();
+        }
+        
+    }, [uploadFormSubmitted]);
 
     React.useEffect(() => {
         postCourseButton.current.disabled = formData.modules.length === 0 || formData.modules.some((module) => {
@@ -313,7 +352,6 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
             {errorMessage.length > 0 &&<p>{errorMessage}</p>}
 
             <div style={{boxSizing: "border-box", display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%"}}>
-                {!uploadFormSubmitted ? 
                 <>
                     <button type="button" onClick={() => {
                         setFormStep((prevValue) => {
@@ -323,70 +361,30 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                     }} className="addCourse__form-btn">
                         Назад к курсу
                     </button>
-                    <button className="addCourse__form-btn" ref={postCourseButton} onClick={() => {
-                        setUploadFormSubmitted(true);
-                        const form = new FormData();
-                        form.append("author", JSON.stringify(loggedInUser));
-                        form.append("courseData", JSON.stringify(formData));
-                        selectedFiles.forEach((file) => {
-                            form.append("files", file);
-                        });
-                        axiosClient.post(`/courses/add`, form, {
-                            headers: {
-                            'Authorization': token,
-                            //   'Content-Type': 'application/json',
-                            },
-                            onUploadProgress: (evt) => {
-                            setUploadProgress(Math.floor(evt.progress * 100));
-                            }
-                        })
-                        .then((createdCourse) => {
-                            setSuccessfullUpload(true);
-                            setSelectedFiles([]);
-                            setSuccessfullUpload(true);
-                            sessionStorage.clear();
-                            localStorage.removeItem("courseData");
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        })
-                    }} type="button">
-                        Далее
-                    </button>
+                    {uploadFormSubmitted ? 
+                        successfullUpload ? 
+                            <button className="addCourse__form-btn" onClick={() => {
+                                navigate(-1);
+                            }}>
+                                Вернуться к курсам
+                            </button>
+                        :
+                            <button className="addCourse__form-btn" onClick={() => {
+                                setUploadFormSubmitted(false);
+                                // abortController.abort();
+                            }}>
+                                Отменить загрузку
+                            </button>
+                    :
+                        <button className="addCourse__form-btn" ref={postCourseButton} onClick={() => {
+                            setUploadFormSubmitted(true);
+                        }} type="button">
+                            Отправить курс
+                        </button>
+                    }
+
                 </>
-                // :
-                // !successfullUpload ? <button onClick={() => {
-                //     console.log('get back to course editing');
-                //     setUploadFormSubmitted(false);
-                // }}>
-                //     <p>Назад</p>
-                // </button>
-                :
-                !successfullUpload ? <>
-                    <button className="addCourse__form-btn" onClick={() => {
-                        console.log("return to modify modules");
-                    }}>
-                        <p>Редактировать курс</p>
-                    </button>
-                    
-                   
-                    <button className="addCourse__form-btn" onClick={() => {
-                        console.log("cancel file upload");
-                    }}>
-                        <p>Отменить загрузку</p>
-                    </button>
-                </>
-                :
-                <button className="addCourse__form-btn" style={{alignSelf: "flex-end"}} onClick={() => {
-                    console.log('course uploaded, proceed');
-                    // navigate(-1);
-                    // setSelectedLessonIndex(null);
-                    // setSelectedModuleIndex(null);
-                    // setFormData({});
-                    
-                }}>
-                    <p>Вернуться к курсам</p>
-                </button>}
+              
             </div>
 
             {moduleDivOpened && <div style={{position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "90px 0", backdropFilter: "blur(2px)"}}>

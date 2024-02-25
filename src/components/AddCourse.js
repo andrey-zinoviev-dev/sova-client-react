@@ -43,6 +43,9 @@ export default function AddCourse() {
     modules: [
 
     ],
+    students: [
+
+    ],
   });
   const [selectedFiles, setSelectedFiles] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
