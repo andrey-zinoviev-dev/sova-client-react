@@ -38,8 +38,10 @@ export default function AddCourse() {
       name: "",
       description: "",
       cover: {},
-      tarifs: [],
     },
+    tarifs: [
+      
+    ],
     modules: [
 
     ],

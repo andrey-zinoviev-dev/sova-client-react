@@ -42,14 +42,35 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
         const reader = new FileReader();
         reader.onload = (e) => {
             const csvData = e.target.result;
-            convertCSVtoJSON(csvData);
+            const addedStudents = convertCSVtoJSON(csvData);
+            setFormData((prevValue) => {
+                return {...prevValue, students: addedStudents};
+            });
             // console.log(csvData.split("\n"));
         }
         reader.readAsText(file)
     };
 
     function convertCSVtoJSON(file) {
-        console.log(file);
+        // console.log(file);
+        const finalJSON = [];
+        const lines = file.split("\n");
+        
+        const headers = lines[0].split(",");
+        // console.log(headers);
+
+        let lineIndex = 1;
+        while(lineIndex < lines.length) {
+            const userString = lines[lineIndex].split(",");
+            const obj = {};
+            headers.forEach((header, index) => {
+                // console.log(header.replace(" ",""))
+                obj[header.replace("\r","")] = userString[index].replace("\r","");
+            });
+            finalJSON.push(obj);
+            lineIndex += 1;
+        };
+        return finalJSON;
     }
 
     function processFile(evt) {
@@ -112,6 +133,10 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
 
     }, [errorMessage.length, formData.course.name, formData.course.description, formData.course.cover.clientPath]);
 
+    React.useEffect(() => {
+        console.log(formData);
+    }, [formData])
+
     // React.useEffect(() => {
     //     imgRef.current.src = Object.keys(selectedImage).length > 0 ? selectedImage.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="
     //     setFormData((prevValue) => {
@@ -152,11 +177,40 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
                     <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
                         <div style={{width: "100%"}}>
                             <input className="addCourse__form-input" onInput={(evt) => {
-                                saveInputChanges(evt.target.name, evt.target.value)
+                                const tarifs = evt.target.value.split(",").map((tarif) => {
+                                    return {name: tarif, expire: ""};
+                                });
+                                setFormData((prevValue) => {
+                                    return {...prevValue, tarifs: tarifs};
+                                });
+                                // console.log(tarifs);
+                                // const tarifsUpdated = tarifs.map((tarif) => {
+                                //     return tarif.replace(" ","");
+                                // });
+                                // console.log(tarifsUpdated);
+                                // saveInputChanges(evt.target.name, tarifs)
                             }} value={course.tarifs} name="tarifs" placeholder="Тарифы курса через запятую"></input>
                             <input ref={inputFileRef} name="cover" type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
                         </div>                            
                     </div>
+                    {formData.tarifs.length > 0 &&<ul style={{listStyle: "none", padding: 0}}>
+                        {formData.tarifs.map((tarif, index) => {
+                            return <li style={{padding: "15px 0 0 0"}} key={tarif}>
+                                <label htmlFor={`tarif ${tarif}`}>Доступ для тарифа {index + 1}</label>
+                                <input key={tarif.name} id={`tarif ${tarif}`} onChange={(evt) => {
+                                    // console.log(evt.target.name, evt.target.value);
+                                    setFormData((prevValue) => {
+                                        return {...prevValue, tarifs: prevValue.tarifs.map((tarif, index) => {
+                                            // console.log(index, evt.target.name)
+                                            return index === +evt.target.name? {...tarif, expire: evt.target.value} : tarif;
+                                        })}
+                                    })
+                                }} className="addCourse__form-input" style={{colorScheme: "dark"}} type="date" name={index} placeholder={`Доступ для тарифа ${index + 1}`}></input>
+                            </li>
+                        })}
+                    </ul>}
+                    {/* {formData.tarifs.length > 0 && <div style={{display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
+                    </div>} */}
                     <div>
                         <p>Ученики: {formData.students.length}</p>
                         <input type="file" ref={studentsRef} onChange={(evt) => {
