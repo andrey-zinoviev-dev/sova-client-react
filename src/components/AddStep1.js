@@ -208,6 +208,18 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
                                 }} className="addCourse__form-input" style={{colorScheme: "dark"}} type="date" name={index} placeholder={`Доступ для тарифа ${index + 1}`}></input>
                             </li>
                         })}
+                        <li style={{padding: "15px 0 0 0"}} key="access date start">
+                            <label htmlFor={`tarif start`}>Начало доступа</label>
+                            <input key="tarifs start" id={`tarifs start`} onChange={(evt) => {
+                                    console.log(evt.target.name, evt.target.value);
+                                setFormData((prevValue) => {
+                                    return {...prevValue, tarifs: prevValue.tarifs.map((tarif) => {
+                                            // console.log(index, evt.target.name)
+                                        return {...tarif, start: evt.target.value};
+                                    })}
+                                })
+                            }} className="addCourse__form-input" style={{colorScheme: "dark"}} type="date" name="tarifs start" placeholder={`Начало доступа к курсу`}></input>
+                        </li>
                     </ul>}
                     {/* {formData.tarifs.length > 0 && <div style={{display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
                     </div>} */}
