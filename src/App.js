@@ -19,7 +19,7 @@ import EditCourse from './components/EditCourse';
 import EditModule from './components/EditModule';
 import AddModule from './components/AddModule';
 import Lesson from './components/Lesson';
-
+import Test from "./components/Test";
 
 
 function App() {
@@ -290,6 +290,7 @@ function App() {
         <Routes>
           {/* <Route path='editCourse/:courseID' element={}></Route> */}
           {/* <Route path='/editLesson/courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<Lesson></Lesson>} */}
+          <Route path='/testFiles' element={<Test></Test>} />
           <Route path='/addModule/courses/:courseID' element={<AddModule></AddModule>} />
           <Route path='/editModule/courses/:courseID/modules/:moduleID' element={<EditModule></EditModule>} />
           <Route path='/editCourse/:courseID' element={loggedIn ? <EditCourse></EditCourse> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>

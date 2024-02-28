@@ -8,10 +8,10 @@ import { Node, mergeAttributes } from "@tiptap/react";
 
 export default function TipTapEditor({setNewLesson, addContentToNewLesson, editContentOfLesson, selectedLesson, selectedFiles, setSelectedFiles}) {
   //states
-  const [editorContent, setEditorContent] = React.useState({name: "", cover: "", content: {"type": "doc",
-  "content": [
-    // …
-  ]}});
+  // const [editorContent, setEditorContent] = React.useState({name: "", cover: "", content: {"type": "doc",
+  // "content": [
+  //   // …
+  // ]}});
   //crete Video extension
   const Video = Node.create({
     name: "video",
