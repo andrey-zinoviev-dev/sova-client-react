@@ -23,22 +23,22 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
     let uploadedImage = evt.target.files[0];
 
     //s3 upload
-    // const formData = new FormData();
-    // formData.append("file", uploadedImage);
-    // fetch(`http://localhost:3000/testUpload`, {
-    //   method: "POST",
-    //   headers: {
-    //     'Authorization': token,
-    //   },
-    //   body: formData,
-    //   // "Content-Type": "multipart/form-data",
-    // })
-    // .then((data) => {
-    //   console.log(data);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // })
+    const formData = new FormData();
+    formData.append("file", uploadedImage);
+    fetch(`http://localhost:3000/testUpload`, {
+      method: "POST",
+      headers: {
+        'Authorization': token,
+      },
+      body: formData,
+      // "Content-Type": "multipart/form-data",
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
     //s3 upload
 
 
@@ -73,22 +73,22 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
     let uploadedVideo = evt.target.files[0];
 
     //s3 upload
-    // const formData = new FormData();
-    // formData.append("file", uploadedVideo);
-    // fetch(`http://localhost:3000/testUpload`, {
-    //   method: "POST",
-    //   headers: {
-    //     'Authorization': token,
-    //   },
-    //   body: formData,
-    //   // "Content-Type": "multipart/form-data",
-    // })
-    // .then((data) => {
-    //   console.log(data);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // })
+    const formData = new FormData();
+    formData.append("file", uploadedVideo);
+    fetch(`http://localhost:3000/testUpload`, {
+      method: "POST",
+      headers: {
+        'Authorization': token,
+      },
+      body: formData,
+      // "Content-Type": "multipart/form-data",
+    })
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
     //s3 upload
 
 
