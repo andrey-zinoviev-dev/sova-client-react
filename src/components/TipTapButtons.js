@@ -5,6 +5,8 @@ import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 
 export default function TipTapButtons ({ formData, editor, selectedFiles, setSelectedFiles }) {
+  // //content
+  // console.log(editor);
   //token
   const token = localStorage.getItem('token');
   //states
@@ -22,24 +24,24 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
   function handleFileChange(evt) {
     let uploadedImage = evt.target.files[0];
 
-    //s3 upload
-    const formData = new FormData();
-    formData.append("file", uploadedImage);
-    fetch(`http://localhost:3000/testUpload`, {
-      method: "POST",
-      headers: {
-        'Authorization': token,
-      },
-      body: formData,
-      // "Content-Type": "multipart/form-data",
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    //s3 upload
+    // //s3 upload
+    // const formData = new FormData();
+    // formData.append("file", uploadedImage);
+    // fetch(`http://localhost:3000/testUpload`, {
+    //   method: "POST",
+    //   headers: {
+    //     'Authorization': token,
+    //   },
+    //   body: formData,
+    //   // "Content-Type": "multipart/form-data",
+    // })
+    // .then((data) => {
+    //   console.log(data);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // })
+    // //s3 upload
 
 
     // console.log(image);
@@ -57,8 +59,6 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
       return [...prevValue, uploadedImage]
     });
 
-
-
     // console.log(evt.target.files[0]);
     // const fileReader = new FileReader();
 
@@ -72,24 +72,24 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
   function handleVideoUpload(evt) {
     let uploadedVideo = evt.target.files[0];
 
-    //s3 upload
-    const formData = new FormData();
-    formData.append("file", uploadedVideo);
-    fetch(`http://localhost:3000/testUpload`, {
-      method: "POST",
-      headers: {
-        'Authorization': token,
-      },
-      body: formData,
-      // "Content-Type": "multipart/form-data",
-    })
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    //s3 upload
+    // //s3 upload
+    // const formData = new FormData();
+    // formData.append("file", uploadedVideo);
+    // fetch(`http://localhost:3000/testUpload`, {
+    //   method: "POST",
+    //   headers: {
+    //     'Authorization': token,
+    //   },
+    //   body: formData,
+    //   // "Content-Type": "multipart/form-data",
+    // })
+    // .then((data) => {
+    //   console.log(data);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // })
+    // //s3 upload
 
 
     if(/[А-Яа-я ]/.test(uploadedVideo.name)) {

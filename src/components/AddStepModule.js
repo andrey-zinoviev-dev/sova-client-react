@@ -57,8 +57,8 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     // const [selectedModuleCover, setSelectedModuleCover] = React.useState('');
     // const [moduleContent, setModuleContent] = React.useState({title: "", cover: "", lessons: []});
     const [newModule, setNewModule] = React.useState({name: "", cover: {title: "", clientPath: ""}, lessons: []})
-    const [newLesson, setNewLesson] = React.useState({title: "", cover: "", content: {"type": "doc",
-    "content": [
+    const [newLesson, setNewLesson] = React.useState({title: "", cover: "", content: {type: "doc",
+    content: [
       // …
     ]}});
     const [uploadProgress, setUploadProgress] = React.useState(0);
@@ -79,8 +79,6 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
 
     //user
     const loggedInUser = React.useContext(UserContext);
-
-
 
     //functions
     // function converFileToBase64() {
@@ -241,32 +239,33 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         const signal = abortController.signal;
 
         if(uploadFormSubmitted) {
-            const form = new FormData();
-            form.append("author", JSON.stringify(loggedInUser));
-            form.append("courseData", JSON.stringify(formData));
-            selectedFiles.forEach((file) => {
-                form.append("files", file);
-            });
-            axiosClient.post(`/courses/add`, form, {
-                signal: signal,
-                headers: {
-                'Authorization': token,
-                //   'Content-Type': 'application/json',
-                },
-                // signal: signal,
-                onUploadProgress: (evt) => {
-                setUploadProgress(Math.floor(evt.progress * 100));
-                }
-            })
-            .then((createdCourse) => {
-                setSuccessfullUpload(true);
-                setSelectedFiles([]);
-                sessionStorage.clear();
-                localStorage.removeItem("courseData");
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+            console.log(selectedFiles);
+            // const form = new FormData();
+            // form.append("author", JSON.stringify(loggedInUser));
+            // form.append("courseData", JSON.stringify(formData));
+            // selectedFiles.forEach((file) => {
+            //     form.append("files", file);
+            // });
+            // axiosClient.post(`/courses/add`, form, {
+            //     signal: signal,
+            //     headers: {
+            //     'Authorization': token,
+            //     //   'Content-Type': 'application/json',
+            //     },
+            //     // signal: signal,
+            //     onUploadProgress: (evt) => {
+            //     setUploadProgress(Math.floor(evt.progress * 100));
+            //     }
+            // })
+            // .then((createdCourse) => {
+            //     setSuccessfullUpload(true);
+            //     setSelectedFiles([]);
+            //     sessionStorage.clear();
+            //     localStorage.removeItem("courseData");
+            // })
+            // .catch((err) => {
+            //     console.log(err);
+            // })
         }
 
         return () => {

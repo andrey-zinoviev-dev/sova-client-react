@@ -133,9 +133,9 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
 
     }, [errorMessage.length, formData.course.name, formData.course.description, formData.course.cover.clientPath]);
 
-    React.useEffect(() => {
-        console.log(formData);
-    }, [formData])
+    // React.useEffect(() => {
+    //     console.log(formData);
+    // }, [formData])
 
     // React.useEffect(() => {
     //     imgRef.current.src = Object.keys(selectedImage).length > 0 ? selectedImage.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="
@@ -195,9 +195,10 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
                     </div>
                     {formData.tarifs.length > 0 &&<ul style={{listStyle: "none", padding: 0}}>
                         {formData.tarifs.map((tarif, index) => {
-                            return <li style={{padding: "15px 0 0 0"}} key={tarif}>
+                            // console.log(tarif);
+                            return <li style={{padding: "15px 0 0 0"}} key={tarif.name}>
                                 <label htmlFor={`tarif ${tarif}`}>Доступ для тарифа {index + 1}</label>
-                                <input key={tarif.name} id={`tarif ${tarif}`} onChange={(evt) => {
+                                <input id={`tarif ${tarif}`} onChange={(evt) => {
                                     // console.log(evt.target.name, evt.target.value);
                                     setFormData((prevValue) => {
                                         return {...prevValue, tarifs: prevValue.tarifs.map((tarif, index) => {
@@ -211,7 +212,7 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
                         <li style={{padding: "15px 0 0 0"}} key="access date start">
                             <label htmlFor={`tarif start`}>Начало доступа</label>
                             <input key="tarifs start" id={`tarifs start`} onChange={(evt) => {
-                                    console.log(evt.target.name, evt.target.value);
+                                    // console.log(evt.target.name, evt.target.value);
                                 setFormData((prevValue) => {
                                     return {...prevValue, tarifs: prevValue.tarifs.map((tarif) => {
                                             // console.log(index, evt.target.name)

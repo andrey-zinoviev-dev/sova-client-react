@@ -59,6 +59,8 @@ export default function AddCourse() {
     skip: false,
   });
 
+  // console.log(selectedFiles);
+
   function renderStep() {
     switch (formStep) {
       case 0:
