@@ -5,8 +5,7 @@ import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 
 export default function TipTapButtons ({ formData, editor, selectedFiles, setSelectedFiles }) {
-  // //content
-  // console.log(editor);
+  // console.log(content.content);
   //token
   const token = localStorage.getItem('token');
   //states
@@ -117,9 +116,7 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
     });
 
     
-  }
-
-
+  };
 
   React.useEffect(() => {
     if(image.clientPath) {

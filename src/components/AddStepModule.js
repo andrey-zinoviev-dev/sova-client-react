@@ -77,6 +77,36 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     let selectedModule = modules[selectedModuleIndex];
     let selectedLesson = selectedModule && selectedModule.lessons[selectedLessonIndex];
 
+    //memo
+    const memoFiles = React.useMemo(() => {
+        const filesArray = [formData.course.cover.name];
+        // console.log(formData.course.cover.name);
+        formData.modules.forEach((module) => {
+            // console.log(module.cover.name);
+            
+            filesArray.push(module.cover.name);
+            module.lessons.forEach((lesson) => {
+                filesArray.push(lesson.cover.name);
+                const filteredLessonContent = lesson.content.content.filter((el) => {
+                    return el.type === 'image' || el.type === 'video';
+                });
+                filteredLessonContent.forEach((filteredEl) => {
+                    return filesArray.push(filteredEl.attrs.title);
+                })
+            })
+        });
+        // console.log(filesArray);
+        // console.log(selectedFiles);
+        
+        const resultArray =  selectedFiles.filter((selectedFile) => {
+            return filesArray.find((fileName) => {
+                return fileName === selectedFile.name;
+            })
+        });
+        return resultArray;
+        // const filesList = [formData.course.cover]
+    }, [formData, selectedFiles]);
+
     //user
     const loggedInUser = React.useContext(UserContext);
 
@@ -239,33 +269,32 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         const signal = abortController.signal;
 
         if(uploadFormSubmitted) {
-            console.log(selectedFiles);
-            // const form = new FormData();
-            // form.append("author", JSON.stringify(loggedInUser));
-            // form.append("courseData", JSON.stringify(formData));
-            // selectedFiles.forEach((file) => {
-            //     form.append("files", file);
-            // });
-            // axiosClient.post(`/courses/add`, form, {
-            //     signal: signal,
-            //     headers: {
-            //     'Authorization': token,
-            //     //   'Content-Type': 'application/json',
-            //     },
-            //     // signal: signal,
-            //     onUploadProgress: (evt) => {
-            //     setUploadProgress(Math.floor(evt.progress * 100));
-            //     }
-            // })
-            // .then((createdCourse) => {
-            //     setSuccessfullUpload(true);
-            //     setSelectedFiles([]);
-            //     sessionStorage.clear();
-            //     localStorage.removeItem("courseData");
-            // })
-            // .catch((err) => {
-            //     console.log(err);
-            // })
+            const form = new FormData();
+            form.append("author", JSON.stringify(loggedInUser));
+            form.append("courseData", JSON.stringify(formData));
+            memoFiles.forEach((file) => {
+                form.append("files", file);
+            });
+            axiosClient.post(`/courses/add`, form, {
+                signal: signal,
+                headers: {
+                'Authorization': token,
+                //   'Content-Type': 'application/json',
+                },
+                // signal: signal,
+                onUploadProgress: (evt) => {
+                setUploadProgress(Math.floor(evt.progress * 100));
+                }
+            })
+            .then((createdCourse) => {
+                setSuccessfullUpload(true);
+                setSelectedFiles([]);
+                sessionStorage.clear();
+                localStorage.removeItem("courseData");
+            })
+            .catch((err) => {
+                console.log(err);
+            })
         }
 
         return () => {
@@ -566,8 +595,8 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                                     return {...prevValue, modules: updatedModules};
                                 });
                                 setLessonPopupOpened(false);
-                                setNewLesson({title: "", cover: "", content: {"type": "doc",
-                                "content": [
+                                setNewLesson({title: "", cover: "", content: {type: "doc",
+                                content: [
                                   // …
                                 ]}});
 

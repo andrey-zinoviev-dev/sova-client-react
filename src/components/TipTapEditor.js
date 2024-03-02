@@ -5,13 +5,15 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
+import NewLesson from "./NewLesson";
 
 export default function TipTapEditor({setNewLesson, addContentToNewLesson, editContentOfLesson, selectedLesson, selectedFiles, setSelectedFiles}) {
-  //states
-  // const [editorContent, setEditorContent] = React.useState({name: "", cover: "", content: {"type": "doc",
-  // "content": [
-  //   // …
-  // ]}});
+  //useMemo
+  // const memoFiles = React.useMemo(() => {
+  //   console.log(selectedFiles);
+  //   console.log(editor);
+  // }, [selectedFiles.length, editor]);
+
   //crete Video extension
   const Video = Node.create({
     name: "video",
@@ -64,6 +66,7 @@ export default function TipTapEditor({setNewLesson, addContentToNewLesson, editC
           setNewLesson((prevValue) => {
             return {...prevValue, content: editor.getJSON()}
           });
+          // console.log(selectedFiles);
           // selectedLesson ? 
           // editContentOfLesson(editor.getJSON())
           // :
@@ -122,7 +125,7 @@ export default function TipTapEditor({setNewLesson, addContentToNewLesson, editC
 
     return (
         <div style={{width: 720, borderRadius: "9px", border: "2px solid #5DB0C7", boxSizing: "border-box"}}>
-            <TipTapButtons editor={editor} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
+            <TipTapButtons content={editor && editor.getJSON()} editor={editor} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             <EditorContent style={{height: "calc(100% - 40px)"}} editor={editor} />
         </div>
         
