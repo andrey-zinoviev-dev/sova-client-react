@@ -398,9 +398,10 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
           {coursesData.courses.map((course, index) => {
             return <motion.li variants={course.available ? liGradient : liGradientDisabled} initial="rest" whileHover="hover" animate="rest" className="main__courses-list-element" key={course._id} style={{overflow:"hidden", width: "100%", boxShadow: "rgba(0, 0, 0, 0.75) 5px 5px 10px", position: "relative", borderRadius: 5, border: "2px solid #34343C", boxSizing: "border-box"}}>
               <motion.div style={{zIndex: 16, position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0, 0, 0, 0.35)"}}></motion.div>
-              <img style={{position: "absolute", top: 0, left: 0, zIndex: 15, width: "100%", height: "100%", objectFit: "cover"}} src={course.cover} alt="обложка курса" />
+              <img style={{position: "absolute", top: 0, left: 0, zIndex: 15, width: "100%", height: "100%", objectFit: "cover"}} src={course.cover.path} alt="обложка курса" />
               <button onClick={() => {
-                showCoursePopup(course._id);
+                navigate(`courses/${course._id}`)
+                // showCoursePopup(course._id);
               }} style={{pointerEvents: !course.available && "none", position: "relative", zIndex: 20, width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
                 
                 <div style={{position: "relative", zIndex: 20, display: "flex", alignItems: "flex-end", justifyContent: "space-between", minWidth: 35, fontSize: 28, color: "white"}}>

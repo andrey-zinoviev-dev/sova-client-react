@@ -20,7 +20,7 @@ import EditModule from './components/EditModule';
 import AddModule from './components/AddModule';
 import Lesson from './components/Lesson';
 import Test from "./components/Test";
-
+import Course from './components/Course';
 
 function App() {
   //variables
@@ -296,6 +296,7 @@ function App() {
           <Route path='/editCourse/:courseID' element={loggedIn ? <EditCourse></EditCourse> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
           <Route path='addUser' element={<AddUser />}></Route>
           <Route path='addCourse' element={<AddCourse />}></Route>
+          <Route path='courses/:courseID' element={<Course></Course>}></Route>
           <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={loggedIn ? <CourseModule socket={socket} onlineUsers={onlineUsers} logout={logout} /> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
           <Route path='/' element={loggedIn ? <Main socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome errorMessage={errorMessage} loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
         </Routes>
