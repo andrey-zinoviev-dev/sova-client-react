@@ -400,7 +400,9 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
               <motion.div style={{zIndex: 16, position: "absolute", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0, 0, 0, 0.35)"}}></motion.div>
               <img style={{position: "absolute", top: 0, left: 0, zIndex: 15, width: "100%", height: "100%", objectFit: "cover"}} src={course.cover.path} alt="обложка курса" />
               <button onClick={() => {
-                navigate(`courses/${course._id}`)
+                navigate(`courses/${course._id}`, {
+                  state: course
+                })
                 // showCoursePopup(course._id);
               }} style={{pointerEvents: !course.available && "none", position: "relative", zIndex: 20, width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
                 
@@ -421,11 +423,12 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
               
               {loggedInUser._id && loggedInUser.admin &&
                 <motion.button variants={liContent} onClick={() => {
-                  setSelectedCourseId(course._id);
-                  // setIsEditCourse(true);
-                  navigate(`/editCourse/${course._id}`, {
-                    state: course,
-                  })
+                  console.log("edit course btn clicked");
+                  // setSelectedCourseId(course._id);
+                  // // setIsEditCourse(true);
+                  // navigate(`/editCourse/${course._id}`, {
+                  //   state: course,
+                  // })
                 }} style={{position: "absolute", top: "6.5%", right: 35, zIndex:25, display: window.innerWidth <= 767 ? "none" : 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10}}>
                   <FontAwesomeIcon icon={faPen}/>
                 </motion.button>
