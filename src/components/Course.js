@@ -16,6 +16,12 @@ export default function Course() {
 
   //states
   const [course, setCourse] = React.useState({});
+  const [moduleId, setModuleId] = React.useState("");
+
+  //derived state
+  const selectedModule = course.modules && course.modules.find((module) => {
+    return module._id === moduleId;
+  });
 
   React.useEffect(() => {
     apiGetCourse(courseID, token)
@@ -45,7 +51,7 @@ export default function Course() {
             </div>
             <img className="course__info-img" alt={course.name} src={course.cover.path}></img>
           </div>
-          <div className="course__programm">
+          {!selectedModule ? <div className="course__programm">
             <p className="course__p">Программа курса</p>
             <ul className="course__ul">
               {course.modules.map((module) => {
@@ -53,7 +59,10 @@ export default function Course() {
                   <h3 className="course__ul-li-headline">{module.title}</h3>
                   <img className="course__ul-li-img" src={module.cover.path} alt={module.title}></img>
                   <p>Уроки: {module.lessons.length}</p>
-                  <button className="course__ul-li-btn">
+                  <button className="course__ul-li-btn" onClick={() => {
+                    setModuleId(module._id);
+                    // console.log(selectedModule)
+                  }}>
                     <p>Открыть</p>
                     <FontAwesomeIcon style={{fontSize: 18}} icon={faArrowRight} />
                   </button>
@@ -61,6 +70,31 @@ export default function Course() {
               })}
             </ul>
           </div>
+          :
+          <div className="course__programm">
+            <div className="course__programm-module">
+              <button className="course__programm-module-btn" onClick={() => {
+                setModuleId("");
+              }}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+                <p>Назад к модулям</p>
+              </button>
+              <p className="course__programm-module-p">{selectedModule.title} / Уроки</p>
+            </div>
+            <ul className="course__ul-lessons">{selectedModule.lessons.map((lesson) => {
+              return <li className="course__ul-lessons-li" key={lesson.title}>
+                <img className="course__ul-lessons-li-img" src={lesson.cover.path} alt={lesson.title}></img>
+                <p className="course__ul-lessons-li-p">{lesson.title}</p>
+                <button onClick={() => {
+                  console.log(lesson._id);
+                }} className="course__ul-lessons-li-btn">
+                  <p>Открыть</p>
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </li>
+            })}</ul>
+          </div>
+          }
         </>}
       </div>
 

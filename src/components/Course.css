@@ -144,3 +144,84 @@
   background-color: rgb(93, 176, 199);
   color: #100f13;
 }
+
+.course__programm-module {
+  display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+  margin: 0 0 25px 0;
+}
+
+.course__programm-module-p {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: 2px;
+}
+
+.course__programm-module-btn {
+  background-color: #26272c;
+    color: rgb(93, 176, 199);
+    padding:  15px 15px;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.course__programm-module-btn p {
+  margin: 0;
+}
+
+/* .course__programm-module-p {
+  margin: 0;
+} */
+
+.course__ul-lessons {
+  padding: 0;
+  list-style: none;
+  margin: 0;
+}
+
+.course__ul-lessons-li {
+  flex-direction: row;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    background-color: #26272c;
+    border-radius: 12px;
+    box-sizing: border-box;
+    padding: 5px 50px;
+}
+
+.course__ul-lessons-li-img {
+  width: 100%;
+  max-width: 45px;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+}
+
+.course__ul-lessons-li-p {
+  margin: 0 auto;
+}
+
+.course__ul-lessons-li-btn {
+  background-color: #100f13;
+    color: rgb(93, 176, 199);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-radius: 9px;
+    box-sizing: border-box;
+    padding: 0px 15px;
+    transition: all 0.25s ease-in-out;
+}
+
+.course__ul-lessons-li-btn:hover {
+  background-color: rgb(93, 176, 199);
+  color: #100f13;
+}

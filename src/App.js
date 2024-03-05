@@ -283,13 +283,13 @@ function App() {
     {
       element: loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit} errorMessage={errorMessage}></Welcome>,
       path: "/",
-      children: loggedIn && [
+      children: loggedIn ? [
         {
           path: "/",
           element: <Courses></Courses>
         },
         {
-          path: "courses/:courseID",
+          path: "courses/:courseID/",
           element: <Course></Course> 
         },
         {
@@ -297,6 +297,8 @@ function App() {
           element: <AddCourse></AddCourse>
         }
       ]
+      :
+      []
     }
   ])
 
