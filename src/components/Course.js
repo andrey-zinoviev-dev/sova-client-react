@@ -1,11 +1,13 @@
 import React from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { apiGetCourse } from "../api";
 import "./Course.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 export default function Course() {
+  //navigate
+  const navigate = useNavigate();
   // //abortController
   // const abortController = new AbortController();
   const loggedInUser = React.useContext(UserContext);
@@ -29,6 +31,15 @@ export default function Course() {
         <>
           <div className="course__info">
             <div className="course__info-namedesc">
+              {/* <div className="course__info-back">
+                
+              </div> */}
+              <button className="course__info-back-btn" onClick={() => {
+                navigate(-1);
+              }}>
+                  <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
+                  <p>Назад к курсам</p>
+              </button>
               <h3 className="course__info-headline">{course.name}</h3>
               <p className="course__info-desc">{course.description}</p>
             </div>

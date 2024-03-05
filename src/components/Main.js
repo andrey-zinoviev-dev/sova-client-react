@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Outlet } from 'react-router-dom';
 import './Main.css';
 // import Welcome from './Welcome';
 // import Navigation from './Navigation';
@@ -22,8 +22,9 @@ export default function Main({socket, logout, loggedIn, registerFormSubmit}) {
     <main className="main">
       {/* <Navigation openLoginPopup={props.openLoginPopup} openRegisterPopup={props.openRegisterPopup}></Navigation>
       <Welcome></Welcome> */}
-      {/* <Dashboard></Dashboard> */}
-      <Courses socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Courses>
+      <Dashboard></Dashboard>
+      <Outlet></Outlet>
+      {/* <Courses socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Courses> */}
     </main>
   )
 }

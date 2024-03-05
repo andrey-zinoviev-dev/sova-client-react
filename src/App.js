@@ -1,6 +1,10 @@
 import './App.css';
 import React, {useState, useEffect, useRef } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+// import { Routes, Route, useNavigate } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 import { socket } from './socketio/socketIO';
 import Welcome from './components/Welcome';
 import Main from './components/Main';
@@ -21,6 +25,7 @@ import AddModule from './components/AddModule';
 import Lesson from './components/Lesson';
 import Test from "./components/Test";
 import Course from './components/Course';
+import Courses from './components/Courses';
 
 function App() {
   //variables
@@ -274,34 +279,62 @@ function App() {
   //   }
   // }, [location])
 
+  const router = createBrowserRouter([
+    {
+      element: loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit} errorMessage={errorMessage}></Welcome>,
+      path: "/",
+      children: loggedIn && [
+        {
+          path: "/",
+          element: <Courses></Courses>
+        },
+        {
+          path: "courses/:courseID",
+          element: <Course></Course> 
+        },
+        {
+          path: "addCourse",
+          element: <AddCourse></AddCourse>
+        }
+      ]
+    }
+  ])
+
   return (
-    <div className="App" onKeyUp={handlePrntScrnButton} tabIndex={0}>
-      <UserContext.Provider value={user}>
-      {/* <Routes>
-        <Route path='courses/:courseID/modules/:moduleID' element={<CourseModule user={user} submitForm={submitChatForm}>
-          <Chat></Chat>
-        </CourseModule>}></Route>
-        <Route path='courses' element={<Courses user={user} courses={courses}></Courses>}></Route>
-        <Route path='/' element={<Main openLoginPopup={openLoginPopup} openRegisterPopup={openRegisterPopup}></Main>}></Route>
-      </Routes> */}
-      {/* <Login formSubmit={navigationLoginFormSubmit} isOpened={loginPopupOpened} closePopup={closePopups}></Login>
-      <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register> */}
-        {/* <Dashboard></Dashboard> */}
-        <Routes>
-          {/* <Route path='editCourse/:courseID' element={}></Route> */}
-          {/* <Route path='/editLesson/courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<Lesson></Lesson>} */}
-          <Route path='/testFiles' element={<Test></Test>} />
-          <Route path='/addModule/courses/:courseID' element={<AddModule></AddModule>} />
-          <Route path='/editModule/courses/:courseID/modules/:moduleID' element={<EditModule></EditModule>} />
-          <Route path='/editCourse/:courseID' element={loggedIn ? <EditCourse></EditCourse> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
-          <Route path='addUser' element={<AddUser />}></Route>
-          <Route path='addCourse' element={<AddCourse />}></Route>
-          <Route path='courses/:courseID' element={<Course></Course>}></Route>
-          <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={loggedIn ? <CourseModule socket={socket} onlineUsers={onlineUsers} logout={logout} /> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
-          <Route path='/' element={loggedIn ? <Main socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome errorMessage={errorMessage} loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
-        </Routes>
-      </UserContext.Provider>
-    </div>
+    <UserContext.Provider value={user}>
+      <RouterProvider router={router}></RouterProvider>
+    </UserContext.Provider>
+    // <div className="App" onKeyUp={handlePrntScrnButton} tabIndex={0}>
+    // <div className='App'>
+      
+    //   <UserContext.Provider value={user}>
+    //     <Dashboard></Dashboard>
+    //   <Routes>
+    //     <Route path='courses/:courseID/modules/:moduleID' element={<CourseModule user={user} submitForm={submitChatForm}>
+    //       <Chat></Chat>
+    //     </CourseModule>}></Route>
+    //     <Route path='courses' element={<Courses user={user} courses={courses}></Courses>}></Route>
+    //     <Route path='/' element={<Main openLoginPopup={openLoginPopup} openRegisterPopup={openRegisterPopup}></Main>}></Route>
+    //   </Routes>
+    //   <Login formSubmit={navigationLoginFormSubmit} isOpened={loginPopupOpened} closePopup={closePopups}></Login>
+    //   <Register formSubmit={navigationRegisterFormSubmit} isOpened={registerPopupOpened} closePopup={closePopups}></Register>
+    //     <Dashboard></Dashboard>
+    //     <Routes>
+    //       <Route path='editCourse/:courseID' element={<EditCourse></EditCourse>}></Route>
+    //       <Route path='/editLesson/courses/:courseID/modules/:moduleID/lessons/:lessonID' element={<Lesson></Lesson>}></Route>
+    //       <Route path='/testFiles' element={<Test></Test>} />
+    //       <Route path='/addModule/courses/:courseID' element={<AddModule></AddModule>} />
+    //       <Route path='/editModule/courses/:courseID/modules/:moduleID' element={<EditModule></EditModule>} />
+    //       <Route path='/editCourse/:courseID' element={loggedIn ? <EditCourse></EditCourse> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
+    //       <Route path='addUser' element={<AddUser />}></Route>
+    //       <Route path='addCourse' element={<AddCourse />}></Route>
+    //       <Route path='courses/:courseID' element={<Course></Course>}></Route>
+    //       <Route path='courses/:courseID/modules/:moduleID/lessons/:lessonID' element={loggedIn ? <CourseModule socket={socket} onlineUsers={onlineUsers} logout={logout} /> : <Welcome loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
+    //       <Route path='/' element={loggedIn ? <Main socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Main> : <Welcome errorMessage={errorMessage} loginFormSubmit={loginFormSubmit} registerFormSubmit={registerFormSubmit} submitForgetPasswordForm={submitForgetPasswordForm}></Welcome>}></Route>
+    //     </Routes>
+    //   </UserContext.Provider>
+    // </div>
+    // </div>
   );
 }
 

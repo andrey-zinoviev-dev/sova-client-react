@@ -8,12 +8,12 @@ import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <App />
   // <React.StrictMode>
-    <BrowserRouter>
-      {/* <SocketContext.Provider value={socket}> */}
-        <App />
-      {/* </SocketContext.Provider> */}
-    </BrowserRouter>
+    // <BrowserRouter>
+    //   <SocketContext.Provider value={socket}>
+    //   </SocketContext.Provider>
+    // </BrowserRouter>
   // </React.StrictMode>
 );
 

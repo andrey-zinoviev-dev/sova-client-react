@@ -151,9 +151,9 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
             setFormStep((prevValue) => {
                 return prevValue + 1;
             });
-        }} style={{margin: "0 auto", width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box", padding: "0 40px" }}>
-            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", margin: "35px auto", width: "100%"}}>
-                <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", height: 230, gap: 35}}>
+        }} style={{margin: "0 auto", width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box"}}>
+            <div style={{display: "flex", alignItems: "flex-start", justifyContent: "space-between", margin: "35px auto", width: "100%"}}>
+                <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", gap: 35}}>
                     <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Название курса</label> */}
                         <input className="addCourse__form-input" placeholder="Введите название курса" name="name" value={formData.course.name} onChange={(evt) => {

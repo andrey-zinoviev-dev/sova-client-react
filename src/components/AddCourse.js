@@ -144,7 +144,7 @@ export default function AddCourse() {
         <div style={{display: "flex"}}>
           <h2 className="addCourse__headline" style={{textAlign: "left", fontWeight: 400, color: "#747374", margin: 0}}><span style={{color: "white"}}>Вернуться к курсам</span>, либо добавить новый</h2>
         </div>
-        <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 25, maxWidth: 410, margin: "20px 0 0 0", boxSizing: "border-box", padding: "0 0 0 35px"}}>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 25, maxWidth: 410, margin: "20px 0 0 0", boxSizing: "border-box"}}>
           <div style={{display: "flex", alignItems: "center", justifyContent: "center", minWidth: 80, minHeight: 80, borderRadius: "50%", backgroundImage: `radial-gradient(closest-side, black 75%, transparent 80%, transparent 100%), conic-gradient(rgb(116, 115, 116) 50%, rgb(93, 176, 199) 0%)`}}>
             {/* <progress value="25" style={{visibility: "hidden", width: 0, height: 0}}></progress> */}
             <p>{formStep + 1} / 2</p>

@@ -37,11 +37,7 @@ export default function Dashboard({ setAddUserOpened, logout, loggedIn }) {
     // </nav>
     <>
       <header className='header' style={{margin: !loggedIn && 0}}>
-        {/* <img className='header__logo' alt="Логотип" src='https://static.tildacdn.com/tild6665-6638-4561-b964-343330373834/sova_logo_icon____4.png'></img>
-        <button onClick={openMenu} style={{display: window.innerWidth >= 767 ?  "none" : "block", backgroundColor: "transparent", color: "white", fontSize: 18, border: "none"}}>
-          <FontAwesomeIcon icon={faBars} style={{fontSize: 18}}/>
-        </button> */}
-          {/* <p style={{margin: 0, fontSize: 40, lineHeight: 1, color: "white"}}>sova</p> */}
+        <div className="header__container">
           <svg className='header__logo' version="1.0" xmlns="http://www.w3.org/2000/svg"
             width="940.000000pt" height="1847.000000pt" viewBox="0 0 940.000000 1847.000000"
             preserveAspectRatio="xMidYMid meet">
@@ -120,48 +116,22 @@ export default function Dashboard({ setAddUserOpened, logout, loggedIn }) {
             4451 23 4572 1z"/>
             </g>
           </svg>
-
-          {/* <div style={{width: 7, height: 7, borderRadius: "51%", backgroundColor: "#5DB0C7", margin: "0 0 5px 0"}}></div> */}
-        <div className="header__buttons">
-          {loggedUser._id && loggedUser.admin && <button className="header__buttons-btn" style={{display: window.innerWidth <= 767 && "none"}} onClick={() => {
-            navigate({pathname: '/addCourse'});
-          }}>
+          <div className="header__buttons">
+            {loggedUser._id && loggedUser.admin && <button className="header__buttons-btn" style={{display: window.innerWidth <= 767 && "none"}} onClick={() => {
+              navigate({pathname: '/addCourse'});
+            }}>
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512" fill="rgb(93, 176, 199)"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
-          </button>}
-          <button onClick={() => {
+            </button>}
+          {/* <button onClick={() => {
             navigate({pathname: "/testFiles"})
-          }} className="header__buttons-btn">Тест</button>
-          {/* {
-          loggedUser._id && loggedUser.admin &&<motion.button className="header__buttons-btn" onClick={() => {
-            
-            navigate('/addUser');
-          }}>
+          }} className="header__buttons-btn">Тест</button> */}
 
-          <motion.svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512" fill="rgb(93, 176, 199)"><path d="M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"/></motion.svg>
-          </motion.button>} */}
-          <button className="header__buttons-btn">{loggedUser._id && loggedUser.name[0]}</button>
-          <button className="header__buttons-btn" onClick={logout}>
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="rgb(93, 176, 199)"><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg>
-          </button>
+            <button className="header__buttons-btn">{loggedUser._id && loggedUser.name[0]}</button>
+            <button className="header__buttons-btn" onClick={logout}>
+              <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" fill="rgb(93, 176, 199)"><path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"/></svg>
+            </button>
+          </div>
         </div>
-        
-        {/* <nav className='header__nav' style={{display: !menuOpened && window.innerWidth < 768 ? "none" : "flex", height: window.innerWidth < 768 && "100vh", position: window.innerWidth < 768 && "absolute", top: window.innerWidth < 768 && 0, right: window.innerWidth < 768 && 0, borderLeft: window.innerWidth < 768 && "2px solid yellow", backdropFilter: "blur(5px)", flexDirection: "column", justifyContent: "center", alignItems: "center"}}>
-          <button onClick={closeMenu} style={{display: window.innerWidth < 768 ? "inline-block" : "none", margin: "0 0 15px 0", backgroundColor: "transparent", border: "2px solid white", color: "white"}}>
-            <FontAwesomeIcon icon={faClose} />
-          </button>
-          <button style={{backgroundColor: "transparent", padding: 0, display: "flex", justifyContent: "center", alignItems: "center", border: "none"}}>
-            <img style={{width: 20}} src={MenuButton} />
-          </button> */}
-          {/* <ul className='header__nav-list' style={{flexDirection: window.innerWidth < 768 && "column", minWidth: window.innerWidth < 768 && 270, padding: "10px 0 0 0", boxSizing: "border-box"}}>
-            <li className='header__nav-list-element' style={{lineHeight: "1.5"}}><Link className='header__nav-list-element-link' to='/music'>Музыка</Link></li>
-            <li className='header__nav-list-element' style={{lineHeight: "1.5"}}><Link className='header__nav-list-element-link' to='/education'>Обучение</Link></li>
-            <li className='header__nav-list-element' style={{lineHeight: "1.5"}}><Link className='header__nav-list-element-link' to='courseplatform'>Платформа</Link></li>
-            <li className='header__nav-list-element' style={{lineHeight: "1.5"}}><Link className='header__nav-list-element-link' to='about'>Об Авторе</Link></li>
-            <li className='header__nav-list-element' style={{lineHeight: "1.5"}}><Link className='header__nav-list-element-link' to='contacts'>Контакты</Link></li>
-            {loggedUser._id && <li className='header__nav-list-element'><Link className='header__nav-list-element-link' to='contacts'>Профиль {`${loggedUser.name}`}</Link></li>}
-          </ul> */}
-        {/* </nav> */}
-
       </header>
       
     </>

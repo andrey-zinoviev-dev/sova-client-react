@@ -1,5 +1,5 @@
 .addCourse {
-    height: 100vh;
+    height: calc(100vh - 80px);
     /* min-height: 100vh; */
     display: flex;
     flex-direction: column;
@@ -8,13 +8,15 @@
     justify-content: space-between;
     /* justify-content: flex-start; */
     /* background-color: #363a3b; */
-    background-color: black;
+    /* background-color: black; */
     color: white;
     /* padding: 45px 90px; */
     box-sizing: border-box;
     position: relative;
-    padding: 45px;
+    padding: 45px 25px;
     overflow: auto;
+    max-width: 1024px;
+    margin: 0 auto;
     /* padding: 20px 45px 45px 45px; */
     /* padding: 30px 45px; */
     /* background-image: url('https://iconcollective.edu/wp-content/uploads/Home-Recording-Studio-by-Will-Francis.jpg'); */

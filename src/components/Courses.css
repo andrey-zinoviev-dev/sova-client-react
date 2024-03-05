@@ -25,7 +25,8 @@
   background-size: cover;
   position: relative;
   overflow: hidden;
-  max-width: 1280px;
+  /* max-width: 1280px; */
+  max-width: 1024px;
   margin: 0 auto;
   /* padding: 25px; */
   padding: 40px 25px; 
@@ -49,7 +50,7 @@
 }
 
 .main__courses-list {
-  margin: auto 0;
+  margin: 0;
   padding: 0; 
   list-style: none;
   position: relative;
@@ -65,13 +66,14 @@
   border-radius: 9px;
   /* width: 100%; */
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
+  /* grid-template-columns: repeat(4, 1fr); */
   /* grid-template-columns: repeat(5, 1fr); */
   /* grid-template-columns: repeat(4, 270px); */
-  gap: 25px;
+  gap: 15px;
   font-family: 'Carlito', sans-serif;
   width: 100%;
-  margin: auto 0;
+  /* margin: auto 0; */
 }
 
 .main__courses-list-element {
@@ -170,11 +172,13 @@
 }
 
 .main__courses-headline {
-  font-size: 42px;
+  /* font-size: 42px; */
+  font-size: 36px;
   max-width: 450px;
   text-align: left;
   font-weight: 400;
-  color: rgb(116, 115, 116);
+  /* color: rgb(116, 115, 116); */
+  color: rgb(209, 209, 209);
   margin: 0 0 50px 0;
   line-height: 1.5;
   /* margin: auto 0; */

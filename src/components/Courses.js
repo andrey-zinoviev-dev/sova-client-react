@@ -306,10 +306,8 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
   return (
     <>
       <section className="main__courses">
-        <Dashboard setAddUserOpened={setAddUserOpened} logout={logout} loggedIn={loggedIn}/>
-
         <div style={{display: "flex", alignItems: "stretch", justifyContent: "space-between", width: "100%"}}>
-          <h2 className="main__courses-headline" style={{textAlign: "left", fontWeight: 400, color: "#747374"}}>
+          <h2 className="main__courses-headline" style={{textAlign: "left", fontWeight: 400}}>
           Добро пожаловать в Школу Экстремального вокала<span style={{color: "rgb(93, 176, 199)"}}> Саши Совы</span><span style={{color: "rgb(93, 176, 199)"}}>.</span></h2>
         </div>
         {coursesLoading ? <div className="main__courses-loader">
