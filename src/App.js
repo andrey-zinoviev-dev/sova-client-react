@@ -26,6 +26,7 @@ import Lesson from './components/Lesson';
 import Test from "./components/Test";
 import Course from './components/Course';
 import Courses from './components/Courses';
+import CourseLesson from './components/CourseLesson';
 
 function App() {
   //variables
@@ -293,9 +294,13 @@ function App() {
           element: <Course></Course> 
         },
         {
+          path: "courses/:courseID/modules/:moduleID/lessons/:lessonID",
+          element: <CourseLesson />
+        },
+        {
           path: "addCourse",
           element: <AddCourse></AddCourse>
-        }
+        },
       ]
       :
       []

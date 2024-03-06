@@ -86,7 +86,9 @@ export default function Course() {
                 <img className="course__ul-lessons-li-img" src={lesson.cover.path} alt={lesson.title}></img>
                 <p className="course__ul-lessons-li-p">{lesson.title}</p>
                 <button onClick={() => {
-                  console.log(lesson._id);
+                  navigate({
+                    pathname: `/courses/${courseID}/modules/${moduleId}/lessons/${lesson._id}`,
+                  })
                 }} className="course__ul-lessons-li-btn">
                   <p>Открыть</p>
                   <FontAwesomeIcon icon={faArrowRight} />

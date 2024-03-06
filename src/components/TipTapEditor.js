@@ -66,62 +66,8 @@ export default function TipTapEditor({setNewLesson, addContentToNewLesson, editC
           setNewLesson((prevValue) => {
             return {...prevValue, content: editor.getJSON()}
           });
-          // console.log(selectedFiles);
-          // selectedLesson ? 
-          // editContentOfLesson(editor.getJSON())
-          // :
-          // addContentToNewLesson(editor.getJSON());
-
-          // setEditorContent(editor.getJSON());
-            // foundLesson ? setFormData((prevValue) => {
-                
-            //     const modulesToUpdate = prevValue.modules.map((module) => {
-            //         return module.title === foundModule.title ? {...module, lessons: module.lessons.map((lesson) => {
-            //             return lesson.title === foundLesson.title ? {...lesson, content: editor.getJSON()} : lesson;
-            //         })} : module;
-            //     });
-            //     return {...prevValue, modules: modulesToUpdate};
-            // }) :
-            // setLessonContent((prevValue) => {
-            //     // console.log('yes');
-            //     return {...prevValue, content: editor.getJSON()}
-            // })
-
-        //     setSelectedLesson((prevValue) => {
-        //         return {...prevValue, layout: editor.getJSON()}
-        //     });
-
-        //     // setFormData((prevValue) => {
-        //     //     const updatedModules = prevValue.modules.map((courseModule) => {
-        //     //         if(courseModule.title === selectedModule.title) {
-        //     //             const updatedModuleLessons = courseModule.lessons.map((lesson) => {
-        //     //                 return lesson.title === selectedLesson.title ? {...lesson, layout: editor.getJSON()} : lesson
-        //     //             });
-        //     //             return {...courseModule, lessons: updatedModuleLessons};
-        //     //         }
-        //     //         return courseModule;
-        //     //     });
-        //     //     // console.log(prevValue);
-
-        //     //     return {...prevValue, modules: [...updatedModules]};
-        //     // });
-
-        //     // console.log(editor.getJSON());
         },
     });
-
-    // React.useEffect(() => {
-    //     console.log(foundLesson);
-    // }, [foundLesson])
-
-    // React.useEffect(() => {
-    //     if(editor) {
-    //       // lessonContent && lessonContent.content.content.length === 0 && editor.commands.setContent({});
-    //       // foundLesson && editor.commands.setContent(foundLesson.content)
-    //     }
-         
-    // }, [foundLesson, editor])
-    // console.log(foundLesson);
 
     return (
         <div style={{width: 720, borderRadius: "9px", border: "2px solid #5DB0C7", boxSizing: "border-box"}}>
