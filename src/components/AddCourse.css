@@ -323,9 +323,10 @@
 
 .ProseMirror {
     height: 100%;
-    caret-color: rgb(226, 100, 59);
+    caret-color: #5DB0C7;
+    color: white;
     /* border: 2px solid rgb(226, 100, 59); */
-    background-color: #242827;
+    /* background-color: #242827; */
     /* height: 500px; */
     /* box-shadow: 5px 5px 10px black; */
     width: 100%;

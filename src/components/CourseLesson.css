@@ -1,0 +1,32 @@
+.main__lesson {
+  display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    background-color: #100f13;
+}
+
+.main__lesson-menu {
+  background-color: #1F1F21;
+  box-sizing: border-box;
+  /* width: 45px;
+  padding: 10px 15px; */
+  padding: 45px;
+  min-width: 340px; 
+}
+
+.main__lesson-menu img {
+  max-width: 35px;
+}
+
+.main__lesson-content {
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+  padding: 90px 0;
+  color: white;
+}
+
+.main__lesson-content-wrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+}

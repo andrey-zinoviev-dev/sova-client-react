@@ -53,7 +53,7 @@ export default function TiptapReader({content}) {
               Video
           ],
           content: content && content ,
-          
+          editable: false,
           // onUpdate: ({editor}) => {
           //   setNewLesson((prevValue) => {
           //     return {...prevValue, content: editor.getJSON()}
@@ -62,10 +62,9 @@ export default function TiptapReader({content}) {
     });
 
   return (
-    <div>
-      <h3>Конент урока</h3>
-      <EditorContent editor={editor} />
+    <EditorContent editor={editor} />
 
-    </div>
+      // <div style={{maxWidth: 1024, margin: "0 auto"}}>
+      // </div>
   )
 }

@@ -293,10 +293,7 @@ function App() {
           path: "courses/:courseID/",
           element: <Course></Course> 
         },
-        {
-          path: "courses/:courseID/modules/:moduleID/lessons/:lessonID",
-          element: <CourseLesson />
-        },
+
         {
           path: "addCourse",
           element: <AddCourse></AddCourse>
@@ -304,7 +301,11 @@ function App() {
       ]
       :
       []
-    }
+    },
+    {
+      path: "courses/:courseID/modules/:moduleID/lessons/:lessonID",
+      element: <CourseLesson />
+    },
   ])
 
   return (
