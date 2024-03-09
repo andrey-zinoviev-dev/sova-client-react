@@ -1,23 +1,21 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { apiGetLesson } from "../api";
-import TiptapReader from "./TiptapReader";
+
 import "./CourseLesson.css";
-import sovaLogo from "../images/sova-logo-white.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import LessonMenu from "./LessonMenu";
+import LessonContent from "./LessonContent";
 
 export default function CourseLesson() {
-  //navigate
-  const navigate = useNavigate();
-  
   const {courseID, moduleID, lessonID} = useParams();
 
   const token = localStorage.getItem("token");
 
   //states
   const [lesson, setLesson] = React.useState(null);
-  // console.log(lesson);
+
+
+
   React.useEffect(() => {
     apiGetLesson(courseID, moduleID, lessonID, token)
     .then((data) => {
@@ -30,41 +28,28 @@ export default function CourseLesson() {
 
   return (
     lesson && <section className="main__lesson">
-      <div className="main__lesson-menu">
-        <div>
-          <img src={sovaLogo} alt="логотип"></img>
-          <p>{lesson.module.title}</p>
-        </div>
-        <ul>
-          {lesson.module.lessons.map((moduleLesson) => {
-            return <li key={moduleLesson.title}>
-              <button>{moduleLesson.title}</button>
-            </li>
-          })}
-        </ul>
-        <button onClick={() => {
-          navigate({
-            pathname: `../courses/${courseID}`
-          })
-        }}>
-          Назад к курсу
-        </button>
-      </div>
-      <div className="main__lesson-content">
+      <LessonMenu courseID={courseID} lesson={lesson.lesson} module={lesson.module}/>
+      <LessonContent lesson={lesson.lesson} module={lesson.module} />
+      {/* <div className="main__lesson-content">
         <div className="main__lesson-content-wrapper">
           <div>
-            <p>Модуль {lesson.module.title} <FontAwesomeIcon icon={faArrowRight} /> Урок {lesson.lesson.title}</p>
+            <p className="main__lesson-content-wrapper-stage">Модуль {lesson.module.title} <FontAwesomeIcon icon={faArrowRight} /> Урок {lesson.lesson.title}</p>
+            <ul>
+              <li>
+                <button>Контент</button>
+              </li>
+              <li>
+                <button>Чат</button>
+              </li>
+            </ul>
           </div>
-          <div>
-            <button>Контент</button>
-            <button>Чат</button>
-          </div>
+
           <h3 style={{color: "white"}}>{lesson.lesson.title}</h3>
           <TiptapReader content={lesson.lesson.content}></TiptapReader>
           <button>Следующий урок</button>
         </div>
 
-      </div>
+      </div> */}
 
     
     </section>

@@ -22,11 +22,24 @@
   width: 100%;
   text-align: center;
   box-sizing: border-box;
-  padding: 90px 0;
+  padding: 75px 0;
   color: white;
 }
 
 .main__lesson-content-wrapper {
   max-width: 1024px;
   margin: 0 auto;
+}
+
+.main__lesson-content-wrapper-stage {
+  display: inline-flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    line-height: 1;
+    border-bottom: 2px solid #5DB0C7;
+    font-size: 18px;
+    padding: 0 0 10px 0;
+    letter-spacing: 1px;
+    font-weight: 500;
 }
