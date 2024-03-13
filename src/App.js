@@ -6,27 +6,35 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { socket } from './socketio/socketIO';
-import Welcome from './components/Welcome';
-import Main from './components/Main';
+import { apiLogin, apiRegister, apiGetCurrentUser, apiNewPassword } from './api';
+import { UserContext } from './context/userContext';
+const Welcome = React.lazy(() => import ('./components/Welcome'));
+// import Welcome from './components/Welcome';
+const Main = React.lazy(() => import ('./components/Main'));
+// import Main from './components/Main';
 // import Login from './components/Login';
 // import Register from './components/Register';
 // import Courses from './components/Courses';
-import CourseModule from './components/CourseModule';
-import AddCourse from './components/AddCourse';
+// import CourseModule from './components/CourseModule';
+const AddCourse = React.lazy(() => import('./components/AddCourse'));
+// import AddCourse from './components/AddCourse';
 // import Chat from './components/Chat';
 // import Course from './components/Course';
-import Dashboard from './components/Dashboard';
-import AddUser from './components/AddUser';
-import { apiLogin, apiRegister, apiGetCurrentUser, apiNewPassword } from './api';
-import { UserContext } from './context/userContext';
-import EditCourse from './components/EditCourse';
-import EditModule from './components/EditModule';
-import AddModule from './components/AddModule';
-import Lesson from './components/Lesson';
-import Test from "./components/Test";
-import Course from './components/Course';
-import Courses from './components/Courses';
-import CourseLesson from './components/CourseLesson';
+// import Dashboard from './components/Dashboard';
+// import AddUser from './components/AddUser';
+
+// import EditCourse from './components/EditCourse';
+// import EditModule from './components/EditModule';
+// import AddModule from './components/AddModule';
+// import Lesson from './components/Lesson';
+// import Test from "./components/Test";
+const Course = React.lazy(() => import ('./components/Course'));
+const Courses = React.lazy(() => import ('./components/Courses'));
+const CourseLesson = React.lazy(() => 
+  import ('./components/CourseLesson')
+);
+// import Courses from './components/Courses';
+// import CourseLesson from './components/CourseLesson';
 
 function App() {
   //variables
@@ -282,21 +290,32 @@ function App() {
 
   const router = createBrowserRouter([
     {
-      element: loggedIn ? <Main></Main> : <Welcome loginFormSubmit={loginFormSubmit} errorMessage={errorMessage}></Welcome>,
+      element: loggedIn ? <React.Suspense>
+        <Main></Main>
+      </React.Suspense> : 
+      <React.Suspense>
+        <Welcome loginFormSubmit={loginFormSubmit} errorMessage={errorMessage}></Welcome>
+      </React.Suspense>,
       path: "/",
       children: loggedIn ? [
         {
           path: "/",
-          element: <Courses></Courses>
+          element: <React.Suspense>
+            <Courses></Courses>
+          </React.Suspense>
         },
         {
           path: "courses/:courseID/",
-          element: <Course></Course> 
+          element: <React.Suspense>
+            <Course></Course> 
+          </React.Suspense>
         },
 
         {
           path: "addCourse",
-          element: <AddCourse></AddCourse>
+          element: <React.Suspense>
+            <AddCourse></AddCourse>
+          </React.Suspense>
         },
       ]
       :
@@ -304,7 +323,9 @@ function App() {
     },
     {
       path: "courses/:courseID/modules/:moduleID/lessons/:lessonID",
-      element: <CourseLesson />
+      element: <React.Suspense>
+        <CourseLesson />
+      </React.Suspense>
     },
   ])
 

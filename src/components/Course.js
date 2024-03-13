@@ -41,7 +41,9 @@ export default function Course() {
                 
               </div> */}
               <button className="course__info-back-btn" onClick={() => {
-                navigate(-1);
+                navigate({
+                  pathname: "/"
+                });
               }}>
                   <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
                   <p>Назад к курсам</p>
@@ -83,8 +85,8 @@ export default function Course() {
             </div>
             <ul className="course__ul-lessons">{selectedModule.lessons.map((lesson) => {
               return <li className="course__ul-lessons-li" key={lesson.title}>
-                <img className="course__ul-lessons-li-img" src={lesson.cover.path} alt={lesson.title}></img>
                 <p className="course__ul-lessons-li-p">{lesson.title}</p>
+                <img className="course__ul-lessons-li-img" src={lesson.cover.path} alt={lesson.title}></img>
                 <button onClick={() => {
                   navigate({
                     pathname: `/courses/${courseID}/modules/${moduleId}/lessons/${lesson._id}`,

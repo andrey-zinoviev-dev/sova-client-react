@@ -1,16 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark, faAngleRight, faArrowLeft, faPlus, faCamera, faPen} from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faXmark, faPlus, faCamera } from "@fortawesome/free-solid-svg-icons";
+// import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+// import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from "../context/userContext"; 
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import EmptyLogo from '../images/Group_20.png';
-import LessonImg from '../images/5af7b516f65dd48bf1c3daae143f8fd7.jpg';
+// import LessonImg from '../images/5af7b516f65dd48bf1c3daae143f8fd7.jpg';
 import TipTapEditor from "./TipTapEditor";
-import SuccessAddCourse from './SuccessAddCourse';
-import CyrillicToTranslit from 'cyrillic-to-translit-js';
+// import SuccessAddCourse from './SuccessAddCourse';
+// import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import NewModule from "./NewModule";
 import NewLesson from "./NewLesson";
 
@@ -20,25 +20,25 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     //navigate
     const navigate = useNavigate();
     //name transformer
-    const cyrillicToTranslit = new CyrillicToTranslit();
+    // const cyrillicToTranslit = new CyrillicToTranslit();
 
     //refs
     const moduleNameRef = React.useRef();
-    const moduleCoverRef = React.useRef();
-    const lessonNameRef = React.useRef();
+    // const moduleCoverRef = React.useRef();
+    // const lessonNameRef = React.useRef();
     const moduleCoverInputRef = React.useRef();
     const moduleCoverImg = React.useRef();
-    const moduleLessonsRef = React.useRef();
+    // const moduleLessonsRef = React.useRef();
     const lessonTitleRef = React.useRef();
     const lessonCoverLinkRef = React.useRef();
     const lessonCoverImg = React.useRef();
     const lessonCoverInputRef = React.useRef();
-    const editLessonCoverImg = React.useRef();
-    const editLessonCoverInput = React.useRef();
-    const lessonAddFormRef = React.useRef();
+    // const editLessonCoverImg = React.useRef();
+    // const editLessonCoverInput = React.useRef();
+    // const lessonAddFormRef = React.useRef();
     const editModuleNameRef = React.useRef();
     const postCourseButton = React.useRef();
-    const abortControllerRef = React.useRef();
+    // const abortControllerRef = React.useRef();
 
 
     // const 
@@ -95,8 +95,6 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                 })
             })
         });
-        // console.log(filesArray);
-        // console.log(selectedFiles);
         
         const resultArray =  selectedFiles.filter((selectedFile) => {
             return filesArray.find((fileName) => {
@@ -104,7 +102,6 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
             })
         });
         return resultArray;
-        // const filesList = [formData.course.cover]
     }, [formData, selectedFiles]);
 
     //user
@@ -150,18 +147,18 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         window.URL.revokeObjectURL(lessonCover);
     };
 
-    function handleModuleCoverEdit(evt) {
-        // const 
-    };
+    // function handleModuleCoverEdit(evt) {
+    //     // const 
+    // };
 
-    function handleEditLessonCoverUpload(evt) {
-        // const picFile = handleCoverUpload(evt);
-        // console.log(picFile);
-        // editLessonCoverImg.current.src = picFile.clientPath;
-        // setLessonContent((prevValue) => {
-        //     return {...prevValue, cover:picFile};
-        // });
-    }
+    // function handleEditLessonCoverUpload(evt) {
+    //     // const picFile = handleCoverUpload(evt);
+    //     // console.log(picFile);
+    //     // editLessonCoverImg.current.src = picFile.clientPath;
+    //     // setLessonContent((prevValue) => {
+    //     //     return {...prevValue, cover:picFile};
+    //     // });
+    // }
 
     // function selectModule(index) {
     //     setSelectedModuleIndex
@@ -415,7 +412,7 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
               
             </div>
 
-            {moduleDivOpened && <div style={{position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "90px 0", backdropFilter: "blur(2px)"}}>
+            {moduleDivOpened && <div style={{position: "fixed", zIndex: 15, top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "90px 0", backdropFilter: "blur(2px)"}}>
                 <div style={{position: "relative", display: "flex", alignItems: "center", justifyContent: "flex-start", flexDirection: "column", boxSizing: "border-box", padding: 30, border: "2px solid rgb(93, 176, 199)", borderRadius: 5}}>
                     <button type="button" onClick={() => {
                         setModuleDivOpened(false);
@@ -472,7 +469,7 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                 </div>
             </div>}
 
-            {moduleEditOpened && <section style={{position: "fixed", top: 0, left: 0, padding: 45, boxSizing: "border-box", width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "45px 0", backdropFilter: "blur(2px)"}}>
+            {moduleEditOpened && <section style={{position: "fixed", zIndex: 15, top: 0, left: 0, padding: 45, boxSizing: "border-box", width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "45px 0", backdropFilter: "blur(2px)"}}>
                 <div style={{position:"relative", overflow: "auto", width: "100%", maxWidth: 1280, height: "100%", maxHeight: 1024, padding: "50px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: 50}}>
                     <button type="button" onClick={() => {
                         setModuleEditOpened(false);
@@ -540,7 +537,7 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                 </div>
             </section>}
 
-            {lessonPopupOpened && <section style={{position: "fixed", top: 0, left: 0, padding: 45, boxSizing: "border-box", width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "45px 0", backdropFilter: "blur(2px)"}}>
+            {lessonPopupOpened && <section style={{position: "fixed", zIndex: 15, top: 0, left: 0, padding: 45, boxSizing: "border-box", width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "45px 0", backdropFilter: "blur(2px)"}}>
                 <div style={{position:"relative", overflow: "auto", width: "100%", maxWidth: 1280, height: "100%", maxHeight: 1024, padding: "50px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: 50}}>
                     <button type="button" onClick={() => {
                         setLessonPopupOpened(false);
@@ -810,7 +807,7 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
 
                 </div>
             </section>}
-            {lessonEditOpened && <section style={{position: "fixed", top: 0, left: 0, padding: 45, boxSizing: "border-box", width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "45px 0", backdropFilter: "blur(2px)"}}>
+            {lessonEditOpened && <section style={{position: "fixed", zIndex: 15, top: 0, left: 0, padding: 45, boxSizing: "border-box", width: "100%", height: "100%", backgroundColor: "rgb(0 0 0/75%)", display: "flex", justifyContent: "center", alignItems: "center", boxSizing: "border-box", padding: "45px 0", backdropFilter: "blur(2px)"}}>
                 <div style={{position:"relative", overflow: "auto", width: "100%", maxWidth: 1280, height: "100%", maxHeight: 1024, padding: "50px 35px", boxSizing: "border-box", border: "2px solid #5DB0C7", boxSizing: "border-box", borderRadius: 9, display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center", gap: 50}}>
                     <button type="button" onClick={() => {
                         setLessonEditOpened(false);
