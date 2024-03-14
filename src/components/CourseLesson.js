@@ -14,10 +14,11 @@ export default function CourseLesson() {
   //states
   const [lesson, setLesson] = React.useState(null);
 
-  console.log("page reloaded");
+  // console.log("page reloaded");
 
 
   React.useEffect(() => {
+    // console.log('ues');
     apiGetLesson(courseID, moduleID, lessonID, token)
     .then((data) => {
       setLesson(data);
@@ -25,7 +26,7 @@ export default function CourseLesson() {
     .catch((err) => {
       console.log(err);
     })
-  }, []);
+  }, [lessonID]);
 
   return (
     lesson && <section className="main__lesson">

@@ -30,6 +30,7 @@ const AddCourse = React.lazy(() => import('./components/AddCourse'));
 // import Test from "./components/Test";
 const Course = React.lazy(() => import ('./components/Course'));
 const Courses = React.lazy(() => import ('./components/Courses'));
+const Module = React.lazy(() => import ('./components/Module')) ;
 const CourseLesson = React.lazy(() => 
   import ('./components/CourseLesson')
 );
@@ -305,12 +306,17 @@ function App() {
           </React.Suspense>
         },
         {
-          path: "courses/:courseID/",
+          path: "courses/:courseID",
           element: <React.Suspense>
             <Course></Course> 
           </React.Suspense>
         },
-
+        {
+          path: "courses/:courseID/modules/:moduleID",
+          element: <React.Suspense>
+            <Module></Module>
+          </React.Suspense>
+        },
         {
           path: "addCourse",
           element: <React.Suspense>

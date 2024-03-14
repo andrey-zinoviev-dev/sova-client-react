@@ -53,7 +53,8 @@ export default function Course() {
             </div>
             <img className="course__info-img" alt={course.name} src={course.cover.path}></img>
           </div>
-          {!selectedModule ? <div className="course__programm">
+
+          <div className="course__programm">
             <p className="course__p">Программа курса</p>
             <ul className="course__ul">
               {course.modules.map((module) => {
@@ -62,7 +63,10 @@ export default function Course() {
                   <img className="course__ul-li-img" src={module.cover.path} alt={module.title}></img>
                   <p>Уроки: {module.lessons.length}</p>
                   <button className="course__ul-li-btn" onClick={() => {
-                    setModuleId(module._id);
+                    navigate({
+                      pathname: `../courses/${courseID}/modules/${module._id}`
+                    })
+                    // setModuleId(module._id);
                     // console.log(selectedModule)
                   }}>
                     <p>Открыть</p>
@@ -72,7 +76,11 @@ export default function Course() {
               })}
             </ul>
           </div>
+
+          {/* {!selectedModule ? 
+
           :
+
           <div className="course__programm">
             <div className="course__programm-module">
               <button className="course__programm-module-btn" onClick={() => {
@@ -98,7 +106,8 @@ export default function Course() {
               </li>
             })}</ul>
           </div>
-          }
+
+          } */}
         </>}
       </div>
 
