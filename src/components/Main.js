@@ -19,12 +19,15 @@ export default function Main({socket, logout, loggedIn, registerFormSubmit}) {
 
 
   return (
-    <main className="main">
-      {/* <Navigation openLoginPopup={props.openLoginPopup} openRegisterPopup={props.openRegisterPopup}></Navigation>
-      <Welcome></Welcome> */}
+    <>
       <Dashboard></Dashboard>
-      <Outlet></Outlet>
-      {/* <Courses socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Courses> */}
-    </main>
+      <main className="main">
+        {/* <Navigation openLoginPopup={props.openLoginPopup} openRegisterPopup={props.openRegisterPopup}></Navigation>
+        <Welcome></Welcome> */}
+        <Outlet></Outlet>
+        {/* <Courses socket={socket} loggedIn={loggedIn} logout={logout} registerFormSubmit={registerFormSubmit}></Courses> */}
+      </main>
+    </>
+
   )
 }

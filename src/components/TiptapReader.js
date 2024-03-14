@@ -4,6 +4,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
+import "./TipTap.css";
+
 export default function TiptapReader({content}) {
 
     //crete Video extension
@@ -62,7 +64,7 @@ export default function TiptapReader({content}) {
     });
 
   return (
-    <EditorContent editor={editor} />
+    <EditorContent editor={editor}/>
 
       // <div style={{maxWidth: 1024, margin: "0 auto"}}>
       // </div>

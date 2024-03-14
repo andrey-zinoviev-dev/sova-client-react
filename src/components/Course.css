@@ -205,7 +205,7 @@
     background-color: #26272c;
     border-radius: 12px;
     box-sizing: border-box;
-    /* padding: 5px 50px; */
+    gap: 25px;
     min-height: 290px;
 }
 

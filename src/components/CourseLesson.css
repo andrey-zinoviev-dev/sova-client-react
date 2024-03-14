@@ -10,8 +10,8 @@
   box-sizing: border-box;
   /* width: 45px;
   padding: 10px 15px; */
-  padding: 45px;
-  min-width: 340px; 
+  padding: 15px 45px;
+  min-width: 240px; 
 }
 
 .main__lesson-menu img {
@@ -27,7 +27,7 @@
 }
 
 .main__lesson-content-wrapper {
-  max-width: 1024px;
+  max-width: 720px;
   margin: 0 auto;
 }
 
