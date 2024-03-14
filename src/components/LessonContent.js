@@ -1,6 +1,7 @@
 import React from "react"
 import TiptapReader from "./TiptapReader"
 import Chat from "./Chat"
+import Contact from "./Contact"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons"
 import { UserContext } from "../context/userContext"
@@ -40,11 +41,20 @@ export default function LessonContent({ lesson, module, students, author }) {
           : 
           <>
             <Chat>
-              {contacts.map((contact) => {
-                return <li>
-                  {contact.name}
-                </li>
-              })}
+              <div className="lesson__div-chat-contacts-wrapper">
+                <h3>Контакты</h3>
+                <ul className="lesson__div-chat-contacts">
+                  {contacts.map((contact) => {
+                    return <li className="lesson__div-chat-contacts-li" key={contact.name}>
+                      <Contact contact={contact}/>
+                    </li>
+                  })}
+                </ul>
+              </div>
+
+              <div>
+
+              </div>
             </Chat>
           </>}
 

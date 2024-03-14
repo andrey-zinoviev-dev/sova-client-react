@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import sovaLogo from "../images/sova-logo-white.png";
 export default function LessonMenu({ courseID, lesson, module }) {
 
@@ -12,7 +12,14 @@ export default function LessonMenu({ courseID, lesson, module }) {
       <ul>
         {module.lessons.map((moduleLesson) => {
           return <li key={moduleLesson.title}>
-            <button>{moduleLesson.title}</button>
+            <button onClick={() => {
+              navigate({
+                pathname: `../courses/${courseID}/modules/${module._id}/lessons/${moduleLesson._id}`,
+              }, {
+                replace: true
+              })
+            }}>{moduleLesson.title}</button>
+            {/* <Link to={`../courses/${courseID}/modules/${module._id}/lessons/${moduleLesson._id}`}>{moduleLesson.title}</Link> */}
           </li>
         })}
       </ul>

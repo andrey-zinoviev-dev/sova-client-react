@@ -14,6 +14,7 @@ export default function CourseLesson() {
   //states
   const [lesson, setLesson] = React.useState(null);
 
+  console.log("page reloaded");
 
 
   React.useEffect(() => {

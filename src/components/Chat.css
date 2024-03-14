@@ -10,7 +10,7 @@
   /* min-height: 420px; */
   height: 768px;
   overflow: hidden;
-  box-shadow: 10px 10px 15px rgba(93, 176, 199, 35%)
+  /* box-shadow: 10px 10px 15px rgba(93, 176, 199, 35%) */
   /* padding: 2em 0; */
   
 }
@@ -22,14 +22,30 @@
   margin: 0 0 2em 0;
   color: white;
 }
-.lesson__div-chat-contacts-list {
+
+.lesson__div-chat-contacts-wrapper {
+  background-color: #1F1F21;
+}
+
+.lesson__div-chat-contacts {
   padding: 0;
   margin: 0;
   list-style: none;
+  background-color: #1F1F21;
+  width: 210px;
+  box-sizing: border-box;
+  padding: 30px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 15px;
 }
-.lesson__div-chat-contacts-list-element {
-  padding: 0 2em;
+.lesson__div-chat-contacts-li {
+  padding: 10px 15px;
   position: relative;
+  border-radius: 12px;
+  background-color: #2D2C32;
+
 }
 .lesson__div-chat-contacts-list-element:not(:last-of-type) {
   margin: 0 0 2em 0;
