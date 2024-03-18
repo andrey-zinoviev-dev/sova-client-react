@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 import { apiGetCourse } from "../api";
 import "./Course.css";
@@ -10,18 +10,31 @@ export default function Course() {
   const navigate = useNavigate();
   // //abortController
   // const abortController = new AbortController();
+
+  //search params
+  const [searchParams] = useSearchParams();
+  const moduleID = searchParams.get('module');
+  const lessonID = searchParams.get('lesson');
+
   const loggedInUser = React.useContext(UserContext);
   const token = localStorage.getItem("token");
   const {courseID} = useParams();
 
   //states
   const [course, setCourse] = React.useState({});
-  const [moduleId, setModuleId] = React.useState("");
-
+  // const [moduleId, setModuleId] = React.useState("");
+  
   //derived state
   const selectedModule = course.modules && course.modules.find((module) => {
-    return module._id === moduleId;
+    return module._id === moduleID;
   });
+  const selectedLesson = selectedModule && selectedModule.lessons.find((lesson) => {
+    return lesson._id === lessonID;
+  })
+
+  // console.log(lessonID);
+
+  console.log(selectedModule);
 
   React.useEffect(() => {
     apiGetCourse(courseID, token)
@@ -29,6 +42,7 @@ export default function Course() {
       setCourse(courseFetched);
     })
   }, []);
+
 
   return(
     <section className="course">
@@ -55,8 +69,24 @@ export default function Course() {
           </div>
 
           <div className="course__programm">
-            <p className="course__p">Программа курса</p>
-            <ul className="course__ul">
+            <div className="course__programm-div">
+              {selectedModule && <button className="course__programm-module-btn" onClick={() => {
+                navigate({
+                    pathname: `../courses/${courseID}`,
+                  })
+                }}>
+                <FontAwesomeIcon icon={faArrowLeft} />
+                <p>Назад к модулям</p>
+              </button>}
+
+              <div>
+                <p className="course__p">Программа курса</p>
+                {selectedModule && <p className="course__p"> / {selectedModule.title} / Уроки</p>}
+              </div>
+            </div>
+
+
+            {!selectedModule ? <ul className="course__ul">
               {course.modules.map((module) => {
                 return <li className="course__ul-li" key={module.title}>
                   <h3 className="course__ul-li-headline">{module.title}</h3>
@@ -64,7 +94,10 @@ export default function Course() {
                   <p>Уроки: {module.lessons.length}</p>
                   <button className="course__ul-li-btn" onClick={() => {
                     navigate({
-                      pathname: `../courses/${courseID}/modules/${module._id}`
+                      pathname: `../courses/${courseID}`,
+                      search: `?${createSearchParams({
+                        module: module._id,
+                      })}`
                     })
                     // setModuleId(module._id);
                     // console.log(selectedModule)
@@ -75,12 +108,49 @@ export default function Course() {
                 </li>
               })}
             </ul>
+            :
+            <ul className="course__ul-lessons">{selectedModule.lessons.map((lesson) => {
+              return <li className="course__ul-lessons-li" key={lesson.title}>
+                <p className="course__ul-lessons-li-p">{lesson.title}</p>
+                <img className="course__ul-lessons-li-img" src={lesson.cover.path} alt={lesson.title}></img>
+                <button onClick={() => {
+                  // navigate({
+                  //   pathname: `../courses/${courseID}`,
+                  //   search: `?${createSearchParams({
+                  //     module: moduleID,
+                  //     lesson: lesson._id,
+                  //   })}`
+                  // })
+                  navigate({
+                    pathname: `/courses/${courseID}/modules/${moduleID}/lessons/${lesson._id}`,
+                  })
+                }} className="course__ul-lessons-li-btn">
+                  <p>Открыть</p>
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </li>})}
+            </ul>
+            }
+{/* 
+            <ul className="course__ul-lessons">{selectedModule.lessons.map((lesson) => {
+              return <li className="course__ul-lessons-li" key={lesson.title}>
+                <p className="course__ul-lessons-li-p">{lesson.title}</p>
+                <img className="course__ul-lessons-li-img" src={lesson.cover.path} alt={lesson.title}></img>
+                <button onClick={() => {
+                  // navigate({
+                  //   pathname: `/courses/${courseID}/modules/${moduleId}/lessons/${lesson._id}`,
+                  // })
+                }} className="course__ul-lessons-li-btn">
+                  <p>Открыть</p>
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </li>
+            })}</ul> */}
+
+
           </div>
 
-          {/* {!selectedModule ? 
-
-          :
-
+          {/* {selectedModule &&
           <div className="course__programm">
             <div className="course__programm-module">
               <button className="course__programm-module-btn" onClick={() => {
@@ -96,9 +166,9 @@ export default function Course() {
                 <p className="course__ul-lessons-li-p">{lesson.title}</p>
                 <img className="course__ul-lessons-li-img" src={lesson.cover.path} alt={lesson.title}></img>
                 <button onClick={() => {
-                  navigate({
-                    pathname: `/courses/${courseID}/modules/${moduleId}/lessons/${lesson._id}`,
-                  })
+                  // navigate({
+                  //   pathname: `/courses/${courseID}/modules/${moduleId}/lessons/${lesson._id}`,
+                  // })
                 }} className="course__ul-lessons-li-btn">
                   <p>Открыть</p>
                   <FontAwesomeIcon icon={faArrowRight} />

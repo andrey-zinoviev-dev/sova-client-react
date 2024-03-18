@@ -4,6 +4,7 @@ import { apiGetModule } from "../api";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import "./Module.css";
 
 export default function Module() {
   const navigate = useNavigate();
@@ -23,18 +24,18 @@ export default function Module() {
 
   return (
     <section className="module">
-      <div className="course__programm">
+      
+      {/* <div className="course__programm">
             <div className="course__programm-module">
               <button className="course__programm-module-btn" onClick={() => {
-                // setModuleId("");
+
                 navigate({
                   pathname: `../courses/${courseID}`
                 })
               }}>
-                {/* <FontAwesomeIcon icon={faArrowLeft} /> */}
+ 
                 <p>Назад к модулям</p>
               </button>
-              {/* <p className="course__programm-module-p">{selectedModule.title} / Уроки</p> */}
             </div>
             {moduleData && <ul className="course__ul-lessons">{moduleData.lessons.map((lesson) => {
               return <li className="course__ul-lessons-li" key={lesson.title}>
@@ -50,7 +51,7 @@ export default function Module() {
                 </button>
               </li>
             })}</ul>}
-          </div>
+          </div> */}
     </section>
   )
 };

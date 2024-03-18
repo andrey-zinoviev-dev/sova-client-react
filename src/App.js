@@ -311,12 +311,12 @@ function App() {
             <Course></Course> 
           </React.Suspense>
         },
-        {
-          path: "courses/:courseID/modules/:moduleID",
-          element: <React.Suspense>
-            <Module></Module>
-          </React.Suspense>
-        },
+        // {
+        //   path: "courses/:courseID/modules/:moduleID",
+        //   element: <React.Suspense>
+        //     <Module></Module>
+        //   </React.Suspense>
+        // },
         {
           path: "addCourse",
           element: <React.Suspense>
