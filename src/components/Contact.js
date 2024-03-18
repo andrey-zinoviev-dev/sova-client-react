@@ -1,12 +1,19 @@
 import React from "react";
-// import Avatar from '../images/IMG-20230525-WA0014 (1).jpg';
-export default function Contact({contact, filterChatToUser}) {
-
+import { useNavigate, createSearchParams, useLocation } from "react-router-dom";
+export default function Contact({contact, getUserMsgs, filterChatToUser}) {
+    const navigate = useNavigate();
+    const location = useLocation();
     return (
         // <li style={{width: 200, height: 40}}>
-            <button style={{width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 10, padding: "0 10px", boxSizing: "border-box", borderRadius: 9, color: "rgb(199, 199, 201)", backgroundColor: "transparent", border: "none"}} onClick={() => {
+            <button onClick={() => {
+                navigate({
+                    pathname: `${location.pathname}`,
+                    search: `?${createSearchParams({
+                        contactId: contact._id
+                    })}`
+                })
                 // filterChatToUser(contact);
-                console.log(contact)
+                // getUserMsgs(contact);
             }}>
                 {/* <div style={{position: "relative"}}>
                     <img style={{width: 35, aspectRatio: "1/1", borderRadius: "51%", objectFit: "cover"}} src={Avatar} alt="аватар"></img>
