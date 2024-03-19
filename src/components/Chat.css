@@ -262,6 +262,7 @@
   box-sizing: border-box;
   padding: 10px;
   outline: none;
+  color: white;
 }
 
 .lesson__div-chat-contacts-convo form button {

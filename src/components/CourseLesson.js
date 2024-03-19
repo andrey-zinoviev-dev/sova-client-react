@@ -28,7 +28,7 @@ export default function CourseLesson() {
   return (
     lesson && <section className="main__lesson">
       <LessonMenu courseID={courseID} lesson={lesson.lesson} module={lesson.module}/>
-      <LessonContent students={lesson.students} author={lesson.author} lesson={lesson.lesson} module={lesson.module} />
+      <LessonContent courseID={courseID} students={lesson.students} author={lesson.author} lesson={lesson.lesson} module={lesson.module} />
       {/* <div className="main__lesson-content">
         <div className="main__lesson-content-wrapper">
           <div>

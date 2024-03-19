@@ -28,13 +28,10 @@ export default function Course() {
   const selectedModule = course.modules && course.modules.find((module) => {
     return module._id === moduleID;
   });
-  const selectedLesson = selectedModule && selectedModule.lessons.find((lesson) => {
-    return lesson._id === lessonID;
-  })
 
   // console.log(lessonID);
 
-  console.log(selectedModule);
+  // console.log(selectedModule);
 
   React.useEffect(() => {
     apiGetCourse(courseID, token)

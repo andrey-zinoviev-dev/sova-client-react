@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, createSearchParams, useLocation } from "react-router-dom";
-export default function Contact({contact, getUserMsgs, filterChatToUser}) {
+export default function Contact({contact}) {
     const navigate = useNavigate();
     const location = useLocation();
     return (
