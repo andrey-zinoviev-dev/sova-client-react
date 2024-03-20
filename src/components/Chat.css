@@ -48,6 +48,10 @@
   background-color: #2D2C32; */
 
 }
+
+.lesson__div-chat-contacts-li:hover {
+  background-color: #313234;
+}
 .lesson__div-chat-contacts-list-element:not(:last-of-type) {
   margin: 0 0 2em 0;
 }

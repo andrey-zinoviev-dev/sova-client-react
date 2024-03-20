@@ -355,15 +355,42 @@ function apiSendMessage(token, message) {
   return fetch(`${apiAdress}/messages`, {
     method: 'POST',
     headers: {
-      
+      'Content-Type':'application/json',
       'Authorization': token,
     },
-    body: message,
+    body: JSON.stringify(message),
   })
   .then((res) => {
     return res.json();
   })
 };
+
+function apiSendFileInMessage(token, file) {
+  return fetch(`${apiAdress}/messages/files`, {
+    method: "POST",
+    headers: {
+      'Authorization': token,
+    },
+    body: file,
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
+function apiReadFileInMessage(token, messageID) {
+  return fetch(`${apiAdress}/messages/files/${messageID}`, {
+    method: "GET",
+    headers: {
+      'Authorization': token,
+      'Content-Type': 'application/json',
+    },
+    // body: JSON.stringify(message),
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
 
 function apiGetAllStudents(token) {
   return fetch(`${apiAdress}/students`, {
@@ -434,6 +461,8 @@ export {
   apiGetLesson,
   apiGetConversation,
   apiSendMessage,
+  apiSendFileInMessage,
+  apiReadFileInMessage,
   apiGetAllStudents,
   apiAddStudentsToCourse,
   apiNewLessonEmail

@@ -1,8 +1,9 @@
 .main__lesson {
   display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    background-color: #100f13;
+  align-items: stretch;
+  justify-content: space-between;
+  background-color: #100f13;
+  min-height: 100vh;
 }
 
 .main__lesson-menu {
