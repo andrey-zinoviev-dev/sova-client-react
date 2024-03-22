@@ -244,6 +244,35 @@
   justify-content: space-between;
 }
 
+.lesson__div-chat-contacts-convo-messages {
+  width: 100%;
+  overflow: auto;
+  list-style: none;
+  padding: 0 20px;
+  /* max-width: 480px; */
+  box-sizing: border-box;
+}
+
+.lesson__div-chat-contacts-convo-messages::-webkit-scrollbar {
+  width: 7px;
+  background-color: #313234;
+}
+
+.lesson__div-chat-contacts-convo-messages::-webkit-scrollbar-thumb {
+  background: #5DB0C7;
+  width: 5px;
+  border-radius: 7px;
+  /* height: 1; */
+}
+
+.lesson__div-chat-contacts-convo-messages li {
+  width: 100%;
+}
+
+.lesson__div-chat-contacts-convo-messages li img {
+  width: 100%;
+}
+
 .lesson__div-chat-contacts-convo form {
   position: relative;
   width: 100%;

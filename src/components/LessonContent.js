@@ -59,14 +59,19 @@ export default function LessonContent({ courseID, lesson, module, students, auth
     formData.append("file", selectedFile);
     apiSendFileInMessage(token, formData)
     .then((data) => {
-      apiReadFileInMessage(token, data._id, createSearchParams({from: loggedInUser._id, to: selectedUser._id, location: JSON.stringify({course: courseID, module: module._id, lesson: lesson._id})}))
-      .then((fileMessage) => {
-        setMessages((prevValue) => {
-          return prevValue === null ? [fileMessage] : [...prevValue, fileMessage];
-        });
-        setSelectedFile(null);
-      })
-
+      console.log(data);
+      if(data.message) {
+        return;
+      } else {
+        apiReadFileInMessage(token, data._id, createSearchParams({from: loggedInUser._id, to: selectedUser._id, location: JSON.stringify({course: courseID, module: module._id, lesson: lesson._id})}))
+        .then((fileMessage) => {
+          setMessages((prevValue) => {
+            return prevValue === null ? [fileMessage] : [...prevValue, fileMessage];
+          });
+          setSelectedFile(null);
+          fileInputRef.current.reset();
+        })
+      }
     })
   }
 
@@ -86,7 +91,7 @@ export default function LessonContent({ courseID, lesson, module, students, auth
       if(data.message) {
         throw new Error(data.message);
       } else {
-        setMessages(data.messages);
+        setMessages(data);
         setErrorMsg("");
       }
     })
@@ -139,7 +144,7 @@ export default function LessonContent({ courseID, lesson, module, students, auth
                     {!userId ? <p>Выберите чат</p> :
                     <>
                       <h3>{selectedUser.name}</h3>
-                      <ul>
+                      <ul className="lesson__div-chat-contacts-convo-messages">
                         {!messages ? 
                           <li key="no messages">
                             <p>{errorMsg}</p>
