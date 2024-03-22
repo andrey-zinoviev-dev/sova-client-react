@@ -378,8 +378,8 @@ function apiSendFileInMessage(token, file) {
   })
 }
 
-function apiReadFileInMessage(token, messageID) {
-  return fetch(`${apiAdress}/messages/files/${messageID}`, {
+function apiReadFileInMessage(token, messageID, messageData) {
+  return fetch(`${apiAdress}/messages/files/${messageID}?${messageData}`, {
     method: "GET",
     headers: {
       'Authorization': token,

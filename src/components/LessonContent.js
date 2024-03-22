@@ -5,7 +5,7 @@ import Contact from "./Contact"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowRight, faPaperPlane, faPaperclip } from "@fortawesome/free-solid-svg-icons"
 import { UserContext } from "../context/userContext"
-import { useSearchParams } from "react-router-dom";
+import { createSearchParams, useSearchParams } from "react-router-dom";
 import { apiGetConversation, apiSendMessage, apiSendFileInMessage, apiReadFileInMessage } from "../api"
 const FilePopup = React.lazy(() => {
   return import("./FilePopup")
@@ -59,11 +59,14 @@ export default function LessonContent({ courseID, lesson, module, students, auth
     formData.append("file", selectedFile);
     apiSendFileInMessage(token, formData)
     .then((data) => {
-      // apiReadFileInMessage(token, data._id)
-      // setMessages((prevValue) => {
-      //   return prevValue === null ? [data] : [...prevValue, data];
-      // });
-      setSelectedFile(null);
+      apiReadFileInMessage(token, data._id, createSearchParams({from: loggedInUser._id, to: selectedUser._id, location: JSON.stringify({course: courseID, module: module._id, lesson: lesson._id})}))
+      .then((fileMessage) => {
+        setMessages((prevValue) => {
+          return prevValue === null ? [fileMessage] : [...prevValue, fileMessage];
+        });
+        setSelectedFile(null);
+      })
+
     })
   }
 
@@ -145,7 +148,8 @@ export default function LessonContent({ courseID, lesson, module, students, auth
                           messages.map((message) => {
                             return <li key={message._id}>
                               <p>{message.text}</p>
-                              {/* {message.files.length > 0 && message.files.pop().type.includes("image") && <img src={message.files.pop().path}></img>} */}
+
+                              {message.files.length > 0 && <img src={message.files[0].path}></img>} 
                             </li>
                           })
                         }
