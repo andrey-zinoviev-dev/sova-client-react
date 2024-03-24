@@ -269,7 +269,7 @@
   width: 100%;
 }
 
-.lesson__div-chat-contacts-convo-messages li img {
+.lesson__div-chat-contacts-convo-messages li img, .lesson__div-chat-contacts-convo-messages li video {
   width: 100%;
 }
 

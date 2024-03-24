@@ -3,20 +3,92 @@
   align-items: stretch;
   justify-content: space-between;
   background-color: #100f13;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .main__lesson-menu {
   background-color: #1F1F21;
   box-sizing: border-box;
-  /* width: 45px;
-  padding: 10px 15px; */
-  padding: 15px 45px;
-  min-width: 240px; 
+  /* padding: 50px 15px; */
+  display: flex;
+  justify-content: space-between;
+}
+
+.main__lesson-menu-nav {
+  height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    /* border-right: 2px solid white; */
+    padding: 50px 15px;
+    min-width: 75px;
+}
+
+.main__lesson-menu-context {
+  min-width: 320px;
+  box-sizing: border-box;
+  border-left: 2px solid white;
+  padding: 50px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.main__lesson-menu-context-ul {
+  display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+    list-style: none;
+    margin: 0;
+}
+
+.main__lesson-menu-context-ul button {
+  width: 100%;
+}
+
+.main__lesson-menu-context-buttons {
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.main__lesson-menu-context-buttons button {
+  background-color: rgb(93, 176, 199);
+  border: none;
+  border-radius: 3px;
+  /* height: 35px; */
+  box-sizing: border-box;
+  padding: 10px 5px;
+  font-weight: 500;
 }
 
 .main__lesson-menu img {
   max-width: 35px;
+  margin: 0 auto;
+}
+
+.main__lesson-menu-user-btn {
+  background-color: rgb(93, 176, 199);
+  border: none;
+  height: 30px;
+  border-radius: 3px;
+}
+
+.main__lesson-menu-user-btn-profile {
+  height: 45px;
+  border-radius: 51%;
+  background-color: transparent;
+  border: 2px solid rgb(93, 176, 199);
+  color: rgb(93, 176, 199);
+}
+
+.main__lesson-menu button p {
+  margin: 0;
 }
 
 .main__lesson-content {
@@ -25,6 +97,7 @@
   box-sizing: border-box;
   padding: 75px 0;
   color: white;
+  overflow: auto;
 }
 
 .main__lesson-content-wrapper {

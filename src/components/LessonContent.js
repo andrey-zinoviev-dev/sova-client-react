@@ -108,7 +108,7 @@ export default function LessonContent({ courseID, lesson, module, students, auth
             
             <div>
               <p className="main__lesson-content-wrapper-stage">Модуль {module.title} <FontAwesomeIcon icon={faArrowRight} /> Урок {lesson.title}</p>
-              <ul>
+              <ul className="">
                 <li>
                   <button onClick={() => {
                     setChatIsOpened(false);
@@ -121,6 +121,7 @@ export default function LessonContent({ courseID, lesson, module, students, auth
                 </li>
               </ul>
             </div>
+
             {!chatIsOpened ? <>
               <h3 style={{color: "white"}}>{lesson.title}</h3>
               <TiptapReader content={lesson.content}></TiptapReader>
@@ -154,7 +155,8 @@ export default function LessonContent({ courseID, lesson, module, students, auth
                             return <li key={message._id}>
                               <p>{message.text}</p>
 
-                              {message.files.length > 0 && <img src={message.files[0].path}></img>} 
+                              {message.files.length > 0 && message.files[0].type.includes("image") && <img src={message.files[0].path}></img>} 
+                              {message.files.length > 0 && message.files[0].type.includes("video") && <video src={message.files[0].path} controls muted/>}
                             </li>
                           })
                         }
