@@ -15,14 +15,21 @@ export default function CourseLesson() {
   const [lesson, setLesson] = React.useState(null);
 
   React.useEffect(() => {
-    // console.log('ues');
-    apiGetLesson(courseID, moduleID, lessonID, token)
+    const abortController = new AbortController();
+    // console.log(abortControllerRef.current);
+    const signal = abortController.signal;
+
+    apiGetLesson(courseID, moduleID, lessonID, token, {signal: signal})
     .then((data) => {
       setLesson(data);
+      console.log(data);
     })
     .catch((err) => {
       console.log(err);
     })
+    return () => {
+      abortController.abort();
+    }
   }, [lessonID]);
 
   return (

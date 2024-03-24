@@ -99,7 +99,9 @@ export default function LessonContent({ courseID, lesson, module, students, auth
       setMessages(null);
       setErrorMsg(err.message);
     })
-  }, [userId])
+  }, [userId]);
+
+  // console.log(lesson);
 
   return (
     <>

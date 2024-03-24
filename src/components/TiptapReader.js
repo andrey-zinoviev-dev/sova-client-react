@@ -7,7 +7,7 @@ import { Node, mergeAttributes } from "@tiptap/react";
 import "./TipTap.css";
 
 export default function TiptapReader({content}) {
-
+  // console.log(content);
     //crete Video extension
     const Video = Node.create({
       name: "video",
@@ -62,6 +62,10 @@ export default function TiptapReader({content}) {
           //   });
           // },
     });
+
+  // React.useEffect(() => {
+  //   editor && editor.commands.setContent(content);
+  // }, [editor])
 
   return (
     <EditorContent editor={editor}/>

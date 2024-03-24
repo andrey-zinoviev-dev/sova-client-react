@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, createSearchParams } from "react-router-dom";
 import sovaLogo from "../images/sova-logo-white.png";
 import { UserContext } from "../context/userContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -34,8 +34,8 @@ export default function LessonMenu({ courseID, lesson, module }) {
         <h3>{module.title}</h3>
         <ul className="main__lesson-menu-context-ul">
           {module.lessons.map((moduleLesson) => {
-            return <li className="main__lesson-menu-context-ul-li" key={moduleLesson.title}>
-              <button onClick={() => {
+            return <li className={`main__lesson-menu-context-ul-li`} key={moduleLesson.title}>
+              <button className={`main__lesson-menu-context-ul-li-btn ${moduleLesson._id === lesson._id && 'main__lesson-menu-context-ul-li-btn_active'}`} onClick={() => {
                 navigate({
                   pathname: `../courses/${courseID}/modules/${module._id}/lessons/${moduleLesson._id}`,
                 })
@@ -47,7 +47,10 @@ export default function LessonMenu({ courseID, lesson, module }) {
         <div className="main__lesson-menu-context-buttons">
           <button onClick={() => {
             navigate({
-              pathname: `../courses/${courseID}/modules/${module._id}`
+              pathname: `../courses/${courseID}`,
+              search: `?${createSearchParams({
+                module: module._id
+            })}`
             })
           }}>
             Назад к модулю
