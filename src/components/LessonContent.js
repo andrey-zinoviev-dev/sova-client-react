@@ -29,9 +29,9 @@ export default function LessonContent({ courseID, lesson, module, students, auth
   const loggedInUser = React.useContext(UserContext);
   //derived state
   const contacts = loggedInUser.admin ? students : [author];
-  const selectedUser = students.find((student) => {
+  const selectedUser = loggedInUser.admin ? students.find((student) => {
     return student._id === userId;
-  })
+  }) : author;
   //refs
   const fileInputRef = React.useRef();
   const messageInputRef = React.useRef();
@@ -154,7 +154,7 @@ export default function LessonContent({ courseID, lesson, module, students, auth
                           </li>
                         :
                           messages.map((message) => {
-                            return <li key={message._id}>
+                            return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id && "flex-end"}} className={message.files.length === 0 && 'lesson__div-chat-contacts-convo-messages-li-text'}>
                               <p>{message.text}</p>
 
                               {message.files.length > 0 && message.files[0].type.includes("image") && <img src={message.files[0].path}></img>} 

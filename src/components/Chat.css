@@ -251,6 +251,11 @@
   padding: 0 20px;
   /* max-width: 480px; */
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: flex-start; */
+  gap: 20px;
 }
 
 .lesson__div-chat-contacts-convo-messages::-webkit-scrollbar {
@@ -266,7 +271,19 @@
 }
 
 .lesson__div-chat-contacts-convo-messages li {
-  width: 100%;
+  /* width: 100%; */
+  align-self: flex-start;
+  max-width: 50%;
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(93, 176, 199);
+}
+
+.lesson__div-chat-contacts-convo-messages-li-text {
+  padding: 0 15px;
 }
 
 .lesson__div-chat-contacts-convo-messages li img, .lesson__div-chat-contacts-convo-messages li video {
