@@ -184,21 +184,31 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                           })
                         }
                       </ul>
-                      <form ref={chatFormRef} onSubmit={(evt) => {
-                        evt.preventDefault();
-                        sendMessage();
-                      }}>
-                        <input onChange={changeFileInput} ref={fileInputRef} type="file" style={{display: "none"}}></input>
-                        <input ref={messageInputRef} name="message" placeholder="Написать сообщение..."></input>
-                        <button type="button" onClick={() => {
-                          fileInputRef.current.click();
+                      <div className="lesson__div-chat-contacts-convo-div">
+                        <div className="lesson__div-chat-contacts-convo-div-homework">
+                          <button onClick={() => {
+                            console.log("accept work")
+                          }}>Принять задание</button>
+                          <button onClick={() => {
+                            console.log("reject work");
+                          }}>Отклонить задание</button>
+                        </div>
+                        <form ref={chatFormRef} onSubmit={(evt) => {
+                          evt.preventDefault();
+                          sendMessage();
                         }}>
-                          <FontAwesomeIcon icon={faPaperclip} />
-                        </button>
-                        <button type="submit">
-                          <FontAwesomeIcon icon={faPaperPlane} />
-                        </button>
-                      </form>
+                          <input onChange={changeFileInput} ref={fileInputRef} type="file" style={{display: "none"}}></input>
+                          <input ref={messageInputRef} name="message" placeholder="Написать сообщение..."></input>
+                          <button type="button" onClick={() => {
+                            fileInputRef.current.click();
+                          }}>
+                            <FontAwesomeIcon icon={faPaperclip} />
+                          </button>
+                          <button type="submit">
+                            <FontAwesomeIcon icon={faPaperPlane} />
+                          </button>
+                        </form>
+                      </div>
                     </>}
                 </div>
               </Chat>
