@@ -6,7 +6,7 @@ import "./CourseLesson.css";
 import LessonMenu from "./LessonMenu";
 import LessonContent from "./LessonContent";
 
-export default function CourseLesson() {
+export default function CourseLesson({ socket }) {
   const {courseID, moduleID, lessonID} = useParams();
 
   const token = localStorage.getItem("token");
@@ -35,7 +35,7 @@ export default function CourseLesson() {
   return (
     lesson && <section className="main__lesson">
       <LessonMenu courseID={courseID} lesson={lesson.lesson} module={lesson.module}/>
-      <LessonContent courseID={courseID} students={lesson.students} author={lesson.author} lesson={lesson.lesson} module={lesson.module} />
+      <LessonContent socket={socket} courseID={courseID} students={lesson.students} author={lesson.author} lesson={lesson.lesson} module={lesson.module} />
       {/* <div className="main__lesson-content">
         <div className="main__lesson-content-wrapper">
           <div>

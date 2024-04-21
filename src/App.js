@@ -330,7 +330,7 @@ function App() {
     {
       path: "courses/:courseID/modules/:moduleID/lessons/:lessonID",
       element: <React.Suspense>
-        <CourseLesson />
+        <CourseLesson socket={socket}/>
       </React.Suspense>
     },
   ])

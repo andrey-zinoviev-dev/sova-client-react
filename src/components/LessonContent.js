@@ -14,7 +14,8 @@ const FilePopup = React.lazy(() => {
 // const AddCourse = React.lazy(() => import('./components/AddCourse'));
 
 
-export default function LessonContent({ courseID, lesson, module, students, author }) {
+export default function LessonContent({ socket, courseID, lesson, module, students, author }) {
+  // console.log(socket);
   //token
   const token = localStorage.getItem("token");
   //search params
@@ -38,12 +39,18 @@ export default function LessonContent({ courseID, lesson, module, students, auth
   const chatFormRef = React.useRef();
 
   //functions
+  // function readMsg() {
+  //   console.log('yes');
+  // }
+
   function sendMessage() {
     // const formData = new FormData();
     // formData.append('messageData', JSON.stringify({text: messageInputRef.current.value, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}}));
     // selectedFile && formData.append("file", selectedFile);
     apiSendMessage(token, {text: messageInputRef.current.value, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
     .then((data) => {
+      // console.log(socket);
+      socket.emit("message", data);
       // console.log(data);
       setMessages((prevValue) => {
         return prevValue === null ? [data] : [...prevValue, data];
@@ -100,6 +107,20 @@ export default function LessonContent({ courseID, lesson, module, students, auth
       setErrorMsg(err.message);
     })
   }, [userId]);
+
+  React.useEffect(() => {
+    //funtions
+    function readMsg(value) {
+      setMessages((prevValue) => {
+        return [...prevValue, value];
+      })
+    }
+    socket.on("private message", readMsg);
+
+    return () => {
+      socket.off("private message", readMsg);
+    }
+  }, [socket.id]);
 
   // console.log(lesson);
 
