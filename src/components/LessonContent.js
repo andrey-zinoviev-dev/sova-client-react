@@ -114,11 +114,27 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
       setMessages((prevValue) => {
         return [...prevValue, value];
       })
-    }
+    };
+
+    function sendHomework(value) {
+      // console.log(value);
+      apiSendMessage(token, {text: `${selectedUser.name} отправляет задание`, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
+      .then((data) => {
+        setMessages((prevValue) => {
+          return [...prevValue, data]
+        })
+      })
+      // value && setMessages((prevValue) => {
+      //   return [...pre]
+      // })
+    };
+
     socket.on("private message", readMsg);
+    socket.on("sent homework", sendHomework);
 
     return () => {
       socket.off("private message", readMsg);
+      socket.off("sent homework", sendHomework);
     }
   }, [socket.id]);
 
@@ -186,12 +202,24 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                       </ul>
                       <div className="lesson__div-chat-contacts-convo-div">
                         <div className="lesson__div-chat-contacts-convo-div-homework">
-                          <button onClick={() => {
-                            console.log("accept work")
-                          }}>Принять задание</button>
-                          <button onClick={() => {
-                            console.log("reject work");
-                          }}>Отклонить задание</button>
+                          {
+                            loggedInUser.admin ? 
+                            <>
+                              <button onClick={() => {
+                                console.log("accept work")
+                              }}>Принять задание</button>
+                              <button onClick={() => {
+                                console.log("reject work");
+                              }}>Отклонить задание</button>
+                            </> 
+                            : 
+                            <>
+                              <button onClick={() => {
+                                socket.emit("send homework", {to: author, sendHomework: true})
+                              }}>Отправить задание</button>
+                            </>
+                          }
+
                         </div>
                         <form ref={chatFormRef} onSubmit={(evt) => {
                           evt.preventDefault();

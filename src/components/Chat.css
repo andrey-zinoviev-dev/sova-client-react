@@ -295,6 +295,7 @@
   width: 100%;
   box-sizing: border-box;
   padding: 15px 20px;
+  border-top: 2px solid #2D2C32;
 }
 
 .lesson__div-chat-contacts-convo-div-homework {
@@ -303,6 +304,14 @@
   gap: 25px;
   align-items: stretch;
   box-sizing: border-box;
+}
+
+.lesson__div-chat-contacts-convo-div-homework button {
+  background-color: rgb(93, 176, 199);
+  border: none;
+  height: 35px;
+  border-radius: 3px;
+  color: white;
 }
 
 .lesson__div-chat-contacts-convo form {
