@@ -37,17 +37,21 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
   const fileInputRef = React.useRef();
   const messageInputRef = React.useRef();
   const chatFormRef = React.useRef();
+  const messagesUlref = React.useRef();
 
   //functions
   // function readMsg() {
   //   console.log('yes');
   // }
 
-  function sendMessage() {
+  function sendMessage(messageText) {
     // const formData = new FormData();
     // formData.append('messageData', JSON.stringify({text: messageInputRef.current.value, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}}));
     // selectedFile && formData.append("file", selectedFile);
-    apiSendMessage(token, {text: messageInputRef.current.value, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
+
+    // messageInputRef.current.value
+
+    apiSendMessage(token, {text: messageText, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
     .then((data) => {
       // console.log(socket);
       socket.emit("message", data);
@@ -66,12 +70,13 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
     formData.append("file", selectedFile);
     apiSendFileInMessage(token, formData)
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       if(data.message) {
         return;
       } else {
         apiReadFileInMessage(token, data._id, createSearchParams({from: loggedInUser._id, to: selectedUser._id, location: JSON.stringify({course: courseID, module: module._id, lesson: lesson._id})}))
         .then((fileMessage) => {
+          socket.emit("message", fileMessage);
           setMessages((prevValue) => {
             return prevValue === null ? [fileMessage] : [...prevValue, fileMessage];
           });
@@ -116,27 +121,20 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
       })
     };
 
-    function sendHomework(value) {
-      // console.log(value);
-      apiSendMessage(token, {text: `${selectedUser.name} отправляет задание`, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
-      .then((data) => {
-        setMessages((prevValue) => {
-          return [...prevValue, data]
-        })
-      })
-      // value && setMessages((prevValue) => {
-      //   return [...pre]
-      // })
-    };
-
     socket.on("private message", readMsg);
-    socket.on("sent homework", sendHomework);
 
     return () => {
       socket.off("private message", readMsg);
-      socket.off("sent homework", sendHomework);
-    }
+    };
+
   }, [socket.id]);
+
+  React.useEffect(() => {
+    if(messagesUlref.current) {
+      console.log(messagesUlref.current);
+      messagesUlref.current.scrollTo({top: messagesUlref.current.scrollHeight, behavior: "smooth"});
+    }
+  }, [messages])
 
   // console.log(lesson);
 
@@ -184,20 +182,24 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                     {!userId ? <p>Выберите чат</p> :
                     <>
                       <h3>{selectedUser.name}</h3>
-                      <ul className="lesson__div-chat-contacts-convo-messages">
+                      <ul ref={messagesUlref} className="lesson__div-chat-contacts-convo-messages">
                         {!messages ? 
                           <li key="no messages">
                             <p>{errorMsg}</p>
                           </li>
                         :
-                          messages.map((message) => {
-                            return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id && "flex-end"}} className={message.files.length === 0 && 'lesson__div-chat-contacts-convo-messages-li-text'}>
-                              <p>{message.text}</p>
+                          <>
+                            {messages.map((message) => {
+                              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id && "flex-end"}} className={message.files.length === 0 && 'lesson__div-chat-contacts-convo-messages-li-text'}>
+                                <p>{message.text}</p>
 
-                              {message.files.length > 0 && message.files[0].type.includes("image") && <img src={message.files[0].path}></img>} 
-                              {message.files.length > 0 && message.files[0].type.includes("video") && <video src={message.files[0].path} controls muted/>}
-                            </li>
-                          })
+                                {message.files.length > 0 && message.files[0].type.includes("image") && <img src={message.files[0].path}></img>} 
+                                {message.files.length > 0 && message.files[0].type.includes("video") && <video src={message.files[0].path} controls muted/>}
+                              </li>
+                            })}
+                            <div></div>
+                          </>
+
                         }
                       </ul>
                       <div className="lesson__div-chat-contacts-convo-div">
@@ -206,16 +208,17 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                             loggedInUser.admin ? 
                             <>
                               <button onClick={() => {
-                                console.log("accept work")
+                                sendMessage(`${loggedInUser.name} принимает задание`)
                               }}>Принять задание</button>
                               <button onClick={() => {
-                                console.log("reject work");
+                                sendMessage(`${loggedInUser.name} отклоняет задание`)
                               }}>Отклонить задание</button>
                             </> 
                             : 
                             <>
                               <button onClick={() => {
-                                socket.emit("send homework", {to: author, sendHomework: true})
+                                sendMessage(`${loggedInUser.name} отправляет задание`)
+                                // socket.emit("send homework", {to: author, sendHomework: true})
                               }}>Отправить задание</button>
                             </>
                           }
@@ -223,7 +226,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                         </div>
                         <form ref={chatFormRef} onSubmit={(evt) => {
                           evt.preventDefault();
-                          sendMessage();
+                          sendMessage(messageInputRef.current.value);
                         }}>
                           <input onChange={changeFileInput} ref={fileInputRef} type="file" style={{display: "none"}}></input>
                           <input ref={messageInputRef} name="message" placeholder="Написать сообщение..."></input>
