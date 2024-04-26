@@ -30,10 +30,10 @@ export default function SendEmail({selectedCourse, setSelectedCourseId, token}) 
 
                     setSelectedTarifs((prevValue) => {
                       return prevValue.find((prevTarif) => {
-                        return prevTarif.name === tarif.name;
+                        return prevTarif === tarif;
                       }) ? prevValue.filter((prevTarif) => {
-                        return prevTarif.name !== tarif.name
-                      }) : [...prevValue, tarif]
+                        return prevTarif !== tarif
+                      }) : [...prevValue, tarif.name]
                     })
                   }}>
                     <p>{tarif.name}</p>
@@ -46,7 +46,20 @@ export default function SendEmail({selectedCourse, setSelectedCourseId, token}) 
           </ul>
           <form className="email__form" onSubmit={(evt) => {
             evt.preventDefault();
-            apiSendEmailToStudents(token, selectedCourse._id, {message: emailRef.current.value, tarifs: selectedTarifs})
+            const studentsToNotify = selectedCourse.students.filter((student) => {
+              const matchedStudent = student.courses.find((course) => {
+                console.log(selectedTarifs);
+                console.log(course);
+                // return course;
+                return course.id === selectedCourse._id && selectedTarifs
+              });
+
+              return matchedStudent;
+            });
+
+            // console.log(studentsToNotify);
+            // console.log(selectedCourse.students);
+            // apiSendEmailToStudents(token, selectedCourse._id, {message: emailRef.current.value, tarifs: selectedTarifs})
           }}>
             <input ref={emailRef} name="message" placeholder="Сообщение для учеников..."></input>
             <button disabled={selectedTarifs.length === 0 ? true : false}>
