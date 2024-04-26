@@ -132,7 +132,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
   React.useEffect(() => {
     if(messagesUlref.current) {
       console.log(messagesUlref.current);
-      messagesUlref.current.scrollTo({top: messagesUlref.current.scrollHeight, behavior: "smooth"});
+      messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
     }
   }, [messages])
 
@@ -193,8 +193,13 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                               return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id && "flex-end"}} className={message.files.length === 0 && 'lesson__div-chat-contacts-convo-messages-li-text'}>
                                 <p>{message.text}</p>
 
-                                {message.files.length > 0 && message.files[0].type.includes("image") && <img src={message.files[0].path}></img>} 
-                                {message.files.length > 0 && message.files[0].type.includes("video") && <video src={message.files[0].path} controls muted/>}
+                                {message.files.length > 0 && message.files[0].type.includes("image") && <img alt={message.files[0].name} onLoad={() => {
+                                  messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
+                                }} src={message.files[0].path}>
+                                </img>} 
+                                {message.files.length > 0 && message.files[0].type.includes("video") && <video onLoad={
+                                  messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
+                                } src={message.files[0].path} controls muted/>}
                               </li>
                             })}
                             <div></div>

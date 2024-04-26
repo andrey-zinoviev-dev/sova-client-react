@@ -1,0 +1,26 @@
+.email {
+  min-height: 100vh;
+  color: white;
+}
+
+.email__back-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.email__back-wrapper button {
+  background-color: rgb(93, 176, 199);
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    border: none;
+    color: white;
+    width: 30px;
+    font-size: 18px;
+}
+
+.email__back-wrapper p {
+  margin: 0;
+  font-size: 20px;
+}

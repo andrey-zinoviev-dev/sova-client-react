@@ -308,6 +308,22 @@
   font-size: 22px;
   color: #fef9e3;
 }
+
+.main__courses-ul-li-buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.main__courses-ul-li-buttons button {
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+}
+
+
 /* .main__courses-list_buttons::after {
   position: absolute;
   content: "<"
