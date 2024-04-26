@@ -28,6 +28,7 @@ import {
   // apiAddLessonToCourse,
   // apiRegister
 } from '../api';
+import SendEmail from "./SendEmail";
 import axiosClient from '../axios';
 // import EditCourse from "./EditCourse";
 // import EditModule from "./EditModule";
@@ -52,6 +53,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
     courses: [],
     allStudents: [],
   });
+  const [selectedCourseId, setSelectedCourseId] = React.useState(null);
   // const [selectedCourseId, setSelectedCourseId] = React.useState("");
   // const [selectedModuleId, setSelectedModuleId] = React.useState("");
   // const [selectedLessonId, setSelectedLessonId] = React.useState("");
@@ -70,6 +72,12 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
   //   // …
   // ]}});
   const [coursesLoading, setCoursesLoading] = React.useState(false);
+
+  //derived state
+  const selectedCourse = coursesData.courses.find((course) => {
+    return course._id === selectedCourseId;
+  });
+  // console.log(selectedCourse);
   // const [lessonUploadProgress, setLessonUploadProgress] = React.useState(0);
   // const [successfullyAddedUser, setSuccessfullyAddedUser] = React.useState(false);
   // const [uploadFormSubmitted, setUploadFormSubmitted] = React.useState(false);
@@ -410,9 +418,10 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                     <div className="main__courses-ul-li-buttons">
                       <button onClick={(evt) => {
                         evt.stopPropagation();
-                        navigate(`../sendEmail/${course._id}`, {
-                          state: course,
-                        })
+                        setSelectedCourseId(course._id);
+                        // navigate(`../sendEmail/${course._id}`, {
+                        //   state: course,
+                        // })
                       }}>
                         <FontAwesomeIcon icon={faEnvelope} />
                       </button>
@@ -451,7 +460,9 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
         </div>
       }
       </section>
+      {selectedCourse && <SendEmail setSelectedCourseId={setSelectedCourseId} selectedCourse={selectedCourse} token={token}/>}
 
+      {/* {} */}
       {/* {modulesPopupOpened && <CourseModulesPopup modulesPopupOpened={modulesPopupOpened}>
         <div className="popup__modules">
           <button className="popup__close popup__close_modules" onClick={closeCoursePopup}>

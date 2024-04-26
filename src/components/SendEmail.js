@@ -1,49 +1,60 @@
 import React from "react";
-import { useLocation } from "react-router-dom"
 import "./SendEmail.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faPaperPlane, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { apiSendEmailToStudents } from "../api";
 
-export default function SendEmail() {
-  const { state } = useLocation();
-
+export default function SendEmail({selectedCourse, setSelectedCourseId, token}) {
+  // const { state } = useLocation();
+  // const naviagte = useNavigate();
   const [selectedTarifs, setSelectedTarifs] = React.useState([]);
+
+  //refs
+  const emailRef = React.useRef();
 
   return (
     <section className="email">
-      <div className="container">
-        <div className="email__back-wrapper">
-          <button>
-            <FontAwesomeIcon icon={faArrowLeft} />
+        <div className="email__wrapper">
+          <button className="email__wrapper-close" onClick={() => {
+            setSelectedCourseId(null);
+          }}>
+            <FontAwesomeIcon icon={faXmark} />
           </button>
-          <p>Назад к курсам</p>
-        </div>
-        <h3>Рассылка</h3>
-        <div>
+          <h2>Отправить сообщение ученикам</h2>
           <p>Тарифы</p>
-          <ul>
-            {state.tarifs.map((tarif) => {
-              return <li key={tarif.name}>
-                <button onClick={() => {
-                  setSelectedTarifs((prevValue) => {
-                    return prevValue.includes(tarif.name) ? prevValue.filter((prevTarif) => {
-                      return prevTarif.name !== tarif.name
-                    }) : [...prevValue, tarif]
-                    // return [...prevValue]
-                  })
-                }}>{tarif.name}</button>
-              </li>
-            })}
+          <ul className="email__ul">
+              {selectedCourse.tarifs.map((tarif) => {
+                return <li className="email__ul-li" key={tarif.name}>
+                  <button className="email__ul-li-button" onClick={(evt) => {
+                    evt.currentTarget.classList.toggle("tarif-active");
+
+                    setSelectedTarifs((prevValue) => {
+                      return prevValue.find((prevTarif) => {
+                        return prevTarif.name === tarif.name;
+                      }) ? prevValue.filter((prevTarif) => {
+                        return prevTarif.name !== tarif.name
+                      }) : [...prevValue, tarif]
+                    })
+                  }}>
+                    <p>{tarif.name}</p>
+                    {selectedTarifs.find((prevTarif) => {
+                        return prevTarif.name === tarif.name;
+                      }) && <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>}
+                  </button>
+                </li>
+              })}
           </ul>
+          <form className="email__form" onSubmit={(evt) => {
+            evt.preventDefault();
+            apiSendEmailToStudents(token, selectedCourse._id, {message: emailRef.current.value, tarifs: selectedTarifs})
+          }}>
+            <input ref={emailRef} name="message" placeholder="Сообщение для учеников..."></input>
+            <button disabled={selectedTarifs.length === 0 ? true : false}>
+              <span>Отправить</span>
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </button>
+          </form>
         </div>
-        <form onSubmit={(evt) => {
-          evt.preventDefault();
-          console.log(selectedTarifs);
-        }}>
-          <input></input>
-          <button>Отправить</button>
-        </form>
-      </div>
     </section>
   )
 }

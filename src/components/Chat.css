@@ -257,6 +257,7 @@
   justify-content: space-between;
   /* align-items: flex-start; */
   gap: 20px;
+  scroll-behavior: smooth;
 }
 
 .lesson__div-chat-contacts-convo-messages::-webkit-scrollbar {

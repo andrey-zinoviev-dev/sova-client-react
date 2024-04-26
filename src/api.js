@@ -432,6 +432,21 @@ function apiNewLessonEmail(token, location, students) {
   .then((res) => {
     return res.json();
   })
+};
+
+function apiSendEmailToStudents(token, courseId, data) {
+  // console.log(token, courseId, tarifs);
+  return fetch(`${apiAdress}/courses/${courseId}/sendEmails`, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token,
+    },
+    body: JSON.stringify(data),
+  })
+  .then((res) => {
+    return res.json();
+  })
 }
 
 export {
@@ -465,5 +480,6 @@ export {
   apiReadFileInMessage,
   apiGetAllStudents,
   apiAddStudentsToCourse,
-  apiNewLessonEmail
+  apiNewLessonEmail,
+  apiSendEmailToStudents
 }
