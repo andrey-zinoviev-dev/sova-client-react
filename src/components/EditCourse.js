@@ -4,7 +4,7 @@ import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrashCan, faPlus, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription } from "../api";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -152,13 +152,14 @@ export default function EditCourse() {
     })
   };
 
-  React.useState(() => {
+  React.useEffect(() => {
     // console.log(courseID);
     apiGetCourse(courseID, token)
     .then((courseData) => {
+      // console.log(courseData);
       setCourseData(courseData);
-      courseNameRef.current.value = courseData.name;
-      courseDescRef.current.value = courseData.description;
+      // courseNameRef.current.value = courseData.name;
+      // courseDescRef.current.value = courseData.description;
     })
     // setCourseData(state);
   }, [])
@@ -178,30 +179,41 @@ export default function EditCourse() {
   return (
     <section className="course-edit">
       <div className="course-edit__wrapper">
-        <div className="course-edit__wrapper-back-div">
+        {/* <div className="course-edit__wrapper-back-div">
           <motion.button onClick={() => {
             navigate(-1);
           }} whileHover="hover" variants={backBtnVariant} initial="rest" className="course-edit__wrapper-back">
             <motion.svg variants={backBtnVariant} fill="rgb(93, 176, 199)" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></motion.svg>
           </motion.button>
           <h3 className="course-edit__headline">Редактировать курс</h3>
-        </div>
-        <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
+        </div> */}
+          <div>
+              {/* <div className="course__info-back">
+                
+              </div> */}
+              <button onClick={() => {
+                navigate({
+                  pathname: "/"
+                });
+              }}>
+                  <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
+                  <p>Назад к курсам</p>
+              </button>
+              <h3>Редактировать курс {courseData.name}</h3>
+              {/* <p className="course__info-desc">{courseData.description}</p> */}
+            </div>
+        {/* <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
             <label style={{display: "block", margin: "0 0 10px 0"}} htmlFor="course-name">Название</label>
             <input className="course-edit__form-input" ref={courseNameRef} id="course-name" onKeyUp={(evt) => {
               updateCourseTitle(evt);
-              // setCourseData((prevValue) => {
-              //   return {...prevValue, name: evt.target.value};
-              // });
+
             }}></input>
-        </form>
+        </form> */}
         <form className="course-edit__form" style={{display: "flex", maxWidth: "100%", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
             <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
               <label style={{display: "block", margin: "0 0 20px 0"}} htmlFor="course-desc">Описание</label> 
               <textarea className="course-edit__form-textarea" ref={courseDescRef} onKeyUp={(evt) => {
-                // setCourseData((prevValue) => {
-                //   return {...prevValue, description: evt.target.value};
-                // });
+
                 updateCourseDescription(evt);
               }}></textarea>
             </div>
@@ -220,15 +232,14 @@ export default function EditCourse() {
 
             </div>
           </form>
-          <div className="course-edit__modules-wrapper">
+          {/* <div className="course-edit__modules-wrapper">
             <p style={{margin: "0 0 25px 0"}}>Модули</p>
             <ul className="course-edit__modules-ul">
               {courseData._id && courseData.modules.map((module) => {
                 return <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key={module._id}>
                   <button className="course-edit__modules-ul-li-edit" onClick={() => {
                     navigate(`../editModule/courses/${courseID}/modules/${module._id}`)
-                    // setIsEditModule(true);
-                    // setSelectedModuleId(module._id);
+
                   }} type="button">
                     <FontAwesomeIcon icon={faPen} />
                   </button>
@@ -258,14 +269,13 @@ export default function EditCourse() {
                 <h3 className="course-edit__modules-ul-li-headline">Добавить модуль</h3>
                 <button onClick={() => {
                   navigate(`/addModule/courses/${courseID}`)
-                  // setAddModulePopupOpened(true);
                 }} type="button" className="course-edit__modules-ul-li-addButton">
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
               </motion.li>
             </ul>
-          </div>
-          <div className="course-edit__students-wrapper">
+          </div> */}
+          {/* <div className="course-edit__students-wrapper">
             <p>Ученики</p>
             <div className="course-edit__students-wrapper-btn-wrapper">
               <p className="course-edit__students-wrapper-btn-wrapper-p">Сейчас на курсе <span className="course-edit__students-wrapper-btn-wrapper-span">{courseData._id && courseData.students.length}</span> студентов</p>
@@ -274,7 +284,6 @@ export default function EditCourse() {
               }}>{!usersFile.name ? 'Добавить учеников к курсу через CSV' : 'Отправить CSV файл'}</button>
               <input ref={studentsInputRef} onChange={(evt => {
                 const uploadedCsv = evt.target.files[0];
-                // console.log(uploadedCsv);
                 if(/[А-Я]/.test(uploadedCsv.name)) {
                   const updatedName = cyrillicToTranslit.transform(uploadedCsv.name, "_");
                   
@@ -283,21 +292,19 @@ export default function EditCourse() {
                     value: updatedName
                   });
                 }
-                // console.log(uploadedCsv);
                 setUsersFile(uploadedCsv);
               })} type="file" style={{display: "none"}} accept=".csv"></input>
             </div>
-          </div>
-          <div>
+          </div> */}
+          {/* <div>
             
-          </div>
-          <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
-              {/* <button></button> */}
+          </div> */}
+          {/* <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
               <div className="course-edit__students-wrapper-success-div">
                 <FontAwesomeIcon className="course-edit__students-wrapper-success-div-tick" icon={faCheck} />
               </div>
               <p className="course-edit__students-wrapper-success-p">{successfulMessage}</p>
-          </motion.div>
+          </motion.div> */}
       </div>
     </section>
   )

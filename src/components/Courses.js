@@ -427,7 +427,8 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                       </button>
                       <button  onClick={(evt) => {
                         evt.stopPropagation();
-                        console.log("edit course btn clicked");
+                        navigate(`courses/${course._id}/edit`)
+                        // console.log("edit course btn clicked");
                       }} 
                       // style={{position: "absolute", top: "6.5%", right: 35, zIndex:25, display: window.innerWidth <= 767 ? "none" : 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10}}
                       >

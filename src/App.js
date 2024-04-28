@@ -8,6 +8,7 @@ import {
 import { socket } from './socketio/socketIO';
 import { apiLogin, apiRegister, apiGetCurrentUser, apiNewPassword } from './api';
 import { UserContext } from './context/userContext';
+import EditCourse from './components/EditCourse';
 const Welcome = React.lazy(() => import ('./components/Welcome'));
 // import Welcome from './components/Welcome';
 const Main = React.lazy(() => import ('./components/Main'));
@@ -310,6 +311,13 @@ function App() {
           path: "courses/:courseID",
           element: <React.Suspense>
             <Course></Course> 
+          </React.Suspense>
+        },
+        {
+          path: "courses/:courseID/edit",
+          element: <React.Suspense>
+            {<EditCourse></EditCourse>}
+            {/* <Course></Course>  */}
           </React.Suspense>
         },
         // {
