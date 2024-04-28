@@ -241,7 +241,7 @@ function App() {
     // console.log(loggedIn);
     // console.log(user);
     function showAllOnlineUsers(data) {
-      console.log(data);
+      // console.log(data);
       setOnlineUsers(data.filter((socketUser) => {
         return socketUser.online === true;
       }));

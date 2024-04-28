@@ -203,6 +203,22 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         setLessonEditOpened(true);
     }
 
+    function calculateChunks(file) {
+        const chunks = [];
+        const chunkSize = 10 * 1024 * 1024;
+        // const totalChunks = Math.ceil(file.size / chunkSize);
+        let start = 0;
+        let finish = chunkSize;
+        while(start < file.size) {
+            console.log("chunk");
+            chunks.push(file.slice(start, finish));
+            start = finish;
+            finish = start + chunkSize;
+            // start
+        }
+        console.log(chunks);
+    };
+
     // function addContentToNewLesson(content) {
     //     // console.log(content);
     //     setLessonContent(content);
@@ -270,28 +286,29 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
             form.append("author", JSON.stringify(loggedInUser));
             form.append("courseData", JSON.stringify(formData));
             memoFiles.forEach((file) => {
-                form.append("files", file);
+                calculateChunks(file);
+                // form.append("files", file);
             });
-            axiosClient.post(`/courses/add`, form, {
-                signal: signal,
-                headers: {
-                'Authorization': token,
-                //   'Content-Type': 'application/json',
-                },
-                // signal: signal,
-                onUploadProgress: (evt) => {
-                setUploadProgress(Math.floor(evt.progress * 100));
-                }
-            })
-            .then((createdCourse) => {
-                setSuccessfullUpload(true);
-                setSelectedFiles([]);
-                sessionStorage.clear();
-                localStorage.removeItem("courseData");
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+            // axiosClient.post(`/courses/add`, form, {
+            //     signal: signal,
+            //     headers: {
+            //     'Authorization': token,
+            //     //   'Content-Type': 'application/json',
+            //     },
+            //     // signal: signal,
+            //     onUploadProgress: (evt) => {
+            //     setUploadProgress(Math.floor(evt.progress * 100));
+            //     }
+            // })
+            // .then((createdCourse) => {
+            //     setSuccessfullUpload(true);
+            //     setSelectedFiles([]);
+            //     sessionStorage.clear();
+            //     localStorage.removeItem("courseData");
+            // })
+            // .catch((err) => {
+            //     console.log(err);
+            // })
         }
 
         return () => {
