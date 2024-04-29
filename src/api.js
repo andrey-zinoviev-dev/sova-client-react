@@ -449,6 +449,34 @@ function apiSendEmailToStudents(token, courseId, data) {
   })
 }
 
+function apiGetUploadUrl(token, name) {
+  return fetch(`${apiAdress}/initiateUpload`, {
+    method: "POST",
+    headers: {
+      'Authorization': token,
+      // "Content-Type":"application/xml",
+    },
+    body: {name: name},
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
+function apiSendFile(address, file) {
+  return fetch(`${address}`, {
+    method: "PUT",
+    headers: {
+      // 'Content-Type': 'application/json',
+      // 'Authorization': token,
+    },
+    body: file,
+  })
+  .then((res) => {
+    return res.json();
+  });
+};
+
 export {
   apiLogin,
   apiRegister,
@@ -481,5 +509,7 @@ export {
   apiGetAllStudents,
   apiAddStudentsToCourse,
   apiNewLessonEmail,
-  apiSendEmailToStudents
+  apiSendEmailToStudents,
+  apiGetUploadUrl,
+  apiSendFile,
 }

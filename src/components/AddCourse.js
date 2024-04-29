@@ -94,45 +94,45 @@ export default function AddCourse() {
   // const prevStepRef = React.useRef();
   // const nextButtonRef = React.useRef();
 
-  React.useEffect(() => {
-    const courseData = localStorage.getItem("courseData");
-    const skipFoundSkecth = sessionStorage.getItem("skipFoundSketch");
-    const parsedSkipSketch = JSON.parse(skipFoundSkecth);
-    const parsedCourseData = JSON.parse(courseData);
-    // console.log(skipFoundSkecth);
-    if(!parsedSkipSketch) {
-      // console.log('yes')
-      const timeout = setTimeout(() => {
-        if(parsedCourseData) {
-          setFoundSketch((prevValue) => {
-            return {...prevValue, found: true}
-          })
-        }
-      }, 500)
+  // React.useEffect(() => {
+  //   const courseData = localStorage.getItem("courseData");
+  //   const skipFoundSkecth = sessionStorage.getItem("skipFoundSketch");
+  //   const parsedSkipSketch = JSON.parse(skipFoundSkecth);
+  //   const parsedCourseData = JSON.parse(courseData);
+  //   // console.log(skipFoundSkecth);
+  //   if(!parsedSkipSketch) {
+  //     // console.log('yes')
+  //     const timeout = setTimeout(() => {
+  //       if(parsedCourseData) {
+  //         setFoundSketch((prevValue) => {
+  //           return {...prevValue, found: true}
+  //         })
+  //       }
+  //     }, 500)
       
-      return () => {
-        clearTimeout(timeout);
-      }
-    } else {
-      parsedSkipSketch && setFoundSketch((prevValue) => {
-        return {...prevValue, skip: true};
-      });
-    }
-  }, []);
+  //     return () => {
+  //       clearTimeout(timeout);
+  //     }
+  //   } else {
+  //     parsedSkipSketch && setFoundSketch((prevValue) => {
+  //       return {...prevValue, skip: true};
+  //     });
+  //   }
+  // }, []);
 
-  React.useEffect(() => {
-    const courseData = localStorage.getItem("courseData");
-    const parsedCourseData = JSON.parse(courseData);
-    const savedFormStep = sessionStorage.getItem("formStep");
-    const parsedSavedFormStep = JSON.parse(savedFormStep);
-    // const courseFiles = localStorage.getItem("courseFiles");
-    // const parsedCourseFiles = JSON.parse(courseFiles);
-    // console.log(parsedCourseFiles);
-    foundSketch.skip && parsedCourseData && setFormData(parsedCourseData);
-    // foundSketch.skip && parsedCourseFiles && setSelectedFiles(parsedCourseFiles);
-    foundSketch.skip && parsedSavedFormStep && setFormStep(parsedSavedFormStep);
-    // console.log(foundSketch.skip)
-  }, [foundSketch.skip]);
+  // React.useEffect(() => {
+  //   const courseData = localStorage.getItem("courseData");
+  //   const parsedCourseData = JSON.parse(courseData);
+  //   const savedFormStep = sessionStorage.getItem("formStep");
+  //   const parsedSavedFormStep = JSON.parse(savedFormStep);
+  //   // const courseFiles = localStorage.getItem("courseFiles");
+  //   // const parsedCourseFiles = JSON.parse(courseFiles);
+  //   // console.log(parsedCourseFiles);
+  //   foundSketch.skip && parsedCourseData && setFormData(parsedCourseData);
+  //   // foundSketch.skip && parsedCourseFiles && setSelectedFiles(parsedCourseFiles);
+  //   foundSketch.skip && parsedSavedFormStep && setFormStep(parsedSavedFormStep);
+  //   // console.log(foundSketch.skip)
+  // }, [foundSketch.skip]);
 
   // React.useEffect(() => {
   //   console.log(formData)

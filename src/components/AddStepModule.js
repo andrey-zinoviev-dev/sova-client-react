@@ -15,6 +15,7 @@ import NewModule from "./NewModule";
 import NewLesson from "./NewLesson";
 
 import axiosClient from '../axios';
+import { apiGetUploadUrl, apiSendFile } from "../api";
 
 export default function AddStepModule({successfullCourseAddOpened, token, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading}) {
     //navigate
@@ -204,19 +205,29 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
     }
 
     function calculateChunks(file) {
-        const chunks = [];
+        // const chunks = [];
         const chunkSize = 10 * 1024 * 1024;
         // const totalChunks = Math.ceil(file.size / chunkSize);
         let start = 0;
         let finish = chunkSize;
         while(start < file.size) {
-            console.log("chunk");
-            chunks.push(file.slice(start, finish));
+            // console.log("chunk");
+            // chunks.push(file.slice(start, finish));
+            const chunk = file.slice(start, finish);
+            const form = new FormData();
+            form.append("file", chunk, file.name);
+            apiSendFile(token, form)
+            // .then((data) => {
+
+            // })
             start = finish;
             finish = start + chunkSize;
+
             // start
-        }
-        console.log(chunks);
+        };
+        // file.chunks = chunks;
+        return file;
+        // console.log(chunks);
     };
 
     // function addContentToNewLesson(content) {
@@ -282,13 +293,41 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         const signal = abortController.signal;
 
         if(uploadFormSubmitted) {
-            const form = new FormData();
-            form.append("author", JSON.stringify(loggedInUser));
-            form.append("courseData", JSON.stringify(formData));
-            memoFiles.forEach((file) => {
-                calculateChunks(file);
+            // const form = new FormData();
+            // form.append("author", JSON.stringify(loggedInUser));
+            // form.append("courseData", JSON.stringify(formData));
+            const filesToUpload = memoFiles.map((file) => {
+                return apiGetUploadUrl(token, file.name)
+                .then((data) => {
+                    // console.log(data);
+                    const form = new FormData();
+                    form.append("file", file)
+                    return apiSendFile(data.signedUrl.split("?")[0], file)
+                    .then((data) => {
+                        console.log(data);
+                    })
+                    // return data;
+                })
+                // console.log(fileToSend);
+                // .then((data) => {
+                //     console.log(data);
+                // })
                 // form.append("files", file);
             });
+            // console.log(filesToUpload);
+            Promise.all(filesToUpload)
+            .then((data) => {
+                console.log(data);
+            })
+            // memoFiles.map((file) => {
+            //     const fileToSend = calculateChunks(file);
+            //     return {...file, chunks: fileToSend.chunks};
+            // });
+            // const form = new FormData();
+            // memoFiles.forEach((memoFile) => {
+            //     form.append("file", memoFile);
+            // });
+            // apiSendFile(token, form)
             // axiosClient.post(`/courses/add`, form, {
             //     signal: signal,
             //     headers: {
