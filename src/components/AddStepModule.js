@@ -297,12 +297,13 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
             // form.append("author", JSON.stringify(loggedInUser));
             // form.append("courseData", JSON.stringify(formData));
             const filesToUpload = memoFiles.map((file) => {
-                return apiGetUploadUrl(token, file.name)
+                return apiGetUploadUrl(token, file)
                 .then((data) => {
+                    // console.log(data.url);
                     // console.log(data);
                     const form = new FormData();
                     form.append("file", file)
-                    return apiSendFile(data.signedUrl.split("?")[0], file)
+                    return apiSendFile(data.url, file)
                     .then((data) => {
                         console.log(data);
                     })

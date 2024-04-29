@@ -449,14 +449,15 @@ function apiSendEmailToStudents(token, courseId, data) {
   })
 }
 
-function apiGetUploadUrl(token, name) {
+function apiGetUploadUrl(token, file) {
   return fetch(`${apiAdress}/initiateUpload`, {
     method: "POST",
     headers: {
       'Authorization': token,
+      'Content-Type': 'application/json',
       // "Content-Type":"application/xml",
     },
-    body: {name: name},
+    body: JSON.stringify({name: file.name, type: file.type}),
   })
   .then((res) => {
     return res.json();
@@ -467,7 +468,7 @@ function apiSendFile(address, file) {
   return fetch(`${address}`, {
     method: "PUT",
     headers: {
-      // 'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       // 'Authorization': token,
     },
     body: file,
