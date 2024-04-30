@@ -14,6 +14,9 @@ import TipTapEditor from "./TipTapEditor";
 import NewModule from "./NewModule";
 import NewLesson from "./NewLesson";
 
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3 } from "@aws-sdk/client-s3";
+
 import axiosClient from '../axios';
 import { apiGetUploadUrl, apiSendFile } from "../api";
 
@@ -206,26 +209,27 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
 
     function calculateChunks(file) {
         // const chunks = [];
-        const chunkSize = 10 * 1024 * 1024;
-        // const totalChunks = Math.ceil(file.size / chunkSize);
-        let start = 0;
-        let finish = chunkSize;
-        while(start < file.size) {
-            // console.log("chunk");
-            // chunks.push(file.slice(start, finish));
-            const chunk = file.slice(start, finish);
-            const form = new FormData();
-            form.append("file", chunk, file.name);
-            apiSendFile(token, form)
-            // .then((data) => {
+        // const chunkSize = 10 * 1024 * 1024;
+        // // const totalChunks = Math.ceil(file.size / chunkSize);
+        // let start = 0;
+        // let finish = chunkSize;
+        // while(start < file.size) {
+        //     // console.log("chunk");
+        //     // chunks.push(file.slice(start, finish));
+        //     // const chunk = file.slice(start, finish);
+        //     // const form = new FormData();
+        //     // form.append("file", chunk, file.name);
+        //     // apiSendFile(token, form)
+        //     // .then((data) => {
 
-            // })
-            start = finish;
-            finish = start + chunkSize;
+        //     // })
+        //     start = finish;
+        //     finish = start + chunkSize;
 
-            // start
-        };
+        //     // start
+        // };
         // file.chunks = chunks;
+
         return file;
         // console.log(chunks);
     };
@@ -293,68 +297,31 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         const signal = abortController.signal;
 
         if(uploadFormSubmitted) {
-            // const form = new FormData();
-            // form.append("author", JSON.stringify(loggedInUser));
-            // form.append("courseData", JSON.stringify(formData));
-            const filesToUpload = memoFiles.map((file) => {
-                return apiGetUploadUrl(token, file)
-                .then((data) => {
-                    // console.log(data.url);
-                    // console.log(data);
-                    const form = new FormData();
-                    form.append("file", file)
-                    return apiSendFile(data.url, file)
-                    .then((data) => {
-                        console.log(data);
-                    })
-                    // return data;
-                })
-                // console.log(fileToSend);
-                // .then((data) => {
-                //     console.log(data);
-                // })
-                // form.append("files", file);
-            });
-            // console.log(filesToUpload);
-            Promise.all(filesToUpload)
-            .then((data) => {
-                console.log(data);
-            })
-            // memoFiles.map((file) => {
-            //     const fileToSend = calculateChunks(file);
-            //     return {...file, chunks: fileToSend.chunks};
-            // });
-            // const form = new FormData();
-            // memoFiles.forEach((memoFile) => {
-            //     form.append("file", memoFile);
-            // });
-            // apiSendFile(token, form)
-            // axiosClient.post(`/courses/add`, form, {
-            //     signal: signal,
-            //     headers: {
-            //     'Authorization': token,
-            //     //   'Content-Type': 'application/json',
-            //     },
-            //     // signal: signal,
-            //     onUploadProgress: (evt) => {
-            //     setUploadProgress(Math.floor(evt.progress * 100));
-            //     }
-            // })
-            // .then((createdCourse) => {
-            //     setSuccessfullUpload(true);
-            //     setSelectedFiles([]);
-            //     sessionStorage.clear();
-            //     localStorage.removeItem("courseData");
-            // })
-            // .catch((err) => {
-            //     console.log(err);
-            // })
-        }
+            // memoFiles.[memoFiles.length -1]
+            memoFiles.forEach((file) => {
+                const uploadS3 = new Upload({
+                    client: new S3({region: process.env.REACT_APP_REGION, credentials: {
+                        secretAccessKey: process.env.REACT_APP_SECRET,
+                        accessKeyId: process.env.REACT_APP_ACCESS,
+                    }, endpoint: "https://storage.yandexcloud.net"}),
+                    params: {Bucket: process.env.REACT_APP_NAME, Key: file.name, Body: file},
+                    queueSize: 4,
+                    partSize: 10 * 1024 * 1024,
+                });
 
+                uploadS3.on("httpUploadProgress", (progress) => {
+                    console.log(progress);
+                });
+
+                uploadS3.done()
+                .then((result) => {
+                    console.log(result);
+                })
+            })
+        }
         return () => {
             abortController.abort();
         }
-        
     }, [uploadFormSubmitted]);
 
     React.useEffect(() => {
