@@ -18,7 +18,7 @@ import { Upload } from "@aws-sdk/lib-storage";
 import { S3 } from "@aws-sdk/client-s3";
 
 import axiosClient from '../axios';
-import { apiGetUploadUrl, apiSendFile } from "../api";
+import { apiCreateCourse, apiGetUploadUrl, apiSendFile } from "../api";
 
 export default function AddStepModule({successfullCourseAddOpened, token, formData, setFormData, setFormStep, selectedFiles, setSelectedFiles, isLoading}) {
     //navigate
@@ -107,6 +107,10 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         });
         return resultArray;
     }, [formData, selectedFiles]);
+
+    //filesToRender
+    const [uploadingFiles, setUploadingFiles] = React.useState(memoFiles);
+
 
     //user
     const loggedInUser = React.useContext(UserContext);
@@ -207,33 +211,6 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         setLessonEditOpened(true);
     }
 
-    function calculateChunks(file) {
-        // const chunks = [];
-        // const chunkSize = 10 * 1024 * 1024;
-        // // const totalChunks = Math.ceil(file.size / chunkSize);
-        // let start = 0;
-        // let finish = chunkSize;
-        // while(start < file.size) {
-        //     // console.log("chunk");
-        //     // chunks.push(file.slice(start, finish));
-        //     // const chunk = file.slice(start, finish);
-        //     // const form = new FormData();
-        //     // form.append("file", chunk, file.name);
-        //     // apiSendFile(token, form)
-        //     // .then((data) => {
-
-        //     // })
-        //     start = finish;
-        //     finish = start + chunkSize;
-
-        //     // start
-        // };
-        // file.chunks = chunks;
-
-        return file;
-        // console.log(chunks);
-    };
-
     // function addContentToNewLesson(content) {
     //     // console.log(content);
     //     setLessonContent(content);
@@ -298,7 +275,9 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
 
         if(uploadFormSubmitted) {
             // memoFiles.[memoFiles.length -1]
-            memoFiles.forEach((file) => {
+            Promise.all(memoFiles.map((file, index, array) => {
+                // console.log(index + 1);
+                // console.log(array.length);
                 const uploadS3 = new Upload({
                     client: new S3({region: process.env.REACT_APP_REGION, credentials: {
                         secretAccessKey: process.env.REACT_APP_SECRET,
@@ -310,12 +289,34 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                 });
 
                 uploadS3.on("httpUploadProgress", (progress) => {
-                    console.log(progress);
+                    setUploadingFiles(() => {
+                        return Math.ceil(index/memoFiles.length * 100)
+                    })
                 });
 
-                uploadS3.done()
-                .then((result) => {
-                    console.log(result);
+                return uploadS3.done()
+            }))
+            .then((result) => {
+                // console.log(result);
+                // console.log(formData);
+                const courseToSend = {courseData: formData, author: loggedInUser}
+                setUploadingFiles(100)
+                axiosClient.post(`/courses/add`, courseToSend, {
+                    signal: signal,
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json',
+                    },
+                    // signal: signal,
+                    onUploadProgress: (evt) => {
+                    setUploadProgress(Math.floor(evt.progress * 100));
+                    }
+                })
+                .then((createdCourse) => {
+                    setSuccessfullUpload(true);
+                    setSelectedFiles([]);
+                    sessionStorage.clear();
+                    localStorage.removeItem("courseData");
                 })
             })
         }
@@ -323,6 +324,10 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
             abortController.abort();
         }
     }, [uploadFormSubmitted]);
+
+    React.useEffect(() => {
+        console.log(uploadingFiles);
+    }, [uploadingFiles])
 
     React.useEffect(() => {
         postCourseButton.current.disabled = formData.modules.length === 0 || formData.modules.some((module) => {
@@ -366,9 +371,18 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
             </div>
             :
             <div style={{backgroundColor: "#2d2d2d", borderRadius: 12, padding: "25px 50px", margin: "0 auto"}}>
-                <h3>Отправка курса на сервер</h3>
-                <p>Прогресс - {uploadProgress}%</p>
-                <p style={{width: `${uploadProgress}%`, height: 3, borderRadius: 4, backgroundColor: "rgb(93, 176, 199)"}}></p>
+                {uploadingFiles < 100 ? 
+                <>
+                    <h3>Отправка файлов на сервер</h3>
+                    <div style={{width: `${uploadingFiles}%`, height: 3, borderRadius: 4, backgroundColor: "rgb(93, 176, 199)"}}></div>
+                </>
+                :
+                <>
+                    <h3>Сохранение курса</h3>
+                    <div style={{width: `${uploadProgress}%`, height: 3, borderRadius: 4, backgroundColor: "rgb(93, 176, 199)"}}></div>
+                </>}
+                {/* <p>Прогресс - {uploadProgress}%</p> */}
+                {/* <p style={{width: `${uploadProgress}%`, height: 3, borderRadius: 4, backgroundColor: "rgb(93, 176, 199)"}}></p> */}
             </div>}
             {/* {!uploadFormSubmitted ? <ul className="addCourse__form-moduleLesson-list-scroll" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 240px))", gridAutoRows: "1fr", width: "100%", boxSizing: "border-box", padding: 0, listStyle: "none", lineHeight: "2", gap: "45px", margin: "50px 0"}}>
                 {modules.length > 0 && modules.map((moduleOfCourse, index) => {
