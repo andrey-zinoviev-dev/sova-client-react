@@ -478,6 +478,8 @@ function apiSendFile(address, file) {
   });
 };
 
+// function apiGetCourseStudents
+
 export {
   apiLogin,
   apiRegister,

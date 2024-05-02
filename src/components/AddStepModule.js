@@ -274,7 +274,27 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         const signal = abortController.signal;
 
         if(uploadFormSubmitted) {
-            // memoFiles.[memoFiles.length -1]
+            // const courseToSend = {courseData: formData, author: loggedInUser}
+            // axiosClient.post(`/courses/add`, courseToSend, {
+            //     signal: signal,
+            //     headers: {
+            //         'Authorization': token,
+            //         'Content-Type': 'application/json',
+            //     },
+            //     // signal: signal,
+            //     onUploadProgress: (evt) => {
+            //         setUploadProgress(Math.floor(evt.progress * 100));
+            //     }
+            // })
+            // .then((createdCourse) => {
+            //     setSuccessfullUpload(true);
+            //     setSelectedFiles([]);
+            //     sessionStorage.clear();
+            //     localStorage.removeItem("courseData");
+            // })
+
+            // uncomment further!!!!
+
             Promise.all(memoFiles.map((file, index, array) => {
                 // console.log(index + 1);
                 // console.log(array.length);
@@ -319,6 +339,9 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                     localStorage.removeItem("courseData");
                 })
             })
+
+            // uncomment further!!!!
+
         }
         return () => {
             abortController.abort();

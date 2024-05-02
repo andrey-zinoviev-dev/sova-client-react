@@ -26,13 +26,30 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
   const [messages, setMessages] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState("");
   const [selectedFile, setSelectedFile] = React.useState(null);
+  // const [contacts, setContacts] = React.useState([]);
   //logged in user
   const loggedInUser = React.useContext(UserContext);
   //derived state
-  const contacts = loggedInUser.admin ? students : [author];
+  const contacts = !loggedInUser.admin ? students.filter((student) => {
+    const arrayToSearch = loggedInUser.courses.find((course) => {
+      return course.id === courseID;
+    }).contacts;
+
+    return arrayToSearch.find((arrayEl) => {
+      return arrayEl === student.email;
+    });
+  })
+  :
+  students;
+
+  console.log(contacts);
+  // console.log(students);
+  // const contacts = loggedInUser.admin ? students : [author];
   const selectedUser = loggedInUser.admin ? students.find((student) => {
     return student._id === userId;
-  }) : author;
+  }) : contacts.find((contact) => {
+    return contact._id === userId;
+  });
   //refs
   const fileInputRef = React.useRef();
   const messageInputRef = React.useRef();
@@ -95,6 +112,10 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
   function cancelFile() {
     setSelectedFile(null);
   }
+
+  React.useEffect(() => {
+    
+  }, []);
 
   React.useEffect(() => {
     userId && apiGetConversation(token, userId, {course: courseID, module: module._id, lesson: lesson._id})
@@ -181,7 +202,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                 <div className={`lesson__div-chat-contacts-convo ${userId && 'chat-user'}`}>
                     {!userId ? <p>Выберите чат</p> :
                     <>
-                      <h3>{selectedUser.name}</h3>
+                      {/* <h3>{selectedUser.name}</h3> */}
                       <ul ref={messagesUlref} className="lesson__div-chat-contacts-convo-messages">
                         {!messages ? 
                           <li key="no messages">
