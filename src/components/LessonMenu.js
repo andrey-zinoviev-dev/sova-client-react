@@ -17,7 +17,7 @@ export default function LessonMenu({ courseID, lesson, module }) {
           <div className={`main__lesson-menu ${menuMobileClicked && "main__lesson-menu_opened"}`}>
         <div className="main__lesson-menu-nav">
           <img className="main__lesson-menu-nav-img" src={sovaLogo} alt="логотип"></img>
-          {menuMobileClicked && <button onClick={() => {
+          <button onClick={() => {
             setMenuClicked((prevValue) => {
               return !prevValue;
             });
@@ -25,13 +25,13 @@ export default function LessonMenu({ courseID, lesson, module }) {
             {!menuClicked || !menuMobileClicked ? 
             <p>Меню</p>
             :
-            <FontAwesomeIcon icon={menuMobileClicked && faXmark} />}
-          </button>}
+            <FontAwesomeIcon icon={(menuMobileClicked || menuClicked) && faXmark} />}
+          </button>
           {/* <button className="main__lesson-menu-user-btn main__lesson-menu-user-btn-profile">
             <p>{loggedInUser.name[0]}</p>
           </button> */}
         </div>
-        {menuClicked || menuMobileClicked && <div className="main__lesson-menu-context">
+        {(menuClicked || menuMobileClicked) && <div className="main__lesson-menu-context">
           <h3>{module.title}</h3>
           <ul className="main__lesson-menu-context-ul">
             {module.lessons.map((moduleLesson) => {
