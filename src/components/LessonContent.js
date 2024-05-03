@@ -3,19 +3,23 @@ import TiptapReader from "./TiptapReader"
 import Chat from "./Chat"
 import Contact from "./Contact"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowRight, faPaperPlane, faPaperclip } from "@fortawesome/free-solid-svg-icons"
+import { faArrowLeft, faArrowRight, faPaperPlane, faPaperclip } from "@fortawesome/free-solid-svg-icons"
 import { UserContext } from "../context/userContext"
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { apiGetConversation, apiSendMessage, apiSendFileInMessage, apiReadFileInMessage } from "../api"
+import "./LessonContent.css";
+import { useLocation, useNavigate } from "react-router-dom"
 const FilePopup = React.lazy(() => {
   return import("./FilePopup")
 });
-
 // const AddCourse = React.lazy(() => import('./components/AddCourse'));
 
 
 export default function LessonContent({ socket, courseID, lesson, module, students, author }) {
   // console.log(socket);
+  //location
+  const location = useLocation();
+  const navigate = useNavigate();
   //token
   const token = localStorage.getItem("token");
   //search params
@@ -41,8 +45,6 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
   })
   :
   students;
-
-  console.log(contacts);
   // console.log(students);
   // const contacts = loggedInUser.admin ? students : [author];
   const selectedUser = loggedInUser.admin ? students.find((student) => {
@@ -114,10 +116,6 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
   }
 
   React.useEffect(() => {
-    
-  }, []);
-
-  React.useEffect(() => {
     userId && apiGetConversation(token, userId, {course: courseID, module: module._id, lesson: lesson._id})
     .then((data) => {
       setChatIsOpened(true);
@@ -152,7 +150,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
 
   React.useEffect(() => {
     if(messagesUlref.current) {
-      console.log(messagesUlref.current);
+      // console.log(messagesUlref.current);
       messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
     }
   }, [messages])
@@ -166,29 +164,29 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
             
             <div>
               <p className="main__lesson-content-wrapper-stage">Модуль {module.title} <FontAwesomeIcon icon={faArrowRight} /> Урок {lesson.title}</p>
-              <ul className="">
+              {contacts.length > 0 && <ul className="main__lesson-content-wrapper-navigation">
                 <li>
-                  <button onClick={() => {
+                  <button className={`main__lesson-content-wrapper-navigation-btn ${!chatIsOpened && 'main__lesson-content-wrapper-navigation-btn_active-button'}`} onClick={() => {
                     setChatIsOpened(false);
                   }}>Контент</button>
                 </li>
-                <li onClick={() => {
+                <li>
+                  <button onClick={() => {
                     setChatIsOpened(true);
-                  }}>
-                  <button>Чат</button>
+                  }} className={`main__lesson-content-wrapper-navigation-btn ${chatIsOpened && 'main__lesson-content-wrapper-navigation-btn_active-button'}` }>Чат</button>
                 </li>
-              </ul>
+              </ul>}
             </div>
 
             {!chatIsOpened ? <>
               <h3 style={{color: "white"}}>{lesson.title}</h3>
               <TiptapReader content={lesson.content}></TiptapReader>
-              <button>Следующий урок</button>
+              {/* <button>Следующий урок</button> */}
             </> 
             : 
             <>
               <Chat>
-                <div className="lesson__div-chat-contacts-wrapper">
+                <div className={`lesson__div-chat-contacts-wrapper ${userId && 'lesson__div-chat-contacts-wrapper_hidden'}`}>
                   <h3>Контакты</h3>
                   <ul className="lesson__div-chat-contacts">
                     {contacts.map((contact) => {
@@ -199,9 +197,17 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                   </ul>
                 </div>
 
-                <div className={`lesson__div-chat-contacts-convo ${userId && 'chat-user'}`}>
+                <div className={`lesson__div-chat-contacts-convo ${userId && 'lesson__div-chat-contacts-convo_active chat-user'}`}>
                     {!userId ? <p>Выберите чат</p> :
                     <>
+                      <div className="lesson__div-chat-contacts-convo-back">
+                        <button onClick={() => {
+                          navigate(location.pathname);
+                        }}>
+                          <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
+                        </button>
+                        <span>Назад</span>
+                      </div>
                       {/* <h3>{selectedUser.name}</h3> */}
                       <ul ref={messagesUlref} className="lesson__div-chat-contacts-convo-messages">
                         {!messages ? 

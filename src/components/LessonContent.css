@@ -1,0 +1,23 @@
+.main__lesson-content-wrapper-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main__lesson-content-wrapper-navigation-btn {
+    background-color: transparent;
+    border: 2px solid rgb(93, 176, 199);
+    color: rgb(93, 176, 199);
+    box-sizing: border-box;
+    padding: 7px 15px;
+    font-size: 14px;
+}
+
+.main__lesson-content-wrapper-navigation-btn_active-button {
+    background-color: rgb(93, 176, 199);
+    color: white;
+}

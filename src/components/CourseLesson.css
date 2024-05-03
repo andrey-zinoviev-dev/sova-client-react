@@ -91,7 +91,7 @@
   font-weight: 500;
 }
 
-.main__lesson-menu img {
+.main__lesson-menu-nav-img {
   max-width: 35px;
   margin: 0 auto;
 }
@@ -140,4 +140,99 @@
     padding: 0 0 10px 0;
     letter-spacing: 1px;
     font-weight: 500;
+}
+
+.main__lesson-menu-mobile {
+  position: fixed;
+    bottom: 45px;
+    left: 5px;
+    z-index: 25;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    border: none;
+    width: 40px;
+    background-color: rgb(93, 176, 199);
+    color: white;
+    display: none;
+    font-size: 16px;
+}
+
+
+
+@media screen and (max-width: 1279px) {
+  .main__lesson-content {
+    padding: 50px 0;
+  }
+  .main__lesson-menu-context {
+    min-width: 260px;
+    padding: 50px 10px;
+  }
+
+  .main__lesson-menu-nav {
+    padding: 50px 10px;
+    min-width: 50px;
+  }
+
+  .main__lesson-menu-nav-img {
+    max-width: 25px;
+  }
+
+  .main__lesson-menu-user-btn-profile {
+    height: 30px;
+  }
+
+  .main__lesson-content-wrapper {
+    max-width: 620px;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .main__lesson-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 25;
+  } 
+  .main__lesson-menu-mobile {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .main__lesson-menu {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 25;
+    display: none;
+  }
+
+  .main__lesson-content-wrapper {
+    max-width: 360px;
+  }
+  .main__lesson-menu_opened {
+    display: flex;
+    /* display: flex; */
+    width: 100%;
+  }
+  .main__lesson-menu-context {
+    width: 100%;
+  }
+  .main__lesson-menu-user-btn_hidden {
+    display: none;
+  }
+  .lesson__div-chat-contacts-wrapper_hidden {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .main__lesson-content-wrapper {
+    max-width: 280px;
+  }
+  .main__lesson-content-wrapper-stage {
+    font-size: 14px;
+  }
 }
