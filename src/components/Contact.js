@@ -18,7 +18,11 @@ export default function Contact({contact, selectedUser}) {
                     <img style={{width: 35, aspectRatio: "1/1", borderRadius: "51%", objectFit: "cover"}} src={Avatar} alt="аватар"></img>
                     {contact.online && <div style={{position: "absolute", bottom: 0, right: 5, width: 7, height: 7, borderRadius: "51%", backgroundColor: "#38e725"}}></div>}
                 </div> */}
-            <p style={{margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{contact.name}</p>
+            <div className="lesson__div-chat-contacts-li-name__wrapper">
+                <p style={{margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{contact.name}</p>
+                {contact.vip && <span className="lesson__div-chat-contacts-li-name__wrapper-span">vip</span>}
+            </div>
+            <p>{contact.email}</p>
         </button>
     )
 };

@@ -44,9 +44,13 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
     });
   })
   :
-  students;
-  // console.log(students);
-  // const contacts = loggedInUser.admin ? students : [author];
+  
+  students.map((student) => {
+    return student.courses.find(({id}) => {
+        return id === courseID;
+    }).contacts.includes(author.email) ? {...student, vip: true} : student;
+  });
+
   const selectedUser = loggedInUser.admin ? students.find((student) => {
     return student._id === userId;
   }) : contacts.find((contact) => {
@@ -168,6 +172,8 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                 <li>
                   <button className={`main__lesson-content-wrapper-navigation-btn ${!chatIsOpened && 'main__lesson-content-wrapper-navigation-btn_active-button'}`} onClick={() => {
                     setChatIsOpened(false);
+                    // console.log(location);
+                    navigate(location.pathname)
                   }}>Контент</button>
                 </li>
                 <li>
@@ -190,7 +196,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                   <h3>Контакты</h3>
                   <ul className="lesson__div-chat-contacts">
                     {contacts.map((contact) => {
-                      return <li style={{backgroundColor: selectedUser && contact._id === selectedUser._id && "#5DB0C7"}} className="lesson__div-chat-contacts-li" key={contact.name}>
+                      return <li style={{backgroundColor: selectedUser && contact._id === selectedUser._id && "#5DB0C7"}} className="lesson__div-chat-contacts-li" key={contact.email}>
                         <Contact contact={contact} selectedUser={selectedUser}/>
                       </li>
                     })}

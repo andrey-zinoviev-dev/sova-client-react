@@ -22,7 +22,7 @@ export default function CourseLesson({ socket }) {
     apiGetLesson(courseID, moduleID, lessonID, token, {signal: signal})
     .then((data) => {
       setLesson(data);
-      console.log(data);
+      // console.log(data);
     })
     .catch((err) => {
       console.log(err);
