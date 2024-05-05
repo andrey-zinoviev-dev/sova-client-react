@@ -274,9 +274,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
       .then(([coursesReceived, studentsReceived]) => {
         // console.log(coursesReceived);
         // console.log(coursesIds);
-        const coursesToRender =  loggedInUser.admin ? coursesReceived.filter((courseReceived) => {
-          return courseReceived.author && courseReceived.author._id === loggedInUser._id;
-        }) 
+        const coursesToRender =  loggedInUser.admin ? coursesReceived
         : 
         // coursesReceived
         coursesReceived.map((courseReceived) => {

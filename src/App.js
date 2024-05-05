@@ -294,7 +294,7 @@ function App() {
   const router = createBrowserRouter([
     {
       element: loggedIn ? <React.Suspense>
-        <Main></Main>
+        <Main logout={logout}></Main>
       </React.Suspense> : 
       <React.Suspense>
         <Welcome loginFormSubmit={loginFormSubmit} errorMessage={errorMessage}></Welcome>

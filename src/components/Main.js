@@ -20,7 +20,7 @@ export default function Main({socket, logout, loggedIn, registerFormSubmit}) {
 
   return (
     <>
-      <Dashboard></Dashboard>
+      <Dashboard logout={logout}></Dashboard>
       <main className="main">
         {/* <Navigation openLoginPopup={props.openLoginPopup} openRegisterPopup={props.openRegisterPopup}></Navigation>
         <Welcome></Welcome> */}

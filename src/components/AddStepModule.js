@@ -274,34 +274,11 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
         const signal = abortController.signal;
 
         if(uploadFormSubmitted) {
-            // const courseToSend = {courseData: formData, author: loggedInUser}
-            // axiosClient.post(`/courses/add`, courseToSend, {
-            //     signal: signal,
-            //     headers: {
-            //         'Authorization': token,
-            //         'Content-Type': 'application/json',
-            //     },
-            //     // signal: signal,
-            //     onUploadProgress: (evt) => {
-            //         setUploadProgress(Math.floor(evt.progress * 100));
-            //     }
-            // })
-            // .then((createdCourse) => {
-            //     setSuccessfullUpload(true);
-            //     setSelectedFiles([]);
-            //     sessionStorage.clear();
-            //     localStorage.removeItem("courseData");
-            // })
-
-            // uncomment further!!!!
-
             Promise.all(memoFiles.map((file, index, array) => {
-                // console.log(index + 1);
-                // console.log(array.length);
                 const uploadS3 = new Upload({
                     client: new S3({region: process.env.REACT_APP_REGION, credentials: {
                         secretAccessKey: process.env.REACT_APP_SECRET,
-                        accessKeyId: process.env.REACT_APP_ACCESS,
+                        accessKeyId: process.env.REACT_APP_ACCESS
                     }, endpoint: "https://storage.yandexcloud.net"}),
                     params: {Bucket: process.env.REACT_APP_NAME, Key: file.name, Body: file},
                     queueSize: 4,
@@ -310,17 +287,15 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
 
                 uploadS3.on("httpUploadProgress", (progress) => {
                     setUploadingFiles(() => {
-                        return Math.ceil(index/memoFiles.length * 100)
+                        return Math.ceil(index/memoFiles.length * 100);
                     })
-                });
+                })
 
-                return uploadS3.done()
+                return uploadS3.done();
             }))
-            .then((result) => {
-                // console.log(result);
-                // console.log(formData);
+            .then(() => {
+                setUploadingFiles(100);
                 const courseToSend = {courseData: formData, author: loggedInUser}
-                setUploadingFiles(100)
                 axiosClient.post(`/courses/add`, courseToSend, {
                     signal: signal,
                     headers: {
@@ -329,17 +304,21 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                     },
                     // signal: signal,
                     onUploadProgress: (evt) => {
-                    setUploadProgress(Math.floor(evt.progress * 100));
+                        setUploadProgress(Math.floor(evt.progress * 100));
                     }
                 })
                 .then((createdCourse) => {
                     setSuccessfullUpload(true);
                     setSelectedFiles([]);
-                    sessionStorage.clear();
+                    // sessionStorage.clear();
                     localStorage.removeItem("courseData");
                 })
             })
+            
 
+            // uncomment further!!!!
+
+            
             // uncomment further!!!!
 
         }

@@ -251,3 +251,56 @@
   background-color: rgb(93, 176, 199);
   color: #100f13;
 }
+
+@media screen and (max-width: 767px) {
+  .course__info {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .course__info-namedesc {
+    gap: 15px;
+  }
+
+  .course__info-back-btn {
+    padding: 0;
+  }
+
+  .course__programm {
+    margin: 25px 0 0 0;
+  }
+
+  .course__programm-div {
+    margin: 0 0 25px 0;
+    flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+  }
+
+  .course__programm-div div {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .course__p {
+    font-weight: 500;
+  }
+
+  .course__ul {
+    grid-template-columns: 1fr;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+
+  .course__ul-lessons {
+    grid-template-columns: 1fr;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .course__p {
+    font-size: 14px;
+  }
+}

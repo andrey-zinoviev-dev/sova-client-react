@@ -56,12 +56,12 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
         const finalJSON = [];
         const lines = file.split("\n");
         
-        const headers = lines[0].split(",");
+        const headers = lines[0].split(lines[0].includes(";") ? (";") : ",");
         // console.log(headers);
 
         let lineIndex = 1;
         while(lineIndex < lines.length) {
-            const userString = lines[lineIndex].split(",");
+            const userString = lines[lineIndex].split(lines[lineIndex].includes(";") ? (";") : ",");
             const obj = {};
             headers.forEach((header, index) => {
                 // console.log(header.replace(" ",""))
@@ -100,38 +100,38 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
     //effects
     
 
-    React.useEffect(() => {
-        if(formData.course.name.length > 0) {
-            axiosClient.get(`/findCourse/${formData.course.name}`, {
-                    headers: {
-                        'Authorization': token,
+    // React.useEffect(() => {
+    //     if(formData.course.name.length > 0) {
+    //         axiosClient.get(`/findCourse/${formData.course.name}`, {
+    //                 headers: {
+    //                     'Authorization': token,
                         
-                    },
-                })
-                .then(() => {
-                    setErrorMessage("");
-                    saveInputChanges("name", formData.course.name);
-                })
-                .catch((err) => {
+    //                 },
+    //             })
+    //             .then(() => {
+    //                 setErrorMessage("");
+    //                 saveInputChanges("name", formData.course.name);
+    //             })
+    //             .catch((err) => {
                     
-                    setErrorMessage(err.response.data.message);
-                })
-        }
-        if(errorMessage.length === 0 && formData.course.name.length > 0 && formData.course.description.length > 0 && formData.course.cover.clientPath) {
-            proceedButton.current.disabled = false;
-            proceedButton.current.classList.remove("addCourse__form-btn_disabled-btn");
-        } else {
-            proceedButton.current.disabled = true;
-            proceedButton.current.classList.add("addCourse__form-btn_disabled-btn");
-        }
-        // if(course.name.length > 0 && course.description.length > 0) {
-        //     setDisableButton(false);
-        // } else {
-        //     setDisableButton(true);
-        // }
+    //                 setErrorMessage(err.response.data.message);
+    //             })
+    //     }
+    //     if(errorMessage.length === 0 && formData.course.name.length > 0 && formData.course.description.length > 0 && formData.course.cover.clientPath) {
+    //         proceedButton.current.disabled = false;
+    //         proceedButton.current.classList.remove("addCourse__form-btn_disabled-btn");
+    //     } else {
+    //         proceedButton.current.disabled = true;
+    //         proceedButton.current.classList.add("addCourse__form-btn_disabled-btn");
+    //     }
+    //     // if(course.name.length > 0 && course.description.length > 0) {
+    //     //     setDisableButton(false);
+    //     // } else {
+    //     //     setDisableButton(true);
+    //     // }
         
 
-    }, [errorMessage.length, formData.course.name, formData.course.description, formData.course.cover.clientPath]);
+    // }, [errorMessage.length, formData.course.name, formData.course.description, formData.course.cover.clientPath]);
 
     // React.useEffect(() => {
     //     console.log(formData);
