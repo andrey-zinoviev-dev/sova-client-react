@@ -100,15 +100,23 @@
 .lesson__div-chat-contacts-li-name__wrapper {
   display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
+    /* justify-content: flex-start; */
     width: 100%;
-    gap: 5px;
+    /* gap: 5px; */
 }
 .lesson__div-chat-contacts-li-name__wrapper-span {
   border: 1px solid rgb(93, 176, 199);
   box-sizing: border-box;
   padding: 1px 3px;
   color: rgb(93, 176, 199);
+}
+
+.lesson__div-chat-contacts-li-name__wrapper-vip {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
 }
 .lesson__div-chat-contacts-ul::-webkit-scrollbar {
   width: 5px;
@@ -384,6 +392,26 @@
   display: none;
 }
 
+.lesson__div-chat-contacts-li-name__wrapper-notification {
+  background-color: #5DB0C7;
+  box-sizing: border-box;
+  padding: 0;
+  aspect-ratio: 1 / 1;
+  line-height: 1;
+  width: 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.lesson__div-chat-contacts-convo-contact {
+  display: none;
+}
+
 @media screen and (max-width: 1439px) {
   .lesson__div-chat {
     height: 540px
@@ -435,5 +463,11 @@
   }
   .lesson__div-chat-contacts-convo-div {
     margin: auto 0 0 0;
+  }
+  .lesson__div-chat-contacts-wrapper_hidden {
+    display: none;
+  }
+  .lesson__div-chat-contacts-convo-contact {
+    display: block;
   }
 }

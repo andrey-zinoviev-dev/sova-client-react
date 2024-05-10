@@ -21,7 +21,10 @@ export default function CourseLesson({ socket }) {
 
     apiGetLesson(courseID, moduleID, lessonID, token, {signal: signal})
     .then((data) => {
-      setLesson(data);
+      // console.log(data.students);
+      setLesson({...data, students: data.students.map((student) => {
+        return {...student, notif: 0};
+      })});
       // console.log(data);
     })
     .catch((err) => {
@@ -35,29 +38,7 @@ export default function CourseLesson({ socket }) {
   return (
     lesson && <section className="main__lesson">
       <LessonMenu courseID={courseID} lesson={lesson.lesson} module={lesson.module}/>
-      <LessonContent socket={socket} courseID={courseID} students={lesson.students} author={lesson.author} lesson={lesson.lesson} module={lesson.module} />
-      {/* <div className="main__lesson-content">
-        <div className="main__lesson-content-wrapper">
-          <div>
-            <p className="main__lesson-content-wrapper-stage">Модуль {lesson.module.title} <FontAwesomeIcon icon={faArrowRight} /> Урок {lesson.lesson.title}</p>
-            <ul>
-              <li>
-                <button>Контент</button>
-              </li>
-              <li>
-                <button>Чат</button>
-              </li>
-            </ul>
-          </div>
-
-          <h3 style={{color: "white"}}>{lesson.lesson.title}</h3>
-          <TiptapReader content={lesson.lesson.content}></TiptapReader>
-          <button>Следующий урок</button>
-        </div>
-
-      </div> */}
-
-    
+      <LessonContent socket={socket} courseID={courseID} setLesson={setLesson} students={lesson.students} author={lesson.author} lesson={lesson.lesson} module={lesson.module} />
     </section>
   )
 };

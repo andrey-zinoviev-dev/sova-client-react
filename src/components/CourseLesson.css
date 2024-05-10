@@ -194,9 +194,7 @@
     height: 100%;
     z-index: 25;
   } 
-  .main__lesson-menu-mobile {
-    display: block;
-  }
+
 }
 
 @media screen and (max-width: 767px) {
@@ -223,8 +221,9 @@
   .main__lesson-menu-user-btn_hidden {
     display: none;
   }
-  .lesson__div-chat-contacts-wrapper_hidden {
-    display: none;
+
+  .main__lesson-menu-mobile {
+    display: block;
   }
 }
 

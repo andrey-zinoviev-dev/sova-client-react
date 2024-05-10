@@ -15,7 +15,7 @@ const FilePopup = React.lazy(() => {
 // const AddCourse = React.lazy(() => import('./components/AddCourse'));
 
 
-export default function LessonContent({ socket, courseID, lesson, module, students, author }) {
+export default function LessonContent({ socket, courseID, lesson, setLesson, module, students, author }) {
   // console.log(socket);
   //location
   const location = useLocation();
@@ -29,7 +29,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
   const [chatIsOpened, setChatIsOpened] = React.useState(false);
   const [messages, setMessages] = React.useState(null);
   const [errorMsg, setErrorMsg] = React.useState("");
-  const [selectedFile, setSelectedFile] = React.useState(null);
+  const [selectedFiles, setSelectedFiles] = React.useState([]);
   // const [contacts, setContacts] = React.useState([]);
   //logged in user
   const loggedInUser = React.useContext(UserContext);
@@ -43,6 +43,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
       return arrayEl === student.email;
     });
   })
+
   :
   
   students.map((student) => {
@@ -82,41 +83,44 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
       setMessages((prevValue) => {
         return prevValue === null ? [data] : [...prevValue, data];
       });
-      setSelectedFile(null);
+      // setSelectedFile(null);
       chatFormRef.current.reset();
     })
   };
 
   function sendFile(file) {
-    const formData = new FormData();
-    formData.append("messageData", JSON.stringify({from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}}));
-    formData.append("file", selectedFile);
-    apiSendFileInMessage(token, formData)
-    .then((data) => {
-      // console.log(data);
-      if(data.message) {
-        return;
-      } else {
-        apiReadFileInMessage(token, data._id, createSearchParams({from: loggedInUser._id, to: selectedUser._id, location: JSON.stringify({course: courseID, module: module._id, lesson: lesson._id})}))
-        .then((fileMessage) => {
-          socket.emit("message", fileMessage);
-          setMessages((prevValue) => {
-            return prevValue === null ? [fileMessage] : [...prevValue, fileMessage];
-          });
-          setSelectedFile(null);
-          fileInputRef.current.reset();
-        })
-      }
-    })
+    // const formData = new FormData();
+    // formData.append("messageData", JSON.stringify({from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}}));
+    // formData.append("file", selectedFile);
+    // apiSendFileInMessage(token, formData)
+    // .then((data) => {
+    //   // console.log(data);
+    //   if(data.message) {
+    //     return;
+    //   } else {
+    //     apiReadFileInMessage(token, data._id, createSearchParams({from: loggedInUser._id, to: selectedUser._id, location: JSON.stringify({course: courseID, module: module._id, lesson: lesson._id})}))
+    //     .then((fileMessage) => {
+    //       socket.emit("message", fileMessage);
+    //       setMessages((prevValue) => {
+    //         return prevValue === null ? [fileMessage] : [...prevValue, fileMessage];
+    //       });
+    //       setSelectedFile(null);
+    //       fileInputRef.current.reset();
+    //     })
+    //   }
+    // })
   }
 
   function changeFileInput(evt) {
     // setOpenFilePopup(true);
-    setSelectedFile(evt.target.files[0]);
+    // setSelectedFile(evt.target.files[0]);
+    setSelectedFiles((prevValue) => {
+      return [...prevValue, ...evt.target.files];
+    })
   };
 
   function cancelFile() {
-    setSelectedFile(null);
+    // setSelectedFile(null);
   }
 
   React.useEffect(() => {
@@ -139,7 +143,13 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
   React.useEffect(() => {
     //funtions
     function readMsg(value) {
-      setMessages((prevValue) => {
+      setLesson((prevValue) => {
+        const updatedStudents = prevValue.students.map((student) => {
+          return (student._id === value.user && userId !== value.user) ? {...student, notif: student.notif + 1} : student;
+        });
+        return {...prevValue, students: updatedStudents};
+      })
+      value.user === userId && setMessages((prevValue) => {
         return [...prevValue, value];
       })
     };
@@ -150,7 +160,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
       socket.off("private message", readMsg);
     };
 
-  }, [socket.id]);
+  }, [socket.id, userId]);
 
   React.useEffect(() => {
     if(messagesUlref.current) {
@@ -197,7 +207,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                   <ul className="lesson__div-chat-contacts">
                     {contacts.map((contact) => {
                       return <li style={{backgroundColor: selectedUser && contact._id === selectedUser._id && "#5DB0C7"}} className="lesson__div-chat-contacts-li" key={contact.email}>
-                        <Contact contact={contact} selectedUser={selectedUser}/>
+                        <Contact setLesson={setLesson} contact={contact} selectedUser={selectedUser}/>
                       </li>
                     })}
                   </ul>
@@ -212,9 +222,8 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                         }}>
                           <FontAwesomeIcon icon={faArrowLeft}></FontAwesomeIcon>
                         </button>
-                        <span>Назад</span>
+                        <span className="lesson__div-chat-contacts-convo-contact">{selectedUser.name}</span>
                       </div>
-                      {/* <h3>{selectedUser.name}</h3> */}
                       <ul ref={messagesUlref} className="lesson__div-chat-contacts-convo-messages">
                         {!messages ? 
                           <li key="no messages">
@@ -222,6 +231,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                           </li>
                         :
                           <>
+                            {/* <span></span> */}
                             {messages.map((message) => {
                               return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id && "flex-end"}} className={message.files.length === 0 && 'lesson__div-chat-contacts-convo-messages-li-text'}>
                                 <p>{message.text}</p>
@@ -266,7 +276,7 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
                           evt.preventDefault();
                           sendMessage(messageInputRef.current.value);
                         }}>
-                          <input onChange={changeFileInput} ref={fileInputRef} type="file" style={{display: "none"}}></input>
+                          <input onChange={changeFileInput} multiple ref={fileInputRef} type="file" style={{display: "none"}}></input>
                           <input ref={messageInputRef} name="message" placeholder="Написать сообщение..."></input>
                           <button type="button" onClick={() => {
                             fileInputRef.current.click();
@@ -285,8 +295,8 @@ export default function LessonContent({ socket, courseID, lesson, module, studen
 
           </div>
       </div>
-      {selectedFile && <React.Suspense fallback={<p>загрузка</p>}>
-        <FilePopup selectedFile={selectedFile} cancelFile={cancelFile} sendFile={sendFile}></FilePopup>
+      {selectedFiles.length > 0 && <React.Suspense fallback={<p>загрузка</p>}>
+        <FilePopup selectedFiles={selectedFiles} cancelFile={cancelFile} sendFile={sendFile}></FilePopup>
       </React.Suspense>}
     </>
   )
