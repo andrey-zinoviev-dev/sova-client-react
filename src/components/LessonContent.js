@@ -88,12 +88,18 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
     })
   };
 
-  function sendFiles(files) {
+  function sendFiles(files, caption) {
     const filesToSend = files.map((file) => {
       return file.Key;
     });
-    console.log(filesToSend);
-    apiSendFileInMessage(token, filesToSend)
+    // console.log(filesToSend);
+    // console.log(caption);
+    // console.log(filesToSend);
+
+    // const dataToSend = 
+
+    apiSendFileInMessage(token, {filesToSend: filesToSend, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
+    
     // console.log(files);
     // const formData = new FormData();
     // formData.append("messageData", JSON.stringify({from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}}));

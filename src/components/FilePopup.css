@@ -110,3 +110,24 @@
 #delete-file-attach {
   padding: 0
 }
+
+.popup-file__form-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  /* border-radius: 9px; */
+  /* background-color: #2D2C32; */
+  border: none;
+  border-bottom: 2px solid white;
+  color: white;
+  background-color: transparent;
+  outline: none;
+}
+
+.popup-file__form {
+  width: 100%;
+}
+
+.popup-file__form-input:focus {
+  border-bottom: 2px solid #5DB0C7;
+}

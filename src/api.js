@@ -365,14 +365,14 @@ function apiSendMessage(token, message) {
   })
 };
 
-function apiSendFileInMessage(token, files) {
+function apiSendFileInMessage(token, dataToSend) {
   return fetch(`${apiAdress}/messages/files`, {
     method: "POST",
     headers: {
       'Authorization': token,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({files: files}),
+    body: JSON.stringify(dataToSend),
   })
   .then((res) => {
     return res.json();
