@@ -88,7 +88,13 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
     })
   };
 
-  function sendFile(file) {
+  function sendFiles(files) {
+    const filesToSend = files.map((file) => {
+      return file.Key;
+    });
+    console.log(filesToSend);
+    apiSendFileInMessage(token, filesToSend)
+    // console.log(files);
     // const formData = new FormData();
     // formData.append("messageData", JSON.stringify({from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}}));
     // formData.append("file", selectedFile);
@@ -112,15 +118,20 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
   }
 
   function changeFileInput(evt) {
+    // console.log(evt.target.files);
     // setOpenFilePopup(true);
     // setSelectedFile(evt.target.files[0]);
+    const files = Array.from(evt.target.files).map((file) => {
+      const url = window.URL.createObjectURL(file);
+      return {file: file, clientPath: url, title: file.name};
+    })
     setSelectedFiles((prevValue) => {
-      return [...prevValue, ...evt.target.files];
+      return [...prevValue, ...files];
     })
   };
 
   function cancelFile() {
-    // setSelectedFile(null);
+    setSelectedFiles([]);
   }
 
   React.useEffect(() => {
@@ -296,7 +307,7 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
           </div>
       </div>
       {selectedFiles.length > 0 && <React.Suspense fallback={<p>загрузка</p>}>
-        <FilePopup selectedFiles={selectedFiles} cancelFile={cancelFile} sendFile={sendFile}></FilePopup>
+        <FilePopup selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} cancelFile={cancelFile} sendFiles={sendFiles}></FilePopup>
       </React.Suspense>}
     </>
   )

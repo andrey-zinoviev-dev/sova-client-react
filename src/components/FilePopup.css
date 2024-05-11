@@ -29,14 +29,19 @@
 .popup-file h3 {
   color: white;
   font-weight: 500;
+  margin: 0 auto 15px auto;
 }
 
 .popup-file .container img, .popup-file .container video {
   width: 100%;
-  max-width: 360px;
-  object-fit: contain;
+  max-width: 120px;
+  object-fit: cover;
   aspect-ratio: 1 / 1;
   border-radius: 9px;
+}
+
+.popup-file .container audio {
+  max-width: 240px;
 }
 
 .popup-file-buttons {
@@ -59,4 +64,49 @@
 
 .popup-file .container button:hover {
   background-color: #2D2C32;
+}
+
+.popup-file__ul {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: white;
+  align-items: center;
+  width: 100%;
+  width: 320px;
+  max-height: 540px;
+  overflow: auto;
+}
+
+.popup-file__ul::-webkit-scrollbar {
+  width: 5px;
+  width: 5px;
+  background-color: #EBEBEB;
+  border-radius: 9px;
+}
+
+.popup-file__ul::-webkit-scrollbar-thumb {
+  width: 5px;
+  /* height: 20px; */
+  background-color: #5DB0C7;
+  border-radius: 9px;
+}
+
+.popup-file__ul li {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.popup-file__ul-li-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+#delete-file-attach {
+  padding: 0
 }
