@@ -252,13 +252,13 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
                           <>
                             {/* <span></span> */}
                             {messages.map((message) => {
-                              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id && "flex-end"}} className={message.files.length === 0 && 'lesson__div-chat-contacts-convo-messages-li-text'}>
+                              return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id && "flex-end"}} className={message.files.length === 0 ? 'lesson__div-chat-contacts-convo-messages-li-text lesson__div-chat-contacts-convo-messages-li' : "lesson__div-chat-contacts-convo-messages-li"}>
                                 <p>{message.text}</p>
                                 {message.files.length > 0 && 
                                 <ul className="lesson__div-chat-contacts-convo-messages-files">
                                   {message.files.map((file) => {
                                     // console.log(file);
-                                    return <li key={file.title}>
+                                    return <li key={file.title} style={{flexDirection: file.type.includes("audio") && "column"}}>
                                       {file.type.includes("image") && 
                                       <img alt={file.title} onLoad={() => {
                                         messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
@@ -268,10 +268,15 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
                                         messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
                                       }} src={file.path} controls contextMenu="return false" controlslist="nodownload"/>}
                                       {
-                                        file.type.includes("audio") && <audio onLoad={() => {
-                                          messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
-                                        }} controls src={file.path} type={file.type}>
-                                        </audio>
+                                        file.type.includes("audio") && 
+                                        <>
+                                          <audio onLoad={() => {
+                                            messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
+                                          }} controls src={file.path} type={file.type}>
+                                          </audio> 
+                                          <span style={{boxSizing: "border-box", textAlign: "left", padding: "5px 10px"}}>{file.title}</span>
+                                        </>
+
                                       }
                                     </li>
                                   })}
@@ -336,7 +341,7 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
           </div>
       </div>
       {selectedFiles.length > 0 && <React.Suspense fallback={<p>загрузка</p>}>
-        <FilePopup selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} cancelFile={cancelFile} sendFiles={sendFiles}></FilePopup>
+        <FilePopup socket={socket} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles} cancelFile={cancelFile} sendFiles={sendFiles} setMessages={setMessages}></FilePopup>
       </React.Suspense>}
     </>
   )

@@ -182,7 +182,8 @@
   }
 
   .main__lesson-content-wrapper {
-    max-width: 620px;
+    /* max-width: 620px; */
+    max-width: 740px;
   }
 }
 
@@ -195,6 +196,9 @@
     z-index: 25;
   } 
 
+  .main__lesson-content-wrapper {
+    max-width: 620px;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -229,7 +233,7 @@
 
 @media screen and (max-width: 424px) {
   .main__lesson-content-wrapper {
-    max-width: 280px;
+    max-width: 300px;
   }
   .main__lesson-content-wrapper-stage {
     font-size: 14px;

@@ -9,7 +9,8 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3 } from "@aws-sdk/client-s3";
 
-export default function FilePopup({ selectedFiles, setSelectedFiles, cancelFile, sendFiles }) {
+export default function FilePopup({ socket, selectedFiles, setSelectedFiles, cancelFile, sendFiles, setMessages }) {
+  // console.log(socket);
   const [loading, setLoading] = React.useState(false);
   const [uploadProgress, setUploadProgress] = React.useState(null);
   const [sendingMessage, setSendingMessage] = React.useState(false);
@@ -47,8 +48,15 @@ export default function FilePopup({ selectedFiles, setSelectedFiles, cancelFile,
       sendFiles(selectedFiles, captionValue)
       .then((data) => {
         // console.log(data);
+        socket.emit("message", data);
+
+        // socket.emit("sendFile", data);
+        // console.log(data);
         setSendingMessage(false);
         setSelectedFiles([]);
+        setMessages((prevValue) => {
+          return prevValue === null ? [data] : [...prevValue, data];
+        })
       })
     })
   }

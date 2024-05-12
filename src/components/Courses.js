@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faLock, faEnvelope, faTrash } from "@fortawesome/free-solid-svg-icons";
 // import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from "../context/userContext";
 // import Menu from "./Menu";
@@ -431,6 +431,12 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                       // style={{position: "absolute", top: "6.5%", right: 35, zIndex:25, display: window.innerWidth <= 767 ? "none" : 'flex', justifyContent: "center", alignItems: "center", width: 27, height: 27, borderRadius: "51%", backgroundColor: "transparent", border: "2px solid #5DB0C7", color: "#5DB0C7", fontSize: 10}}
                       >
                         <FontAwesomeIcon icon={faPen}/>
+                      </button>
+                      <button onClick={(evt) => {
+                        evt.stopPropagation();
+                        console.log(course);
+                      }}>
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </div>
                   }
