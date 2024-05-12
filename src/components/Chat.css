@@ -337,6 +337,23 @@
   border-top: 2px solid #2D2C32;
 }
 
+.lesson__div-chat-contacts-convo-messages-files {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lesson__div-chat-contacts-convo-messages-files li {
+  max-width: 100%;
+}
+
+.lesson__div-chat-contacts-convo-messages-files li audio {
+  max-width: 240px;
+}
+
 .lesson__div-chat-contacts-convo-div-homework {
   display: flex;
   justify-content: flex-start;

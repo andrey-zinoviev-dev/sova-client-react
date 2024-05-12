@@ -90,15 +90,17 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
 
   function sendFiles(files, caption) {
     const filesToSend = files.map((file) => {
-      return file.Key;
+      return {title: file.file.name, type: file.file.type};
     });
+    // console.log(filesToSend);
+    return apiSendFileInMessage(token, {filesToSend: filesToSend, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
     // console.log(filesToSend);
     // console.log(caption);
     // console.log(filesToSend);
 
     // const dataToSend = 
 
-    apiSendFileInMessage(token, {filesToSend: filesToSend, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
+    // apiSendFileInMessage(token, {filesToSend: filesToSend, from: loggedInUser._id, to: selectedUser._id, location: {course: courseID, module: module._id, lesson: lesson._id}})
     
     // console.log(files);
     // const formData = new FormData();
@@ -252,14 +254,35 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
                             {messages.map((message) => {
                               return <li key={message._id} style={{alignSelf: message.user === loggedInUser._id && "flex-end"}} className={message.files.length === 0 && 'lesson__div-chat-contacts-convo-messages-li-text'}>
                                 <p>{message.text}</p>
-
-                                {message.files.length > 0 && message.files[0].type.includes("image") && <img alt={message.files[0].name} onLoad={() => {
+                                {message.files.length > 0 && 
+                                <ul className="lesson__div-chat-contacts-convo-messages-files">
+                                  {message.files.map((file) => {
+                                    // console.log(file);
+                                    return <li key={file.title}>
+                                      {file.type.includes("image") && 
+                                      <img alt={file.title} onLoad={() => {
+                                        messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
+                                      }} src={file.path}>
+                                      </img>}
+                                      {file.type.includes("video") && <video onLoad={() => {
+                                        messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
+                                      }} src={file.path} controls contextMenu="return false" controlslist="nodownload"/>}
+                                      {
+                                        file.type.includes("audio") && <audio onLoad={() => {
+                                          messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
+                                        }} controls src={file.path} type={file.type}>
+                                        </audio>
+                                      }
+                                    </li>
+                                  })}
+                                </ul>}
+                                {/* {message.files.length > 0 && message.files[0].type.includes("image") && <img alt={message.files[0].name} onLoad={() => {
                                   messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
                                 }} src={message.files[0].path}>
                                 </img>} 
                                 {message.files.length > 0 && message.files[0].type.includes("video") && <video onLoad={
                                   messagesUlref.current.scrollTop = messagesUlref.current.scrollHeight
-                                } src={message.files[0].path} controls muted/>}
+                                } src={message.files[0].path} controls muted/>} */}
                               </li>
                             })}
                             <div></div>

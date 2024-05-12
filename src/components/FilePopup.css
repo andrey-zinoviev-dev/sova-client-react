@@ -1,3 +1,14 @@
+@keyframes loader {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 .popup-file {
   position: fixed;
   width: 100%;
@@ -130,4 +141,12 @@
 
 .popup-file__form-input:focus {
   border-bottom: 2px solid #5DB0C7;
+}
+
+.popup-file__form-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  animation: loader 3s ease-in-out alternate infinite;
 }

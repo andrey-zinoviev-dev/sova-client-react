@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
 
+import SovaLogo from '../images/sova-logo-white.png';
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./FilePopup.css";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -8,14 +10,15 @@ import { Upload } from "@aws-sdk/lib-storage";
 import { S3 } from "@aws-sdk/client-s3";
 
 export default function FilePopup({ selectedFiles, setSelectedFiles, cancelFile, sendFiles }) {
-  const [uploadProgress, setUploadProgress] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const [uploadProgress, setUploadProgress] = React.useState(null);
   const [sendingMessage, setSendingMessage] = React.useState(false);
-  const [messageText, setMessageText] = React.useState(null);
   // const [filesSent, setFileSent] = React.useState(false);
   //functions
   function upload(captionValue) {
     // console.log(selectedFiles);
     // console.log(captionRef.current.value);
+    setLoading(true);
     return Promise.all(selectedFiles.map((selectedFile) => {
       const uploadS3 = new Upload({
         client: new S3({region: process.env.REACT_APP_REGION, credentials: {
@@ -23,12 +26,13 @@ export default function FilePopup({ selectedFiles, setSelectedFiles, cancelFile,
           accessKeyId: process.env.REACT_APP_ACCESS
           }, endpoint: "https://storage.yandexcloud.net"
         }),
-          params: {Bucket: process.env.REACT_APP_NAME, Key: selectedFile.file.name, Body: selectedFile.file},
+          params: {Bucket: process.env.REACT_APP_NAME, Key: selectedFile.file.name, Body: selectedFile.file, ContentType: selectedFile.file.type},
           queueSize: 4,
           partSize: 10 * 1024 * 1024,
         });
     
         uploadS3.on("httpUploadProgress", (progress) => {
+          // setLoading(false);
           setUploadProgress({name: progress.Key, progress: (progress.loaded/progress.total) * 100});
           // setUploadingFiles(() => {
           //   return Math.ceil(index/memoFiles.length * 100);
@@ -38,18 +42,31 @@ export default function FilePopup({ selectedFiles, setSelectedFiles, cancelFile,
         return uploadS3.done();
     }))
     .then((result) => {
-      console.log(result);
-      // console.log("send data to node js");
-      // sendFiles(result, captionValue);
+      setUploadProgress(null);
+      setSendingMessage(true);
+      sendFiles(selectedFiles, captionValue)
+      .then((data) => {
+        // console.log(data);
+        setSendingMessage(false);
+        setSelectedFiles([]);
+      })
     })
   }
 
   //refs
   const captionRef = useRef();
 
-  React.useEffect(() => {
-    console.log(uploadProgress);
-  }, [uploadProgress])
+  // React.useEffect(() => {
+  //   console.log(uploadProgress);
+  // }, [uploadProgress])
+
+  // React.useEffect(() => {
+  //   console.log(loading);
+  // }, [loading]);
+
+  // React.useEffect(() => {
+  //   console.log(uploadProgress);
+  // }, [uploadProgress])
 
   return (
     <section className="popup-file">
@@ -58,11 +75,15 @@ export default function FilePopup({ selectedFiles, setSelectedFiles, cancelFile,
         <form className="popup-file__form" onSubmit={(evt) => {
           evt.preventDefault();
           // console.log(selectedFiles);
-          // upload(captionRef.current.value);
+          upload(captionRef.current.value);
           // sendFiles(selectedFiles, captionRef.current.value);
         }}>
-          {/* {Object.keys(uploadProgress).length < 1 ? 
-          <> */}
+          {/* <div>
+                <img src={SovaLogo} style={{maxWidth: 30, aspectRatio: "auto"}} alt="loader"></img>
+                <span style={{color: "white"}}>Загрузка</span>
+          </div> */}
+          {!loading ? 
+          <>
             <ul className="popup-file__ul">
               {selectedFiles.map((selectedFile) => {
                 return <li key={selectedFile.file.name}>
@@ -87,19 +108,25 @@ export default function FilePopup({ selectedFiles, setSelectedFiles, cancelFile,
             <input className="popup-file__form-input" ref={captionRef} name="caption" placeholder="Добавить подпись"></input>
             <div className="popup-file-buttons">
                 <button onClick={cancelFile}>Отменить</button>
-                <button type="submit" onClick={() => {
-
-                  // upload()
-
-                  // sendFile(selectedFile);
-                }}>Отправить</button>
+                <button type="submit">Отправить</button>
             </div>
-          {/* </>
-          // :
-          // <>
-          //   <span style={{color: "white"}}>{uploadProgress.name}</span>
-          //   <div style={{width: `${uploadProgress.progress}%`, height: 3, borderRadius: 5, backgroundColor: "white"}}></div>
-          // </>} */}
+          </>
+          :
+          <>
+            {uploadProgress ? 
+              <>
+                <span style={{color: "white"}}>{uploadProgress.name}</span>
+                <div style={{width: `${uploadProgress.progress}%`, height: 3, borderRadius: 5, backgroundColor: "white"}}></div>
+              </>
+              :
+              <div className="popup-file__form-loading">
+                <img src={SovaLogo} style={{maxWidth: 30, aspectRatio: "auto"}} alt="loader"></img>
+                <span style={{color: "white"}}>{sendingMessage ? "Отправка" : "Загрузка"}</span>
+              </div>
+            }
+
+      
+          </>}
           
         </form>
         {/* {Object.keys(uploadProgress) < 1 ? 
