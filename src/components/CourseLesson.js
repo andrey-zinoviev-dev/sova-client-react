@@ -23,8 +23,9 @@ export default function CourseLesson({ socket }) {
 
     apiGetLesson(courseID, moduleID, lessonID, token, {signal: signal})
     .then((data) => {
+      console.log([...data.students, data.author])
       // console.log(data.students);
-      setLesson({...data, students: data.students.filter((student) => {
+      setLesson({...data, students: [...data.students, data.author].filter((student) => {
         return student._id !== loggedInUser._id;
       }).map((student) => {
         return {...student, notif: 0};
@@ -42,7 +43,7 @@ export default function CourseLesson({ socket }) {
   return (
     lesson && <section className="main__lesson">
       <LessonMenu courseID={courseID} lesson={lesson.lesson} module={lesson.module}/>
-      <LessonContent socket={socket} courseID={courseID} setLesson={setLesson} students={lesson.students} author={lesson.author} lesson={lesson.lesson} module={lesson.module} />
+      <LessonContent socket={socket} courseID={courseID} setLesson={setLesson} users={lesson.users} students={lesson.students} author={lesson.author} lesson={lesson.lesson} module={lesson.module} />
     </section>
   )
 };

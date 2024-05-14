@@ -15,7 +15,7 @@ const FilePopup = React.lazy(() => {
 // const AddCourse = React.lazy(() => import('./components/AddCourse'));
 
 
-export default function LessonContent({ socket, courseID, lesson, setLesson, module, students, author }) {
+export default function LessonContent({ socket, courseID, lesson, setLesson, module, students, users, author }) {
   // console.log(socket);
   //location
   const location = useLocation();
@@ -33,30 +33,54 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
   // const [contacts, setContacts] = React.useState([]);
   //logged in user
   const loggedInUser = React.useContext(UserContext);
+
   //derived state
-  const contacts = !loggedInUser.admin ? students.filter((student) => {
-    const arrayToSearch = loggedInUser.courses.find((course) => {
-      return course.id === courseID;
-    }).contacts;
+  // console.log(users, students);
 
-    return arrayToSearch.find((arrayEl) => {
-      return arrayEl === student.email;
-    });
-  })
-
-  :
-  
-  students.map((student) => {
-    return student.courses.find(({id}) => {
+  const contacts = loggedInUser.admin ? 
+    students.map((student) => {
+      return student.courses.find(({id}) => {
+          return id === courseID;
+      }) && student.courses.find(({id}) => {
         return id === courseID;
-    }).contacts.includes(author.email) ? {...student, vip: true} : student;
-  });
+    }).contacts.includes(author.email) && author.email === loggedInUser.email ? {...student, vip: true} : student;
+    })
+    : 
+    students.filter((student) => {
+      const arrayToSearch = loggedInUser.courses.find((course) => {
+        return course.id === courseID;
+      }).contacts;
+      // console.log(arrayToSearch);
+      return arrayToSearch.find((arrayEl) => {
+        return arrayEl === student.email;
+      });
+    });
+  // console.log(contacts);
+  // const contacts = !loggedInUser.admin ? students.filter((student) => {
+  //   const arrayToSearch = loggedInUser.courses.find((course) => {
+  //     return course.id === courseID;
+  //   }).contacts;
+  //   // console.log(arrayToSearch);
+  //   return arrayToSearch.find((arrayEl) => {
+  //     return arrayEl === student.email;
+  //   });
+  // })
+
+  // :
+  // console.log(students);
+  // students.map((student) => {
+  //   return student.courses.find(({id}) => {
+  //       return id === courseID;
+  //   }).contacts.includes(author.email) && author.email === loggedInUser.email ? {...student, vip: true} : student;
+  // });
 
   const selectedUser = loggedInUser.admin ? students.find((student) => {
     return student._id === userId;
   }) : contacts.find((contact) => {
     return contact._id === userId;
   });
+  console.log(loggedInUser);
+  console.log(contacts);
   //refs
   const fileInputRef = React.useRef();
   const messageInputRef = React.useRef();
