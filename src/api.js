@@ -1,6 +1,6 @@
 //api variable
-const apiAdress = 'https://api.sova-courses.site';
-// const apiAdress = 'http://localhost:3000';
+// const apiAdress = 'https://api.sova-courses.site';
+const apiAdress = 'http://localhost:3000';
 // 
 //api calls
 function apiLogin(formData) {
@@ -116,6 +116,19 @@ function apiEditCourse(courseID, token, content) {
       'Authorization': token,
     },
     body: content,
+  })
+  .then((res) => {
+    return res.json();
+  })
+};
+
+function apiDeleteCourse(token, courseID) {
+  return fetch(`${apiAdress}/courses/${courseID}/delete`, {
+    method: "DELETE",
+    headers: {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    }
   })
   .then((res) => {
     return res.json();
@@ -514,6 +527,7 @@ export {
   apiAddStudentsToCourse,
   apiNewLessonEmail,
   apiSendEmailToStudents,
+  apiDeleteCourse,
   // apiGetUploadUrl,
   // apiSendFile,
 }

@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faC, faCheck, faPaperPlane, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { apiSendEmailToStudents } from "../api";
 
-export default function SendEmail({selectedCourse, setSelectedCourseId, token}) {
+export default function SendEmail({selectedCourse, setSelectedCourseId, setEmailCourse, token}) {
   // const { state } = useLocation();
   // const naviagte = useNavigate();
   const [selectedTarifs, setSelectedTarifs] = React.useState([]);
@@ -18,6 +18,7 @@ export default function SendEmail({selectedCourse, setSelectedCourseId, token}) 
         <div className="email__wrapper">
           <button className="email__wrapper-close" onClick={() => {
             setSelectedCourseId(null);
+            setEmailCourse(false);
           }}>
             <FontAwesomeIcon icon={faXmark} />
           </button>

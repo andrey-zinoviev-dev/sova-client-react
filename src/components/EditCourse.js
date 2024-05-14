@@ -1,10 +1,10 @@
 import React from "react";
 import './EditCourse.css';
 import CyrillicToTranslit from "cyrillic-to-translit-js";
-import { NavLink, useLocation, useParams, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useParams, useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription } from "../api";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -20,8 +20,15 @@ export default function EditCourse() {
   const token = localStorage.getItem('token');
   //location
   const navigate = useNavigate();
-  // const { state } = location;
-  // console.log(state);
+  const location = useLocation();
+
+  //search params
+  const [searchParams] = useSearchParams();
+  const moduleId = searchParams.get("moduleId");
+  const lessonId = searchParams.get("lessonId");
+
+
+
   //refs
   const studentsInputRef = React.useRef();
   const courseNameRef = React.useRef();
@@ -162,11 +169,15 @@ export default function EditCourse() {
       // courseDescRef.current.value = courseData.description;
     })
     // setCourseData(state);
-  }, [])
+  }, [moduleId, lessonId])
 
   // React.useEffect(() => {
   //   console.log(courseData);
   // }, [courseData])
+
+  React.useEffect(() => {
+    console.log(courseData);
+  }, [moduleId, lessonId])
 
   React.useEffect(() => {
     // console.log(successfulMessage);
@@ -209,29 +220,78 @@ export default function EditCourse() {
 
             }}></input>
         </form> */}
-        <form className="course-edit__form" style={{display: "flex", maxWidth: "100%", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
-            <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
-              <label style={{display: "block", margin: "0 0 20px 0"}} htmlFor="course-desc">Описание</label> 
-              <textarea className="course-edit__form-textarea" ref={courseDescRef} onKeyUp={(evt) => {
+        {!moduleId ?
+          <>
+            <form className="course-edit__form" style={{display: "flex", maxWidth: "100%", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
+              <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
+                <label style={{display: "block", margin: "0 0 20px 0"}} htmlFor="course-desc">Описание</label> 
+                <textarea className="course-edit__form-textarea" ref={courseDescRef} onKeyUp={(evt) => {
 
-                updateCourseDescription(evt);
-              }}></textarea>
-            </div>
-            <div style={{textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
-              <span style={{display: "block", margin: "0 0 20px 0"}}>Текущая обложка курса</span>
-              <div style={{position: "relative", display: "flex"}}>
-                <img style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} ref={courseCoverImgRef} src={courseData.cover} alt="Обложка курса"></img>
-                <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
-                  courseCoverRef.current.click();
-                })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>
-                  <p>Изменить обложку</p>
-                  
-                </motion.button>
-                <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
+                  updateCourseDescription(evt);
+                }}></textarea>
               </div>
+              <div style={{textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
+                <span style={{display: "block", margin: "0 0 20px 0"}}>Текущая обложка курса</span>
+                <div style={{position: "relative", display: "flex"}}>
+                  <img src={courseData.cover.path} style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} ref={courseCoverImgRef} alt="Обложка курса"></img>
+                  <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
+                    courseCoverRef.current.click();
+                  })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>
+                    <p>Изменить обложку</p>
+                    
+                  </motion.button>
+                  <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
+                </div>
 
-            </div>
-          </form>
+              </div>
+            </form>
+            <ul className="course-edit__ul">
+              {courseData.modules.map((module) => {
+                return <li key={module._id}>
+                  <span>{module.title}</span>
+                  <img src={module.cover.path} alt={module.name}></img>
+                  <span>Уроки: {module.lessons.length}</span>
+                  <button className="course-edit__ul-btn" onClick={() => {
+                    navigate({
+                      pathname: location.pathname,
+                      search: `?${createSearchParams({
+                        moduleId: module._id
+                      })}`
+                    })
+                  }}>
+                    <span>Изменить</span>
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </button>
+                </li>
+              })}
+            </ul>
+          </>
+          :
+          <>
+            <ul className="course-edit__ul">
+              {/* {courseData.modules.find((module) => {
+                return module._id === moduleId;
+              }).lessons.map((lesson) => {
+                return <li key={lesson._id}>
+                  <span>{lesson.title}</span>
+                  <img src={lesson.cover.path} alt={lesson.name}></img>
+                  <button className="course-edit__ul-btn" onClick={() => {
+                    navigate({
+                      pathname: location.pathname,
+                      search: `?${createSearchParams({
+                        moduleId: moduleId,
+                        lessonId: lesson._id
+                      })}`
+                    })
+                  }}>
+                    <span>Изменить</span>
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </button>
+                </li>
+              })} */}
+            </ul>
+          </>
+          }
           {/* <div className="course-edit__modules-wrapper">
             <p style={{margin: "0 0 25px 0"}}>Модули</p>
             <ul className="course-edit__modules-ul">
