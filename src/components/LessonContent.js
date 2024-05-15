@@ -55,6 +55,8 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
         return arrayEl === student.email;
       });
     });
+
+    console.log(contacts);
   // console.log(contacts);
   // const contacts = !loggedInUser.admin ? students.filter((student) => {
   //   const arrayToSearch = loggedInUser.courses.find((course) => {
@@ -79,8 +81,7 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
   }) : contacts.find((contact) => {
     return contact._id === userId;
   });
-  console.log(loggedInUser);
-  console.log(contacts);
+  // console.log(loggedInUser);
   //refs
   const fileInputRef = React.useRef();
   const messageInputRef = React.useRef();
@@ -193,7 +194,7 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
         return {...prevValue, students: updatedStudents};
       })
       value.user === userId && setMessages((prevValue) => {
-        return [...prevValue, value];
+        return prevValue ? [...prevValue, value] : [value];
       })
     };
 
@@ -249,7 +250,7 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
                   <h3>Контакты</h3>
                   <ul className="lesson__div-chat-contacts">
                     {contacts.map((contact) => {
-                      return <li style={{backgroundColor: selectedUser && contact._id === selectedUser._id && "#5DB0C7"}} className="lesson__div-chat-contacts-li" key={contact.email}>
+                      return <li className={selectedUser && contact._id === selectedUser._id ? 'lesson__div-chat-contacts-li_active lesson__div-chat-contacts-li' : `lesson__div-chat-contacts-li`} key={contact.email}>
                         <Contact setLesson={setLesson} contact={contact} selectedUser={selectedUser}/>
                       </li>
                     })}
@@ -322,7 +323,11 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
                       <div className="lesson__div-chat-contacts-convo-div">
                         <div className="lesson__div-chat-contacts-convo-div-homework">
                           {
-                            loggedInUser.admin ? 
+                            loggedInUser.admin || (loggedInUser.courses.find(({id}) => {
+                              return id === courseID;
+                            }) && loggedInUser.courses.find(({id}) => {
+                              return id === courseID;
+                            }).tarif === 'admin') ? 
                             <>
                               <button onClick={() => {
                                 sendMessage(`${loggedInUser.name} принимает задание`)

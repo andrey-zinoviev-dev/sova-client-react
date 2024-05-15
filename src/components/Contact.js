@@ -31,7 +31,7 @@ export default function Contact({contact, selectedUser, setLesson}) {
             <div className="lesson__div-chat-contacts-li-name__wrapper">
                 <div className="lesson__div-chat-contacts-li-name__wrapper-vip">
                     <p style={{margin: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap"}}>{contact.name}</p>
-                    {contact.vip && <span className="lesson__div-chat-contacts-li-name__wrapper-span">vip</span>}
+                    {contact.vip && <span className="lesson__div-chat-contacts-li-name__wrapper-span" style={{}}>vip</span>}
                 </div>
                 {contact.notif > 0 && <span className="lesson__div-chat-contacts-li-name__wrapper-notification">{contact.notif}</span>}
             </div>

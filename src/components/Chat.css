@@ -61,12 +61,29 @@
   position: relative;
   /* border-radius: 12px;
   background-color: #2D2C32; */
-
 }
 
 .lesson__div-chat-contacts-li:hover {
   background-color: #313234;
 }
+
+.lesson__div-chat-contacts-li_active {
+  background-color: #5DB0C7;
+}
+
+
+
+.lesson__div-chat-contacts-li_active .lesson__div-chat-contacts-li-name__wrapper-span {
+  color: #313234;
+  border: 1px solid #313234;
+}
+
+
+
+.lesson__div-chat-contacts-li_active:hover {
+  background-color: #5DB0C7;
+}
+
 .lesson__div-chat-contacts-list-element:not(:last-of-type) {
   margin: 0 0 2em 0;
 }
