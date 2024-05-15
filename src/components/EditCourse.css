@@ -127,7 +127,7 @@
   }
 
   .course-edit__ul li {
-    gap: 15px;
+    gap: 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -140,6 +140,18 @@
     /* background-color: #100f13; */
     background-color: #26272c;
     transition: all 0.25s ease-in-out;
+  }
+
+  .course-edit__ul-li-delete {
+    align-self: flex-end;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border: none;
+    background-color: #100f13;
+    color: rgb(93, 176, 199);
+    box-sizing: border-box;
+    padding: 0;
+    width: 30px;
   }
 
   .course-edit__ul li img {
@@ -171,6 +183,21 @@
   .course-edit__ul-btn:hover {
     background: rgb(93, 176, 199);
     color: black;
+  }
+
+  #new-module, #new-lesson {
+    background: transparent;
+    border: 2px solid rgb(93, 176, 199);
+  }
+
+  #new-module button, #new-lesson button {
+    aspect-ratio: 1 / 1;
+    align-self: center;
+    width: 50px;
+    background-color: #26272c;
+    border: none;
+    color: rgb(93, 176, 199);
+    border-radius: 5px;
   }
   
   .course-edit__modules-wrapper {

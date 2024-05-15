@@ -5,7 +5,7 @@ import { NavLink, useLocation, useParams, useNavigate, createSearchParams, useSe
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription } from "../api";
+import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription, apiGetModule } from "../api";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCheck } from "@fortawesome/free-solid-svg-icons";
 // import './EditCourse.css';
@@ -49,7 +49,11 @@ export default function EditCourse() {
   const [successfulMessage, setSuccessfullMessage] = React.useState(null);
   const [usersFile, setUsersFile] = React.useState({});
   const [inputTimeout, setInputTimeout] = React.useState(null);
+  const [moduleToUpdate, setModuleToUpdate] = React.useState(null);
+  const [lessonToUpdate, setLessonToUpdate] = React.useState(null);
 
+  //derived state
+  let selectedModule;
   //variants
     const backBtnVariant = {
       hover: {
@@ -163,21 +167,12 @@ export default function EditCourse() {
     // console.log(courseID);
     apiGetCourse(courseID, token)
     .then((courseData) => {
-      // console.log(courseData);
       setCourseData(courseData);
       // courseNameRef.current.value = courseData.name;
       // courseDescRef.current.value = courseData.description;
     })
     // setCourseData(state);
-  }, [moduleId, lessonId])
-
-  // React.useEffect(() => {
-  //   console.log(courseData);
-  // }, [courseData])
-
-  React.useEffect(() => {
-    console.log(courseData);
-  }, [moduleId, lessonId])
+  }, []);
 
   React.useEffect(() => {
     // console.log(successfulMessage);
@@ -202,7 +197,7 @@ export default function EditCourse() {
               {/* <div className="course__info-back">
                 
               </div> */}
-              <button onClick={() => {
+              {!moduleId ? <button onClick={() => {
                 navigate({
                   pathname: "/"
                 });
@@ -210,7 +205,15 @@ export default function EditCourse() {
                   <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
                   <p>Назад к курсам</p>
               </button>
-              <h3>Редактировать курс {courseData.name}</h3>
+              :
+              <button onClick={() => {
+                navigate(-1);
+              }}>
+                  <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
+                  <p>Назад к курсу</p>
+              </button>
+              }
+              <h3>{!moduleId ? `Редактировать курс ${courseData.name}` : `Редактировать уроки модуля`}</h3>
               {/* <p className="course__info-desc">{courseData.description}</p> */}
             </div>
         {/* <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
@@ -248,6 +251,11 @@ export default function EditCourse() {
             <ul className="course-edit__ul">
               {courseData.modules.map((module) => {
                 return <li key={module._id}>
+                  <button className="course-edit__ul-li-delete" onClick={() => {
+                    console.log(module);
+                  }}>
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
                   <span>{module.title}</span>
                   <img src={module.cover.path} alt={module.name}></img>
                   <span>Уроки: {module.lessons.length}</span>
@@ -264,15 +272,29 @@ export default function EditCourse() {
                   </button>
                 </li>
               })}
+              <li key="add-new_module" id="new-module">
+                {/* <span></span> */}
+                <button>
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+                {/* <button className="course-edit__ul-btn" onClick={() => {
+                }}>
+                </button> */}
+              </li>
             </ul>
           </>
           :
           <>
             <ul className="course-edit__ul">
-              {/* {courseData.modules.find((module) => {
+              {courseData.modules.length > 0 && courseData.modules.find((module) => {
                 return module._id === moduleId;
               }).lessons.map((lesson) => {
                 return <li key={lesson._id}>
+                  <button className="course-edit__ul-li-delete" onClick={() => {
+                    console.log(lesson);
+                  }}>
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
                   <span>{lesson.title}</span>
                   <img src={lesson.cover.path} alt={lesson.name}></img>
                   <button className="course-edit__ul-btn" onClick={() => {
@@ -288,7 +310,12 @@ export default function EditCourse() {
                     <FontAwesomeIcon icon={faArrowRight} />
                   </button>
                 </li>
-              })} */}
+              })}
+              <li id="new-lesson" key="add-new-lesson">
+                <button>
+                  <FontAwesomeIcon icon={faPlus} />
+                </button>
+              </li>
             </ul>
           </>
           }
