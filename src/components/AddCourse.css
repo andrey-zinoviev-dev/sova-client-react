@@ -377,6 +377,13 @@
     height: 0;
     pointer-events: none;
   }
+
+.tiptap__wrapper {
+    width: 100%;
+    border-radius: 9px;
+    border: 2px solid rgb(93, 176, 199);
+    box-sizing: border-box;
+}
 /* .ProseMirror:focus {
     border: 2px solid rgba(255, 255, 255, 1);
 } */

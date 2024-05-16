@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: flex-start;
     height: 100%;
-    background-color: rgba(0, 0, 0, 1);
+    /* background-color: rgba(0, 0, 0, 1); */
     backdrop-filter: blur(3px);
     padding: 2% 0px;
     box-sizing: border-box;
@@ -20,7 +20,10 @@
     position: relative;
     color: white;
     width: 100%;
-    max-width: 540px;
+    max-width: 1024px;
+    box-sizing: border-box;
+    padding: 0 25px;
+    /* max-width: 540px; */
     /* max-width: 768px; */
   }
 
@@ -53,7 +56,10 @@
   .module-edit__form-div {
     display: flex;
     flex-direction: column;
-    margin: 0 0 25px 0;
+    /* margin: 0 0 25px 0; */
+    width: 100%;
+    max-width: 360px;
+    gap: 15px;
   }
 
   .module-edit__form-label {

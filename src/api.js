@@ -201,15 +201,28 @@ function apiEditModule(courseID, moduleID, token, cover) {
   })
 };
 
-// function apiAddStu
+function apiEditLessonTitle(courseID, moduleID, lessonID, token, title) {
+  return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}/title`, {
+    method: "PUT",
+    headers: {
+      'Authorization': token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(title),
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
 
 function apiEditLessonCover(courseID, moduleID, lessonID, token, cover) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}/cover`, {
     method: "PUT",
     headers: {
       'Authorization': token,
+      "Content-Type": "application/json",
     },
-    body: cover,
+    body: JSON.stringify(cover),
   })
   .then((res) => {
     return res.json();
@@ -303,8 +316,9 @@ function apiUpdateCourseCover(token, courseId, file) {
     method: "PUT",
     headers: {
       'Authorization': token,
+      'Content-Type': "application/json",
     },
-    body: file,
+    body: JSON.stringify(file),
   })
   .then((res) => {
     return res.json();
@@ -330,8 +344,9 @@ function apiUpdateModuleCover(token, courseId, moduleId, file) {
     method: "PUT",
     headers: {
       'Authorization': token,
+      'Content-Type': 'application/json',
     },
-    body: file,
+    body: JSON.stringify(file),
   })
   .then((res) => {
     return res.json();
@@ -514,6 +529,7 @@ export {
   apiAddModule,
   apiGetModule,
   apiEditModule,
+  apiEditLessonTitle,
   apiEditLessonCover,
   apiEditLessonContent,
   apiAddLessonToCourse,

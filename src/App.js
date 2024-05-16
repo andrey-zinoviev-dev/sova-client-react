@@ -35,6 +35,8 @@ const Module = React.lazy(() => import ('./components/Module')) ;
 const CourseLesson = React.lazy(() => 
   import ('./components/CourseLesson')
 );
+const EditModule = React.lazy(() => import("./components/EditModule"));
+const EditLesson = React.lazy(() => import("./components/EditLesson"));
 const SendEmail = React.lazy(() => import ("./components/SendEmail"));
 // import Courses from './components/Courses';
 // import CourseLesson from './components/CourseLesson';
@@ -314,10 +316,22 @@ function App() {
           </React.Suspense>
         },
         {
-          path: "courses/:courseID/edit",
+          path: "courses/edit/:courseID",
           element: <React.Suspense>
             {<EditCourse></EditCourse>}
             {/* <Course></Course>  */}
+          </React.Suspense>,
+        },
+        {
+          path: 'courses/edit/:courseID/modules/:moduleID',
+          element: <React.Suspense>
+            <EditModule></EditModule>
+          </React.Suspense>
+        },
+        {
+          path: 'courses/edit/:courseID/modules/:moduleID/lessons/:lessonID',
+          element: <React.Suspense>
+            <EditLesson></EditLesson>
           </React.Suspense>
         },
         // {

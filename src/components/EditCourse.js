@@ -6,11 +6,11 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription, apiGetModule } from "../api";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCheck } from "@fortawesome/free-solid-svg-icons";
-// import './EditCourse.css';
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faXmark } from "@fortawesome/free-solid-svg-icons";
+
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3 } from "@aws-sdk/client-s3";
+
+import axiosClient from '../axios';
 
 export default function EditCourse() {
   const cyrillicToTranslit = new CyrillicToTranslit();
@@ -23,9 +23,9 @@ export default function EditCourse() {
   const location = useLocation();
 
   //search params
-  const [searchParams] = useSearchParams();
-  const moduleId = searchParams.get("moduleId");
-  const lessonId = searchParams.get("lessonId");
+  // const [searchParams] = useSearchParams();
+  // const moduleId = searchParams.get("moduleId");
+  // const lessonId = searchParams.get("lessonId");
 
 
 
@@ -51,6 +51,8 @@ export default function EditCourse() {
   const [inputTimeout, setInputTimeout] = React.useState(null);
   const [moduleToUpdate, setModuleToUpdate] = React.useState(null);
   const [lessonToUpdate, setLessonToUpdate] = React.useState(null);
+  const [coverFile, setCoverFile] = React.useState(null);
+  const [upload, setUpload] = React.useState(null);
 
   //derived state
   let selectedModule;
@@ -121,30 +123,35 @@ export default function EditCourse() {
     // console.log('yes');
     const uploadedCoverFile = courseCoverRef.current.files[0];
     uploadedCoverFile.clientPath = window.URL.createObjectURL(uploadedCoverFile);
+    courseCoverImgRef.current.src = uploadedCoverFile.clientPath;
+    console.log(uploadedCoverFile);
+    setCoverFile(uploadedCoverFile);
 
-    if(/[А-Я ]/.test(uploadedCoverFile.name)) {
-      // console.log('space in name');
-      const updatedName = cyrillicToTranslit.transform(uploadedCoverFile.name, "_");
+
+
+    // if(/[А-Я ]/.test(uploadedCoverFile.name)) {
+    //   // console.log('space in name');
+    //   const updatedName = cyrillicToTranslit.transform(uploadedCoverFile.name, "_");
                   
-      Object.defineProperty(uploadedCoverFile, 'name', {
-        writable: true,
-        value: updatedName
-      });
-    }
-    // console.log(uploadedCoverFile);
-    const form = new FormData();
-    form.append("courseCover", uploadedCoverFile);
+    //   Object.defineProperty(uploadedCoverFile, 'name', {
+    //     writable: true,
+    //     value: updatedName
+    //   });
+    // }
+    // // console.log(uploadedCoverFile);
+    // const form = new FormData();
+    // form.append("courseCover", uploadedCoverFile);
 
-    apiUpdateCourseCover(token, courseID, form)
-    .then((data) => {
-      if(!data.coverPath) {
-        return;
-      }
-      setCourseData((prevValue) => {
-        return {...prevValue, cover: data.coverPath};
-      });
-      setSuccessfullMessage(data.message);
-    })
+    // apiUpdateCourseCover(token, courseID, form)
+    // .then((data) => {
+    //   if(!data.coverPath) {
+    //     return;
+    //   }
+    //   setCourseData((prevValue) => {
+    //     return {...prevValue, cover: data.coverPath};
+    //   });
+    //   setSuccessfullMessage(data.message);
+    // })
   };
 
   function uploadStudentsFile() {
@@ -167,6 +174,8 @@ export default function EditCourse() {
     // console.log(courseID);
     apiGetCourse(courseID, token)
     .then((courseData) => {
+      courseNameRef.current.value = courseData.name;
+      courseDescRef.current.value = courseData.description;
       setCourseData(courseData);
       // courseNameRef.current.value = courseData.name;
       // courseDescRef.current.value = courseData.description;
@@ -180,61 +189,52 @@ export default function EditCourse() {
       setSuccessfullMessage(null);
     }, 3000);
     // console.log(successfulMessage);
-  }, [successfulMessage])
+  }, [successfulMessage]);
 
   return (
     <section className="course-edit">
       <div className="course-edit__wrapper">
-        {/* <div className="course-edit__wrapper-back-div">
-          <motion.button onClick={() => {
-            navigate(-1);
-          }} whileHover="hover" variants={backBtnVariant} initial="rest" className="course-edit__wrapper-back">
-            <motion.svg variants={backBtnVariant} fill="rgb(93, 176, 199)" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></motion.svg>
-          </motion.button>
-          <h3 className="course-edit__headline">Редактировать курс</h3>
-        </div> */}
-          <div>
-              {/* <div className="course__info-back">
-                
-              </div> */}
-              {!moduleId ? <button onClick={() => {
+          <div className="course-edit__wrapper-back">
+              <button onClick={() => {
                 navigate({
                   pathname: "/"
                 });
               }}>
                   <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
                   <p>Назад к курсам</p>
-              </button>
-              :
-              <button onClick={() => {
-                navigate(-1);
-              }}>
-                  <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
-                  <p>Назад к курсу</p>
-              </button>
-              }
-              <h3>{!moduleId ? `Редактировать курс ${courseData.name}` : `Редактировать уроки модуля`}</h3>
-              {/* <p className="course__info-desc">{courseData.description}</p> */}
+              </button>   
+              <h3>Редактировать курс {courseData.name}</h3>
             </div>
-        {/* <form className="course-edit__form" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", textAlign: "left", margin: '0 0 30px 0'}}>
-            <label style={{display: "block", margin: "0 0 10px 0"}} htmlFor="course-name">Название</label>
-            <input className="course-edit__form-input" ref={courseNameRef} id="course-name" onKeyUp={(evt) => {
-              updateCourseTitle(evt);
-
-            }}></input>
-        </form> */}
-        {!moduleId ?
-          <>
-            <form className="course-edit__form" style={{display: "flex", maxWidth: "100%", justifyContent: "space-between", alignItems: "stretch", gap: 50}}>
-              <div style={{width: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start"}}>
-                <label style={{display: "block", margin: "0 0 20px 0"}} htmlFor="course-desc">Описание</label> 
-                <textarea className="course-edit__form-textarea" ref={courseDescRef} onKeyUp={(evt) => {
-
-                  updateCourseDescription(evt);
-                }}></textarea>
+            <form className="course-edit__form">
+              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start"}}>
+                  <label style={{display: "block"}} htmlFor="course-desc">Название</label>
+                  <input className="course-edit__form-input" autoComplete="off" ref={courseNameRef}></input>
+                  <button type="button" className="course-edit__form-btn" onClick={() => {
+                    // console.log(courseNameRef.current.value);
+                    apiUpdateCourseTitle(token, courseID, {name: courseNameRef.current.value})
+                    .then((data) => {
+                      setSuccessfullMessage("Название обновлено");
+                    });
+                  }}>
+                    <span>Обновить название</span>
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </button>
               </div>
-              <div style={{textAlign: "left", display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
-                <span style={{display: "block", margin: "0 0 20px 0"}}>Текущая обложка курса</span>
+              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start"}}>
+                <label style={{display: "block"}} htmlFor="course-desc">Описание</label> 
+                <textarea className="course-edit__form-textarea" ref={courseDescRef}></textarea>
+                <button type="button" className="course-edit__form-btn" onClick={() => {
+                  apiUpdateCourseDescription(token, courseID, {desc: courseDescRef.current.value})
+                  .then((data) => {
+                    setSuccessfullMessage("Описание обновлено");
+                  })
+                }}>
+                  <span>Обновить описание</span>
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
+              </div>
+              <div style={{textAlign: "left", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
+                <span style={{display: "block"}}>Обложка курса</span>
                 <div style={{position: "relative", display: "flex"}}>
                   <img src={courseData.cover.path} style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} ref={courseCoverImgRef} alt="Обложка курса"></img>
                   <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
@@ -245,7 +245,39 @@ export default function EditCourse() {
                   </motion.button>
                   <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
                 </div>
-
+                <button type="button" className="course-edit__form-btn" onClick={() => {
+                  setUpload({start: true});
+                  // console.log(coverFile);
+                  const uploadS3 = new Upload({
+                    client: new S3({region: process.env.REACT_APP_REGION, credentials: {
+                      secretAccessKey: process.env.REACT_APP_SECRET,
+                      accessKeyId: process.env.REACT_APP_ACCESS
+                    }, endpoint: "https://storage.yandexcloud.net"}),
+                    params: {Bucket: process.env.REACT_APP_NAME, Key: coverFile.name, Body: coverFile},
+                    queueSize: 4,
+                    partSize: 10 * 1024 * 1024,
+                  });
+                  
+                  uploadS3.on("httpUploadProgress", (progress) => {
+                    setUpload((prevValue) => {
+                      return {...prevValue, name: progress.Key, progress: progress.loaded/progress.total * 100}
+                    });
+                  })
+                  
+                  return uploadS3.done()
+                  .then((result) => {
+                    apiUpdateCourseCover(token, courseID, {title: coverFile.name, type: coverFile.type})
+                    .then((data) => {
+                      setUpload(null);
+                      setSuccessfullMessage("Обложка обновлена");   
+                    })
+                    // setUpload(null);
+                    // setSuccessfullMessage("Обложка обновлена");
+                  })
+                }}>
+                  <span>Обновить обложку</span>
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </button>
               </div>
             </form>
             <ul className="course-edit__ul">
@@ -261,10 +293,7 @@ export default function EditCourse() {
                   <span>Уроки: {module.lessons.length}</span>
                   <button className="course-edit__ul-btn" onClick={() => {
                     navigate({
-                      pathname: location.pathname,
-                      search: `?${createSearchParams({
-                        moduleId: module._id
-                      })}`
+                      pathname: `${location.pathname}/modules/${module._id}`,
                     })
                   }}>
                     <span>Изменить</span>
@@ -282,7 +311,7 @@ export default function EditCourse() {
                 </button> */}
               </li>
             </ul>
-          </>
+          {/* </>
           :
           <>
             <ul className="course-edit__ul">
@@ -318,7 +347,7 @@ export default function EditCourse() {
               </li>
             </ul>
           </>
-          }
+          } */}
           {/* <div className="course-edit__modules-wrapper">
             <p style={{margin: "0 0 25px 0"}}>Модули</p>
             <ul className="course-edit__modules-ul">
@@ -386,12 +415,12 @@ export default function EditCourse() {
           {/* <div>
             
           </div> */}
-          {/* <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
+          <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
               <div className="course-edit__students-wrapper-success-div">
                 <FontAwesomeIcon className="course-edit__students-wrapper-success-div-tick" icon={faCheck} />
               </div>
               <p className="course-edit__students-wrapper-success-p">{successfulMessage}</p>
-          </motion.div> */}
+          </motion.div>
       </div>
     </section>
   )
