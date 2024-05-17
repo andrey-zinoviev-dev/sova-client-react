@@ -41,10 +41,10 @@ export default function AddLessonToNewModule({ setAddLesson, setDataToCreate, se
         }}>
           <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
           <span>
-            Назад к модулю
+            Назад к новому модулю
           </span>
         </button>
-        <h3>Добавление нового урока к модулю</h3>
+        <h3>Добавление нового урока к новому модулю</h3>
       </div>
 
       <form className="course-edit__form">

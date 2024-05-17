@@ -3,24 +3,36 @@ import "./EditCourse.css";
 import "./AddCourse.css";
 import TipTapEditor from "./TipTapEditor";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faArrowRight, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import SovaLogo from '../images/sova-logo-white.png';
+
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3 } from "@aws-sdk/client-s3";
+
+import axiosClient from '../axios';
+import { apiAddLessonToCourse } from "../api";
 
 export default function AddLessonToExModule() {
-  // console.log('yes');
+  //token
+  const token = localStorage.getItem("token");
+  //location
+  const location = useLocation();
+  // console.log(location.state);
   //navigate
   const navigate = useNavigate();
 
   //params
   const { courseID, moduleID } = useParams();
-  console.log(courseID, moduleID);
+  // console.log(courseID, moduleID);
 
   //states
   const [lessonData, setLessonData] = React.useState({});
   const [addFilesToContent, setAddFilesToContent] = React.useState([]);
   const [selectedFiles, setSelectedFiles] = React.useState([]);
-  const [finised, setFinished] = React.useState(false);
+  const [loading, setLoading] = React.useState({initiated: false, uploaded: false, finished: false});
+  const [uploadProgress, setUploadProgress] = React.useState(null);
 
   //refs
   const lessonImgRef = React.useRef();
@@ -32,7 +44,7 @@ export default function AddLessonToExModule() {
     const uploadedCoverFile = lessonFileRef.current.files[0];
     uploadedCoverFile.clientPath = window.URL.createObjectURL(uploadedCoverFile);
     setLessonData((prevValue) => {
-      return {...prevValue, cover: uploadedCoverFile};
+      return {...prevValue, cover: {title: uploadedCoverFile.name, clientPath: uploadedCoverFile.clientPath, type: uploadedCoverFile.type}};
     });
     setSelectedFiles((prevValue) => {
       return [...prevValue, uploadedCoverFile];
@@ -46,9 +58,13 @@ export default function AddLessonToExModule() {
       // setCoverFile(uploadedCoverFile);
   }
 
+  // React.useEffect(() => {
+  //   console.log(uploadProgress);
+  // }, [uploadProgress]);
 
   return (
     <section className="course-edit">
+    {!loading.initiated ?
     <div className="course-edit__wrapper">
       <div className="course-edit__wrapper-back">
         <button onClick={() => {
@@ -60,7 +76,7 @@ export default function AddLessonToExModule() {
             Назад к модулю
           </span>
         </button>
-        {/* <h3>Тут будет добавление урока к модулю {module}</h3> */}
+        <h3>Тут будет добавление урока к модулю {location.state.title}</h3>
       </div>
       <form className="course-edit__form">
         <div style={{width: "100%", maxWidth: 360, display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start"}}>
@@ -92,6 +108,9 @@ export default function AddLessonToExModule() {
         
       </TipTapEditor>
       <button style={{margin: "25px 0 0 0"}} onClick={() => {
+        setLoading((prevValue) => {
+          return {...prevValue, initiated: true};
+        })
         const filteredContent = lessonData.content.content.filter((contentEl) => {
           return  contentEl.type === "image" || contentEl.type === "video" || contentEl.type === "audio";
         });
@@ -111,7 +130,40 @@ export default function AddLessonToExModule() {
         // setSelectedFiles((prevValue) => {
         //   return [...prevValue, ...finalContentArray];
         // });
-        console.log([...selectedFiles, ...finalContentArray]);
+        Promise.all([...selectedFiles, ...finalContentArray].map((file) => {
+          const uploadS3 = new Upload({
+            client: new S3({region: process.env.REACT_APP_REGION, credentials: {
+                secretAccessKey: process.env.REACT_APP_SECRET,
+                accessKeyId: process.env.REACT_APP_ACCESS
+            }, endpoint: "https://storage.yandexcloud.net"}),
+            params: {Bucket: process.env.REACT_APP_NAME, Key: file.name, Body: file},
+            queueSize: 4,
+            partSize: 10 * 1024 * 1024,
+          });
+
+          uploadS3.on("httpUploadProgress", (progress) => {
+            setUploadProgress(progress.loaded / progress.total * 100);
+              // setUploadingFiles(() => {
+              //     return Math.ceil(index/memoFiles.length * 100);
+              // })
+          })
+
+          return uploadS3.done();
+        }))
+        .then((result) => {
+          setLoading((prevValue) => {
+            return {...prevValue, uploaded: true};
+          })
+          apiAddLessonToCourse(courseID, moduleID, token, lessonData)
+          .then((data) => {
+            setLoading((prevValue) => {
+              return {...prevValue, uploaded: false, finished: true};
+            });
+            // setLoading((prevValue) => {
+            //   return {...prevValue, }
+            // })
+          })
+        })
         // setFinished(true);
         // console.log(select)
         // navigate(-1, {
@@ -126,7 +178,24 @@ export default function AddLessonToExModule() {
         <FontAwesomeIcon icon={faArrowRight} />
       </button>
     </div>
+    :
+    <div>
+      <h3>Загрузка урока</h3>
+      {!loading.finished ? 
+        loading.upload ? <div style={{width: `${uploadProgress}%`, height: 3, backgroundColor: "#5DB0C7"}}>
+        </div>
+        :
+        <div>
+          <img className="main__courses-loader-svg" src={SovaLogo} alt="sova-logo"></img>
+          <span>Сохранение урока</span>
+        </div>
+      :
+      <div>
+        <FontAwesomeIcon icon={faCheck} />
+        <span>Урок успешно добавлен!</span>  
+      </div>}
+      {loading.finished && <button>Вернуться к модулю</button>}
+    </div>}
     </section>
-
   )
 }

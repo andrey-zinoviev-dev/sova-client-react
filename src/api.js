@@ -248,8 +248,9 @@ function apiAddLessonToCourse(courseID, moduleID, token, content) {
     method: "PUT",
     headers: {
       'Authorization': token,
+      "Content-Type": "application/json",
     },
-    body: content,
+    body: JSON.stringify(content),
   })
   .then((res) => {
     return res.json();
