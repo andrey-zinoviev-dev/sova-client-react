@@ -301,15 +301,37 @@ export default function EditCourse() {
                   </button>
                 </li>
               })}
-              <li key="add-new_module" id="new-module">
-                {/* <span></span> */}
-                <button>
+              <li key="add-new-lesson">
+                <button className="course-edit__ul-btn" onClick={(() => {
+                  
+                  navigate({
+                    pathname: `${location.pathname}/add`,
+                  }, {
+                    state: courseData,
+                  })
+                })}>
                   <FontAwesomeIcon icon={faPlus} />
+                  <span>
+                    Добавить модуль
+                  </span>
                 </button>
-                {/* <button className="course-edit__ul-btn" onClick={() => {
-                }}>
-                </button> */}
               </li>
+              {/* <li key="add-new_module" id="new-module">
+                <button className="course-edit__ul-btn" onClick={(() => {
+                  
+                  navigate({
+                    pathname: `${location.pathname}/add`,
+                  }, {
+                    state: courseData,
+                  })
+                })}>
+                  <FontAwesomeIcon icon={faPlus} />
+                  <span>
+                    Добавить урок
+                  </span>
+                </button>
+
+              </li> */}
             </ul>
           {/* </>
           :

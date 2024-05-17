@@ -56,7 +56,7 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
       });
     });
 
-    console.log(contacts);
+    // console.log(contacts);
   // console.log(contacts);
   // const contacts = !loggedInUser.admin ? students.filter((student) => {
   //   const arrayToSearch = loggedInUser.courses.find((course) => {

@@ -38,6 +38,8 @@ const CourseLesson = React.lazy(() =>
 const EditModule = React.lazy(() => import("./components/EditModule"));
 const EditLesson = React.lazy(() => import("./components/EditLesson"));
 const SendEmail = React.lazy(() => import ("./components/SendEmail"));
+const AddNewToCourse = React.lazy(() => import ("./components/AddNewToCourse"));
+const AddLessonToExModule = React.lazy(() => import ('./components/AddLessonToExModule'));
 // import Courses from './components/Courses';
 // import CourseLesson from './components/CourseLesson';
 
@@ -334,6 +336,24 @@ function App() {
             <EditLesson></EditLesson>
           </React.Suspense>
         },
+        {
+          path: 'courses/edit/:courseID/add',
+          element: <React.Suspense>
+            <AddNewToCourse></AddNewToCourse>
+          </React.Suspense>,
+        },
+        {
+          path: 'courses/edit/:courseID/modules/:moduleID/add',
+          element: <React.Suspense>
+            <AddLessonToExModule></AddLessonToExModule> 
+          </React.Suspense>,
+        },
+        // {
+        //   path: 'courses/edit/:courseID/modules/:moduleID/add',
+        //   element: <React.Suspense>
+        //     <AddToCourse></AddToCourse>
+        //   </React.Suspense>,
+        // },
         // {
         //   path: "sendEmail/:courseID",
         //   element: <React.Suspense>

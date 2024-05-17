@@ -70,7 +70,7 @@ export default function TipTapEditor({setNewLesson, addContentToNewLesson, editC
     });
 
     return (
-        <div style={{width: 720, borderRadius: "9px", border: "2px solid #5DB0C7", boxSizing: "border-box"}}>
+        <div style={{width: "100%", borderRadius: "9px", border: "2px solid #5DB0C7", boxSizing: "border-box"}}>
             <TipTapButtons content={editor && editor.getJSON()} editor={editor} selectedFiles={selectedFiles} setSelectedFiles={setSelectedFiles}/>
             <EditorContent style={{height: "calc(100% - 40px)"}} editor={editor} />
         </div>

@@ -637,7 +637,7 @@ export default function AddStepModule({successfullCourseAddOpened, token, formDa
                                   // …
                                 ]}});
 
-                            }} style={{display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", gap: 25, margin: "0 0 auto 0"}}>
+                            }} style={{display: "flex", width: "100%", maxWidth: 720, flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", gap: 25, margin: "0 0 auto 0"}}>
                                 <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-start"}}>
                                     <div style={{display: "flex", flexDirection: "column", minWidth: 280, margin: "0 60px 0 0", gap: 20}}>
                                         <input ref={lessonTitleRef} onChange={(evt) => {

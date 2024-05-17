@@ -1,7 +1,7 @@
 import React from "react";
 import './EditModule.css';
 import Lesson from "./Lesson";
-import { useParams, useNavigate, useLocation} from "react-router-dom";
+import { useParams, useNavigate, useLocation, createSearchParams} from "react-router-dom";
 import { apiEditModule, apiGetCourse, apiNewLessonEmail, apiUpdateModuleTitle, apiUpdateModuleCover, apiDeleteLesson } from '../api';
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -20,7 +20,7 @@ export default function EditModule() {
 
   //location
   const location = useLocation();
-
+  console.log(location);
   //token
   const token = localStorage.getItem('token');
 
@@ -123,6 +123,8 @@ export default function EditModule() {
   //   console.log(moduleData);
   // }, [moduleData]);
 
+  // console.log(location);
+
   return (
     <section ref={addModuleSectionRef} className="module-edit">
       <div className="module-edit__wrapper">
@@ -222,15 +224,38 @@ export default function EditModule() {
                 </button>
               </li>
             })}
-            <li key="add-new_module" id="new-module">
-                {/* <span></span> */}
-                <button>
+            <li key="add-new-lesson">
+              <button className="course-edit__ul-btn" onClick={() => {
+                  // console.log(moduleData);
+                   navigate({
+                    pathname: `${location.pathname}/add`,
+                  }, {
+                    state: moduleData
+                  })
+                }}>
+                  <FontAwesomeIcon icon={faPlus} />
+                  <span>
+                    Добавить Урок
+                  </span>
+              </button>
+            </li>
+            {/* <li key="add-new_module" id="new-module">
+                <button onClick={() => {
+                  console.log(moduleData);
+                   navigate({
+                    pathname: `${location.pathname}/add`,
+                    search: `?${createSearchParams({
+                      lesson: true
+                    })
+                    }`
+                  }, {
+                    state: moduleData
+                  })
+                }}>
                   <FontAwesomeIcon icon={faPlus} />
                 </button>
-                {/* <button className="course-edit__ul-btn" onClick={() => {
-                }}>
-                </button> */}
-            </li>
+
+            </li> */}
           </ul>
         </div>
       </div>
