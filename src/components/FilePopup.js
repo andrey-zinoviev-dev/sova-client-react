@@ -16,7 +16,7 @@ export default function FilePopup({ socket, selectedFiles, setSelectedFiles, can
   const [sendingMessage, setSendingMessage] = React.useState(false);
   // const [filesSent, setFileSent] = React.useState(false);
   //functions
-  function upload(captionValue) {
+  function upload() {
     // console.log(selectedFiles);
     // console.log(captionRef.current.value);
     setLoading(true);
@@ -45,7 +45,7 @@ export default function FilePopup({ socket, selectedFiles, setSelectedFiles, can
     .then((result) => {
       setUploadProgress(null);
       setSendingMessage(true);
-      sendFiles(selectedFiles, captionValue)
+      sendFiles(selectedFiles)
       .then((data) => {
         // console.log(data);
         socket.emit("message", data);
@@ -83,7 +83,7 @@ export default function FilePopup({ socket, selectedFiles, setSelectedFiles, can
         <form className="popup-file__form" onSubmit={(evt) => {
           evt.preventDefault();
           // console.log(selectedFiles);
-          upload(captionRef.current.value);
+          upload();
           // sendFiles(selectedFiles, captionRef.current.value);
         }}>
           {/* <div>
