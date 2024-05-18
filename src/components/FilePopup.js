@@ -113,7 +113,7 @@ export default function FilePopup({ socket, selectedFiles, setSelectedFiles, can
                 </li>
               })}
             </ul>
-            <input className="popup-file__form-input" ref={captionRef} name="caption" placeholder="Добавить подпись"></input>
+            {/* <input className="popup-file__form-input" ref={captionRef} name="caption" placeholder="Добавить подпись"></input> */}
             <div className="popup-file-buttons">
                 <button onClick={cancelFile}>Отменить</button>
                 <button type="submit">Отправить</button>

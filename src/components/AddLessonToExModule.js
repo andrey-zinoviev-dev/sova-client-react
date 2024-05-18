@@ -109,7 +109,7 @@ export default function AddLessonToExModule() {
       </TipTapEditor>
       <button style={{margin: "25px 0 0 0"}} onClick={() => {
         setLoading((prevValue) => {
-          return {...prevValue, initiated: true};
+          return {...prevValue, initiated: true, uploaded: true};
         })
         const filteredContent = lessonData.content.content.filter((contentEl) => {
           return  contentEl.type === "image" || contentEl.type === "video" || contentEl.type === "audio";
@@ -121,15 +121,6 @@ export default function AddLessonToExModule() {
           });
         });
 
-        // console.log(finalContentArray);
-
-        // setDataToCreate((prevValue) => {
-        //   return {...prevValue, lessons: prevValue.lessons ? [...prevValue.lessons, lessonData] : [lessonData]};
-        // });
-
-        // setSelectedFiles((prevValue) => {
-        //   return [...prevValue, ...finalContentArray];
-        // });
         Promise.all([...selectedFiles, ...finalContentArray].map((file) => {
           const uploadS3 = new Upload({
             client: new S3({region: process.env.REACT_APP_REGION, credentials: {
@@ -152,12 +143,12 @@ export default function AddLessonToExModule() {
         }))
         .then((result) => {
           setLoading((prevValue) => {
-            return {...prevValue, uploaded: true};
+            return {...prevValue, uploaded: false};
           })
           apiAddLessonToCourse(courseID, moduleID, token, lessonData)
           .then((data) => {
             setLoading((prevValue) => {
-              return {...prevValue, uploaded: false, finished: true};
+              return {...prevValue, finished: true};
             });
             // setLoading((prevValue) => {
             //   return {...prevValue, }
@@ -179,22 +170,43 @@ export default function AddLessonToExModule() {
       </button>
     </div>
     :
-    <div>
+    <div style={{margin: "auto 0"}}>
       <h3>Загрузка урока</h3>
       {!loading.finished ? 
-        loading.upload ? <div style={{width: `${uploadProgress}%`, height: 3, backgroundColor: "#5DB0C7"}}>
+
+        loading.uploaded ? <div style={{width: `${uploadProgress}%`, height: 3, backgroundColor: "#5DB0C7"}}>
         </div>
         :
-        <div>
+        <div style={{display: "flex",
+          alignItems: "center",
+          gap: 15,
+          margin: "30px 0"
+        }}>
           <img className="main__courses-loader-svg" src={SovaLogo} alt="sova-logo"></img>
           <span>Сохранение урока</span>
         </div>
       :
-      <div>
-        <FontAwesomeIcon icon={faCheck} />
+      <div style={{display: "flex",
+        alignItems: "center",
+        gap: 15,
+        margin: "30px 0"}}>
+        <FontAwesomeIcon style={{
+          aspectRatio: "1/1",
+          boxSizing: "content-box",
+          padding: 5,
+          border: "2px solid white",
+          borderRadius: "50%",
+        }} icon={faCheck} />
         <span>Урок успешно добавлен!</span>  
       </div>}
-      {loading.finished && <button>Вернуться к модулю</button>}
+      {loading.finished && <button className="course-edit__button-submit course-edit__ul-btn" onClick={() => {
+        navigate(-1);
+      }}>
+        <FontAwesomeIcon icon={faArrowLeft} />
+        <span>
+          Вернуться к модулю  
+        </span>
+      </button>}
     </div>}
     </section>
   )

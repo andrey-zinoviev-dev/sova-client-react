@@ -1,6 +1,6 @@
 //api variable
-// const apiAdress = 'https://api.sova-courses.site';
-const apiAdress = 'http://localhost:3000';
+const apiAdress = 'https://api.sova-courses.site';
+// const apiAdress = 'http://localhost:3000';
 // 
 //api calls
 function apiLogin(formData) {
@@ -149,13 +149,14 @@ function apiGetModule(courseID, moduleID, token) {
   })
 }
 
-function apiAddModule(courseID, token, content) {
+function apiAddModule(courseID, token, newModule) {
   return fetch(`${apiAdress}/courses/${courseID}/addModule`, {
     method: "PUT",
     headers: {
       'Authorization': token,
+      "Content-Type" : "application/json",
     },
-    body: content,
+    body: JSON.stringify(newModule),
   })
   .then((res) => {
     return res.json();
@@ -233,10 +234,10 @@ function apiEditLessonContent(courseID, moduleID, lessonID, token, content) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/lessons/${lessonID}/content`, {
     method: "PUT",
     headers: {
-      // 'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
       'Authorization': token,
     },
-    body: content,
+    body: JSON.stringify(content),
   })
   .then((res) => {
     return res.json();
@@ -422,6 +423,20 @@ function apiReadFileInMessage(token, messageID, messageData) {
   })
 }
 
+function apiHomeworkEmail(token, admin, homework, receiver, courseID, moduleID, lessonID) {
+  return fetch(`${apiAdress}/homeworkEmail/${courseID}/${moduleID}/${lessonID}`, {
+    method: "POST",
+    headers: {
+      'Authorization': token,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({receiver: receiver, admin: admin, homework: homework})
+  })
+  .then((res) => {
+    return res.json();
+  })
+}
+
 function apiGetAllStudents(token) {
   return fetch(`${apiAdress}/students`, {
     method: 'GET',
@@ -540,6 +555,7 @@ export {
   apiSendMessage,
   apiSendFileInMessage,
   apiReadFileInMessage,
+  apiHomeworkEmail,
   apiGetAllStudents,
   apiAddStudentsToCourse,
   apiNewLessonEmail,

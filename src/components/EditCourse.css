@@ -531,6 +531,11 @@
     margin: 0;
   }
 
+  .course-edit__button-submit {
+    background-color: #26272c;
+    max-width: 280px;
+  }
+
   @media screen and (max-width: 1439px) {
     .course-edit__modules-ul-li {
       padding: 10px 5px;

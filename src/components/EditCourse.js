@@ -284,7 +284,15 @@ export default function EditCourse() {
               {courseData.modules.map((module) => {
                 return <li key={module._id}>
                   <button className="course-edit__ul-li-delete" onClick={() => {
-                    console.log(module);
+                    // console.log(module);
+                    apiDeleteModule(courseID, module._id, token)
+                    .then((data) => {
+                      setCourseData((prevValue) => {
+                        return {...prevValue, modules: prevValue.modules.filter((prevModule) => {
+                          return prevModule._id !== data.moduleID;
+                        })}
+                      })
+                    })
                   }}>
                     <FontAwesomeIcon icon={faTrashCan} />
                   </button>

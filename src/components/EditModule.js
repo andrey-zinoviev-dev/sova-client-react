@@ -207,7 +207,16 @@ export default function EditModule() {
           <ul className="course-edit__ul">
             {moduleData.lessons && moduleData.lessons.map((lesson) => {
               return <li key={lesson._id}>
-                <button className="course-edit__ul-li-delete">
+                <button className="course-edit__ul-li-delete" onClick={() => {
+                  apiDeleteLesson(courseID, moduleID, lesson._id, token)
+                  .then((data) => {
+                    setModuleData((prevValue) => {
+                      return {...prevValue, lessons: prevValue.lessons.filter((prevLesson) => {
+                        return prevLesson._id !== data.lessonID; 
+                      })}
+                    })
+                  })
+                }}>
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
                 <span>{lesson.title}</span>

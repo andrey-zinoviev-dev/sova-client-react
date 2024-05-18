@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft, faArrowRight, faPaperPlane, faPaperclip } from "@fortawesome/free-solid-svg-icons"
 import { UserContext } from "../context/userContext"
 import { createSearchParams, useSearchParams } from "react-router-dom";
-import { apiGetConversation, apiSendMessage, apiSendFileInMessage, apiReadFileInMessage } from "../api"
+import { apiGetConversation, apiSendMessage, apiSendFileInMessage, apiReadFileInMessage, apiHomeworkEmail } from "../api"
 import "./LessonContent.css";
 import { useLocation, useNavigate } from "react-router-dom"
 const FilePopup = React.lazy(() => {
@@ -330,16 +330,21 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
                             }).tarif === 'admin') ? 
                             <>
                               <button onClick={() => {
-                                sendMessage(`${loggedInUser.name} принимает задание`)
+                                sendMessage(`${loggedInUser.name} принимает задание`);
+                                apiHomeworkEmail(token, true, "accept", selectedUser.email, courseID, module._id, lesson._id);
+
                               }}>Принять задание</button>
                               <button onClick={() => {
-                                sendMessage(`${loggedInUser.name} отклоняет задание`)
+                                sendMessage(`${loggedInUser.name} отклоняет задание`);
+                                apiHomeworkEmail(token, true, "decline", selectedUser.email, courseID, module._id, lesson._id);
                               }}>Отклонить задание</button>
                             </> 
                             : 
                             <>
                               <button onClick={() => {
                                 sendMessage(`${loggedInUser.name} отправляет задание`)
+                                apiHomeworkEmail(token, true, "homework", selectedUser.email, courseID, module._id, lesson._id);
+                                // apiHomeworkEmail(token, loggedInUser.email, selectedUser.email, {course: courseID, module: module._id, lesson: lesson._id})
                                 // socket.emit("send homework", {to: author, sendHomework: true})
                               }}>Отправить задание</button>
                             </>

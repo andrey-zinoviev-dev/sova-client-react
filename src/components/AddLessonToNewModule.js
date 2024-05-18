@@ -19,7 +19,7 @@ export default function AddLessonToNewModule({ setAddLesson, setDataToCreate, se
     const uploadedCoverFile = lessonFileRef.current.files[0];
     uploadedCoverFile.clientPath = window.URL.createObjectURL(uploadedCoverFile);
     setLessonData((prevValue) => {
-      return {...prevValue, cover: uploadedCoverFile};
+      return {...prevValue, cover: {title: uploadedCoverFile.name, clientPath: uploadedCoverFile.clientPath, type: uploadedCoverFile.type}};
     });
     setSelectedFiles((prevValue) => {
       return [...prevValue, uploadedCoverFile];
