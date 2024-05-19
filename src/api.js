@@ -1,6 +1,6 @@
 //api variable
-const apiAdress = 'https://api.sova-courses.site';
-// const apiAdress = 'http://localhost:3000';
+// const apiAdress = 'https://api.sova-courses.site';
+const apiAdress = 'http://localhost:3000';
 // 
 //api calls
 function apiLogin(formData) {
@@ -455,10 +455,10 @@ function apiAddStudentsToCourse(courseID, token, students) {
   return fetch(`${apiAdress}/courses/${courseID}/students`, {
     method: "PUT",
     headers: {
-      // 'Content-Type': 'application/json',
+      'Content-Type': 'application/json',
       'Authorization': token,
     },
-    body: students,
+    body: JSON.stringify({students: students}),
   })
   .then((res) => {
     return res.json();

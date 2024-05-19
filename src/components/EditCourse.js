@@ -35,6 +35,7 @@ export default function EditCourse() {
   const courseDescRef = React.useRef();
   const courseCoverRef = React.useRef();
   const courseCoverImgRef = React.useRef();
+  const studentsFileRef = React.useRef();
 
   //states
   const [courseData, setCourseData] = React.useState({
@@ -169,6 +170,47 @@ export default function EditCourse() {
       setSuccessfullMessage('Ученики успешно добавлены!')
     })
   };
+
+  function readCSV(evt) {
+    const file = evt.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const csvData = e.target.result;
+        const addedStudents = convertCSVtoJSON(csvData);
+        apiAddStudentsToCourse(courseID, token, addedStudents)
+        .then((data) => {
+          console.log(data);
+        })
+        // console.log(addedStudents);
+        // setFormData((prevValue) => {
+        //     return {...prevValue, students: addedStudents};
+        // });
+        // console.log(csvData.split("\n"));
+    }
+    reader.readAsText(file)
+};
+
+function convertCSVtoJSON(file) {
+    // console.log(file);
+    const finalJSON = [];
+    const lines = file.split("\n");
+    
+    const headers = lines[0].split(lines[0].includes(";") ? (";") : ",");
+    // console.log(headers);
+
+    let lineIndex = 1;
+    while(lineIndex < lines.length) {
+        const userString = lines[lineIndex].split(lines[lineIndex].includes(";") ? (";") : ",");
+        const obj = {};
+        headers.forEach((header, index) => {
+            // console.log(header.replace(" ",""))
+            obj[header.replace("\r","")] = userString[index].replace("\r","");
+        });
+        finalJSON.push(obj);
+        lineIndex += 1;
+    };
+    return finalJSON;
+}
 
   React.useEffect(() => {
     // console.log(courseID);
@@ -324,127 +366,21 @@ export default function EditCourse() {
                   </span>
                 </button>
               </li>
-              {/* <li key="add-new_module" id="new-module">
-                <button className="course-edit__ul-btn" onClick={(() => {
-                  
-                  navigate({
-                    pathname: `${location.pathname}/add`,
-                  }, {
-                    state: courseData,
-                  })
-                })}>
-                  <FontAwesomeIcon icon={faPlus} />
-                  <span>
-                    Добавить урок
-                  </span>
-                </button>
-
-              </li> */}
             </ul>
-          {/* </>
-          :
-          <>
-            <ul className="course-edit__ul">
-              {courseData.modules.length > 0 && courseData.modules.find((module) => {
-                return module._id === moduleId;
-              }).lessons.map((lesson) => {
-                return <li key={lesson._id}>
-                  <button className="course-edit__ul-li-delete" onClick={() => {
-                    console.log(lesson);
-                  }}>
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
-                  <span>{lesson.title}</span>
-                  <img src={lesson.cover.path} alt={lesson.name}></img>
-                  <button className="course-edit__ul-btn" onClick={() => {
-                    navigate({
-                      pathname: location.pathname,
-                      search: `?${createSearchParams({
-                        moduleId: moduleId,
-                        lessonId: lesson._id
-                      })}`
-                    })
-                  }}>
-                    <span>Изменить</span>
-                    <FontAwesomeIcon icon={faArrowRight} />
-                  </button>
-                </li>
-              })}
-              <li id="new-lesson" key="add-new-lesson">
-                <button>
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-              </li>
-            </ul>
-          </>
-          } */}
-          {/* <div className="course-edit__modules-wrapper">
-            <p style={{margin: "0 0 25px 0"}}>Модули</p>
-            <ul className="course-edit__modules-ul">
-              {courseData._id && courseData.modules.map((module) => {
-                return <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key={module._id}>
-                  <button className="course-edit__modules-ul-li-edit" onClick={() => {
-                    navigate(`../editModule/courses/${courseID}/modules/${module._id}`)
-
-                  }} type="button">
-                    <FontAwesomeIcon icon={faPen} />
-                  </button>
-                  <button type="button" className="course-edit__modules-ul-li-delete" onClick={(evt) => {
-                    evt.stopPropagation();
-                    // console.log(module);
-                    apiDeleteModule(courseID, module._id, token)
-                    .then((data) => {
-                      
-                      setCourseData((prevValue) => {
-
-                        return {...prevValue, modules: data.modules};
-                      });
-
-                    });
-                  }} style={{position: "absolute", border: "none", backgroundColor: "transparent", color: "white", fontSize: 18}}>
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
-                  <h3 className="course-edit__modules-ul-li-headline">{module.title}</h3>
-                  
-                  <img className="course-edit__modules-ul-li-img" src={module.cover} alt="обложка модуля"></img>
-                  
-                  <p className="course-edit__modules-ul-li-p">{module.lessons.length > 0 ? `Уроки ${module.lessons.length}` : `Уроков пока нет`}</p>
-                </motion.li>
-              })}
-              <motion.li whileHover={{ border: "2px solid rgb(93, 176, 199)"}} className="course-edit__modules-ul-li" key="new-module">
-                <h3 className="course-edit__modules-ul-li-headline">Добавить модуль</h3>
-                <button onClick={() => {
-                  navigate(`/addModule/courses/${courseID}`)
-                }} type="button" className="course-edit__modules-ul-li-addButton">
-                  <FontAwesomeIcon icon={faPlus} />
-                </button>
-              </motion.li>
-            </ul>
-          </div> */}
-          {/* <div className="course-edit__students-wrapper">
-            <p>Ученики</p>
-            <div className="course-edit__students-wrapper-btn-wrapper">
-              <p className="course-edit__students-wrapper-btn-wrapper-p">Сейчас на курсе <span className="course-edit__students-wrapper-btn-wrapper-span">{courseData._id && courseData.students.length}</span> студентов</p>
-              <button className="course-edit__students-wrapper-btn-wrapper-btn" onClick={() => {
-                !usersFile.name ?  studentsInputRef.current.click() : uploadStudentsFile()
-              }}>{!usersFile.name ? 'Добавить учеников к курсу через CSV' : 'Отправить CSV файл'}</button>
-              <input ref={studentsInputRef} onChange={(evt => {
-                const uploadedCsv = evt.target.files[0];
-                if(/[А-Я]/.test(uploadedCsv.name)) {
-                  const updatedName = cyrillicToTranslit.transform(uploadedCsv.name, "_");
-                  
-                  Object.defineProperty(uploadedCsv, 'name', {
-                    writable: true,
-                    value: updatedName
-                  });
-                }
-                setUsersFile(uploadedCsv);
-              })} type="file" style={{display: "none"}} accept=".csv"></input>
-            </div>
-          </div> */}
-          {/* <div>
-            
-          </div> */}
+          <div>
+            <span>Ученики: {courseData.students.length}</span>
+            {/* <span>{courseData.students.length}</span> */}
+            <button onClick={() => {
+              studentsFileRef.current.click();
+              // apiAddStudentsToCourse(courseID, token)
+            }}>
+              <FontAwesomeIcon icon={faPlus} />
+              <span>Добавить учеников</span>
+            </button>
+            <input type="file" style={{display: "none"}} ref={studentsFileRef} onInput={(evt) => {
+              readCSV(evt);
+            }}></input>
+          </div>
           <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
               <div className="course-edit__students-wrapper-success-div">
                 <FontAwesomeIcon className="course-edit__students-wrapper-success-div-tick" icon={faCheck} />
