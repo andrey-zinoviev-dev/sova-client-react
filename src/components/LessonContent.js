@@ -331,19 +331,18 @@ export default function LessonContent({ socket, courseID, lesson, setLesson, mod
                             <>
                               <button onClick={() => {
                                 sendMessage(`${loggedInUser.name} принимает задание`);
-                                apiHomeworkEmail(token, true, "accept", selectedUser.email, courseID, module._id, lesson._id);
-
+                                apiHomeworkEmail(token, true, "accept", loggedInUser._id, selectedUser.email, courseID, module._id, lesson._id);
                               }}>Принять задание</button>
                               <button onClick={() => {
                                 sendMessage(`${loggedInUser.name} отклоняет задание`);
-                                apiHomeworkEmail(token, true, "decline", selectedUser.email, courseID, module._id, lesson._id);
+                                apiHomeworkEmail(token, true, "decline", loggedInUser._id, selectedUser.email, courseID, module._id, lesson._id);
                               }}>Отклонить задание</button>
                             </> 
                             : 
                             <>
                               <button onClick={() => {
                                 sendMessage(`${loggedInUser.name} отправляет задание`)
-                                apiHomeworkEmail(token, false, "homework", selectedUser.email, courseID, module._id, lesson._id);
+                                apiHomeworkEmail(token, false, "homework", loggedInUser._id, selectedUser.email, courseID, module._id, lesson._id);
                                 // apiHomeworkEmail(token, loggedInUser.email, selectedUser.email, {course: courseID, module: module._id, lesson: lesson._id})
                                 // socket.emit("send homework", {to: author, sendHomework: true})
                               }}>Отправить задание</button>

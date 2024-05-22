@@ -3,15 +3,32 @@ import "./SendEmail.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faC, faCheck, faPaperPlane, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { apiSendEmailToStudents } from "../api";
+import TipTapEmail from "./TipTapEmail";
 
 export default function SendEmail({selectedCourse, setSelectedCourseId, setEmailCourse, token}) {
   // const { state } = useLocation();
   // const naviagte = useNavigate();
   const [selectedTarifs, setSelectedTarifs] = React.useState([]);
   const [successfullNotification, setSuccessfullNotification] = React.useState(false);
+  const [emailContent, setEmailContent] = React.useState(null);
 
   //refs
   const emailRef = React.useRef();
+
+  //memo
+  const studentsToNotify = React.useMemo(() => {
+    // console.log(selectedCourse.students);
+    // console.log(selectedCourse._id);
+    return selectedCourse.students.filter((courseStudent) => {
+      const courseTarif = courseStudent.courses.find((course) => {
+        return course.id === selectedCourse._id;
+      }).tarif;
+      
+      return selectedTarifs.includes(courseTarif);
+    });
+  }, [selectedTarifs]);
+
+  // console.log(studentsToNotify);
 
   return (
     <section className="email">
@@ -22,10 +39,9 @@ export default function SendEmail({selectedCourse, setSelectedCourseId, setEmail
           }}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
-          {successfullNotification ? <div>
-            <div>
-              <FontAwesomeIcon icon={faCheck} />  
-            </div>
+          {successfullNotification ? <div style={{display: "flex", alignItems: "center", gap: 15}}>
+            <FontAwesomeIcon style={{aspectRatio: "1/1", padding: 7, border: "2px solid white", borderRadius: "50%"}} icon={faCheck} />  
+
             <h3>Уведомление успешно отправлено</h3>
           </div>
           :
@@ -53,7 +69,19 @@ export default function SendEmail({selectedCourse, setSelectedCourseId, setEmail
                 </li>
               })}
             </ul>
-            <form className="email__form" onSubmit={(evt) => {
+            <TipTapEmail setEmailContent={setEmailContent}></TipTapEmail>
+            <button className={selectedTarifs.length === 0 ? "email__button-send email__button-send_disabled" : "email__button-send"} disabled={selectedTarifs.length === 0 ? true : false} onClick={() => {
+              console.log(emailContent);
+              console.log(studentsToNotify);
+              apiSendEmailToStudents(token, selectedCourse._id, {message: emailContent, users: studentsToNotify, courseName: selectedCourse.name})
+              .then((data) => {
+                setSuccessfullNotification(true);
+              })
+            }}>
+                <span>Отправить</span>
+                <FontAwesomeIcon icon={faPaperPlane} />
+            </button>
+            {/* <form className="email__form" onSubmit={(evt) => {
               evt.preventDefault();
               // console.log(selectedTarifs);
               // console.log(selectedCourse.students);
@@ -79,7 +107,7 @@ export default function SendEmail({selectedCourse, setSelectedCourseId, setEmail
                 <span>Отправить</span>
                 <FontAwesomeIcon icon={faPaperPlane} />
               </button>
-            </form>
+            </form> */}
           </>
           }
 

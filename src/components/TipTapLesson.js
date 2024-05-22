@@ -6,6 +6,7 @@ import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Node, mergeAttributes } from "@tiptap/react";
 import "./AddCourse.css";
+import Link from '@tiptap/extension-link'
 
 export default function TipTapLesson({selectedLesson, setLessonData, setSelectedFiles}) {
   // console.log(selectedLesson);
@@ -51,6 +52,15 @@ export default function TipTapLesson({selectedLesson, setLessonData, setSelected
             Image,
             Placeholder.configure({
                 placeholder: "Добавьте контент уроку..."
+            }),
+            Link.configure({
+              openOnClick: true,
+              rel: "opener",
+              target: "_blank",
+              linkOnPaste: true,
+              HTMLAttributes: {
+                class: "email__link"
+              }
             }),
             Video
         ],

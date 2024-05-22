@@ -4,7 +4,7 @@ import { faImage, faFilm } from "@fortawesome/free-solid-svg-icons";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 
-export default function TipTapButtons ({ formData, editor, selectedFiles, setSelectedFiles }) {
+export default function TipTapButtons ({ formData, email, editor, selectedFiles, setSelectedFiles }) {
   // console.log(content.content);
   //token
   const token = localStorage.getItem('token');
@@ -197,22 +197,25 @@ export default function TipTapButtons ({ formData, editor, selectedFiles, setSel
           return editor.chain().focus().toggleHeading({level: 6}).run();
         }}>H6</button>
       </li>
-      <li>
-        <button type="button" className={editor.isActive('image') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'} onClick={() => {
-          imageInputRef.current.click();
-        }}>
-          <FontAwesomeIcon icon={faImage} />
-          <input ref={imageInputRef} onChange={handleFileChange} type="file" name="image" style={{display: "none"}}/>
-        </button>
-      </li>
-      <li>
-        <button type="button" className={editor.isActive('video') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'} onClick={() => {
-          videoInputRef.current.click();
-        }}>
-          <FontAwesomeIcon icon={faFilm} />
-          <input ref={videoInputRef} onChange={handleVideoUpload} type="file" name="video" style={{display: "none"}}/>
-        </button>
-      </li>
+      {!email && <>
+        <li>
+          <button type="button" className={editor.isActive('image') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'} onClick={() => {
+            imageInputRef.current.click();
+          }}>
+            <FontAwesomeIcon icon={faImage} />
+            <input ref={imageInputRef} onChange={handleFileChange} type="file" name="image" style={{display: "none"}}/>
+          </button>
+        </li>
+        <li>
+          <button type="button" className={editor.isActive('video') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'} onClick={() => {
+            videoInputRef.current.click();
+          }}>
+            <FontAwesomeIcon icon={faFilm} />
+            <input ref={videoInputRef} onChange={handleVideoUpload} type="file" name="video" style={{display: "none"}}/>
+          </button>
+        </li>
+      </> }
+      
     </ul>
   )
 }
