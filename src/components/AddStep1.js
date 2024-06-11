@@ -6,13 +6,17 @@ import { faCamera } from "@fortawesome/free-solid-svg-icons";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import { createSearchParams, useNavigate } from "react-router-dom";
 import axiosClient from '../axios';
+import { apiCreateCourse } from "../api";
+import { UserContext } from "../context/userContext";
+import { Upload } from "@aws-sdk/lib-storage";
+import { S3 } from "@aws-sdk/client-s3";
 // import { useSearchParams } from "react-router-dom";
 
 export default function AddStep1({token, formData, setFormData, formStep, setFormStep, setSelectedFiles}) {
     //navigate
     const navigate = useNavigate();
 
-    const { course } = formData;
+    // const { course } = formData;
   
     const cyrillicToTranslit = new CyrillicToTranslit();
 
@@ -20,6 +24,11 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
     const [disableButton, setDisableButton] = React.useState(true);
     const [selectedImage, setSelectedImage] = React.useState({});
     const [errorMessage, setErrorMessage] = React.useState("");
+    const [newCourseData, setNewCourseData] = React.useState({});
+
+    //loggedInUser
+    const loggedInUser = React.useContext(UserContext);
+
     // let [searchParams, setSearchParams] = useSearchParams();
 
     //refs
@@ -43,7 +52,7 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
         reader.onload = (e) => {
             const csvData = e.target.result;
             const addedStudents = convertCSVtoJSON(csvData);
-            setFormData((prevValue) => {
+            setNewCourseData((prevValue) => {
                 return {...prevValue, students: addedStudents};
             });
             // console.log(csvData.split("\n"));
@@ -88,13 +97,16 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
     }
 
     function saveInputChanges(name, value) {
+        setNewCourseData((prevValue) => {
+            return {...prevValue, [name]: value};
+        });
         // console.log(name, value);
         // localStorage.setItem("courseData", JSON.stringify({...formData, course: {
         //     ...formData.course, [name]: value
         // }}))
-        setFormData({...formData, course: {
-            ...formData.course, [name]: value,
-        }})
+        // setFormData({...formData, course: {
+        //     ...formData.course, [name]: value,
+        // }})
     };
 
     //effects
@@ -148,25 +160,66 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
     return (
         <form onSubmit={(evt) => {
             evt.preventDefault();
-            setFormStep((prevValue) => {
-                return prevValue + 1;
+            // console.log(newCourseData);
+            const uploadS3 = new Upload({
+                client: new S3({region: process.env.REACT_APP_REGION, credentials: {
+                    secretAccessKey: process.env.REACT_APP_SECRET,
+                    accessKeyId: process.env.REACT_APP_ACCESS
+                }, endpoint: "https://storage.yandexcloud.net"}),
+                params: {Bucket: process.env.REACT_APP_NAME, Key: newCourseData.cover.name, Body: newCourseData.cover, ContentType: newCourseData.cover.type},
+                queueSize: 4,
+                partSize: 10 * 1024 * 1024,
             });
+
+            uploadS3.on("httpUploadProgress", (progress) => {
+                console.log(progress);
+            })
+
+            uploadS3.done()
+            .then((data) => {
+                console.log(data);
+                axiosClient.post(`/courses/add`, {courseData: newCourseData, author: loggedInUser}, {
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type': 'application/json',
+                    },
+                // signal: signal,
+                // onUploadProgress: (evt) => {
+                //     setUploadProgress(Math.floor(evt.progress * 100));
+                // }
+                })
+                .then((response) => {
+                    setFormStep((prevValue) => {
+                        return prevValue + 1;
+                    })
+                })
+            })
+
+
+
+
+            // console.log(uploadS3Client);
+            // apiCreateCourse(token, )
+            // setFormStep((prevValue) => {
+            //     return prevValue + 1;
+            // });
         }} style={{margin: "0 auto", width: "100%", height: "100%", textAlign: "left", display: "flex", flexDirection: "column", alignItems: "flex-start", justifyContent: "space-between", maxWidth: 1280, boxSizing: "border-box"}}>
             <div style={{display: "flex", alignItems: "flex-start", justifyContent: "space-between", margin: "35px auto", width: "100%"}}>
                 <div style={{display: "flex", flexDirection: "column", justifyContent:"space-between", alignItems: "stretch", gap: 35}}>
                     <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Название курса</label> */}
-                        <input className="addCourse__form-input" placeholder="Введите название курса" name="name" value={formData.course.name} onChange={(evt) => {
+                        <input className="addCourse__form-input" placeholder="Введите название курса" name="name" onChange={(evt) => {
                                     // localStorage.setItem(evt.target.name, evt.target.value);
-                            setFormData({...formData, course: {
-                                 ...formData.course, name: evt.target.value,
-                            }})
+                            // setFormData({...formData, course: {
+                            //      ...formData.course, name: evt.target.value,
+                            // }})
+                            saveInputChanges(evt.target.name, evt.target.value);
                         }}></input>
                         {errorMessage.length > 0 && <p style={{marginLeft: "0 0 0 10px", color: "#ff4949"}}>{errorMessage}</p>}
                     </div>
                     <div className="addCourse__form-div" style={{display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start"}}>
                                 {/* <label>Описание курса</label> */}
-                        <input className="addCourse__form-input" name="description" placeholder="Введите описание курса" value={course.description} onChange={(evt) => {
+                        <input className="addCourse__form-input" name="description" placeholder="Введите описание курса" onChange={(evt) => {
                                     // localStorage.setItem(evt.target.name, evt.target.value);
                                     // setFormData({...formData, course: {
                                     //     ...formData.course, description: evt.target.value,
@@ -180,27 +233,21 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
                                 const tarifs = evt.target.value.split(",").map((tarif) => {
                                     return {name: tarif, expire: ""};
                                 });
-                                setFormData((prevValue) => {
-                                    return {...prevValue, tarifs: tarifs};
-                                });
-                                // console.log(tarifs);
-                                // const tarifsUpdated = tarifs.map((tarif) => {
-                                //     return tarif.replace(" ","");
-                                // });
-                                // console.log(tarifsUpdated);
-                                // saveInputChanges(evt.target.name, tarifs)
-                            }} value={course.tarifs} name="tarifs" placeholder="Тарифы курса через запятую"></input>
+                                saveInputChanges(evt.target.name, tarifs);
+                            }} name="tarifs" placeholder="Тарифы курса через запятую"></input>
                             <input ref={inputFileRef} name="cover" type="file" onChange={(evt) => {processFile(evt)}} style={{display: "none"}}></input>
                         </div>                            
                     </div>
-                    {formData.tarifs.length > 0 &&<ul style={{listStyle: "none", padding: 0}}>
-                        {formData.tarifs.map((tarif, index) => {
+                    {/* {newCourseData.tarifs.length > 0 && */}
+                    <ul style={{listStyle: "none", padding: 0}}>
+                        {newCourseData.tarifs && newCourseData.tarifs.map((tarif, index) => {
                             // console.log(tarif);
                             return <li style={{padding: "15px 0 0 0"}} key={tarif.name}>
                                 <label htmlFor={`tarif ${tarif}`}>Доступ для тарифа {index + 1}</label>
                                 <input id={`tarif ${tarif}`} onChange={(evt) => {
+
                                     // console.log(evt.target.name, evt.target.value);
-                                    setFormData((prevValue) => {
+                                    setNewCourseData((prevValue) => {
                                         return {...prevValue, tarifs: prevValue.tarifs.map((tarif, index) => {
                                             // console.log(index, evt.target.name)
                                             return index === +evt.target.name? {...tarif, expire: evt.target.value} : tarif;
@@ -213,7 +260,7 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
                             <label htmlFor={`tarif start`}>Начало доступа</label>
                             <input key="tarifs start" id={`tarifs start`} onChange={(evt) => {
                                     // console.log(evt.target.name, evt.target.value);
-                                setFormData((prevValue) => {
+                                setNewCourseData((prevValue) => {
                                     return {...prevValue, tarifs: prevValue.tarifs.map((tarif) => {
                                             // console.log(index, evt.target.name)
                                         return {...tarif, start: evt.target.value};
@@ -221,11 +268,12 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
                                 })
                             }} className="addCourse__form-input" style={{colorScheme: "dark"}} type="date" name="tarifs start" placeholder={`Начало доступа к курсу`}></input>
                         </li>
-                    </ul>}
+                    </ul>
+                    {/* } */}
                     {/* {formData.tarifs.length > 0 && <div style={{display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "space-between", gap: 25}}>
                     </div>} */}
                     <div>
-                        <p>Ученики: {formData.students.length}</p>
+                        <p>Ученики: {newCourseData.students ? newCourseData.students.length : 0}</p>
                         <input type="file" ref={studentsRef} onChange={(evt) => {
                             readCSV(evt);
                         }} style={{display: "none"}}></input>
@@ -235,7 +283,7 @@ export default function AddStep1({token, formData, setFormData, formStep, setFor
                     </div>
                 </div>
                 <div style={{position: "relative", boxSizing: "border-box", display: "flex"}}>
-                    <img ref={imgRef} style={{width: 230, borderRadius: 12, aspectRatio: "1/1", objectFit: "cover", objectPosition: "top"}} src={formData.course.cover.clientPath ? formData.course.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="} alt="обложка курса"/>
+                    <img ref={imgRef} style={{width: 230, borderRadius: 12, aspectRatio: "1/1", objectFit: "cover", objectPosition: "top"}} src={newCourseData.cover ? newCourseData.cover.clientPath : "https://media.istockphoto.com/id/1147544807/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%BD%D0%B5%D1%82-thumbnail-%D0%B8%D0%B7%D0%BE%D0%B1%D1%80%D0%B0%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5-%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80-%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg?s=612x612&w=0&k=20&c=qA0VzNlwzqnnha_m2cHIws9MJ6vRGsZmys335A0GJW4="} alt="обложка курса"/>
                     <button onClick={openFileInput} type="button" style={{position: "absolute", bottom: -10, right: -10, width: 45, height: 45, border: "none", borderRadius: "51%", fontSize: 20, display: "flex", justifyContent: "center", alignItems: "center"}}>
                         <FontAwesomeIcon icon={faCamera} />
                     </button>

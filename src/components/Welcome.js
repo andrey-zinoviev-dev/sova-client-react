@@ -48,6 +48,7 @@ export default function Welcome({ errorMessage, loginFormSubmit, registerFormSub
   const [passwordRestorePressed, setPasswordRestorePressed] = React.useState(false);
   const [passwordRestorerStep, setPasswordRestoreStep] = React.useState(0);
   const [userToUpdateData, setUserToUpdateData] = React.useState({email: "", password: ""});
+  // const []
   // const [initiateAnimation, setInitiateAnimation] = React.useState(0);
 
   function openWelcomePopupLogin() {
@@ -64,6 +65,7 @@ export default function Welcome({ errorMessage, loginFormSubmit, registerFormSub
 
   function closePopups() {
     setPopupOpened(false);
+    setRegisterPopupOpened(false);
     // setLoginButtonPressed(false);
     // setInitiateAnimation(0);
   };
@@ -96,6 +98,11 @@ export default function Welcome({ errorMessage, loginFormSubmit, registerFormSub
     // registerFormSubmit(objToPost);
     // submitForgetPasswordForm(objToPost);
   };
+
+  function submitRegisterForm(evt) {
+    evt.preventDefault();
+    console.log("register popup");
+  }
 
   function renderNewPassword () {
     switch(passwordRestorerStep) {
@@ -182,7 +189,11 @@ export default function Welcome({ errorMessage, loginFormSubmit, registerFormSub
               <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
                 setPopupOpened(true);
               }}>войти</motion.button>
-              {/* <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
+              <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
+                setRegisterPopupOpened(true);
+              }}>
+                Регистрация  
+              </motion.button>              {/* <motion.button className='welcome__content-button' whileHover={{backgroundColor: "rgb(93, 176, 199, 1)"}} onClick={() => {
                 setRegisterPopupOpened(true);
               }}>зарегистрироваться</motion.button> */}
             </div>
@@ -272,6 +283,30 @@ export default function Welcome({ errorMessage, loginFormSubmit, registerFormSub
         </RefreshPass>}
       </div>
       {/* <RefreshPass */}
+      <div className="popup__overlay">
+
+      </div>
+    </PopupWithForm>
+    <PopupWithForm popupOpened={registerPopupOpened} closePopups={closePopups} loginButtonPressed={loginButtonPressed}>
+      <div className='popup__right-wrapper'>
+        <h3 className='popup__right-wrapper-headline'>Регистрация</h3>
+        <form className="popup__form" onSubmit={(evt) => {submitRegisterForm(evt)}}>
+          <p className='popup__form-error'>{errorMessage}</p>
+          <button type="submit" className="popup__close" onClick={closePopups}>
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+          <div className='popup__right-wrapper-div'>
+            <input ref={loginEmailRef} autoComplete='off' type="text" className="popup__form-input" name="email" placeholder="почта" />
+          </div>
+          <div className='popup__right-wrapper-div' style={{position: "relative"}}>
+            <input ref={loginPasswordRef} autoComplete='off' type="password" className="popup__form-input" name="password" id="" placeholder="пароль" />
+            <motion.button onClick={() => {
+              setPasswordRestorePressed(true);
+            }} whileHover={{border: "2px solid #5DB0C7", color: "rgba(255, 255, 255, 1)"}} style={{minWidth: 30, minHeight: 30, position: "absolute", top: 0, right: 0, margin: 0, border: "2px solid #5db0c79c", color: "rgba(255, 255, 255, 0.7)"}} className="popup__form-button" type='button'>?</motion.button>
+          </div>
+          <button className="popup__form-button" type="submit" data-type="login">Войти</button>
+        </form>
+      </div>
       <div className="popup__overlay">
 
       </div>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: "https://api.sova-courses.site"
-    // baseURL: 'http://localhost:3000'
+    // baseURL: "https://api.sova-co÷urses.site"
+    baseURL: 'http://localhost:3000'
 });
