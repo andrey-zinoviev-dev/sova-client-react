@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import SovaLogo from '../images/sova-logo-white.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faLock, faEnvelope, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faLock, faEnvelope, faTrash, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 // import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { UserContext } from "../context/userContext";
 // import Menu from "./Menu";
@@ -277,7 +277,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
 
       Promise.all([coursesFromApi, allStudentsFromApi])
       .then(([coursesReceived, studentsReceived]) => {
-        // console.log(coursesReceived);
+        console.log(coursesReceived);
         // console.log(coursesIds);
         const coursesToRender =  loggedInUser.admin ? coursesReceived
         : 
@@ -291,6 +291,10 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
           //   return userCourse.id === courseReceived._id;
           // }) ? {...courseReceived, available: true} : {...courseReceived, available: false};
         });
+
+        console.log(coursesReceived.filter((course) => {
+          return !course.hidden;
+        }))
 
         setCoursesData({courses: coursesToRender, allStudents: studentsReceived});
         setCoursesLoading(false);
@@ -335,13 +339,22 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                 navigate(`courses/${course._id}`, {
                   state: course
                 })
-              }} style={{pointerEvents: !course.available && "none", position: "relative", zIndex: 20, width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "20px 35px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
+              }} style={{pointerEvents: !course.available && "none", position: "relative", zIndex: 20, width: "100%", height: "100%", backgroundColor: "transparent", borderRadius: 5, border: "none", boxSizing: "border-box", padding: "15px", display: "flex", flexDirection: "column", justifyContent: "space-between", alignContent: "flex-start"}}>
                 
                 <div style={{position: "relative", zIndex: 20, width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", minWidth: 35, fontSize: 28, color: "white"}}>
                   <p style={{margin: 0}}>0{index + 1}</p>
                   {/* <motion.div variants={dotColor} style={{backgroundColor: "#5DB0C7", width: 5, height: 5, borderRadius: "51%", margin: "0 0 6px 0"}}></motion.div> */}
                   {loggedInUser._id && loggedInUser.admin &&
                     <div className="main__courses-ul-li-buttons">
+                      <button onClick={(evt) => {
+                        evt.stopPropagation();
+                        console.log("show course");
+                        // navigate(`../sendEmail/${course._id}`, {
+                        //   state: course,
+                        // })
+                      }}>
+                        <FontAwesomeIcon icon={faEye} />
+                      </button>
                       <button onClick={(evt) => {
                         evt.stopPropagation();
                         setSelectedCourseId(course._id);
@@ -376,7 +389,7 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
                   <h3 style={{margin: 0, letterSpacing: 2, width: "100%", height: "100%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "white", fontSize: 24}}>{course.name}</h3>
                   <div style={{width: "100%", display: "flex", justifyContent: "space-between", alignItems: "flex-end", margin: "10px 0 0 0"}}>
                     <motion.p style={{margin: 0, color: "rgb(249, 249, 249)", fontSize: 20}}>{course.author.name}</motion.p>
-                
+                    {course.hidden && <FontAwesomeIcon style={{color: "#C7C7C9", width: "100%", height: "100%", maxWidth: 20 }} icon={faEyeSlash} />}
                     {!course.available && <FontAwesomeIcon style={{color: "#C7C7C9", width: "100%", height: "100%", maxWidth: 20 }} icon={faLock} />}
                   </div>
 

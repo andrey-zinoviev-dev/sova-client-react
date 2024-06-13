@@ -135,6 +135,17 @@ function apiDeleteCourse(token, courseID) {
   })
 };
 
+function apiShowHideCourse(token, courseID, hiddenState) {
+  return fetch(`${apiAdress}/courses/${courseID}/render`, {
+    method: "PUT",
+    headers: {
+      "Authorization": token,
+      "Content-Type": 'application/json'
+    },
+    body: JSON.stringify({hidden: hiddenState})
+  })
+};
+
 function apiGetModule(courseID, moduleID, token) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}`, {
     headers: {
@@ -540,6 +551,7 @@ export {
   apiUpdateModuleTitle,
   apiUpdateModuleCover,
   apiEditCourse,
+  apiShowHideCourse,
   apiDeleteModule,
   apiDeleteLesson,
   apiAddModule,
