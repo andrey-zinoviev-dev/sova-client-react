@@ -4,13 +4,14 @@ import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { NavLink, useLocation, useParams, useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription, apiGetModule } from "../api";
+import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft, faArrowRight, faEye, faLock } from "@fortawesome/free-solid-svg-icons";
+import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription, apiGetModule, apiEditAccess, apiShowHideCourse } from "../api";
 
 import { Upload } from "@aws-sdk/lib-storage";
 import { S3 } from "@aws-sdk/client-s3";
 
 import axiosClient from '../axios';
+import EditCourseRender from "./EditCourseRender";
 
 export default function EditCourse() {
   const cyrillicToTranslit = new CyrillicToTranslit();
@@ -50,13 +51,16 @@ export default function EditCourse() {
   const [successfulMessage, setSuccessfullMessage] = React.useState(null);
   const [usersFile, setUsersFile] = React.useState({});
   const [inputTimeout, setInputTimeout] = React.useState(null);
-  const [moduleToUpdate, setModuleToUpdate] = React.useState(null);
+  const [moduleIdSelected, setModuleIdSelected] = React.useState(null);
   const [lessonToUpdate, setLessonToUpdate] = React.useState(null);
   const [coverFile, setCoverFile] = React.useState(null);
   const [upload, setUpload] = React.useState(null);
+  const [editModuleAccess, setEditModuleAccess] = React.useState(false);
 
   //derived state
-  let selectedModule;
+  let selectedModule = courseData.modules.find((module) => {
+    return module._id === moduleIdSelected;
+  });
   //variants
     const backBtnVariant = {
       hover: {
@@ -90,36 +94,6 @@ export default function EditCourse() {
   // const courseCoverRef = React.useRef();
 
   //functions
-  function updateCourseTitle (evt) {
-    // console.log(evt.target.value);
-    clearTimeout(inputTimeout);
-
-    setInputTimeout(setTimeout(() => {
-      apiUpdateCourseTitle(token, courseID, {name: evt.target.value})
-      .then((data) => {
-        setCourseData((prevValue) => {
-          return {...prevValue, name: data.name};
-        });
-        setSuccessfullMessage(data.message);
-      })    
-    }, 1500))
-    
-  };
-
-  function updateCourseDescription(evt) {
-    clearTimeout(inputTimeout);
-
-    setInputTimeout(setTimeout(() => {
-      apiUpdateCourseDescription(token, courseID, {desc: evt.target.value})
-      .then((data) => {
-        setCourseData((prevValue) => {
-          return {...prevValue, description: data.description};
-        });
-        setSuccessfullMessage(data.message);
-      })
-    }, 1500))
-  };
-
   function handleCoverEdit() {
     // console.log('yes');
     const uploadedCoverFile = courseCoverRef.current.files[0];
@@ -153,22 +127,6 @@ export default function EditCourse() {
     //   });
     //   setSuccessfullMessage(data.message);
     // })
-  };
-
-  function uploadStudentsFile() {
-    const form = new FormData();
-    form.append('usersFile', usersFile);
-
-    apiAddStudentsToCourse(courseID, token, form)
-    .then((data) => {
-      if(!data) {
-        return;
-      }
-      setCourseData((prevValue) => {
-        return {...prevValue, students: data.students};
-      })
-      setSuccessfullMessage('Ученики успешно добавлены!')
-    })
   };
 
   function readCSV(evt) {
@@ -212,6 +170,24 @@ function convertCSVtoJSON(file) {
     return finalJSON;
 }
 
+function moduleEditAvilable() {
+  console.log("api request to modify module access");
+  console.log(selectedModule);
+  apiShowHideCourse(token, courseID, {moduleID: selectedModule._id, hidden: selectedModule.available})
+  .then((data) => {
+    console.log(data);
+  })
+  // apiEditAccess(token, courseID, selectedModule._id, selectedModule.access)
+  // .then((data) => {
+  //   console.log(data);
+  // })
+};
+
+function closeModueEditAvailable() {
+  setModuleIdSelected(null);
+  setEditModuleAccess(false);
+}
+
   React.useEffect(() => {
     // console.log(courseID);
     apiGetCourse(courseID, token)
@@ -234,160 +210,176 @@ function convertCSVtoJSON(file) {
   }, [successfulMessage]);
 
   return (
-    <section className="course-edit">
-      <div className="course-edit__wrapper">
-          <div className="course-edit__wrapper-back">
-              <button onClick={() => {
-                navigate({
-                  pathname: "/"
-                });
-              }}>
-                  <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
-                  <p>Назад к курсам</p>
-              </button>   
-              <h3>Редактировать курс {courseData.name}</h3>
-            </div>
-            <form className="course-edit__form">
-              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start"}}>
-                  <label style={{display: "block"}} htmlFor="course-desc">Название</label>
-                  <input className="course-edit__form-input" autoComplete="off" ref={courseNameRef}></input>
-                  <button type="button" className="course-edit__form-btn" onClick={() => {
-                    // console.log(courseNameRef.current.value);
-                    apiUpdateCourseTitle(token, courseID, {name: courseNameRef.current.value})
-                    .then((data) => {
-                      setSuccessfullMessage("Название обновлено");
-                    });
-                  }}>
-                    <span>Обновить название</span>
-                    <FontAwesomeIcon icon={faArrowRight} />
-                  </button>
-              </div>
-              <div style={{width: "100%", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start"}}>
-                <label style={{display: "block"}} htmlFor="course-desc">Описание</label> 
-                <textarea className="course-edit__form-textarea" ref={courseDescRef}></textarea>
-                <button type="button" className="course-edit__form-btn" onClick={() => {
-                  apiUpdateCourseDescription(token, courseID, {desc: courseDescRef.current.value})
-                  .then((data) => {
-                    setSuccessfullMessage("Описание обновлено");
-                  })
-                }}>
-                  <span>Обновить описание</span>
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
-              </div>
-              <div style={{textAlign: "left", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
-                <span style={{display: "block"}}>Обложка курса</span>
-                <div style={{position: "relative", display: "flex"}}>
-                  <img src={courseData.cover.path} style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} ref={courseCoverImgRef} alt="Обложка курса"></img>
-                  <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
-                    courseCoverRef.current.click();
-                  })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>
-                    <p>Изменить обложку</p>
-                    
-                  </motion.button>
-                  <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
-                </div>
-                <button type="button" className="course-edit__form-btn" onClick={() => {
-                  setUpload({start: true});
-                  // console.log(coverFile);
-                  const uploadS3 = new Upload({
-                    client: new S3({region: process.env.REACT_APP_REGION, credentials: {
-                      secretAccessKey: process.env.REACT_APP_SECRET,
-                      accessKeyId: process.env.REACT_APP_ACCESS
-                    }, endpoint: "https://storage.yandexcloud.net"}),
-                    params: {Bucket: process.env.REACT_APP_NAME, Key: coverFile.name, Body: coverFile},
-                    queueSize: 4,
-                    partSize: 10 * 1024 * 1024,
+    <>
+      <section className="course-edit">
+        <div className="course-edit__wrapper">
+            <div className="course-edit__wrapper-back">
+                <button onClick={() => {
+                  navigate({
+                    pathname: "/"
                   });
-                  
-                  uploadS3.on("httpUploadProgress", (progress) => {
-                    setUpload((prevValue) => {
-                      return {...prevValue, name: progress.Key, progress: progress.loaded/progress.total * 100}
-                    });
-                  })
-                  
-                  return uploadS3.done()
-                  .then((result) => {
-                    apiUpdateCourseCover(token, courseID, {title: coverFile.name, type: coverFile.type})
-                    .then((data) => {
-                      setUpload(null);
-                      setSuccessfullMessage("Обложка обновлена");   
-                    })
-                    // setUpload(null);
-                    // setSuccessfullMessage("Обложка обновлена");
-                  })
                 }}>
-                  <span>Обновить обложку</span>
-                  <FontAwesomeIcon icon={faArrowRight} />
-                </button>
+                    <FontAwesomeIcon className="course__info-back-btn-svg" icon={faArrowLeft} />
+                    <p>Назад к курсам</p>
+                </button>   
+                <h3>Редактировать курс {courseData.name}</h3>
               </div>
-            </form>
-            <ul className="course-edit__ul">
-              {courseData.modules.map((module) => {
-                return <li key={module._id}>
-                  <button className="course-edit__ul-li-delete" onClick={() => {
-                    // console.log(module);
-                    apiDeleteModule(courseID, module._id, token)
+              <form className="course-edit__form">
+                <div style={{width: "100%", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start"}}>
+                    <label style={{display: "block"}} htmlFor="course-desc">Название</label>
+                    <input className="course-edit__form-input" autoComplete="off" ref={courseNameRef}></input>
+                    <button type="button" className="course-edit__form-btn" onClick={() => {
+                      // console.log(courseNameRef.current.value);
+                      apiUpdateCourseTitle(token, courseID, {name: courseNameRef.current.value})
+                      .then((data) => {
+                        setSuccessfullMessage("Название обновлено");
+                      });
+                    }}>
+                      <span>Обновить название</span>
+                      <FontAwesomeIcon icon={faArrowRight} />
+                    </button>
+                </div>
+                <div style={{width: "100%", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start"}}>
+                  <label style={{display: "block"}} htmlFor="course-desc">Описание</label> 
+                  <textarea className="course-edit__form-textarea" ref={courseDescRef}></textarea>
+                  <button type="button" className="course-edit__form-btn" onClick={() => {
+                    apiUpdateCourseDescription(token, courseID, {desc: courseDescRef.current.value})
                     .then((data) => {
-                      setCourseData((prevValue) => {
-                        return {...prevValue, modules: prevValue.modules.filter((prevModule) => {
-                          return prevModule._id !== data.moduleID;
-                        })}
-                      })
+                      setSuccessfullMessage("Описание обновлено");
                     })
                   }}>
-                    <FontAwesomeIcon icon={faTrashCan} />
-                  </button>
-                  <span>{module.title}</span>
-                  <img src={module.cover.path} alt={module.name}></img>
-                  <span>Уроки: {module.lessons.length}</span>
-                  <button className="course-edit__ul-btn" onClick={() => {
-                    navigate({
-                      pathname: `${location.pathname}/modules/${module._id}`,
-                    })
-                  }}>
-                    <span>Изменить</span>
+                    <span>Обновить описание</span>
                     <FontAwesomeIcon icon={faArrowRight} />
+                  </button>
+                </div>
+                <div style={{textAlign: "left", display: "flex", flexDirection: "column", gap: 25, justifyContent: "flex-start", alignItems: "flex-start", width: "100%"}}>
+                  <span style={{display: "block"}}>Обложка курса</span>
+                  <div style={{position: "relative", display: "flex"}}>
+                    <img src={courseData.cover.path} style={{objectFit: "cover", width: "100%", aspectRatio: "16/10", height: "100%", boxSizing: "border-box", borderRadius: 9, border: "2px solid white"}} ref={courseCoverImgRef} alt="Обложка курса"></img>
+                    <motion.button whileHover={{opacity: 1}} type="button" onClick={(() => {
+                      courseCoverRef.current.click();
+                    })} style={{position: "absolute", backgroundColor: "rgba(0, 0, 0, 0.5)", color: "white", fontSize: 20, bottom: 0, right: 0, opacity: 0, width: "100%", height: "100%", padding: 0, border: "none", display: "flex", alignItems: "center", justifyContent: "center"}}>
+                      <p>Изменить обложку</p>
+                      
+                    </motion.button>
+                    <input ref={courseCoverRef} onChange={handleCoverEdit} id="course-cover" type="file" style={{display: "none"}}></input> 
+                  </div>
+                  <button type="button" className="course-edit__form-btn" onClick={() => {
+                    setUpload({start: true});
+                    // console.log(coverFile);
+                    const uploadS3 = new Upload({
+                      client: new S3({region: process.env.REACT_APP_REGION, credentials: {
+                        secretAccessKey: process.env.REACT_APP_SECRET,
+                        accessKeyId: process.env.REACT_APP_ACCESS
+                      }, endpoint: "https://storage.yandexcloud.net"}),
+                      params: {Bucket: process.env.REACT_APP_NAME, Key: coverFile.name, Body: coverFile},
+                      queueSize: 4,
+                      partSize: 10 * 1024 * 1024,
+                    });
+                    
+                    uploadS3.on("httpUploadProgress", (progress) => {
+                      setUpload((prevValue) => {
+                        return {...prevValue, name: progress.Key, progress: progress.loaded/progress.total * 100}
+                      });
+                    })
+                    
+                    return uploadS3.done()
+                    .then((result) => {
+                      apiUpdateCourseCover(token, courseID, {title: coverFile.name, type: coverFile.type})
+                      .then((data) => {
+                        setUpload(null);
+                        setSuccessfullMessage("Обложка обновлена");   
+                      })
+                      // setUpload(null);
+                      // setSuccessfullMessage("Обложка обновлена");
+                    })
+                  }}>
+                    <span>Обновить обложку</span>
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  </button>
+                </div>
+              </form>
+              <ul className="course-edit__ul">
+                {courseData.modules.map((module) => {
+                  return <li key={module._id}>
+                    <div className="course-edit__ul-li-div">
+                      <button className="course-edit__ul-li-delete" onClick={() => {
+                        setModuleIdSelected(module._id);
+                        setEditModuleAccess(true);
+                      }}>
+                        <FontAwesomeIcon icon={faLock} />
+                      </button>
+                      <button className="course-edit__ul-li-delete" onClick={() => {
+                        // console.log(module);
+                        apiDeleteModule(courseID, module._id, token)
+                        .then((data) => {
+                          setCourseData((prevValue) => {
+                            return {...prevValue, modules: prevValue.modules.filter((prevModule) => {
+                              return prevModule._id !== data.moduleID;
+                            })}
+                          })
+                        })
+                      }}>
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </button>
+                    </div>
+
+                    <span>{module.title}</span>
+                    <img src={module.cover.path} alt={module.name}></img>
+                    <span>Уроки: {module.lessons.length}</span>
+                    <button className="course-edit__ul-btn" onClick={() => {
+                      navigate({
+                        pathname: `${location.pathname}/modules/${module._id}`,
+                      })
+                    }}>
+                      <span>Изменить</span>
+                      <FontAwesomeIcon icon={faArrowRight} />
+                    </button>
+                  </li>
+                })}
+                <li key="add-new-lesson">
+                  <button className="course-edit__ul-btn" onClick={(() => {
+                    
+                    navigate({
+                      pathname: `${location.pathname}/add`,
+                    }, {
+                      state: courseData,
+                    })
+                  })}>
+                    <FontAwesomeIcon icon={faPlus} />
+                    <span>
+                      Добавить модуль
+                    </span>
                   </button>
                 </li>
-              })}
-              <li key="add-new-lesson">
-                <button className="course-edit__ul-btn" onClick={(() => {
-                  
-                  navigate({
-                    pathname: `${location.pathname}/add`,
-                  }, {
-                    state: courseData,
-                  })
-                })}>
-                  <FontAwesomeIcon icon={faPlus} />
-                  <span>
-                    Добавить модуль
-                  </span>
-                </button>
-              </li>
-            </ul>
-          <div>
-            <span>Ученики: {courseData.students.length}</span>
-            {/* <span>{courseData.students.length}</span> */}
-            <button onClick={() => {
-              studentsFileRef.current.click();
-              // apiAddStudentsToCourse(courseID, token)
-            }}>
-              <FontAwesomeIcon icon={faPlus} />
-              <span>Добавить учеников</span>
-            </button>
-            <input type="file" style={{display: "none"}} ref={studentsFileRef} onInput={(evt) => {
-              readCSV(evt);
-            }}></input>
-          </div>
-          <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
-              <div className="course-edit__students-wrapper-success-div">
-                <FontAwesomeIcon className="course-edit__students-wrapper-success-div-tick" icon={faCheck} />
-              </div>
-              <p className="course-edit__students-wrapper-success-p">{successfulMessage}</p>
-          </motion.div>
-      </div>
-    </section>
+              </ul>
+            <div>
+              <span>Ученики: {courseData.students.length}</span>
+              {/* <span>{courseData.students.length}</span> */}
+              <button onClick={() => {
+                studentsFileRef.current.click();
+                // apiAddStudentsToCourse(courseID, token)
+              }}>
+                <FontAwesomeIcon icon={faPlus} />
+                <span>Добавить учеников</span>
+              </button>
+              <input type="file" style={{display: "none"}} ref={studentsFileRef} onInput={(evt) => {
+                readCSV(evt);
+              }}></input>
+            </div>
+            <motion.div initial="rest" variants={studentsSuccess} animate={successfulMessage && successfulMessage.length > 0 ? "success" : "rest"} className="course-edit__students-wrapper-success">
+                <div className="course-edit__students-wrapper-success-div">
+                  <FontAwesomeIcon className="course-edit__students-wrapper-success-div-tick" icon={faCheck} />
+                </div>
+                <p className="course-edit__students-wrapper-success-p">{successfulMessage}</p>
+            </motion.div>
+        </div>
+      </section>
+      {editModuleAccess && <EditCourseRender closeWindow={closeModueEditAvailable} module={selectedModule} buttonFunction={moduleEditAvilable} available={selectedModule.available}>
+        <h2>Изменение статуса модуля</h2>  
+        <p>Вы действительно хотите {!selectedModule.available ? "открыть" : "закрыть" } доступ к модулю {selectedModule.title}?</p>  
+      </EditCourseRender>}
+    </>
+    
   )
 };

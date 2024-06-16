@@ -135,16 +135,33 @@ function apiDeleteCourse(token, courseID) {
   })
 };
 
-function apiShowHideCourse(token, courseID, hiddenState) {
+function apiShowHideCourse(token, courseID, objectToUpdate) {
   return fetch(`${apiAdress}/courses/${courseID}/render`, {
     method: "PUT",
     headers: {
       "Authorization": token,
       "Content-Type": 'application/json'
     },
-    body: JSON.stringify({hidden: hiddenState})
+    body: JSON.stringify(objectToUpdate)
+  })
+  .then((res) => {
+    return res.json();
   })
 };
+
+// function apiEditAccess(token, courseID, moduleID, accessState) {
+//   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}/render`, {
+//     method: "PUT",
+//     headers: {
+//       "Authorization": token,
+//       "Content-Type": 'application/json'
+//     },
+//     body: JSON.stringify({hidden: accessState})
+//   })
+//   .then((res) => {
+//     return res.json();
+//   })
+// }
 
 function apiGetModule(courseID, moduleID, token) {
   return fetch(`${apiAdress}/courses/${courseID}/modules/${moduleID}`, {
@@ -552,6 +569,7 @@ export {
   apiUpdateModuleCover,
   apiEditCourse,
   apiShowHideCourse,
+  // apiEditAccess,
   apiDeleteModule,
   apiDeleteLesson,
   apiAddModule,

@@ -4,7 +4,7 @@ import { UserContext } from "../context/userContext";
 import { apiGetCourse } from "../api";
 import "./Course.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faArrowLeft, faLock } from "@fortawesome/free-solid-svg-icons";
 export default function Course() {
   //navigate
   const navigate = useNavigate();
@@ -87,7 +87,7 @@ export default function Course() {
               {course.modules.map((module) => {
                 return <li className="course__ul-li" key={module.title}>
                   <h3 className="course__ul-li-headline">{module.title}</h3>
-                  <img className="course__ul-li-img" src={module.cover.path} alt={module.title}></img>
+                  <img className="course__ul-li-img" style={{filter: !module.available ? "grayscale(85%)" : "none"}} src={module.cover.path} alt={module.title}></img>
                   <p>Уроки: {module.lessons.length}</p>
                   <button className="course__ul-li-btn" onClick={() => {
                     navigate({
@@ -100,7 +100,7 @@ export default function Course() {
                     // console.log(selectedModule)
                   }}>
                     <p>Открыть</p>
-                    <FontAwesomeIcon style={{fontSize: 18}} icon={faArrowRight} />
+                    <FontAwesomeIcon style={{fontSize: 18}} icon={module.available ? faArrowRight : faLock} />
                   </button>
                 </li>
               })}

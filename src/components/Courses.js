@@ -21,6 +21,7 @@ import './Courses.css';
 import {  
   apiGetCourses,
   apiGetAllStudents,
+  apiShowHideCourse,
   // apiAddStudentsToCourse,
   // apiEditCourse,
   // apiDeleteModule,
@@ -132,6 +133,25 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
     hover: {
       color: "rgba(252, 249, 249, 0.65)",
     }
+  }
+
+  //functions
+  function editCourseRender() {
+    // console.log("api to show/hide course");
+    apiShowHideCourse(token, selectedCourse._id, {hidden: selectedCourse.hidden})
+    .then((data) => {
+      setCoursesData((prevValue) => {
+        return {...prevValue, courses: prevValue.courses.map((prevCourse) => {
+          return prevCourse._id === selectedCourse._id ? {...prevCourse, hidden: data.hidden} : prevCourse;
+        })}
+      });
+      closeEditCourseRedner();
+    })
+  }
+
+  function closeEditCourseRedner() {
+    setRenderCourse(false);
+    setSelectedCourseId(null);
   }
 
   //refs
@@ -297,7 +317,10 @@ export default function Courses({ socket, setCourseInEdit, logout, loggedIn, reg
         </div>
       }
       </section>
-      {renderCourse && <EditCourseRender course={selectedCourse} setRenderCourse={setRenderCourse} setSelectedCourseId={setSelectedCourseId}/>}
+      {renderCourse && <EditCourseRender closeWindow={closeEditCourseRedner} buttonFunction={editCourseRender} setCoursesData={setCoursesData} hidden={selectedCourse.hidden}>
+        <h2>Изменение статуса курса</h2>  
+        <p>Вы действительно хотите {selectedCourse.hidden ? "открыть" : "закрыть" } доступ к курсу {selectedCourse.name}?</p>
+      </EditCourseRender>}
       {emailCourse && <SendEmail setEmailCourse={setEmailCourse} setSelectedCourseId={setSelectedCourseId} selectedCourse={selectedCourse} token={token}/>}
       {deleteCourse && <DeleteCourse course={selectedCourse} setSelectedCourseId={setSelectedCourseId} setDeleteCourse={setDeleteCourse} setCoursesData={setCoursesData}></DeleteCourse>}
     </>

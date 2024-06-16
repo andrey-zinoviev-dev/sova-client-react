@@ -1,39 +1,35 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { apiShowHideCourse } from "../api";
 
-export default function EditCourseRender({setRenderCourse, setSelectedCourseId, course}) {
+// export default function EditCourseRender({setCoursesData, setRenderCourse, setSelectedCourseId, course}) {
+export default function EditCourseRender({ closeWindow, buttonFunction, children, setRenderCourse, setCoursesData, setSelectedCourseId, hidden, available})  {
+
+  const token = localStorage.getItem("token");
+
   return (
     <section className="email">
       <div className="email__wrapper">
         <button className="email__wrapper-close" onClick={() => {
-            setSelectedCourseId(null);
-            setRenderCourse(false);
+            closeWindow();
             // setSelectedCourseId(null);
-            // setDeleteCourse(false);
+            // setRenderCourse(false);
           }}>
             <FontAwesomeIcon icon={faXmark} />
           </button>
-          <h2>Изменение статуса курса</h2>
-          <p>Вы действительно хотите открыть доступ к курсу {course.name}?</p>
+          {children}
           <div className="delete-course__buttons">
             <button onClick={() => {
-              console.log("send request to api here");
-              // apiDeleteCourse(token, course._id)
-              // .then(({ courseId }) => {
-              //   setCoursesData((prevValue) => {
-              //     return {...prevValue, courses: prevValue.courses.filter((prevCourse) => {
-              //       return prevCourse._id !== courseId;
-              //     })}
-              //   });
-              //   setSelectedCourseId(null);
-              //   setDeleteCourse(false);
-              // })
+              buttonFunction();
+
             }}>
-              Открыть
+              {/* Открыт÷ь */}
+              {hidden ||  !available ? "Открыть" : "Скрыть"}
             </button>
             <button onClick={() => {
-              setSelectedCourseId(null);
-              setRenderCourse(false);
+              closeWindow();
+              // setSelectedCourseId(null);
+              // setRenderCourse(false);
             }}>Отменить</button>
           </div>
       </div>
