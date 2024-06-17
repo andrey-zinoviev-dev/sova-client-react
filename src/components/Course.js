@@ -85,7 +85,7 @@ export default function Course() {
 
             {!selectedModule ? <ul className="course__ul">
               {course.modules.map((module) => {
-                return <li className="course__ul-li" key={module.title}>
+                return <li className="course__ul-li" style={{pointerEvents: !module.available ? "none" : "all"}} key={module.title}>
                   <h3 className="course__ul-li-headline">{module.title}</h3>
                   <img className="course__ul-li-img" style={{filter: !module.available ? "grayscale(85%)" : "none"}} src={module.cover.path} alt={module.title}></img>
                   <p>Уроки: {module.lessons.length}</p>
@@ -107,9 +107,9 @@ export default function Course() {
             </ul>
             :
             <ul className="course__ul-lessons">{selectedModule.lessons.map((lesson) => {
-              return <li className="course__ul-lessons-li" key={lesson.title}>
+              return <li className="course__ul-lessons-li" style={{pointerEvents: !lesson.available ? "none" : "all"}} key={lesson.title}>
                 <p className="course__ul-lessons-li-p">{lesson.title}</p>
-                <img className="course__ul-lessons-li-img" src={lesson.cover.path} alt={lesson.title}></img>
+                <img className="course__ul-lessons-li-img" style={{filter: !lesson.available ? "grayscale(85%)" : "none"}} src={lesson.cover.path} alt={lesson.title}></img>
                 <button onClick={() => {
                   // navigate({
                   //   pathname: `../courses/${courseID}`,
@@ -123,7 +123,8 @@ export default function Course() {
                   })
                 }} className="course__ul-lessons-li-btn">
                   <p>Открыть</p>
-                  <FontAwesomeIcon icon={faArrowRight} />
+                  {/* <FontAwesomeIcon icon={faArrowRight} /> */}
+                  <FontAwesomeIcon style={{fontSize: 18}} icon={lesson.available ? faArrowRight : faLock} />
                 </button>
               </li>})}
             </ul>

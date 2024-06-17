@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage, faFilm } from "@fortawesome/free-solid-svg-icons";
+import { faImage, faFilm, faMusic } from "@fortawesome/free-solid-svg-icons";
 import CyrillicToTranslit from "cyrillic-to-translit-js";
 
 
@@ -11,6 +11,7 @@ export default function TipTapButtons ({ formData, email, editor, selectedFiles,
   //states
   const [image, setImage] = React.useState({});
   const [video, setVideo] = React.useState({});
+  const [audio, setAudio] = React.useState({});
 
   //variables
   const cyrillicToTranslit = new CyrillicToTranslit();
@@ -18,6 +19,7 @@ export default function TipTapButtons ({ formData, email, editor, selectedFiles,
   //refs
   const imageInputRef = React.useRef();
   const videoInputRef = React.useRef();
+  const audioInputRef = React.useRef();
 
   //functions
   function handleFileChange(evt) {
@@ -118,6 +120,25 @@ export default function TipTapButtons ({ formData, email, editor, selectedFiles,
     
   };
 
+  function handleAudioUpload(evt) {
+    let audioFile = evt.target.files[0];
+    // console.log(audioFile);
+    if(/[А-Яа-я ]/.test(audioFile.name)) {
+      audioFile = new File([audioFile], cyrillicToTranslit.transform(audioFile.name, "_"), {
+        type: audioFile.type,
+      })
+    };
+
+    audioFile.clientPath = window.URL.createObjectURL(audioFile);
+    audioFile.title = audioFile.name;
+    setAudio(audioFile);
+    setSelectedFiles((prevValue) => {
+      return [...prevValue, audioFile]
+    });
+    window.URL.revokeObjectURL(audioFile);
+
+  };
+
   React.useEffect(() => {
     if(image.clientPath) {
       editor && editor.chain().focus().setImage({ src: image.clientPath, title: image.name}).run();
@@ -137,11 +158,16 @@ export default function TipTapButtons ({ formData, email, editor, selectedFiles,
       editor && editor.chain().focus().insertContent(`<video src="${video.clientPath}" title=${/[А-Я]/.test(video.name) ? cyrillicToTranslit.transform(video.name, "_") : video.name.replace(" ", "")}></video>`).run();
       // console.log(Object.keys(video.video));
     };
+
+    if(audio.clientPath) {
+      console.log(audio);
+      editor && editor.chain().focus().insertContent(`<audio src="${audio.clientPath}" title=${/[А-Я]/.test(audio.name) ? cyrillicToTranslit.transform(audio.name, "_") : audio.name.replace(" ", "")} type="${audio.type}"></audio>`).run();
+    }
     // if(videoSrc.length > 0) {
     //   editor.chain().focus().insertContent(`<video src="${videoSrc}"></video>`).run();
     // }
     
-  }, [video.clientPath, editor]);
+  }, [video.clientPath, editor, audio.clientPath]);
 
   // React.useEffect(() => {
   //   if(selectedFiles.length === 0) {
@@ -212,6 +238,14 @@ export default function TipTapButtons ({ formData, email, editor, selectedFiles,
           }}>
             <FontAwesomeIcon icon={faFilm} />
             <input ref={videoInputRef} onChange={handleVideoUpload} type="file" name="video" style={{display: "none"}}/>
+          </button>
+        </li>
+        <li>
+          <button type="button" className={editor.isActive('video') ? 'is-active' : 'addCourse__form-stepwrapper-menu-list-element-button'} onClick={() => {
+            audioInputRef.current.click();
+          }}>
+            <FontAwesomeIcon icon={faMusic} />
+            <input ref={audioInputRef} onChange={handleAudioUpload} type="file" name="audio" style={{display: "none"}}/>
           </button>
         </li>
       </> }

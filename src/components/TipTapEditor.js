@@ -51,6 +51,46 @@ export default function TipTapEditor({setNewLesson, addContentToNewLesson, editC
     },
   });
 
+  //audio node
+  const Audio = Node.create({
+    name: "audio",
+    group: "block",
+    selectable: "true",
+    atom: "true",
+    parseHTML() {
+      return [
+        {
+          tag: "audio",
+        },
+      ]
+    },
+    addAttributes() {
+      return {
+        "src": {
+          default: null,
+        },
+        "controls" : {
+          default: true,
+        },
+        "controlsList": {
+          default: "nodownload",
+        },
+        "oncontextmenu": {
+          default: "return false"
+        },
+        "title": {
+          default: null,
+        },
+        "type": {
+          default: null,
+        }
+      }
+    },
+    renderHTML({HTMLAttributes}) {
+      return ['audio', mergeAttributes(HTMLAttributes)];
+    },
+  });
+
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -58,7 +98,8 @@ export default function TipTapEditor({setNewLesson, addContentToNewLesson, editC
             Placeholder.configure({
                 placeholder: "Добавьте контент уроку..."
             }),
-            Video
+            Video,
+            Audio
         ],
         content: selectedLesson && selectedLesson.content ,
         

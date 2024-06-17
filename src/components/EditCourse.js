@@ -4,7 +4,7 @@ import CyrillicToTranslit from "cyrillic-to-translit-js";
 import { NavLink, useLocation, useParams, useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft, faArrowRight, faEye, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faTrashCan, faPlus, faCheck, faArrowLeft, faArrowRight, faEye, faLock, faLockOpen } from "@fortawesome/free-solid-svg-icons";
 import { apiGetCourse, apiDeleteModule, apiAddStudentsToCourse, apiUpdateCourseCover, apiUpdateCourseTitle, apiUpdateCourseDescription, apiGetModule, apiEditAccess, apiShowHideCourse } from "../api";
 
 import { Upload } from "@aws-sdk/lib-storage";
@@ -171,11 +171,17 @@ function convertCSVtoJSON(file) {
 }
 
 function moduleEditAvilable() {
-  console.log("api request to modify module access");
-  console.log(selectedModule);
+  // console.log("api request to modify module access");
+  // console.log(selectedModule);
   apiShowHideCourse(token, courseID, {moduleID: selectedModule._id, hidden: selectedModule.available})
   .then((data) => {
-    console.log(data);
+    // console.log(data);
+    setCourseData((prevValue) => {
+      return {...prevValue, modules: prevValue.modules.map((prevModule) => {
+        return prevModule._id === data.moduleID ? {...prevModule, available: data.available} : prevModule;  
+      })}
+    })
+    closeModueEditAvailable()
   })
   // apiEditAccess(token, courseID, selectedModule._id, selectedModule.access)
   // .then((data) => {
@@ -307,7 +313,7 @@ function closeModueEditAvailable() {
                         setModuleIdSelected(module._id);
                         setEditModuleAccess(true);
                       }}>
-                        <FontAwesomeIcon icon={faLock} />
+                        <FontAwesomeIcon icon={module.available ? faLock : faLockOpen} />
                       </button>
                       <button className="course-edit__ul-li-delete" onClick={() => {
                         // console.log(module);
